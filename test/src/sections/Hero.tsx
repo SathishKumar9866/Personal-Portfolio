@@ -3,6 +3,8 @@ import Image from 'next/image'
 import ArrowDown from '@/assets/icons/arrow-down.svg';
 import grainImage from '@/assets/images/grain.jpg'
 import StarIcon from '@/assets/icons/star.svg';
+import {HeroOrbit} from '@/components/HeroOrbit';
+
 export const HeroSection = () => {
   return (
   <div className='py-32 md:py-48 lg:py-60 relative z-0'>
@@ -20,11 +22,9 @@ export const HeroSection = () => {
     <div className=' size-[1420px] hero-ring'></div>
     <div className=' size-[1620px] hero-ring'></div>
 
-    <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-red-500  size-[800px] animate-spin [animation-duration:30s] '>
-      <div className='border border-red-500 size-[800px] inline-flex animate-spin [animation-duration:5s]'> 
-      <StarIcon className='size-28 text-emerald-300'/>
-      </div>
-    </div>
+    <HeroOrbit size={800}>
+      <StarIcon className='size-28 text-emerald-300' />
+    </HeroOrbit>
     <div className="container">
         <div className='flex flex-col items-center'>
           <Image src={memjiImage} 
@@ -59,3 +59,4 @@ export const HeroSection = () => {
     )
 };
 // video stopped at >> 29:28
+// animate-spin [animation-duration:30s]
