@@ -2,4 +2,16 @@
 Building my personal portfolio
 
 
-Installatioin of Node.js, 
+## Installation of Tools :
+
+* [Link]()
+* [Link]()
+* 
+OS: Windows, Linux, Mac
+Commands to Run: 
+
+## Issues
+
+#
+## References 
+
