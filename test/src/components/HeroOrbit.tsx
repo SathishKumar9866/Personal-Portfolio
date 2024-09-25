@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 export const HeroOrbit =({    children, size, rotation} : PropsWithChildren<{size:number; rotation:number}>) => {
     return (<div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-red-500  size-[800px]  '>
         
-        <div className='  ' 
+        <div className='outline outline-1 outline-red-500' 
         style={{ 
                 transform: `rotate(${rotation}deg)`,
                 height:`${size}px`,
