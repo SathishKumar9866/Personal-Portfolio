@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import {Inter, Calistoga } from 'next/font/google'
+import {Inter, Calistoga } from 'next/font/google';
 import "./globals.css";
 import { twMerge } from "tailwind-merge";
-
+// import { Inter, Roboto_Mono } from 'next/font/google';
 const inter = Inter({subsets: ['latin'], variable: '--font-sans'});
-const catlistoga = Calistoga(
-  {subsets: ['latin'], variable: '--font-sans', weight: ['400'],}
+const calistoga = Calistoga(
+  {
+    subsets: ['latin'], 
+    variable: '--font-sans', 
+    weight: ['400'],
+  }
 )
 export const metadata: Metadata = {
   title: "My Portfolio",
@@ -19,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={twMerge(inter.variable, catlistoga.variable, 
+      <body className={twMerge(inter.variable, calistoga.variable, 
         
         "bg-gray-900 text-white antialiased font-sans ")}>
           {children}</body>
