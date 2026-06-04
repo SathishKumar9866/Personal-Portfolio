@@ -2,12 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-    .nav-item {
-        @apply px-4 py-1.5 rounded-full text-white/80 text-sm font-semibold hover:bg-white/10 hover:text-white transition duration-300;
-    }
+@layer base {
+  /* Light theme (default) */
+  :root {
+    --c-canvas: 250 250 250;
+    --c-panel: 255 255 255;
+    --c-line: 229 231 235;
+    --c-fg: 26 26 26;
+    --c-muted: 107 114 128;
+    --c-accent: 13 148 136; /* teal-600, readable on white */
+  }
 
-    .hero-ring{
-        @apply absolute inset-0  border-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-emerald-300/5 shadow-[0_0_80px_inset] shadow-emerald-300/5
-    }
+  /* Dark theme */
+  .dark {
+    --c-canvas: 13 17 23; /* #0D1117 */
+    --c-panel: 22 27 34; /* #161B22 */
+    --c-line: 48 54 61; /* #30363D */
+    --c-fg: 230 237 243; /* #E6EDF3 */
+    --c-muted: 139 148 158; /* #8B949E */
+    --c-accent: 45 212 191; /* #2DD4BF */
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-fg antialiased;
+    /* Long words/URLs wrap instead of forcing a horizontal scrollbar. */
+    overflow-wrap: break-word;
+  }
+
+  /* Safety net: never allow horizontal scroll from an overflowing child.
+     `clip` (not `hidden`) so it doesn't create a scroll container that
+     would break the sticky header. */
+  html {
+    overflow-x: clip;
+  }
+
+  /* Land just below the fixed header - no big empty gap above headings. */
+  .scroll-anchor {
+    scroll-margin-top: 5rem;
+  }
+
+  /* Subtle data/dot grid background (decorative). */
+  .bg-grid {
+    background-image: radial-gradient(
+      rgb(var(--c-line) / 0.7) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
+
+  ::selection {
+    @apply bg-accent/30;
+  }
+
+  /* Visible keyboard focus for all interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  [tabindex]:focus-visible {
+    @apply rounded outline-none ring-2 ring-accent ring-offset-2 ring-offset-canvas;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer components {
+  .nav-item {
+    @apply rounded-md px-3 py-1.5 text-sm font-medium text-muted transition-colors hover:bg-fg/5 hover:text-fg;
+  }
+
+  .eyebrow {
+    @apply font-mono text-sm text-accent;
+  }
+
+  .chip {
+    @apply rounded-md border border-line px-2 py-1 font-mono text-xs text-muted;
+  }
 }

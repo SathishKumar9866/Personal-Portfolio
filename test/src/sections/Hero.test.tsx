@@ -1,0 +1,33 @@
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { HeroSection } from "@/sections/Hero";
+import { profile } from "@/data/resume";
+
+describe("HeroSection", () => {
+  it("renders the name as the main heading", () => {
+    render(<HeroSection />);
+    expect(
+      screen.getByRole("heading", { level: 1, name: /Sathish Kumar/ })
+    ).toBeInTheDocument();
+  });
+
+  it("shows the first typewriter phrase and the FileTree", () => {
+    render(<HeroSection />);
+    expect(screen.getByText("LLM & RAG systems")).toBeInTheDocument();
+    // FileTree (about-me filesystem) now lives in the Hero.
+    expect(screen.getByRole("link", { name: "experience/" })).toHaveAttribute(
+      "href",
+      "#experience"
+    );
+  });
+
+  it("has working primary CTAs", () => {
+    render(<HeroSection />);
+    expect(
+      screen.getByRole("link", { name: /view my experience/i })
+    ).toHaveAttribute("href", "#experience");
+    expect(
+      screen.getByRole("link", { name: /download résumé/i })
+    ).toHaveAttribute("href", profile.resume);
+  });
+});

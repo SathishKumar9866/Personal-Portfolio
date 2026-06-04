@@ -21,6 +21,13 @@ const nextConfig = {
         use: {
           loader: "@svgr/webpack",
           options: {
+            // All our SVGs are decorative icons sitting next to real text or an
+            // aria-label — keep them out of the a11y tree by default so screen
+            // readers don't announce empty/duplicate graphics.
+            svgProps: {
+              "aria-hidden": "true",
+              focusable: "false",
+            },
             svgoConfig: {
               plugins: [
                 {

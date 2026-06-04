@@ -1,82 +1,75 @@
-import darkSaasLandingPage from "@/assets/images/dark-saas-landing-page.png";
-import lightSaasLandingPage from "@/assets/images/light-saas-landing-page.png";
-import aiStartupLandingPage from "@/assets/images/ai-startup-landing-page.png";
-import Image from "next/image";
-
-const portfolioProjects = [
-  {
-    company: "Acme Corp",
-    year: "2022",
-    title: "Dark Saas Landing Page",
-    results: [
-      { title: "Enhanced user experience by 40%" },
-      { title: "Improved site speed by 50%" },
-      { title: "Increased mobile traffic by 35%" },
-    ],
-    link: "https://youtu.be/4k7IdSLxh6w",
-    image: darkSaasLandingPage,
-  },
-  {
-    company: "Innovative Co",
-    year: "2021",
-    title: "Light Saas Landing Page",
-    results: [
-      { title: "Boosted sales by 20%" },
-      { title: "Expanded customer reach by 35%" },
-      { title: "Increased brand awareness by 15%" },
-    ],
-    link: "https://youtu.be/7hi5zwO75yc",
-    image: lightSaasLandingPage,
-  },
-  {
-    company: "Quantum Dynamics",
-    year: "2023",
-    title: "AI Startup Landing Page",
-    results: [
-      { title: "Enhanced user experience by 40%" },
-      { title: "Improved site speed by 50%" },
-      { title: "Increased mobile traffic by 35%" },
-    ],
-    link: "https://youtu.be/Z7I5uSRHMHg",
-    image: aiStartupLandingPage,
-  },
-];
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import GithubIcon from "@/assets/icons/github.svg";
+import { FolderGit2 } from "lucide-react";
+import { Section } from "@/components/Section";
+import { Reveal } from "@/components/Reveal";
+import { MetricTag } from "@/components/ui/Tag";
+import { TechStack } from "@/components/ui/TechStack";
+import { projects } from "@/data/projects";
 
 export const ProjectsSection = () => {
-  return (<div>
-    <div className="container">
-      <p>Real World Projects</p>
-      <h2>Featured Projects</h2>
-      <p></p>
-    <div>
-      {portfolioProjects.map(project =>
-        (
-        <div key={project.title}>
+  return (
+    <Section
+      id="projects"
+      eyebrow="02 / Selected Work"
+      title="Projects"
+      description="A few systems I've taken from raw data to a deployed model or RAG application."
+      icon={<FolderGit2 />}
+    >
+      <div className="mt-12 flex max-w-3xl flex-col gap-5">
+        {projects.map((project, i) => (
+          <Reveal
+            key={project.title}
+            delay={i * 0.06}
+            className="group rounded-lg border border-line bg-panel p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-lg hover:shadow-accent/5 md:p-7"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-semibold">{project.title}</h3>
+                <p className="mt-1 font-mono text-xs text-muted">
+                  {project.context}
+                </p>
+              </div>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${project.title} on GitHub`}
+                  className="inline-flex items-center gap-1 whitespace-nowrap font-mono text-xs text-muted transition-colors group-hover:text-accent [&_svg:last-child]:transition-transform group-hover:[&_svg:last-child]:translate-x-0.5"
+                >
+                  <GithubIcon className="size-4" />
+                  code
+                  <ArrowUpRightIcon className="size-3.5" />
+                </a>
+              )}
+            </div>
 
-        <div> 
-          <span>{project.company}</span>
-          <span>{project.year}</span>
-        </div>
-        <h3>{project.title}</h3>
-        <hr/>
-        <ul>
-          {project.results.map(
-            (result) =>
-              (
-                <li>{result.title} </li>
-              )
-            )
-          }
-        </ul>
-        <a href={project.link}>
-        <button>View Live Site</button>
-        </a>
-        <Image src={project.image} alt={project.title} />
+            {project.metrics && project.metrics.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {project.metrics.map((metric) => (
+                  <MetricTag key={metric}>{metric}</MetricTag>
+                ))}
+              </div>
+            )}
+
+            <ul className="mt-4 flex flex-col gap-2">
+              {project.points.map((point) => (
+                <li
+                  key={point}
+                  className="relative pl-4 text-sm leading-relaxed text-muted before:absolute before:left-0 before:text-accent before:content-['-']"
+                >
+                  {point}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5">
+              <TechStack items={project.stack} />
+            </div>
+          </Reveal>
+        ))}
       </div>
-
-    ))}
-    </div>
-    </div>
-  </div>
+    </Section>
   );
 };
