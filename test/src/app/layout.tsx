@@ -4,6 +4,7 @@ import "./globals.css";
 import { twMerge } from "tailwind-merge";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { SectionNav } from "@/components/SectionNav";
 import { profile } from "@/data/resume";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -103,6 +104,7 @@ export default function RootLayout({
         </a>
         <ThemeProvider>
           <ScrollProgress />
+          <SectionNav />
           {children}
         </ThemeProvider>
       </body>
