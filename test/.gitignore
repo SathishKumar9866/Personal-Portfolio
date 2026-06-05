@@ -34,3 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal build/meta notes — kept local, never published
+/docs/
+/BUILD_LOG.md
+/PROJECT_NOTES.md
+/.claude/
