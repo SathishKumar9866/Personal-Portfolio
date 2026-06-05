@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { SectionNav } from "@/components/SectionNav";
 import { Clarity } from "@/components/Clarity";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { profile } from "@/data/resume";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -109,6 +111,9 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
         <Clarity />
+        {/* Audience + performance. No-op off Vercel, so no local tracking. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
