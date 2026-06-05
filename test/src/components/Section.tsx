@@ -23,8 +23,15 @@ export const Section = ({
   className,
   icon,
 }: SectionProps) => {
+  // min-h-screen so each section fills at least one viewport (centered);
+  // taller content simply grows the section - never clipped.
   return (
-    <section className={twMerge("py-16 lg:py-20", className)}>
+    <section
+      className={twMerge(
+        "flex min-h-[100svh] flex-col justify-center py-16 lg:py-20",
+        className
+      )}
+    >
       <div className="container">
         {/* Anchor sits on the heading so nav jumps land on the title, not empty padding. */}
         <div id={id} className="scroll-anchor">

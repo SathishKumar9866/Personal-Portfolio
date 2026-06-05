@@ -9,10 +9,15 @@ describe("AboutSection", () => {
     expect(screen.getByText("MLEngineer")).toBeInTheDocument();
   });
 
-  it("renders quick facts", () => {
+  it("renders the bio with the GitHub link", () => {
     render(<AboutSection />);
-    expect(screen.getByText("role")).toBeInTheDocument();
-    expect(screen.getByText("experience")).toBeInTheDocument();
-    expect(screen.getByText("location")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /github/i })).toBeInTheDocument();
+  });
+
+  it("has the Download résumé button", () => {
+    render(<AboutSection />);
+    expect(
+      screen.getByRole("link", { name: /download résumé/i })
+    ).toHaveAttribute("href", "/Sathish_Kumar_Resume.pdf");
   });
 });

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { RuleLine } from "@/components/ui/RuleLine";
 
 export const SectionHeader = ({
   title,
@@ -20,7 +21,7 @@ export const SectionHeader = ({
           </span>
         ) : null}
         <p className="eyebrow whitespace-nowrap">{eyebrow}</p>
-        <span className="h-px flex-1 bg-line" />
+        <RuleLine />
       </div>
       <h2 className="mt-4 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-tight">
         {title}

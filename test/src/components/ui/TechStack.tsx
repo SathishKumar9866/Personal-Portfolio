@@ -27,28 +27,28 @@ export const TechStack = ({ items }: { items: string[] }) => (
               role="img"
               aria-hidden="true"
               viewBox="0 0 24 24"
-              className="size-3.5 shrink-0"
+              className="size-3.5 shrink-0 transition-transform duration-200 group-hover/chip:scale-125"
               fill={`#${icon.hex}`}
             >
               <path d={icon.path} />
             </svg>
           ) : cloud ? (
             <Cloud
-              className="size-3.5 shrink-0"
+              className="size-3.5 shrink-0 transition-transform duration-200 group-hover/chip:scale-125"
               style={{ color: cloud }}
               aria-hidden="true"
             />
           ) : (
             <Hexagon
-              className="size-3.5 shrink-0 text-muted/70"
+              className="size-3.5 shrink-0 text-muted/70 transition-transform duration-200 group-hover/chip:scale-125"
               aria-hidden="true"
             />
           )}
           {item}
           {info ? (
             <span
-              role="tooltip"
-              className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 hidden w-52 -translate-x-1/2 rounded-md border border-line bg-panel px-2.5 py-1.5 font-sans text-[11px] leading-snug text-fg shadow-lg group-hover/chip:block"
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 hidden w-max max-w-[min(16rem,calc(100vw-2rem))] -translate-x-1/2 whitespace-normal break-words rounded-md border border-line bg-panel px-2.5 py-1.5 font-sans text-[11px] leading-snug text-fg shadow-lg group-hover/chip:block"
             >
               {info}
             </span>

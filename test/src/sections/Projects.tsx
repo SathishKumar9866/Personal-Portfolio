@@ -16,12 +16,13 @@ export const ProjectsSection = () => {
       description="A few systems I've taken from raw data to a deployed model or RAG application."
       icon={<FolderGit2 />}
     >
-      <div className="mt-12 flex max-w-3xl flex-col gap-5">
+      <div className="mt-12 grid items-start gap-5 lg:grid-cols-2">
         {projects.map((project, i) => (
           <Reveal
             key={project.title}
             delay={i * 0.06}
-            className="group rounded-lg border border-line bg-panel p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-lg hover:shadow-accent/5 md:p-7"
+            hoverScale={1.05}
+            className="group relative rounded-lg border border-line bg-panel p-6 transition-colors duration-200 hover:border-accent/60 hover:shadow-lg hover:shadow-accent/5 md:p-7"
           >
             <div className="flex items-start justify-between gap-4">
               <div>

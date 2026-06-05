@@ -1,20 +1,11 @@
 import { UserRound } from "lucide-react";
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
 import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { CodeCard } from "@/components/CodeCard";
 import { Highlight } from "@/components/ui/Highlight";
+import { LinkButton } from "@/components/ui/LinkButton";
 import { profile } from "@/data/resume";
-
-const facts = [
-  { label: "role", value: "ML Engineer · MLOps · GenAI" },
-  { label: "experience", value: "6 yrs in production AI" },
-  { label: "education", value: "M.S. CS, SIU" },
-  { label: "location", value: profile.location },
-  // Only shows up once profile.workAuthorization is filled in.
-  ...(profile.workAuthorization
-    ? [{ label: "work auth", value: profile.workAuthorization }]
-    : []),
-];
 
 export const AboutSection = () => {
   return (
@@ -32,11 +23,9 @@ export const AboutSection = () => {
         <div className="flex min-w-0 flex-col gap-5">
           <div className="flex flex-col gap-5 text-base leading-relaxed text-muted md:text-lg">
             <p>
-              ML engineer with{" "}
-              <Highlight>six years of experience</Highlight> taking AI systems
-              from raw data to a deployed, monitored model{" "}
-              <Highlight>in production</Highlight> - lately LLM and RAG on Neo4j
-              knowledge graphs, with the MLOps that keeps them reliable.
+              I&apos;ve worked across the ML stack - computer vision, NLP, and
+              research, and earlier the infrastructure and CI/CD side - so I see{" "}
+              <Highlight>the whole lifecycle</Highlight>, not just the model.
             </p>
             <p>
               I like <Highlight>owning the hard calls</Highlight>: the
@@ -52,7 +41,7 @@ export const AboutSection = () => {
                 href={profile.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent underline-offset-4 hover:underline"
+                className="link-underline text-accent"
               >
                 GitHub
               </a>{" "}
@@ -60,17 +49,17 @@ export const AboutSection = () => {
             </p>
           </div>
 
-          <dl className="flex flex-wrap gap-x-6 gap-y-3 pt-2">
-            {facts.map((fact) => (
-              <div key={fact.label}>
-                <dt className="font-mono text-xs text-accent">{fact.label}</dt>
-                <dd className="mt-0.5 text-sm text-fg">{fact.value}</dd>
-              </div>
-            ))}
-          </dl>
+          <div>
+            <LinkButton href={profile.resume} external variant="outline">
+              Download résumé
+              <ArrowUpRightIcon className="size-4" />
+            </LinkButton>
+          </div>
         </div>
 
-        <CodeCard />
+        <Reveal as="div" x={28} delay={0.1} className="min-w-0">
+          <CodeCard />
+        </Reveal>
       </Reveal>
     </Section>
   );

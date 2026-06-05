@@ -14,7 +14,7 @@ export default function Home() {
       <Header />
       {/* md:pr reserves a right gutter for the fixed header rail so page
           content never slides under it (overlap-proof at any zoom). */}
-      <main id="main" className="md:pr-16 lg:pr-20">
+      <main id="main" className="md:pr-20 lg:pr-24">
         <HeroSection />
         <ContactSection />
         <ExperienceSection />

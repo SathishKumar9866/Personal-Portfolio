@@ -3,7 +3,14 @@ import { Section } from "@/components/Section";
 import { Reveal } from "@/components/Reveal";
 import { MetricTag } from "@/components/ui/Tag";
 import { TechStack } from "@/components/ui/TechStack";
-import { experience, education } from "@/data/resume";
+import { experience, profile /*, education */ } from "@/data/resume";
+
+// Kept lean to avoid repeating what the hero / impact strip already state
+// (years, current role). Location + education live ONLY here now.
+const snapshot = [
+  { label: "location", value: profile.location },
+  { label: "education", value: "M.S. Computer Science, SIU" },
+];
 
 export const ExperienceSection = () => {
   return (
@@ -14,7 +21,7 @@ export const ExperienceSection = () => {
       description="Six years building and shipping machine learning systems."
       icon={<Briefcase />}
     >
-      <div className="mt-12 max-w-3xl">
+      <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_17rem] lg:gap-14">
         <div className="flex flex-col">
           {experience.map((job, i) => (
             <Reveal
@@ -64,6 +71,29 @@ export const ExperienceSection = () => {
           ))}
         </div>
 
+        {/* Sticky recruiter snapshot - fills the right column, follows scroll. */}
+        <Reveal as="div" x={20} className="hidden lg:block">
+          <div className="sticky top-24 flex flex-col gap-4 rounded-lg border border-line bg-panel p-5">
+            <p className="font-mono text-xs uppercase tracking-widest text-accent">
+              Snapshot
+            </p>
+            <dl className="flex flex-col gap-3">
+              {snapshot.map((item) => (
+                <div key={item.label}>
+                  <dt className="font-mono text-xs text-muted">{item.label}</dt>
+                  <dd className="mt-0.5 text-sm text-fg">{item.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <div>
+              <p className="mb-2 font-mono text-xs text-muted">core stack</p>
+              <TechStack items={["PyTorch", "Neo4j", "LangChain", "Docker", "AWS"]} />
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Education - hidden for now (kept so it can be re-enabled). Also
+            uncomment `education` in the import above to restore.
         <h3 className="mt-14 font-mono text-xs uppercase tracking-widest text-accent">
           Education
         </h3>
@@ -87,6 +117,7 @@ export const ExperienceSection = () => {
             </Reveal>
           ))}
         </div>
+        */}
       </div>
     </Section>
   );

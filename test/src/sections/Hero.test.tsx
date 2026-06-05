@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { HeroSection } from "@/sections/Hero";
-import { profile } from "@/data/resume";
 
 describe("HeroSection", () => {
   it("renders the name as the main heading", () => {
@@ -21,13 +20,12 @@ describe("HeroSection", () => {
     );
   });
 
-  it("has working primary CTAs", () => {
+  it("has a 'Get in touch' mailto CTA", () => {
     render(<HeroSection />);
-    expect(
-      screen.getByRole("link", { name: /view my experience/i })
-    ).toHaveAttribute("href", "#experience");
-    expect(
-      screen.getByRole("link", { name: /download résumé/i })
-    ).toHaveAttribute("href", profile.resume);
+    const href = screen
+      .getByRole("link", { name: /get in touch/i })
+      .getAttribute("href");
+    expect(href).toMatch(/^mailto:sathishkumar\.p9875@gmail\.com\?/);
+    expect(href).toContain("subject=");
   });
 });

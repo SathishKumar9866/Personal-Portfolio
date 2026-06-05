@@ -90,4 +90,16 @@
   .chip {
     @apply rounded-md border border-line px-2 py-1 font-mono text-xs text-muted;
   }
+
+  /* Underline that grows from the left on hover (for inline text links). */
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1.5px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s ease;
+  }
+  .link-underline:hover {
+    background-size: 100% 1.5px;
+  }
 }

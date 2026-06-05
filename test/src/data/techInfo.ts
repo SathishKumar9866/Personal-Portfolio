@@ -38,10 +38,26 @@ const info: Record<string, string> = {
   flask: "Lightweight Python web framework.",
   databricks: "Unified analytics + ML platform on Spark.",
   bigquery: "Google Cloud's serverless data warehouse.",
+  // Cloud
+  awssagemaker: "AWS managed platform to build, train, and deploy ML models.",
+  awsbedrock: "AWS service for GenAI apps on foundation models.",
+  awsec2s3lambdaglue: "Core AWS compute, storage, serverless, and ETL services.",
+  azureml: "Azure's managed platform for training and deploying ML models.",
+  azuredatafactory: "Azure's managed data-integration and pipeline service.",
+  azuresynapseaks: "Azure analytics warehouse + managed Kubernetes (AKS).",
+  gcpvertexai: "Google Cloud's managed platform for ML and GenAI.",
+  // Data
+  sqlplsql: "Relational querying plus Oracle's procedural SQL.",
+  mysql: "Popular open-source relational database.",
   // Observability / security
   prometheus: "Metrics collection and alerting.",
   grafana: "Dashboards for metrics and logs.",
+  cloudwatch: "AWS monitoring for metrics, logs, and alarms.",
   opentelemetry: "Vendor-neutral tracing, metrics, and logs.",
+  iam: "Identity and Access Management - permissions and roles.",
+  oauth20: "Standard protocol for delegated authorization.",
+  secretsmanager: "Securely stores and rotates secrets and credentials.",
+  rbac: "Role-Based Access Control - permissions granted by role.",
 };
 
 const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");

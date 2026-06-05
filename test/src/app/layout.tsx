@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { twMerge } from "tailwind-merge";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import { profile } from "@/data/resume";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -100,7 +101,10 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <ScrollProgress />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -28,7 +28,7 @@ const RepoCard = ({ repo }: { repo: Repo }) => (
     href={repo.url}
     target="_blank"
     rel="noopener noreferrer"
-    className="group flex flex-col gap-3 rounded-lg border border-line bg-panel p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60 hover:shadow-lg hover:shadow-accent/5"
+    className="group relative flex flex-col gap-3 rounded-lg border border-line bg-panel p-5 transition-all duration-200 hover:z-10 hover:scale-[1.03] hover:border-accent/60 hover:shadow-lg hover:shadow-accent/5"
   >
     <div className="flex items-center justify-between">
       <div className="inline-flex min-w-0 items-center gap-2">

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ExperienceSection } from "@/sections/Experience";
-import { experience, education } from "@/data/resume";
+import { experience } from "@/data/resume";
 
 describe("ExperienceSection", () => {
   it("renders every role and company", () => {
@@ -19,11 +19,5 @@ describe("ExperienceSection", () => {
     }
   });
 
-  it("renders every education entry", () => {
-    render(<ExperienceSection />);
-    for (const edu of education) {
-      expect(screen.getByText(edu.degree)).toBeInTheDocument();
-      expect(screen.getAllByText(edu.school).length).toBeGreaterThan(0);
-    }
-  });
+  // Education is currently commented out in the section (kept in code).
 });

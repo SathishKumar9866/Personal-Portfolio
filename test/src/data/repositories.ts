@@ -7,7 +7,6 @@ export type Repo = {
   language: string | null;
   stars: number;
   url: string;
-  homepage: string | null;
 };
 
 export const githubUrl = "https://github.com/SathishKumarAI";
@@ -20,7 +19,6 @@ export const repositories: Repo[] = [
     language: "Python",
     stars: 1,
     url: "https://github.com/SathishKumarAI/RAG",
-    homepage: null,
   },
   {
     name: "Pickleball-Vision-LLM",
@@ -29,7 +27,6 @@ export const repositories: Repo[] = [
     language: "Python",
     stars: 1,
     url: "https://github.com/SathishKumarAI/Pickleball-Vision-LLM",
-    homepage: null,
   },
   {
     name: "FL_AV",
@@ -38,7 +35,6 @@ export const repositories: Repo[] = [
     language: "Jupyter Notebook",
     stars: 0,
     url: "https://github.com/SathishKumarAI/FL_AV",
-    homepage: null,
   },
   {
     name: "Project-Med",
@@ -46,7 +42,6 @@ export const repositories: Repo[] = [
     language: "Jupyter Notebook",
     stars: 0,
     url: "https://github.com/SathishKumarAI/Project-Med",
-    homepage: null,
   },
   {
     name: "Github_Repo_Gen_template",
@@ -55,7 +50,6 @@ export const repositories: Repo[] = [
     language: "Python",
     stars: 1,
     url: "https://github.com/SathishKumarAI/Github_Repo_Gen_template",
-    homepage: null,
   },
   {
     name: "system-design-interview-prep",
@@ -63,7 +57,6 @@ export const repositories: Repo[] = [
     language: "Python",
     stars: 0,
     url: "https://github.com/SathishKumarAI/system-design-interview-prep",
-    homepage: null,
   },
   {
     name: "pickleball-shuffle",
@@ -72,7 +65,6 @@ export const repositories: Repo[] = [
     language: "TypeScript",
     stars: 0,
     url: "https://github.com/SathishKumarAI/pickleball-shuffle",
-    homepage: null,
   },
   {
     name: "rocky-dev-setup",
@@ -81,7 +73,6 @@ export const repositories: Repo[] = [
     language: "Shell",
     stars: 0,
     url: "https://github.com/SathishKumarAI/rocky-dev-setup",
-    homepage: null,
   },
   {
     name: "Dotfiles",
@@ -89,7 +80,6 @@ export const repositories: Repo[] = [
     language: "Shell",
     stars: 0,
     url: "https://github.com/SathishKumarAI/Dotfiles",
-    homepage: null,
   },
   {
     name: "prompts",
@@ -98,7 +88,6 @@ export const repositories: Repo[] = [
     language: "Markdown",
     stars: 0,
     url: "https://github.com/SathishKumarAI/prompts",
-    homepage: null,
   },
   {
     name: "Python_DS",
@@ -106,7 +95,6 @@ export const repositories: Repo[] = [
     language: "Python",
     stars: 0,
     url: "https://github.com/SathishKumarAI/Python_DS",
-    homepage: null,
   },
   {
     name: "Project_Lee",
@@ -114,7 +102,6 @@ export const repositories: Repo[] = [
     language: "HTML",
     stars: 0,
     url: "https://github.com/SathishKumarAI/Project_Lee",
-    homepage: null,
   },
   {
     name: "Personal-Portfolio",
@@ -122,7 +109,6 @@ export const repositories: Repo[] = [
     language: "TypeScript",
     stars: 0,
     url: "https://github.com/SathishKumarAI/Personal-Portfolio",
-    homepage: null,
   },
   {
     name: "KickStarterFiles",
@@ -130,7 +116,6 @@ export const repositories: Repo[] = [
     language: "Dockerfile",
     stars: 0,
     url: "https://github.com/SathishKumarAI/KickStarterFiles",
-    homepage: null,
   },
   {
     name: "SathishKumar",
@@ -138,7 +123,6 @@ export const repositories: Repo[] = [
     language: "Markdown",
     stars: 0,
     url: "https://github.com/SathishKumarAI/SathishKumar",
-    homepage: null,
   },
   {
     name: "loan",
@@ -146,7 +130,6 @@ export const repositories: Repo[] = [
     language: "HTML",
     stars: 0,
     url: "https://github.com/SathishKumarAI/loan",
-    homepage: null,
   },
 ];
 

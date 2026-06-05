@@ -25,7 +25,7 @@ export const Footer = () => {
           human and reach out at{" "}
           <a
             href={`mailto:${profile.email}`}
-            className="text-accent underline-offset-4 hover:underline"
+            className="link-underline text-accent"
           >
             {profile.email}
           </a>{" "}

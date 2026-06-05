@@ -1,12 +1,28 @@
-import ArrowDownIcon from "@/assets/icons/arrow-down.svg";
-import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import MailIcon from "@/assets/icons/mail.svg";
 import { Reveal } from "@/components/Reveal";
 import { LinkButton } from "@/components/ui/LinkButton";
 import { NeuralBackground } from "@/components/NeuralBackground";
 import { Typewriter } from "@/components/Typewriter";
 import { FileTree } from "@/components/FileTree";
 import { Highlight } from "@/components/ui/Highlight";
+import { CountUp } from "@/components/CountUp";
 import { profile, currentRole } from "@/data/resume";
+
+// Pre-filled mailto so the hero's primary CTA opens a ready-to-send email.
+const subject = "ML / GenAI / MLOps role - let's talk";
+const body = `Hi Sathish,
+
+I came across your portfolio and have a role that looks like a fit:
+
+  - Role:
+  - Company:
+  - A few lines about it:
+
+Best,
+`;
+const mailto = `mailto:${profile.email}?subject=${encodeURIComponent(
+  subject
+)}&body=${encodeURIComponent(body)}`;
 
 export const HeroSection = () => {
   return (
@@ -44,8 +60,12 @@ export const HeroSection = () => {
                   phrases={[
                     "LLM & RAG systems",
                     "Neo4j knowledge graphs",
+                    "LLM agents with LangGraph",
+                    "computer-vision systems",
                     "MLOps pipelines",
-                    "production AI",
+                    "vector search & retrieval",
+                    "drift-monitored models",
+                    "production AI that ships",
                   ]}
                 />
               </p>
@@ -54,11 +74,12 @@ export const HeroSection = () => {
             <Reveal delay={0.15}>
               <p className="mt-6 text-base leading-relaxed text-muted md:text-lg">
                 Machine learning engineer with{" "}
-                <Highlight>six years of experience</Highlight> - lately focused
-                on <Highlight>LLM and RAG</Highlight> applications backed by
-                knowledge graphs, plus the <Highlight>MLOps</Highlight> that
-                keeps them reliable: pipelines, deployment, and drift
-                monitoring.
+                <Highlight>
+                  <CountUp to={6} /> years of experience
+                </Highlight>{" "}
+                - I take AI from raw data all the way to{" "}
+                <Highlight>production</Highlight>, and keep it reliable long
+                after launch.
               </p>
             </Reveal>
 
@@ -69,7 +90,8 @@ export const HeroSection = () => {
                     <span className="absolute inline-flex h-full w-full animate-ping-slow rounded-full bg-accent opacity-75" />
                     <span className="relative inline-flex size-2.5 rounded-full bg-accent" />
                   </span>
-                  Open to ML / GenAI roles
+                  Open to ML / AI Engineer · GenAI · MLOps roles · US ·
+                  remote-friendly
                 </span>
                 {currentRole ? (
                   <span className="text-muted">
@@ -81,19 +103,15 @@ export const HeroSection = () => {
 
             <Reveal delay={0.25}>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <LinkButton href="#experience">
-                  View my experience
-                  <ArrowDownIcon className="size-4" />
-                </LinkButton>
-                <LinkButton href={profile.resume} external variant="outline">
-                  Download résumé
-                  <ArrowUpRightIcon className="size-4" />
+                <LinkButton href={mailto}>
+                  Get in touch
+                  <MailIcon className="size-4" />
                 </LinkButton>
               </div>
             </Reveal>
           </div>
 
-          <Reveal delay={0.15} className="hidden min-w-0 lg:block">
+          <Reveal delay={0.15} x={28} className="hidden min-w-0 lg:block">
             <FileTree />
           </Reveal>
         </div>
