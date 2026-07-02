@@ -1,9 +1,10 @@
 import { useState, useRef, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial, Preload } from "@react-three/drei";
+import { useReducedMotion } from "framer-motion";
 import * as random from "maath/random/dist/maath-random.esm";
 
-const Stars = (props) => {
+const Stars = ({ reduced, ...props }) => {
   const ref = useRef();
   // length divisible by 3 to avoid NaN positions
   const [sphere] = useState(() =>
@@ -11,9 +12,9 @@ const Stars = (props) => {
   );
 
   useFrame((_, delta) => {
-    if (!ref.current) return;
-    ref.current.rotation.x -= delta / 10;
-    ref.current.rotation.y -= delta / 15;
+    if (!ref.current || reduced) return;
+    ref.current.rotation.x -= delta / 16;
+    ref.current.rotation.y -= delta / 22;
   });
 
   return (
@@ -21,8 +22,8 @@ const Stars = (props) => {
       <Points ref={ref} positions={sphere} stride={3} frustumCulled {...props}>
         <PointMaterial
           transparent
-          color="#cba6f7"
-          size={0.0025}
+          color="#8a93a1"
+          size={0.0022}
           sizeAttenuation
           depthWrite={false}
         />
@@ -31,15 +32,22 @@ const Stars = (props) => {
   );
 };
 
-const StarsCanvas = () => (
-  <div className="w-full h-full absolute inset-0 z-[-1]">
-    <Canvas camera={{ position: [0, 0, 1] }}>
-      <Suspense fallback={null}>
-        <Stars />
-      </Suspense>
-      <Preload all />
-    </Canvas>
-  </div>
-);
+const StarsCanvas = () => {
+  const reduced = useReducedMotion();
+  return (
+    <div className="w-full h-full absolute inset-0 z-[-1]">
+      <Canvas
+        camera={{ position: [0, 0, 1] }}
+        dpr={[1, 1.5]}
+        frameloop={reduced ? "demand" : "always"}
+      >
+        <Suspense fallback={null}>
+          <Stars reduced={reduced} />
+        </Suspense>
+        <Preload all />
+      </Canvas>
+    </div>
+  );
+};
 
 export default StarsCanvas;

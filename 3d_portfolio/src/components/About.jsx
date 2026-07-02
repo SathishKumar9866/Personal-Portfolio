@@ -6,16 +6,16 @@ import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 
 const ServiceCard = ({ index, title }) => (
-  <Tilt className="xs:w-[250px] w-full" options={{ max: 35, scale: 1, speed: 450 }}>
+  <Tilt className="xs:w-[250px] w-full" options={{ max: 10, scale: 1, speed: 450 }}>
     <motion.div
-      variants={fadeIn("right", "spring", index * 0.3, 0.75)}
-      className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
+      variants={fadeIn("right", "spring", index * 0.2, 0.6)}
+      className="w-full rounded-2xl border border-line bg-tertiary shadow-card hover:border-accent/40 transition-colors"
     >
-      <div className="bg-tertiary rounded-[20px] py-8 px-6 min-h-[160px] flex justify-center items-center flex-col">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-mauve to-blue text-primary font-black flex items-center justify-center mb-4">
+      <div className="rounded-2xl py-8 px-6 min-h-[160px] flex flex-col items-start justify-between gap-6">
+        <span className="font-mono text-[13px] text-accent">
           {String(index + 1).padStart(2, "0")}
-        </div>
-        <h3 className="text-white-100 text-[18px] font-bold text-center">
+        </span>
+        <h3 className="font-display text-white-100 text-[20px] leading-tight">
           {title}
         </h3>
       </div>
@@ -32,7 +32,7 @@ const About = () => (
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]"
+      className="mt-4 font-serif text-secondary text-[17px] max-w-2xl leading-[1.6]"
     >
       I work across the full data-to-AI stack and care about the problem more
       than the title. The work tends to run offline, ground its answers in real
