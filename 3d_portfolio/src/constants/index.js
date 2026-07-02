@@ -46,6 +46,7 @@ export const projects = [
   {
     name: "rag-pipeline-langchain",
     outcome: "Production RAG on AWS with a measured retrieval loop and GitOps deploys.",
+    stages: ["ingest", "embed", "retrieve", "generate"],
     description:
       "Production RAG on AWS with a measured retrieval loop and a GitOps deploy path. Built to be evaluated and shipped, not demoed.",
     tags: [
@@ -60,6 +61,7 @@ export const projects = [
   {
     name: "ai-due-diligence-copilot",
     outcome: "Document Q&A that cites the exact source passage behind every answer.",
+    stages: ["docs", "index", "ask", "cite"],
     description:
       "Document Q&A that cites the exact source passage behind every answer. Runs free and offline first; one env var swaps in a hosted model.",
     tags: [
@@ -74,6 +76,7 @@ export const projects = [
   {
     name: "federated-yolov8-object-detection",
     outcome: "YOLOv8 detection trained federated — raw data never leaves the client.",
+    stages: ["clients", "local train", "aggregate", "detect"],
     description:
       "Object detection trained across distributed clients with federated learning, so the raw data never leaves the client that owns it.",
     tags: [
@@ -88,6 +91,7 @@ export const projects = [
   {
     name: "instagram-reels-extractor",
     outcome: "Turns video into structured, searchable text via transcript, OCR, and vision.",
+    stages: ["video", "transcribe", "index", "search"],
     description:
       "Turns video into structured, searchable text through transcript, OCR, and vision, then renders a clean document with local semantic search.",
     tags: [
@@ -102,6 +106,7 @@ export const projects = [
   {
     name: "pickleball-vision-llm",
     outcome: "Detection + tracking over match footage, split into modular layers.",
+    stages: ["video", "vision", "api", "ui"],
     description:
       "A full detection and tracking pipeline over match footage, split into modular vision, ML, API, and frontend layers.",
     tags: [
@@ -116,6 +121,7 @@ export const projects = [
   {
     name: "pickleball-shuffle",
     outcome: "Live mobile-first scorekeeper — no login, works offline after first load.",
+    stages: ["load", "cache", "play", "score"],
     description:
       "A live, mobile-first web app: draw a twist card mid-match and keep score, with no login and no signal needed after first load.",
     tags: [

@@ -6,27 +6,12 @@ import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 
-// deterministic RNG so each project gets a stable, unique cover
-const seedFrom = (str) => {
-  let h = 1779033703 ^ str.length;
-  for (let i = 0; i < str.length; i++) {
-    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
-    h = (h << 13) | (h >>> 19);
-  }
-  return () => {
-    h = Math.imul(h ^ (h >>> 16), 2246822507);
-    h = Math.imul(h ^ (h >>> 13), 3266489909);
-    return ((h ^= h >>> 16) >>> 0) / 4294967296;
-  };
-};
-
-// generative node/edge cover — a small map of the project's moving parts
-const ProjectCover = ({ name }) => {
+// pipeline cover — draws the project's real layers left-to-right (data flow)
+const ProjectCover = ({ stages = [], name }) => {
   const ref = useRef(null);
   useEffect(() => {
     const c = ref.current;
-    if (!c) return;
-    const rng = seedFrom(name);
+    if (!c || !stages.length) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const w = c.clientWidth,
       h = c.clientHeight;
@@ -35,59 +20,69 @@ const ProjectCover = ({ name }) => {
     const ctx = c.getContext("2d");
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, w, h);
+
     // hairline grid
-    ctx.strokeStyle = "rgba(42,50,61,0.6)";
+    ctx.strokeStyle = "rgba(42,50,61,0.55)";
     ctx.lineWidth = 1;
     for (let x = 24; x < w; x += 24) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, h);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
     }
     for (let y = 24; y < h; y += 24) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
     }
-    // nodes
-    const n = 7 + Math.floor(rng() * 4);
-    const pts = Array.from({ length: n }, () => ({
-      x: 20 + rng() * (w - 40),
-      y: 20 + rng() * (h - 40),
-    }));
-    // edges to nearest neighbours
-    ctx.strokeStyle = "rgba(227,164,76,0.45)";
-    pts.forEach((p, i) => {
-      const near = pts
-        .map((q, j) => ({ j, d: (p.x - q.x) ** 2 + (p.y - q.y) ** 2 }))
-        .filter((o) => o.j !== i)
-        .sort((a, b) => a.d - b.d)
-        .slice(0, 2);
-      near.forEach(({ j }) => {
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(pts[j].x, pts[j].y);
-        ctx.stroke();
-      });
-    });
-    // node dots
+
+    const n = stages.length;
+    const padX = 34;
+    const gap = (w - padX * 2) / (n - 1 || 1);
+    const cy = h * 0.44;
+    const pts = stages.map((_, i) => ({ x: padX + gap * i, y: cy }));
+
+    // flow arrows between stages
+    ctx.strokeStyle = "rgba(227,164,76,0.6)";
+    ctx.fillStyle = "rgba(227,164,76,0.6)";
+    ctx.lineWidth = 1.4;
+    for (let i = 0; i < n - 1; i++) {
+      const a = pts[i], b = pts[i + 1];
+      ctx.beginPath();
+      ctx.moveTo(a.x + 7, a.y);
+      ctx.lineTo(b.x - 10, b.y);
+      ctx.stroke();
+      // arrowhead
+      ctx.beginPath();
+      ctx.moveTo(b.x - 10, b.y - 4);
+      ctx.lineTo(b.x - 4, b.y);
+      ctx.lineTo(b.x - 10, b.y + 4);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // nodes + labels
+    ctx.textAlign = "center";
+    ctx.font = '600 11px "JetBrains Mono Variable", ui-monospace, monospace';
     pts.forEach((p, i) => {
       ctx.beginPath();
-      ctx.arc(p.x, p.y, i === 0 ? 5 : 3, 0, Math.PI * 2);
-      ctx.fillStyle = i === 0 ? "#e3a44c" : "rgba(232,228,217,0.85)";
+      ctx.arc(p.x, p.y, i === 0 ? 6 : 5, 0, Math.PI * 2);
+      ctx.fillStyle = i === 0 ? "#e3a44c" : "#0d1015";
       ctx.fill();
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = i === 0 ? "#e3a44c" : "rgba(232,228,217,0.8)";
+      ctx.stroke();
+      ctx.fillStyle = i === 0 ? "#e3a44c" : "rgba(232,228,217,0.85)";
+      ctx.fillText(stages[i], p.x, p.y + 26);
     });
-  }, [name]);
+  }, [stages, name]);
 
   return (
     <div className="relative w-full rounded-xl overflow-hidden border border-line bg-[#0d1015]" style={{ aspectRatio: "16 / 9" }}>
       <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
+      <span className="absolute top-2.5 left-3 font-mono text-[10px] tracking-label uppercase text-faint">
+        pipeline
+      </span>
     </div>
   );
 };
 
-const ProjectCard = ({ index, name, outcome, description, tags, source_code_link, live_link, featured }) => {
+const ProjectCard = ({ index, name, outcome, description, tags, stages, source_code_link, live_link, featured }) => {
   const reduced = useReducedMotion();
   const isLive = Boolean(live_link);
   return (
@@ -99,7 +94,7 @@ const ProjectCard = ({ index, name, outcome, description, tags, source_code_link
         options={{ max: reduced ? 0 : 8, scale: 1, speed: 400 }}
         className="h-full bg-tertiary p-5 rounded-2xl border border-line shadow-card hover:border-accent/40 transition-colors flex flex-col"
       >
-        <ProjectCover name={name} />
+        <ProjectCover stages={stages} name={name} />
 
         <div className="mt-5 flex items-center gap-3">
           <span
