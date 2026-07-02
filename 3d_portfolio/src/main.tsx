@@ -9,6 +9,13 @@ import "@fontsource/newsreader/400-italic.css";
 import App from "./App.tsx";
 import "./index.css";
 
+// a wink for the devs who open the console
+console.log(
+  "%c↳ built by hand. %chttps://github.com/SathishKumarAI",
+  "color:#e3a44c;font-family:monospace;font-weight:bold",
+  "color:#9aa3af;font-family:monospace"
+);
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />
