@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
+import CommandPalette from "./components/CommandPalette";
 
 // Code-split the second WebGL canvas out of the initial bundle.
 const StarsCanvas = lazy(() => import("./components/canvas/Stars"));
@@ -33,6 +34,7 @@ function App() {
         </main>
         <Footer />
         <BackToTop />
+        <CommandPalette />
       </div>
     </ErrorBoundary>
   );

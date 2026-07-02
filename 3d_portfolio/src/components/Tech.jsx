@@ -16,16 +16,19 @@ const Tech = () => (
         <motion.div
           key={g.title}
           variants={fadeIn("up", "spring", i * 0.1, 0.6)}
-          className="bg-tertiary rounded-2xl p-6 border border-surface hover:border-mauve/60 transition-colors"
+          className="bg-tertiary rounded-2xl p-6 border border-line hover:border-accent/50 transition-colors"
         >
-          <h3 className="text-mauve font-mono text-[13px] uppercase tracking-wider mb-4">
+          <h3 className="text-accent font-mono text-[12px] uppercase tracking-label mb-1">
             {g.title}
           </h3>
+          {g.note && (
+            <p className="font-serif text-secondary text-[13px] leading-snug mb-4">{g.note}</p>
+          )}
           <div className="flex flex-wrap gap-2">
             {g.items.map((it) => (
               <span
                 key={it}
-                className="text-secondary text-[13px] px-3 py-1 rounded-full bg-primary border border-surface"
+                className="font-mono text-secondary text-[12px] px-3 py-1 rounded-full bg-primary border border-line"
               >
                 {it}
               </span>

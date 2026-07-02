@@ -29,26 +29,32 @@ export const services = [
 export const stackGroups = [
   {
     title: "Data engineering",
+    note: "Moving and shaping data so the rest can trust it.",
     items: ["PySpark", "ETL pipelines", "PostgreSQL", "DynamoDB", "S3", "SQL"],
   },
   {
     title: "Data science",
+    note: "Finding what the data actually supports.",
     items: ["pandas", "NumPy", "scikit-learn", "evaluation", "exploratory analysis"],
   },
   {
     title: "LLM / RAG",
+    note: "Grounded answers with citations, offline-first.",
     items: ["LangChain", "LangGraph", "Ollama", "Claude", "Pinecone", "embeddings"],
   },
   {
     title: "Computer vision",
+    note: "Detection and tracking on real footage.",
     items: ["YOLOv8", "OpenCV", "detection & tracking", "federated learning", "PyTorch"],
   },
   {
     title: "MLOps & infra",
+    note: "Shipping models like software — reproducible, deployable.",
     items: ["MLflow", "Docker", "GitHub Actions", "Kubernetes", "Helm"],
   },
   {
     title: "Backend & apps",
+    note: "The interface a person actually uses.",
     items: ["Python", "FastAPI", "Next.js", "React", "TypeScript", "Tauri"],
   },
 ];
