@@ -8,7 +8,7 @@ import CanvasLoader from "../Loader";
 const AMBER = "#e3a44c";
 
 // A node/edge graph — a stand-in for the data → model → interface path I work on.
-function DataMesh({ reduced }) {
+function DataMesh({ reduced, mobile }) {
   const group = useRef();
   const { pointer } = useThree();
 
@@ -18,15 +18,21 @@ function DataMesh({ reduced }) {
   useFrame((_, delta) => {
     if (!group.current) return;
     if (!reduced) group.current.rotation.y += delta * 0.18;
-    // gentle mouse parallax
-    const tx = reduced ? 0 : pointer.y * 0.18;
-    const ty = reduced ? 0 : pointer.x * 0.28;
+    // gentle mouse parallax (desktop only)
+    const tx = reduced || mobile ? 0 : pointer.y * 0.18;
+    const ty = reduced || mobile ? 0 : pointer.x * 0.28;
     group.current.rotation.x += (tx - group.current.rotation.x) * 0.05;
     group.current.rotation.z += (ty - group.current.rotation.z) * 0.05;
   });
 
+  // on phones, drop the mesh into the lower third and shrink it so it never sits behind the copy
   return (
-    <group ref={group} rotation={[0.2, 0, 0]}>
+    <group
+      ref={group}
+      rotation={[0.2, 0, 0]}
+      position={mobile ? [0, -2.1, 0] : [1.3, 0, 0]}
+      scale={mobile ? 0.78 : 1}
+    >
       {/* faceted inner core */}
       <Icosahedron args={[1.12, 0]}>
         <meshStandardMaterial
@@ -85,10 +91,12 @@ const Poster = () => (
   </div>
 );
 
+// "compact" = phones + portrait tablets, where a big centred mesh would sit
+// behind the copy. Re-evaluates live on resize / orientation change.
 const useIsMobile = () => {
   const [m, setM] = useState(false);
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 640px)");
+    const mq = window.matchMedia("(max-width: 1024px)");
     const on = () => setM(mq.matches);
     on();
     mq.addEventListener("change", on);
@@ -122,14 +130,14 @@ const ComputersCanvas = () => {
           className="!absolute inset-0"
           frameloop={animate ? "always" : "demand"}
           dpr={[1, isMobile ? 1.3 : 2]}
-          camera={{ position: [0, 0, 6], fov: 42 }}
+          camera={{ position: [0, 0, isMobile ? 8.5 : 6], fov: 42 }}
           gl={{ antialias: true, powerPreference: "high-performance" }}
         >
           <Suspense fallback={<CanvasLoader />}>
             <ambientLight intensity={0.6} />
             <directionalLight position={[4, 5, 5]} intensity={1.6} color="#f4d9a8" />
             <pointLight position={[-5, -3, -4]} intensity={30} color="#4f9a8e" />
-            <DataMesh reduced={reduced} />
+            <DataMesh reduced={reduced} mobile={isMobile} />
           </Suspense>
           <Preload all />
         </Canvas>

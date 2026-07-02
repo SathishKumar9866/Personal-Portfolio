@@ -22,11 +22,17 @@ const Hero = () => {
         <ComputersCanvas />
       </Suspense>
 
+      {/* legibility scrim on compact widths — keeps the copy readable over the mesh */}
+      <div
+        className="absolute inset-0 z-[5] lg:hidden pointer-events-none bg-gradient-to-b from-primary via-primary/70 to-transparent"
+        aria-hidden="true"
+      />
+
       <motion.div
         variants={container}
         initial={reduced ? false : "hidden"}
         animate="show"
-        className={`${styles.paddingX} absolute inset-0 top-[18vh] max-w-7xl mx-auto flex flex-row items-start gap-5 z-10 pointer-events-none`}
+        className={`${styles.paddingX} absolute inset-0 top-[14vh] sm:top-[18vh] max-w-7xl mx-auto flex flex-row items-start gap-4 sm:gap-5 z-10 pointer-events-none`}
       >
         <div className="flex flex-col items-center mt-3">
           <div className="w-3 h-3 rounded-full bg-accent shadow-glow" />

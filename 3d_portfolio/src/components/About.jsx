@@ -9,13 +9,13 @@ const ServiceCard = ({ index, title }) => (
   <Tilt className="xs:w-[250px] w-full" options={{ max: 10, scale: 1, speed: 450 }}>
     <motion.div
       variants={fadeIn("right", "spring", index * 0.2, 0.6)}
-      className="w-full rounded-2xl border border-line bg-tertiary shadow-card hover:border-accent/40 transition-colors"
+      className="w-full h-full rounded-2xl border border-line bg-tertiary shadow-card hover:border-accent/40 transition-colors"
     >
-      <div className="rounded-2xl py-8 px-6 min-h-[160px] flex flex-col items-start justify-between gap-6">
+      <div className="rounded-2xl py-6 px-5 flex flex-col gap-4">
         <span className="font-mono text-[13px] text-accent">
           {String(index + 1).padStart(2, "0")}
         </span>
-        <h3 className="font-display text-white-100 text-[20px] leading-tight">
+        <h3 className="font-display text-white-100 text-[19px] leading-tight">
           {title}
         </h3>
       </div>
