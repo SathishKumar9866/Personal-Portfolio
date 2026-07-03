@@ -56,18 +56,18 @@ const Hero = () => {
 
         <motion.h1
           variants={rise}
-          className={`${styles.heroHeadText} max-w-[16ch]`}
+          className={`${styles.heroHeadText} max-w-[18ch]`}
         >
-          From raw <span className="text-accent">data</span> to a working
-          <span className="text-accent"> interface</span> — shipped.
+          Everyone&apos;s building AI agents. I ship the ones that reach{" "}
+          <span className="text-accent">production</span>.
         </motion.h1>
 
         <motion.p
           variants={rise}
           className="mt-7 font-sans text-secondary text-[clamp(1rem,1.6vw,1.3rem)] leading-[1.55] max-w-xl"
         >
-          I&apos;m Sathish — an ML / AI engineer working across the full
-          data-to-AI stack: RAG, computer vision, and products people actually use.
+          I&apos;m Sathish — an ML / AI engineer. Offline-first, cited sources,
+          evaluated: RAG and vision systems built to survive real users, not a demo.
         </motion.p>
 
         <motion.div variants={rise} className="mt-10 flex flex-wrap items-center gap-4">
