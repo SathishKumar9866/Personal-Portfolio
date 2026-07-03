@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { styles } from "../styles";
+import LiveClock from "./LiveClock";
 
 const container = {
   hidden: {},
@@ -51,7 +52,7 @@ const Hero = () => {
           className="flex items-center justify-between border-b border-line pb-4 mb-10 sm:mb-14 font-mono text-[11px] uppercase tracking-label"
         >
           <span className="text-secondary">Sathish Kumar</span>
-          <span className="text-faint hidden xs:inline">India · UTC+5:30</span>
+          <LiveClock className="text-[11px] hidden sm:inline" />
         </motion.div>
 
         <motion.h1

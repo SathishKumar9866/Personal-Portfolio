@@ -1,4 +1,5 @@
 import { contact, navLinks } from "../constants";
+import LiveClock from "./LiveClock";
 
 const BUILD = "2026.07";
 
@@ -51,7 +52,9 @@ const Footer = () => (
 
     <div className="border-t border-line">
       <div className="max-w-7xl mx-auto px-6 sm:px-16 py-5 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between font-mono text-[11px] text-faint">
-        <span>© 2026 Sathish Kumar · {contact.timezone}</span>
+        <span className="flex flex-wrap items-center gap-x-2">
+          © 2026 Sathish Kumar <span className="text-line">·</span> <LiveClock />
+        </span>
         <span>
           Type: Bricolage Grotesque · Newsreader · JetBrains Mono ·{" "}
           <span className="text-secondary">build {BUILD}</span>

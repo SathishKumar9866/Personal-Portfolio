@@ -11,7 +11,16 @@ const Tech = () => (
       <h2 className={styles.sectionHeadText}>Stack.</h2>
     </motion.div>
 
-    <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-4">
+    <motion.p
+      variants={fadeIn("", "", 0.1, 1)}
+      className="mt-4 font-sans text-secondary text-[17px] max-w-2xl leading-[1.6]"
+    >
+      Not a badge collection — this is what I actually reach for, grouped by where
+      it sits on the path from raw data to a running product. I pick tools that
+      are boring in production: measurable, reproducible, and easy to hand off.
+    </motion.p>
+
+    <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4">
       {stackGroups.map((g, i) => (
         <motion.div
           key={g.title}

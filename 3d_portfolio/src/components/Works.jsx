@@ -110,12 +110,20 @@ const ProjectCard = ({ index, name, outcome, description, tags, stages, source_c
         <h3 className="mt-3 font-display text-[19px] leading-tight text-white-100">{outcome}</h3>
         <p className="mt-2 font-serif text-secondary text-[14px] leading-[1.55]">{description}</p>
 
-        <div className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
-          {tags.map((t) => (
-            <span key={t.name} className="font-mono text-[12px] text-faint">
-              #{t.name}
-            </span>
-          ))}
+        <div className="mt-4">
+          <span className="font-mono text-[10px] uppercase tracking-label text-faint">
+            built with
+          </span>
+          <div className="mt-1.5 flex flex-wrap gap-2">
+            {tags.map((t) => (
+              <span
+                key={t.name}
+                className="font-mono text-[11px] text-secondary px-2 py-0.5 rounded border border-line"
+              >
+                {t.name}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="mt-5 pt-4 border-t border-line flex gap-5 font-mono text-[12px]">
@@ -142,10 +150,12 @@ const Works = () => (
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-4 font-serif text-secondary text-[17px] max-w-2xl leading-[1.6]"
+      className="mt-4 font-sans text-secondary text-[17px] max-w-2xl leading-[1.6]"
     >
-      Six projects across RAG, computer vision, and shipped products. Each links
-      to its source; one runs live.
+      Six projects that put the stack to work — production RAG on AWS, federated
+      and real-time computer vision, multimodal search, and a live shipped app.
+      Each card shows the pipeline it runs on and the tools it was built with;
+      each links to its source, and one is live.
     </motion.p>
 
     <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
