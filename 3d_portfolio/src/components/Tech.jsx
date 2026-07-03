@@ -11,12 +11,12 @@ const Tech = () => (
       <h2 className={styles.sectionHeadText}>Stack.</h2>
     </motion.div>
 
-    <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-4">
       {stackGroups.map((g, i) => (
         <motion.div
           key={g.title}
-          variants={fadeIn("up", "spring", i * 0.1, 0.6)}
-          className="bg-tertiary rounded-2xl p-6 border border-line hover:border-accent/50 transition-colors"
+          variants={fadeIn("up", "spring", i * 0.08, 0.5)}
+          className="bg-tertiary rounded-2xl p-4 sm:p-6 border border-line hover:border-accent/50 transition-colors"
         >
           <h3 className="text-accent font-mono text-[12px] uppercase tracking-label mb-1">
             {g.title}

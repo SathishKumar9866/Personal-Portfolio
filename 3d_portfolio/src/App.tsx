@@ -4,6 +4,8 @@ import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import CommandPalette from "./components/CommandPalette";
+import Quote from "./components/Quote";
+import { quotes } from "./constants";
 
 function App() {
   return (
@@ -19,8 +21,11 @@ function App() {
         </div>
         <main id="main">
           <About />
+          <Quote text={quotes[0].text} author={quotes[0].author} />
           <Tech />
+          <Quote text={quotes[1].text} author={quotes[1].author} align="right" />
           <Works />
+          <Quote text={quotes[2].text} author={quotes[2].author} />
           <Contact />
         </main>
         <Footer />

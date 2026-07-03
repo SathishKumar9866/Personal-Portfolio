@@ -6,7 +6,7 @@ import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 
 const ServiceCard = ({ index, title }) => (
-  <Tilt className="xs:w-[250px] w-full" options={{ max: 10, scale: 1, speed: 450 }}>
+  <Tilt className="w-full h-full" options={{ max: 10, scale: 1, speed: 450 }}>
     <motion.div
       variants={fadeIn("right", "spring", index * 0.2, 0.6)}
       className="w-full h-full rounded-2xl border border-line bg-tertiary shadow-card hover:border-accent/40 transition-colors"
@@ -40,7 +40,7 @@ const About = () => (
       worth building. Calm, disciplined, focused on what I can control.
     </motion.p>
 
-    <div className="mt-20 flex flex-wrap gap-10">
+    <div className="mt-16 grid grid-cols-2 gap-3 sm:gap-6 max-w-3xl">
       {services.map((s, i) => (
         <ServiceCard key={s.title} index={i} title={s.title} />
       ))}

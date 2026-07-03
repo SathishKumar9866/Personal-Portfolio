@@ -11,6 +11,21 @@ export const contact = {
   ],
 };
 
+export const quotes = [
+  {
+    text: "If you can't explain it simply, you don't understand it well enough.",
+    author: "Albert Einstein",
+  },
+  {
+    text: "An equation for me has no meaning unless it expresses a thought of God.",
+    author: "Srinivasa Ramanujan",
+  },
+  {
+    text: "Dream is not what you see in sleep; dream is the thing which does not let you sleep.",
+    author: "A. P. J. Abdul Kalam",
+  },
+];
+
 export const navLinks = [
   { id: "about", title: "About" },
   { id: "work", title: "Work" },
