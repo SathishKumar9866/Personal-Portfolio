@@ -34,10 +34,22 @@ export const navLinks = [
 
 // Focus areas across the data-to-AI stack
 export const services = [
-  { title: "Data Engineering" },
-  { title: "Data Science" },
-  { title: "Machine Learning" },
-  { title: "AI Engineering" },
+  {
+    title: "Data Engineering",
+    desc: "Pipelines that move and shape data reliably — Spark, SQL, and cloud storage the rest of the stack can trust.",
+  },
+  {
+    title: "Data Science",
+    desc: "Turning raw data into decisions — analysis, evaluation, and models grounded in what the data actually supports.",
+  },
+  {
+    title: "Machine Learning",
+    desc: "Training, tuning, and evaluating models — computer vision and beyond — built to generalize past the demo.",
+  },
+  {
+    title: "AI Engineering",
+    desc: "Shipping LLM and RAG systems to production: cited, offline-capable, and evaluated like software.",
+  },
 ];
 
 // Grouped stack, six areas across the data-to-AI path.

@@ -5,19 +5,20 @@ import { services } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 
-const ServiceCard = ({ index, title }) => (
-  <Tilt className="w-full h-full" options={{ max: 10, scale: 1, speed: 450 }}>
+const ServiceCard = ({ index, title, desc }) => (
+  <Tilt className="w-full h-full" options={{ max: 8, scale: 1, speed: 450 }}>
     <motion.div
       variants={fadeIn("right", "spring", index * 0.2, 0.6)}
       className="w-full h-full rounded-2xl border border-line bg-tertiary shadow-card hover:border-accent/40 transition-colors"
     >
-      <div className="rounded-2xl py-6 px-5 flex flex-col gap-4">
+      <div className="rounded-2xl py-6 px-5 flex flex-col gap-3 h-full">
         <span className="font-mono text-[13px] text-accent">
           {String(index + 1).padStart(2, "0")}
         </span>
         <h3 className="font-display text-white-100 text-[19px] leading-tight">
           {title}
         </h3>
+        <p className="font-sans text-secondary text-[14px] leading-[1.5]">{desc}</p>
       </div>
     </motion.div>
   </Tilt>
@@ -42,7 +43,7 @@ const About = () => (
 
     <div className="mt-16 grid grid-cols-2 gap-3 sm:gap-6 max-w-3xl">
       {services.map((s, i) => (
-        <ServiceCard key={s.title} index={i} title={s.title} />
+        <ServiceCard key={s.title} index={i} title={s.title} desc={s.desc} />
       ))}
     </div>
   </>
