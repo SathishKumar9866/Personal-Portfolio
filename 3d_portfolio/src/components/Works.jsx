@@ -6,71 +6,103 @@ import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 
-// pipeline cover — draws the project's real layers left-to-right (data flow)
+// pipeline cover — the project's real layers, with a data packet flowing through
 const ProjectCover = ({ stages = [], name }) => {
   const ref = useRef(null);
+  const reduced = useReducedMotion();
   useEffect(() => {
     const c = ref.current;
     if (!c || !stages.length) return;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = c.clientWidth,
-      h = c.clientHeight;
+    const w = c.clientWidth;
+    const h = c.clientHeight;
     c.width = w * dpr;
     c.height = h * dpr;
     const ctx = c.getContext("2d");
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, w, h);
-
-    // hairline grid
-    ctx.strokeStyle = "rgba(255,255,255,0.06)";
-    ctx.lineWidth = 1;
-    for (let x = 24; x < w; x += 24) {
-      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-    }
-    for (let y = 24; y < h; y += 24) {
-      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-    }
 
     const n = stages.length;
     const padX = 34;
     const gap = (w - padX * 2) / (n - 1 || 1);
     const cy = h * 0.44;
     const pts = stages.map((_, i) => ({ x: padX + gap * i, y: cy }));
+    // cumulative distance to each node (nodes are evenly spaced, so gap * i)
+    const cum = pts.map((_, i) => gap * i);
+    const total = cum[n - 1] || 1;
 
-    // flow arrows between stages
-    ctx.strokeStyle = "rgba(255,54,33,0.72)";
-    ctx.fillStyle = "rgba(255,54,33,0.72)";
-    ctx.lineWidth = 1.4;
-    for (let i = 0; i < n - 1; i++) {
-      const a = pts[i], b = pts[i + 1];
-      ctx.beginPath();
-      ctx.moveTo(a.x + 7, a.y);
-      ctx.lineTo(b.x - 10, b.y);
-      ctx.stroke();
-      // arrowhead
-      ctx.beginPath();
-      ctx.moveTo(b.x - 10, b.y - 4);
-      ctx.lineTo(b.x - 4, b.y);
-      ctx.lineTo(b.x - 10, b.y + 4);
-      ctx.closePath();
-      ctx.fill();
+    const draw = (dist) => {
+      // dist = how far the packet has travelled (px); -1 = static (all lit)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      // hairline grid
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
+      ctx.lineWidth = 1;
+      for (let x = 24; x < w; x += 24) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 24; y < h; y += 24) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+
+      // flow arrows
+      ctx.strokeStyle = "rgba(255,54,33,0.6)";
+      ctx.fillStyle = "rgba(255,54,33,0.6)";
+      ctx.lineWidth = 1.4;
+      for (let i = 0; i < n - 1; i++) {
+        const a = pts[i], b = pts[i + 1];
+        ctx.beginPath(); ctx.moveTo(a.x + 7, a.y); ctx.lineTo(b.x - 10, b.y); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(b.x - 10, b.y - 4); ctx.lineTo(b.x - 4, b.y); ctx.lineTo(b.x - 10, b.y + 4);
+        ctx.closePath(); ctx.fill();
+      }
+
+      // nodes + labels (lit once the packet has reached them)
+      ctx.textAlign = "center";
+      ctx.font = '600 11px "JetBrains Mono Variable", ui-monospace, monospace';
+      pts.forEach((p, i) => {
+        const lit = dist < 0 || dist >= cum[i] - 2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, lit ? 6 : 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = lit ? "#FF3621" : "#11262C";
+        ctx.fill();
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = lit ? "#FF3621" : "rgba(233,230,223,0.55)";
+        ctx.stroke();
+        ctx.fillStyle = lit ? "#FF3621" : "rgba(233,230,223,0.55)";
+        ctx.fillText(stages[i], p.x, p.y + 26);
+      });
+
+      // the travelling packet
+      if (dist >= 0) {
+        const px = pts[0].x + Math.min(dist, total);
+        ctx.beginPath();
+        ctx.arc(px, cy, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = "#fff";
+        ctx.shadowColor = "#FF3621";
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    };
+
+    if (reduced) {
+      draw(-1);
+      return;
     }
 
-    // nodes + labels
-    ctx.textAlign = "center";
-    ctx.font = '600 11px "JetBrains Mono Variable", ui-monospace, monospace';
-    pts.forEach((p, i) => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, i === 0 ? 6 : 5, 0, Math.PI * 2);
-      ctx.fillStyle = i === 0 ? "#FF3621" : "#11262C";
-      ctx.fill();
-      ctx.lineWidth = 1.5;
-      ctx.strokeStyle = i === 0 ? "#FF3621" : "rgba(233,230,223,0.8)";
-      ctx.stroke();
-      ctx.fillStyle = i === 0 ? "#FF3621" : "rgba(233,230,223,0.85)";
-      ctx.fillText(stages[i], p.x, p.y + 26);
-    });
-  }, [stages, name]);
+    let raf, start = null, visible = true;
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.1 });
+    io.observe(c);
+    const PERIOD = 2800; // ms per pass
+    const loop = (ts) => {
+      if (start === null) start = ts;
+      const p = ((ts - start) % (PERIOD + 700)) / PERIOD; // brief pause after each pass
+      if (visible) draw(p >= 1 ? -1 : p * total);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); };
+  }, [stages, name, reduced]);
 
   return (
     <div className="relative w-full rounded-xl overflow-hidden border border-line bg-[#11262C]" style={{ aspectRatio: "16 / 9" }}>
