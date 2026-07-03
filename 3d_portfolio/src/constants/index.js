@@ -89,6 +89,7 @@ export const stackGroups = [
 export const projects = [
   {
     name: "rag-pipeline-langchain",
+    cover: "embeddings",
     outcome: "Production RAG on AWS with a measured retrieval loop and GitOps deploys.",
     stages: ["ingest", "embed", "retrieve", "generate"],
     description:
@@ -104,6 +105,7 @@ export const projects = [
   },
   {
     name: "ai-due-diligence-copilot",
+    cover: "citation",
     outcome: "Document Q&A that cites the exact source passage behind every answer.",
     stages: ["docs", "index", "ask", "cite"],
     description:
@@ -119,6 +121,7 @@ export const projects = [
   },
   {
     name: "federated-yolov8-object-detection",
+    cover: "federated",
     outcome: "YOLOv8 detection trained federated — raw data never leaves the client.",
     stages: ["clients", "local train", "aggregate", "detect"],
     description:
@@ -134,6 +137,7 @@ export const projects = [
   },
   {
     name: "instagram-reels-extractor",
+    cover: "frames",
     outcome: "Turns video into structured, searchable text via transcript, OCR, and vision.",
     stages: ["video", "transcribe", "index", "search"],
     description:
@@ -149,6 +153,7 @@ export const projects = [
   },
   {
     name: "pickleball-vision-llm",
+    cover: "tracking",
     outcome: "Detection + tracking over match footage, split into modular layers.",
     stages: ["video", "vision", "api", "ui"],
     description:
@@ -164,6 +169,7 @@ export const projects = [
   },
   {
     name: "pickleball-shuffle",
+    cover: "scorecard",
     outcome: "Live mobile-first scorekeeper — no login, works offline after first load.",
     stages: ["load", "cache", "play", "score"],
     description:
