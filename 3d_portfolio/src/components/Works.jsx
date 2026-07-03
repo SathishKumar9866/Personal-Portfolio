@@ -22,7 +22,7 @@ const ProjectCover = ({ stages = [], name }) => {
     ctx.clearRect(0, 0, w, h);
 
     // hairline grid
-    ctx.strokeStyle = "rgba(42,50,61,0.55)";
+    ctx.strokeStyle = "rgba(255,255,255,0.06)";
     ctx.lineWidth = 1;
     for (let x = 24; x < w; x += 24) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
@@ -38,8 +38,8 @@ const ProjectCover = ({ stages = [], name }) => {
     const pts = stages.map((_, i) => ({ x: padX + gap * i, y: cy }));
 
     // flow arrows between stages
-    ctx.strokeStyle = "rgba(227,164,76,0.6)";
-    ctx.fillStyle = "rgba(227,164,76,0.6)";
+    ctx.strokeStyle = "rgba(255,54,33,0.72)";
+    ctx.fillStyle = "rgba(255,54,33,0.72)";
     ctx.lineWidth = 1.4;
     for (let i = 0; i < n - 1; i++) {
       const a = pts[i], b = pts[i + 1];
@@ -62,18 +62,18 @@ const ProjectCover = ({ stages = [], name }) => {
     pts.forEach((p, i) => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, i === 0 ? 6 : 5, 0, Math.PI * 2);
-      ctx.fillStyle = i === 0 ? "#e3a44c" : "#0d1015";
+      ctx.fillStyle = i === 0 ? "#FF3621" : "#11262C";
       ctx.fill();
       ctx.lineWidth = 1.5;
-      ctx.strokeStyle = i === 0 ? "#e3a44c" : "rgba(232,228,217,0.8)";
+      ctx.strokeStyle = i === 0 ? "#FF3621" : "rgba(233,230,223,0.8)";
       ctx.stroke();
-      ctx.fillStyle = i === 0 ? "#e3a44c" : "rgba(232,228,217,0.85)";
+      ctx.fillStyle = i === 0 ? "#FF3621" : "rgba(233,230,223,0.85)";
       ctx.fillText(stages[i], p.x, p.y + 26);
     });
   }, [stages, name]);
 
   return (
-    <div className="relative w-full rounded-xl overflow-hidden border border-line bg-[#0d1015]" style={{ aspectRatio: "16 / 9" }}>
+    <div className="relative w-full rounded-xl overflow-hidden border border-line bg-[#11262C]" style={{ aspectRatio: "16 / 9" }}>
       <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
       <span className="absolute top-2.5 left-3 font-mono text-[10px] tracking-label uppercase text-faint">
         pipeline

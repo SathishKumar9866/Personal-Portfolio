@@ -1,13 +1,9 @@
-import { lazy, Suspense } from "react";
 import { About, Contact, Hero, Navbar, Tech, Works } from "./components";
 import Footer from "./components/Footer";
 import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import CommandPalette from "./components/CommandPalette";
-
-// Code-split the second WebGL canvas out of the initial bundle.
-const StarsCanvas = lazy(() => import("./components/canvas/Stars"));
 
 function App() {
   return (
@@ -25,12 +21,7 @@ function App() {
           <About />
           <Tech />
           <Works />
-          <div className="relative z-0">
-            <Contact />
-            <Suspense fallback={null}>
-              <StarsCanvas />
-            </Suspense>
-          </div>
+          <Contact />
         </main>
         <Footer />
         <BackToTop />

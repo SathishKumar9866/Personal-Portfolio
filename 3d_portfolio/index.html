@@ -3,7 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0E1116" />
+    <meta name="theme-color" content="#FFFFFF" />
+
+    <!-- set theme before first paint to avoid a flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", t);
+        } catch (e) {
+          document.documentElement.setAttribute("data-theme", "light");
+        }
+      })();
+    </script>
 
     <title>Sathish Kumar — ML / AI Engineer</title>
     <meta
@@ -17,7 +30,7 @@
     <link
       rel="icon"
       type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E1116'/%3E%3Ctext x='50%25' y='53%25' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%23E3A44C' text-anchor='middle' dominant-baseline='middle'%3ES%3C/text%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23FF3621'/%3E%3Ctext x='50%25' y='54%25' font-family='Barlow,Arial,sans-serif' font-size='42' font-weight='700' fill='%23ffffff' text-anchor='middle' dominant-baseline='middle'%3ES%3C/text%3E%3C/svg%3E"
     />
 
     <!-- Open Graph / Twitter -->

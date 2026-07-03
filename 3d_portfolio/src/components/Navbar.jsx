@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { styles } from "../styles";
 import { navLinks } from "../constants";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const [active, setActive] = useState("");
@@ -84,9 +85,11 @@ const Navbar = () => {
           >
             ⌘K
           </button>
+          <ThemeToggle />
         </div>
 
-        <div className="sm:hidden flex flex-1 justify-end items-center">
+        <div className="sm:hidden flex flex-1 justify-end items-center gap-2">
+          <ThemeToggle />
           <button
             onClick={() => setToggle(!toggle)}
             className="relative z-50 text-white-100 text-[22px] leading-none px-2 py-1"
