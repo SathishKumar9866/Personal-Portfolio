@@ -48,7 +48,7 @@ const Navbar = () => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-primary font-display font-bold text-[15px]">
+          <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-white font-display font-bold text-[15px]">
             S
           </span>
           <p className="text-white-100 font-mono text-[14px] tracking-tight flex items-center">

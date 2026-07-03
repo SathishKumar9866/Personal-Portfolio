@@ -7,7 +7,7 @@ const Footer = () => (
     <div className="max-w-7xl mx-auto px-6 sm:px-16 py-14 grid gap-10 sm:grid-cols-[2fr_1fr_1fr]">
       <div>
         <div className="flex items-center gap-3">
-          <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-primary font-display font-bold text-[15px]">
+          <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-white font-display font-bold text-[15px]">
             S
           </span>
           <span className="font-mono text-[14px] text-white-100">sathish · ml/ai engineer</span>

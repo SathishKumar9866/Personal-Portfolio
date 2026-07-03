@@ -4,11 +4,22 @@ import { contact } from "../constants";
 
 const go = (id) => () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 const open = (url) => () => window.open(url, "_blank", "noreferrer");
+const toggleTheme = () => {
+  const el = document.documentElement;
+  const next = el.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  el.setAttribute("data-theme", next);
+  try {
+    localStorage.setItem("theme", next);
+  } catch {
+    /* ignore */
+  }
+};
 
 const ACTIONS = [
   { label: "Go to About", hint: "section", run: go("about") },
   { label: "Go to Work", hint: "section", run: go("work") },
   { label: "Go to Contact", hint: "section", run: go("contact") },
+  { label: "Toggle light / dark", hint: "theme", run: toggleTheme },
   { label: "Copy email", hint: contact.email, run: () => navigator.clipboard?.writeText(contact.email) },
   { label: "Open GitHub", hint: "SathishKumarAI", run: open("https://github.com/SathishKumarAI") },
   { label: "Open LinkedIn", hint: "in/SathishKumarAI", run: open("https://www.linkedin.com/in/SathishKumarAI") },
