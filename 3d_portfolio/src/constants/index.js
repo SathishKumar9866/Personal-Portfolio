@@ -181,6 +181,6 @@ export const projects = [
     ],
     gradient: "from-[#a6e3a1] to-[#fab387]",
     source_code_link: `${GH}/pickleball-shuffle`,
-    live_link: "https://www.pickleballshuffle.com/",
+    live_link: "https://pb-card-deck.vercel.app/",
   },
 ];

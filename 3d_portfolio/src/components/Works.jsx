@@ -263,13 +263,13 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           </div>
         </div>
 
-        <div className="mt-5 pt-4 border-t border-line flex gap-5 font-mono text-[12px]">
+        <div className="mt-5 pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-[12px]">
           <a href={source_code_link} target="_blank" rel="noreferrer" className="text-secondary hover:text-accent transition-colors">
             repo ↗
           </a>
           {live_link && (
             <a href={live_link} target="_blank" rel="noreferrer" className="text-live hover:text-accent transition-colors">
-              live ↗
+              {live_link.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗
             </a>
           )}
         </div>
