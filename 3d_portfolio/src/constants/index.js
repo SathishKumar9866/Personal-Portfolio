@@ -26,6 +26,28 @@ export const quotes = [
   },
 ];
 
+// plain-English definitions + a "learn more" link (curated: Wikipedia for
+// concepts, official site for tools, Hugging Face for model/task terms).
+// Any term without a link falls back to a Google search of the term.
+export const glossary = {
+  RAG: { def: "Retrieval-Augmented Generation — the AI looks things up in real documents before answering, so it cites sources instead of guessing.", link: "https://en.wikipedia.org/wiki/Retrieval-augmented_generation" },
+  LLM: { def: "Large Language Model — the kind of AI (like ChatGPT) that understands and writes text.", link: "https://en.wikipedia.org/wiki/Large_language_model" },
+  MLOps: { def: "The tooling and process to ship, monitor, and update ML models reliably — DevOps, but for models.", link: "https://en.wikipedia.org/wiki/MLOps" },
+  Kubernetes: { def: "An industry-standard system that runs and scales apps across many servers automatically.", link: "https://kubernetes.io/" },
+  FastAPI: { def: "A fast Python framework for building web APIs — the backend that serves the model.", link: "https://fastapi.tiangolo.com/" },
+  Vision: { def: "Computer vision — teaching software to understand images and video.", link: "https://en.wikipedia.org/wiki/Computer_vision" },
+  Federated: { def: "Federated learning — training a model across many devices without their raw data ever leaving them (privacy-preserving).", link: "https://en.wikipedia.org/wiki/Federated_learning" },
+  PyTorch: { def: "A popular open-source library for building and training neural networks.", link: "https://pytorch.org/" },
+  OpenCV: { def: "A widely-used library for processing images and video.", link: "https://opencv.org/" },
+  Docker: { def: "Packages an app with everything it needs so it runs the same anywhere.", link: "https://www.docker.com/" },
+  React: { def: "A popular library for building interactive web interfaces.", link: "https://react.dev/" },
+  AppliedML: { def: "Applied machine learning — using ML to solve a real, practical problem.", link: "https://en.wikipedia.org/wiki/Machine_learning" },
+  Multimodal: { def: "Works across several data types at once — e.g. video, audio, and text together.", link: "https://huggingface.co/tasks" },
+  Python: { def: "The main programming language for data and AI work.", link: "https://www.python.org/" },
+  Product: { def: "A finished, usable app — not a prototype.", link: null },
+  Live: { def: "Deployed and running in the real world right now.", link: null },
+};
+
 export const navLinks = [
   { id: "about", title: "About" },
   { id: "work", title: "Work" },
