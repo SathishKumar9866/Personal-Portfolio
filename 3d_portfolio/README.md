@@ -38,14 +38,17 @@ npm run lint
 
 ## Configuration
 
-Optional — enables the live contact form (otherwise it opens the visitor's
-mail client):
+Optional — enables the contact form to send email in-page (otherwise it opens
+the visitor's mail client). Copy `.env.example` → `.env.local` and fill in:
 
 ```
 VITE_EMAILJS_SERVICE_ID=...
 VITE_EMAILJS_TEMPLATE_ID=...
 VITE_EMAILJS_PUBLIC_KEY=...
 ```
+
+Full step-by-step (including the required template variables): see
+[`docs/EMAIL-SETUP.md`](docs/EMAIL-SETUP.md).
 
 ## Editing content
 

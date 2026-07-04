@@ -25,8 +25,10 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 - [~] **(P1, M) Real project screenshots / GIFs (option A).** Drop images into
   `public/`; layer them over the generative covers for the top 1–2 projects.
   Highest credibility. *Needs assets from Sathish.*
-- [~] **(P1, S) Wire real EmailJS.** Set `VITE_EMAILJS_*` env vars; form already
-  falls back to `mailto` without them. *Needs EmailJS account keys.*
+- [~] **(P1, S) Add EmailJS keys.** Setup is scaffolded — code reads
+  `VITE_EMAILJS_*`, `.env.example` + `docs/EMAIL-SETUP.md` are in place, form
+  falls back to `mailto` until keys are set. *Just needs the 3 keys (local
+  `.env.local` + Vercel env), then verify a test send.*
 - [~] **(P1, S) Confirm LinkedIn slug + contact email** are current (LinkedIn
   blocks bot verification; email deliverability untestable here).
 - [~] **(P2, M) Metric covers (option E).** Show a real chart per project
