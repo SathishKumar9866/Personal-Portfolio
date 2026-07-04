@@ -59,16 +59,17 @@ const Hero = () => {
           variants={rise}
           className={`${styles.heroHeadText} max-w-[18ch]`}
         >
-          Everyone&apos;s building AI agents. I ship the ones that reach{" "}
-          <span className="text-accent">production</span>.
+          I&apos;m Sathish. I turn data and models into things people{" "}
+          <span className="text-accent">actually use</span>.
         </motion.h1>
 
         <motion.p
           variants={rise}
           className="mt-7 font-sans text-secondary text-[clamp(1rem,1.6vw,1.3rem)] leading-[1.55] max-w-xl"
         >
-          I&apos;m Sathish — an ML / AI engineer. Offline-first, cited sources,
-          evaluated: RAG and vision systems built to survive real users, not a demo.
+          An ML / AI engineer across the full data-to-AI stack — RAG, computer
+          vision, and products shipped offline-first, cited, and evaluated. I care
+          about the problem more than the title.
         </motion.p>
 
         <motion.div variants={rise} className="mt-10 flex flex-wrap items-center gap-4">
