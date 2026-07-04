@@ -59,17 +59,17 @@ const Hero = () => {
           variants={rise}
           className={`${styles.heroHeadText} max-w-[18ch]`}
         >
-          I&apos;m Sathish. I turn data and models into things people{" "}
-          <span className="text-accent">actually use</span>.
+          I like hard problems and shipped software. That&apos;s the{" "}
+          <span className="text-accent">whole pitch</span>.
         </motion.h1>
 
         <motion.p
           variants={rise}
           className="mt-7 font-sans text-secondary text-[clamp(1rem,1.6vw,1.3rem)] leading-[1.55] max-w-xl"
         >
-          An ML / AI engineer across the full data-to-AI stack — RAG, computer
-          vision, and products shipped offline-first, cited, and evaluated. I care
-          about the problem more than the title.
+          I&apos;m Sathish — an ML / AI engineer across the full data-to-AI stack:
+          RAG, computer vision, and products shipped offline-first, cited, and
+          evaluated.
         </motion.p>
 
         <motion.div variants={rise} className="mt-10 flex flex-wrap items-center gap-4">
