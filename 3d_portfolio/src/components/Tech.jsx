@@ -3,6 +3,7 @@ import { styles } from "../styles";
 import { stackGroups } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
+import TagTerm from "./TagTerm";
 
 const Tech = () => (
   <>
@@ -35,12 +36,7 @@ const Tech = () => (
           )}
           <div className="flex flex-wrap gap-2">
             {g.items.map((it) => (
-              <span
-                key={it}
-                className="font-mono text-secondary text-[12px] px-3 py-1 rounded-full bg-primary border border-line"
-              >
-                {it}
-              </span>
+              <TagTerm key={it} name={it} />
             ))}
           </div>
         </motion.div>
