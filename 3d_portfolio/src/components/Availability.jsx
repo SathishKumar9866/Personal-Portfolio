@@ -65,11 +65,11 @@ const Availability = () => (
 
     <motion.p
       variants={row}
-      className="relative flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[11px] uppercase tracking-label text-live"
+      className="relative flex flex-wrap items-center gap-x-2 gap-y-1 font-mono font-bold text-[11px] uppercase tracking-label text-live"
     >
       <Dot />
       Open to work
-      <span className="text-faint normal-case tracking-normal">· available now</span>
+      <span className="font-normal text-faint normal-case tracking-normal">· available now</span>
     </motion.p>
 
     <dl className="relative mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-[5.5rem_1fr] font-mono text-[12px]">
