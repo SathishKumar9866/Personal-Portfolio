@@ -1,11 +1,11 @@
-import { contact, navLinks } from "../constants";
+import { navLinks } from "../constants";
 import LiveClock from "./LiveClock";
 
 const BUILD = "2026.07";
 
 const Footer = () => (
   <footer className="relative z-10 border-t border-line bg-primary">
-    <div className="max-w-7xl mx-auto px-6 sm:px-16 py-14 grid gap-10 sm:grid-cols-[2fr_1fr_1fr]">
+    <div className="max-w-7xl mx-auto px-6 sm:px-16 py-14 grid gap-10 sm:grid-cols-[2fr_1fr]">
       <div>
         <div className="flex items-center gap-3">
           <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-white font-display font-bold text-[15px]">
@@ -30,24 +30,6 @@ const Footer = () => (
           ))}
         </ul>
       </nav>
-
-      <div>
-        <p className="font-mono text-[11px] uppercase tracking-label text-faint mb-3">Elsewhere</p>
-        <ul className="flex flex-col gap-2">
-          {contact.socials.map((s) => (
-            <li key={s.k}>
-              <a
-                href={s.href}
-                target={s.k === "email" ? undefined : "_blank"}
-                rel="noreferrer"
-                className="font-mono text-[13px] text-secondary hover:text-accent transition-colors break-all"
-              >
-                {s.v}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
 
     <div className="border-t border-line">

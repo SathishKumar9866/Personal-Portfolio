@@ -89,11 +89,6 @@ const Contact = () => {
         </motion.p>
 
         <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="mt-8 flex flex-col gap-4">
-          <div className="inline-flex items-center gap-2 self-start rounded-full border border-live/40 bg-live/10 px-3 py-1">
-            <span className="w-2 h-2 rounded-full bg-live animate-pulse" />
-            <span className="font-mono text-[12px] text-live">{contact.availability}</span>
-          </div>
-
           <button
             onClick={copyEmail}
             className="group flex items-center gap-3 self-start font-mono text-[14px] text-white-100"

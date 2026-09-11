@@ -2,7 +2,7 @@ const GH = "https://github.com/SathishKumarAI";
 
 export const contact = {
   email: "sathishkumar786.ml@gmail.com",
-  availability: "Open to ML / AI engineering roles",
+  availability: "Open to roles",
   timezone: "IST · UTC+5:30",
   socials: [
     { k: "github", v: "SathishKumarAI", href: "https://github.com/SathishKumarAI" },
