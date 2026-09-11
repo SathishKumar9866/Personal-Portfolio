@@ -3,7 +3,9 @@ const GH = "https://github.com/SathishKumarAI";
 export const contact = {
   email: "sathishkumar786.ml@gmail.com",
   github: "SathishKumarAI",
-  linkedin: "in/SathishKumarAI",
+  // Canonical slug is lowercase — it appears 72 times in his own saved
+  // profile page, and the mixed-case form appears zero times.
+  linkedin: "in/sathishkumarai",
   substack: "https://sathishkumarai.substack.com/",
   availability: "Open to roles",
   timezone: "IST · UTC+5:30",
