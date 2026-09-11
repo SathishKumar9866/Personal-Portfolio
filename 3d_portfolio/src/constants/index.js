@@ -4,9 +4,7 @@ export const contact = {
   email: "sathishkumar786.ml@gmail.com",
   github: "SathishKumarAI",
   linkedin: "in/SathishKumarAI",
-  // Full URL once the Substack exists. Null hides its icon rather than
-  // shipping a link that goes nowhere.
-  substack: null,
+  substack: "https://sathishkumarai.substack.com/",
   availability: "Open to roles",
   timezone: "IST · UTC+5:30",
 };
