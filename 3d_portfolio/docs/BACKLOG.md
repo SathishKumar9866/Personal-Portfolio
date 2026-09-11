@@ -11,7 +11,7 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 
 ## Ship / deploy
 
-- [ ] **(P0, S) Push branch + open PR.** Blocked on `gh auth login` (token expired).
+- [x] **(P0, S) ~~Push branch + open PR.~~** Done 2026-09-11: PR #4 open against `main`. Blocked on `gh auth login` (token expired).
 - [ ] **(P0, M) Deploy to Vercel.** Zero-config for this Vite app. Yields the
   production URL that unblocks the two tickets below.
 - [~] **(P0, S) Set the real canonical domain** in `index.html` (currently a
@@ -28,7 +28,7 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 - [x] **(P1, S) ~~Add EmailJS keys.~~** Dropped 2026-09-11, the contact form
   was removed in favour of a copyable address and an icon row, so there is
   nothing left to key.
-- [~] **(P1, S) Confirm LinkedIn slug + contact email** are current (LinkedIn
+- [x] **(P1, S) ~~Confirm LinkedIn slug + contact email.~~** Done 2026-09-11: canonical slug is lowercase `sathishkumarai`, from the owner's own saved profile (72 occurrences, zero for mixed case). HTTP cannot settle it; LinkedIn answers both with 999. Original note: are current (LinkedIn
   blocks bot verification; email deliverability untestable here).
 - [~] **(P2, M) Metric covers (option E).** Show a real chart per project
   (retrieval recall, detection mAP, latency). *Needs real numbers: don't fake.*
@@ -44,16 +44,16 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 - [ ] **(P2, S) "Now" / current-focus line**, what he's building this month.
 - [ ] **(P2, M) Hover-reveal on Stack tools**, where each tool was used (link to
   the project that uses it).
-- [ ] **(P2, S) Rotating / more quotes.**
+- [x] **(P2, S) ~~Rotating / more quotes.~~** Cancelled 2026-09-11: the three interstitial quotes were removed. They were the largest type on the page after the h1, larger than any project title, and sat between the reader and the work.
 
 ## Polish
 
-- [ ] **(P1, S) Light-mode contrast audit.** Small red text (`#FF3621`) on white
+- [x] **(P1, S) ~~Light-mode contrast audit.~~** Done 2026-09-11: the accent's role was split rather than its colour changed. `--c-accent` fills, `--c-accent-ink` reads as text. 22 pairs measured from the built stylesheet, all AA in both themes. Small red text (`#FF3621`) on white
   is ~3.5:1: fine for large headings (AA large), below AA for small body/eyebrow
   text. Consider a darker red token for small text, or navy.
 - [ ] **(P2, S) Smooth theme-toggle transition** on panels/borders (currently only
   `body` fades; other surfaces flip instantly).
-- [ ] **(P2, M) OG / Twitter share image.** Custom-designed card. *Needs a hosted
+- [x] **(P2, M) ~~OG / Twitter share image.~~** Done 2026-09-11: generated `public/og.png` at 1200x630 plus 180/192/512 icons. Still needs absolute URLs at deploy. Custom-designed card. *Needs a hosted
   raster image (PNG) at the deploy domain.*
 - [ ] **(P2, S) Section-header treatment**, the eyebrow+word pattern is fine but
   could be made more distinctly editorial if desired.

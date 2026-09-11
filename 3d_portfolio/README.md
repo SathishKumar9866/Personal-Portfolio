@@ -1,84 +1,61 @@
 # Sathish Kumar: portfolio
 
-A fast, type-led personal site for an ML / AI engineer. Databricks-inspired
-visual system, light + dark themes, no heavy 3D.
+A fast, type-led personal site for an AI engineer. Light and dark themes, one
+lava-red accent, no 3D engine. React 18 on Vite 5, Tailwind for styling, Framer
+Motion for movement, and two 2D canvases for the ambient field.
 
+Despite the folder name there is no 3D in it. `3d_portfolio` is left over from
+the template this was forked from; that stack was removed long ago.
 
-## Stack
+## Where to change what
 
-| Area | Choice |
+Read this table instead of the code.
+
+| You want to change | Open |
 | --- | --- |
-| Build | Vite 5 + `@vitejs/plugin-react-swc` |
-| UI | React 18 |
-| Styling | Tailwind CSS (CSS-variable design tokens) |
-| Motion | Framer Motion |
-| Type | Barlow (display + UI), Newsreader (prose), JetBrains Mono (labels), self-hosted via `@fontsource` |
-| Contact | Copyable address + `mailto:`, no form, no service |
-
-## Design system
-
-- **Themes.** Every color is a CSS variable (`--c-*`, RGB triples) read through
-  Tailwind tokens, so light/dark swap by toggling `data-theme` on `<html>`. An
-  inline script in `index.html` sets the theme before first paint (no flash) and
-  respects `prefers-color-scheme`. `ThemeToggle` persists the choice.
-- **Palette.** Databricks-style: white / navy ink / oat in light, deep navy in
-  dark, one lava-red accent (`#FF3621`).
-- **The accent has two roles, and they are different tokens.** `--c-accent` is
-  the lava red and is for FILLS only, as text it measures 3.62:1 on white and
-  fails AA. `--c-accent-ink` is the same red darkened for text (5.78:1 light,
-  6.00:1 dark). Using `text-accent` on small type is a bug.
-- **`--c-line` vs `--c-line-strong`.** The hairline is deliberately faint
-  (1.22:1) and is right for decorative card edges. Anything that bounds an
-  *interactive control* uses `--c-line-strong`, which clears WCAG 1.4.11 at 3:1.
-- **Every text pair passes WCAG AA in both themes**, 22 pairs measured from the
-  built stylesheet, not from the source.
-- **Type scale + spacing.** 4px base; fluid `clamp()` headings. Prose is capped
-  near 72 characters a line; the featured card once ran 117.
+| Any copy: roles, projects, glossary, status | `src/constants/index.js` |
+| Colour, spacing, type tokens | `src/index.css`, then `tailwind.config.js` |
+| A whole section's layout | `src/components/<Section>.jsx` |
+| The order of sections | `src/App.tsx` |
+| Which items appear in the nav and the right rail | `navLinks` in `src/constants/index.js` |
+| The hero backdrop network | `src/components/NeuralField.jsx` |
+| The token wave in Stack | `src/components/TokenStream.jsx` |
+| A project's cover drawing | the drawing functions at the top of `src/components/Works.jsx` |
+| What a tech chip explains | `glossary` in `src/constants/index.js` |
 
 ## Run
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm run build      # production build to dist/
-npm run preview    # serve the build
+npm run build
 npm run lint
 ```
 
-## Configuration
+**A `node_modules` installed under Linux will not work on Windows.** It has no
+`.bin` shims and none of the platform binaries
+(`@rollup/rollup-win32-x64-msvc`, `@esbuild/win32-x64`). Re-run `npm install` on
+the machine you are building on.
 
-None. The site is static and takes no environment variables.
+**Configuration: none.** The site is static and reads no environment variables.
+`docs/EMAIL-SETUP.md` and `.env.example` describe a contact form removed on
+2026-09-11 and are kept only as history.
 
-Contact is a copyable address plus an icon row, there is no form and no mail
-service. `docs/EMAIL-SETUP.md` and `.env.example` describe the removed EmailJS
-form and are kept only as history.
+## Stack
 
-## Editing content
-
-All content is data-driven in `src/constants/index.js`:
-
-- `navLinks`, `services` (Overview), `stackGroups` (Stack, each with a `note`),
-- `projects` (each with `outcome`, `description`, `tags`, links), `quotes`,
-  and `contact`. Note: `stages` is present on each project but is currently
-  dead data: no component reads it.
-
-## Structure
-
-```
-src/
-  components/   Hero, Navbar, About, Tech, Works, Contact, Footer,
-                Quote, CommandPalette, ThemeToggle, LiveClock, ...
-  constants/    all site content
-  hoc/          SectionWrapper (scroll-reveal + layout)
-  utils/        motion variants
-  styles.js     shared type/spacing class strings
-  index.css     theme tokens + base styles
-```
+| Area | Choice |
+| --- | --- |
+| Build | Vite 5 with `@vitejs/plugin-react-swc` |
+| UI | React 18 |
+| Styling | Tailwind, with CSS-variable design tokens |
+| Motion | Framer Motion, plus two hand-written canvases |
+| Type | Barlow (display and UI), Newsreader (prose), JetBrains Mono (labels), self-hosted via `@fontsource` |
+| Contact | A copyable address and `mailto:`. No form, no service |
 
 ## Content model
 
-All content lives in `src/constants/index.js`. Components read it; a fact
-hard-coded in a component is a bug.
+All content lives in `src/constants/index.js`. Components read it. **A fact
+hard-coded in a component is a bug.**
 
 | Export | Holds |
 | --- | --- |
@@ -86,31 +63,148 @@ hard-coded in a component is a bug.
 | `experience` | roles, newest first |
 | `education` | degrees, newest first |
 | `projects` | the Work section |
-| `stackGroups`, `services` | Stack and About cards |
+| `services` | the six capability cards in About |
+| `stackGroups` | the six Stack groups |
 | `glossary` | plain-English definitions behind the dotted terms |
+| `navLinks` | drives the navbar, the right rail, and the command palette |
+| `profile` | portrait path and alt text |
 
-**Nothing unverified renders.** `experience` and `education` entries use
-`start` / `end` as ISO `"YYYY-MM"` or `null`, and every field is optional: an
-entry renders exactly what it has and omits what it does not. A role with no
-dates shows no date range rather than an invented one. Source numbers that are
-still placeholders (the resume repo's `[X]%`) must not be copied in.
+### Nothing unverified renders
 
-## Notable details
+This is enforced by shape, not by discipline.
 
-- **Two edge docks, different jobs.** Section navigation on the right (where you
-  are, one click to anywhere); contact on the left. Both appear only above the
-  `rail` breakpoint (1400px): below it a 44px dock measured 4px from the text at
-  every width, because the content container is `max-w-7xl` plus fixed padding.
-- **⌘K command palette**. jump to sections, copy email, open socials, toggle theme.
-- **Generative project covers**. each card draws an abstract diagram of what
-  the project does (a retrieval neighbourhood, a cited passage, a federated
-  hub-and-spoke), selected by its `cover` key and seeded deterministically from
-  the project name. Not screenshots, and not the literal pipeline stages.
-- **Live clock**. IST and US Eastern / Central in the hero and footer, with
-  zone abbreviations derived so they track daylight saving.
-- **Accessibility**. semantic landmarks, single `h1`, skip link, visible focus,
-  `prefers-reduced-motion` honored, keyboard-navigable palette.
-- **Performance**. vendor chunks split for caching; no runtime 3D.
+`experience` and `education` entries use `start` and `end` as ISO `"YYYY-MM"` or
+`null`, and every field is optional. **An entry renders exactly what it has and
+omits what it does not.** A role with no dates shows no date range rather than an
+invented one; a degree with only an end date shows the graduation and no span.
+
+The same rule governs figures. The resume repo this content came from carries
+unfilled placeholders such as `[X]%` and `p95 under [X]ms`. **None were copied.**
+The summaries state mechanisms and stacks, which are real, and stay silent on
+every number nobody has measured.
+
+### Adding a role or a degree
+
+```js
+{
+  company: "Acme",            // school: for education
+  title: "AI Engineer",       // degree: for education
+  location: "Chicago, IL",
+  start: "2025-01",           // or null
+  end: null,                  // null plus current:true renders "Present"
+  current: true,
+  summary: "What it was, and what made it hard.",
+  stack: ["Neo4j", "Azure"],  // focus: for education
+}
+```
+
+Anything left `null` or omitted does not render.
+
+### Adding a glossary term
+
+```js
+Neo4j: {
+  def: "A graph database, storing data as nodes and the relationships between them.",
+  link: "https://neo4j.com/",     // null is allowed and renders no link
+  full: "Neo4j graph database",   // optional, shown on hover, for acronyms
+},
+```
+
+Every term used anywhere must have an entry. Check it:
+
+```bash
+node --input-type=module -e "import('./src/constants/index.js').then(m=>{
+  const used=[...new Set([...m.stackGroups.flatMap(x=>x.items),
+    ...m.projects.flatMap(p=>p.tags),...m.experience.flatMap(e=>e.stack||[])])];
+  console.log('missing:', used.filter(t=>!m.glossary[t]));})"
+```
+
+## Design system
+
+Every colour is a CSS variable (`--c-*`, RGB triples) read through Tailwind
+tokens, so light and dark swap by toggling `data-theme` on `<html>`. An inline
+script in `index.html` sets the theme before first paint, so there is no flash,
+and respects `prefers-color-scheme`. `ThemeToggle` persists the choice and is the
+single owner of that state; the command palette asks it to toggle rather than
+writing the DOM itself.
+
+### The accent has two roles, and they are different tokens
+
+- `--c-accent` is the lava red and is for **fills only**. As text it measures
+  3.62:1 on white and fails AA.
+- `--c-accent-ink` is the same red darkened for **text**: 5.78:1 light, 6.00:1 dark.
+
+Using `text-accent` on small type is a bug.
+
+### `--c-line` against `--c-line-strong`
+
+The hairline is deliberately faint (1.22:1) and is right for decorative card
+edges. Anything bounding an **interactive control** uses `--c-line-strong`, which
+clears WCAG 1.4.11 at 3:1.
+
+### Glass
+
+Two materials, and the split is the engineering decision:
+
+- `.glass` is real `backdrop-filter`, reserved for surfaces that **float over
+  content**: the nav, both docks, the command palette, tooltips. Six of them.
+- `.glass-card` is the same look **without** the filter, for the twenty cards in
+  the page flow. A dozen-plus blurred layers in a scrolling page is the classic
+  cause of jank on a phone, and behind an in-flow card there is only the page
+  ground anyway.
+
+Light mode gets its own specular value; a bright top edge sells glass on a dark
+ground and muddies it on a near-white one. `prefers-reduced-transparency` drops
+the blur entirely.
+
+### Type
+
+Barlow for display and UI, Newsreader for prose, JetBrains Mono for labels and
+data. Prose is capped near 72 characters a line. Headings use fluid `clamp()`.
+
+**Every text pair passes WCAG AA in both themes**, 22 pairs measured from the
+built stylesheet rather than from source.
+
+## Sections, in order
+
+| Section | Component | Notes |
+| --- | --- | --- |
+| Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed: it was the fifth route to `#contact` |
+| About | `About.jsx` | Portrait, lede, availability card, six capability cards |
+| Experience | `Experience.jsx` | Roles then education on one timeline, dates right-aligned |
+| Stack | `Tech.jsx` | Six groups. Every chip has a definition on hover |
+| Work | `Works.jsx` | Six projects, generative canvas covers, plain chips |
+| Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
+| Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs. A notice, never an instruction |
+
+## Navigation and docks
+
+Two edges, two jobs, both above 1024px only:
+
+- **Right** (`SideRail.jsx`) is where you are, and one click to anywhere. Dots
+  driven by `useActiveSection`, the same single observer the top navbar reads, so
+  the two cannot disagree about where you are.
+- **Left** (`ContactRail.jsx`) is how to reach him. It steps aside while the
+  Contact section is on screen, so the same links are never visible twice.
+
+Both sit behind a `rail` breakpoint of 1024px, with 40px cells held 8px from the
+edge. The content container is `max-w-7xl` plus fixed 64px padding, so the text
+column starts at `max(0,(vw-1280)/2) + 64`. A 40px dock at 8px clears that at
+every desktop width; an earlier 44px-at-16px version sat 4px from the text until
+the viewport passed roughly 1320, which is why the breakpoint had wrongly been
+raised to 1400 instead.
+
+The top bar hides on scroll down and returns on scroll up, with four guards: a
+6px movement threshold, never hidden above 160px, never while the mobile menu is
+open, and never while focus is inside it, with any focus bringing it back.
+
+### Chips do two different things
+
+- In **Stack** the chip teaches, so its definition opens on **hover** as well as
+  click, and clicking pins it. A reader scanning tools should not have to guess
+  that a chip is clickable to learn what it means.
+- On **project and experience cards** the chip states, so it is `plain`: the
+  expanded name is a native tooltip, and no panel opens inside a tilting card.
 
 ## Ambient motion: two effects, each scoped
 
@@ -200,15 +294,24 @@ Verified in the browser rather than by grep: 13 external links, 13 with
 
 ## House style
 
-**No long dashes.** Not em, not en, not `&mdash;`. They read as machine-written
+**No long dashes.** No em dash, no en dash, no `&mdash;` or `&ndash;` entity. They read as machine-written
 now, and the alternatives are almost always clearer anyway: a colon where a label
 introduces its definition, a comma where a clause is parenthetical, a full stop
 where two sentences were being held together against their will. Swept the whole
 repo to zero, source and prose alike, and the check is one line:
 
 ```bash
-grep -rn $'—\|–\|&mdash;\|&ndash;' src public index.html README.md
+node -e "const fs=require('fs'),path=require('path');let bad=0;
+(function w(d){for(const f of fs.readdirSync(d)){const p=path.join(d,f);
+if(fs.statSync(p).isDirectory()){if(!['node_modules','dist','.git'].includes(f))w(p);}
+else if(/[.](jsx?|tsx?|css|md|html|txt)$/.test(f)){
+const n=(fs.readFileSync(p,'utf8').match(/[\u2013\u2014]/g)||[]).length;
+if(n){console.log(n,p);bad+=n;}}}})('src');console.log('total',bad);"
 ```
+
+Run it over `src`, `public` and `index.html`. This README is the one file that
+legitimately names the characters, so check it by eye rather than by grep.
+
 
 ## Traps
 
@@ -232,28 +335,63 @@ Each of these cost real time to find. They are written down so they cost it once
 - **Lighthouse's accessibility category does not check tap-target size.** The
   page scored 100 while 49 of 53 controls were under 44x44 on mobile.
 
-## Content sections, in order
+## Accessibility
 
-| Section | Component | Notes |
-| --- | --- | --- |
-| Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed, it was the fifth route to `#contact` |
-| About | `About.jsx` | Portrait, lede, the availability card, six capability cards |
-| Experience | `Experience.jsx` | Roles then education on one timeline; dates right-aligned. Renders only fields that exist |
-| Stack | `Tech.jsx` | Six groups; every chip has a definition on hover |
-| Work | `Works.jsx` | Six projects, generative covers, plain chips |
-| Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
-| Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs, a notice, never an instruction |
+Lighthouse reports 100 for accessibility, best practices, SEO and agentic
+browsing, on both desktop and mobile: 53 audits, none failing.
 
-## Docks and navigation
+That number is necessary and not sufficient. **Tap-target size is not in
+Lighthouse's accessibility category**, and this page scored 100 while 49 of 53
+controls were under 44x44 on mobile, the worst a chip at 15% of the minimum area.
+Measure it separately:
 
-Two edges, two jobs, both above 1024px only:
+```js
+[...document.querySelectorAll('a[href],button,input')]
+  .filter(el => el.offsetParent)
+  .filter(el => { const r = el.getBoundingClientRect();
+                  return r.width < 44 || r.height < 44; })
+```
 
-- **Right** (`SideRail.jsx`): where you are and one click to anywhere. Dots
-  driven by `useActiveSection`, the single observer the top navbar also reads, so
-  the two cannot disagree.
-- **Left** (`ContactRail.jsx`): how to reach him. Steps aside while the Contact
-  section is on screen, so the same links are never visible twice at once.
+Other things that hold, and should keep holding:
 
-The top bar hides on scroll down and returns on scroll up, with four guards: a
-6px threshold, never hidden above 160px, never while the mobile menu is open, and
-never while focus is inside it.
+- One `h1`, then `h2` per section, then `h3` for cards. No skips.
+- The skip link targets `<main tabIndex={-1}>`, and the hero lives inside `main`,
+  so "skip to content" does not mean "skip the content".
+- Both dialogs trap Tab, restore focus to whatever opened them, and lock body
+  scroll. The command palette is a real combobox and listbox with
+  `aria-activedescendant`, and its selection carries a left rule as well as a
+  tint, because colour alone is not a cue.
+- `prefers-reduced-motion` is honoured by one `MotionConfig` at the root, which
+  covers every Framer animation. The CSS block alone did not: it neutralises CSS
+  animation only, and every section reveal is JS-driven.
+- Timezone abbreviations are derived, so they track daylight saving. India is the
+  exception and is labelled by hand, because `Intl` returns `GMT+5:30` for
+  `Asia/Kolkata` in `en-US`, not `IST`.
+
+## Verification
+
+`npm run lint` and `npm run build` both exit 0. **Neither proves the page works.**
+
+`no-undef` is re-enabled explicitly in `eslint.config.js`, because
+`tseslint.configs.recommended` disables it on the assumption TypeScript catches
+it, and these are `.jsx` files `tsc` never sees. An undefined identifier once
+passed lint *and* `vite build`, and failed only in the browser.
+
+For anything visual, measure it in a browser:
+
+| Question | How, and why not the obvious way |
+| --- | --- |
+| Is contrast sufficient? | Compute from the **built** stylesheet. Reading the source proves the palette exists, not that an element uses it |
+| Is the line length right? | Walk text nodes with one `Range` per character and bucket by rendered line box. Average-glyph-width estimates are not accurate enough to act on |
+| Does this overlap that? | Compare **rendered text extents**, not element boxes. A block element is full width even when its text is not, which gives false positives |
+| Is the canvas really off? | Read its pixel buffer. `display: none` and a stopped loop are different things |
+| Did the dev server pick up my change? | Restart it after any `tailwind.config.js` edit. See Traps |
+
+## Repo conventions
+
+- **Every off-site link opens in a new tab.** See Links.
+- **No long dashes.** See House style.
+- Content in `src/constants/index.js`, never in a component.
+- A comment says *why*, not *what*. Several here record a decision that looks
+  like an omission, so the next person does not undo it.
+- `docs/WORKLOG.md` records what shipped; `docs/BACKLOG.md` records what has not.
