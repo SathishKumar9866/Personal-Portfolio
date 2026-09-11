@@ -276,10 +276,9 @@ These do not block the build; each renders nothing until its input exists.
 
 ## Found, not fixed
 
-- `pickleball-shuffle` in constants is the stale repo name; GitHub renamed it to
-  `pb-card-deck`. The link survives on a rename redirect, so it is not a 404,
-  but the displayed name is wrong and the redirect is not a guarantee. Fixed in
-  increment 3.
+- ~~`pickleball-shuffle` in constants is the stale repo name.~~ Fixed 2026-09-11:
+  renamed to `pb-card-deck` in constants and the link verified 200 directly,
+  no longer relying on GitHub's rename redirect.
 - `rag-project/ai-due-diligence-copilot/.env` is a real credential file in an
   unversioned 6.6 GB folder with no `.gitignore`. Outside this repo, so outside
   this spec — but it should be gitignored before that folder ever becomes a git

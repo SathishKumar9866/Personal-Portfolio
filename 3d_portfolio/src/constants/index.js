@@ -224,7 +224,7 @@ export const projects = [
     live_link: null,
   },
   {
-    name: "pickleball-shuffle",
+    name: "pb-card-deck",
     cover: "scorecard",
     outcome: "Live mobile-first scorekeeper — no login, works offline after first load.",
     stages: ["load", "cache", "play", "score"],
@@ -236,7 +236,7 @@ export const projects = [
       { name: "React", color: "text-blue" },
     ],
     gradient: "from-[#a6e3a1] to-[#fab387]",
-    source_code_link: `${GH}/pickleball-shuffle`,
+    source_code_link: `${GH}/pb-card-deck`,
     live_link: "https://pb-card-deck.vercel.app/",
   },
 ];
