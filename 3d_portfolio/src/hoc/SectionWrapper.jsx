@@ -14,7 +14,7 @@ const SectionWrapper = (Component, idName) =>
         // on a 844px phone the ratio maxes at 0.22 and a 0.25 threshold NEVER
         // fires — the whole section stayed at opacity 0. "some" is threshold 0.
         viewport={{ once: true, amount: "some" }}
-        className={`${styles.padding} max-w-7xl mx-auto relative z-0`}
+        className={`${styles.padding} max-w-7xl mx-auto relative z-0 isolate`}
       >
         <span className="hash-span" id={idName}>
           &nbsp;

@@ -11,9 +11,9 @@ import { useEffect, useRef } from "react";
  * getBoundingClientRect() on the actual controls, so the drawing stays wired to
  * the interface even when a dock hides itself or the window resizes.
  *
- * Underneath, a wave descends the viewport and generated tokens ride along it,
- * so the two ideas the page is about — a model computing, and text being emitted
- * — are the same picture.
+ * Scoped to the LANDING VIEW and faded out as the hero leaves. The token stream
+ * lives separately, in the one section where tokens mean something
+ * (TokenStream.jsx) — a backdrop that follows the reader everywhere is wallpaper.
  *
  * Deliberately NOT a 3D engine. three.js plus a renderer is ~150kB gzip against
  * a ~115kB bundle; this is one 2D canvas and a few hundred lines.
@@ -28,11 +28,6 @@ import { useEffect, useRef } from "react";
 
 // Real sub-word pieces, the way a tokenizer splits text, so the stream reads as
 // tokens being emitted rather than as boxes sliding past.
-const PIECES = [
-  "re", "trie", "val", "▁aug", "ment", "ed", "▁cites", "▁the", "▁source",
-  "▁it", "▁used", ".", "▁offline", "▁first", "▁eval", "uated", ".",
-];
-
 const HIDDEN = [5, 4]; // two hidden layers, between the two docks
 
 const token = (el, name, alpha) => {
@@ -69,7 +64,14 @@ const NeuralField = () => {
     // nobody asked for. This STOPS the loop rather than hiding the canvas.
     const wide = window.matchMedia("(min-width: 1024px)");
 
-    let dpr = 1, w = 0, h = 0, raf = 0, t0 = null, poll = 0;
+    // Scoped to the landing view. The canvas must stay position:fixed, because
+    // it is wired to two docks that are themselves fixed — so it is scoped by
+    // FADING OUT as the hero leaves and halting the loop, not by re-parenting.
+    // A field that follows the reader through Experience and Contact is
+    // wallpaper competing with text, which is the opposite of what it is for.
+    let heroVisible = 1;
+
+    let dpr = 1, w = 0, h = 0, raf = 0, poll = 0;
     let layers = [];      // [inputs, hidden1, hidden2, outputs]
     let signals = [];
 
@@ -120,53 +122,14 @@ const NeuralField = () => {
       signals.push({ path, t: 0, speed: 0.28 + Math.random() * 0.22 });
     };
 
-    const drawWave = (time, ink, accent) => {
-      // A wave that descends and wraps, with tokens riding it. The descent is
-      // slow on purpose: it should read as drift, not as a loading bar.
-      const bandH = h * 0.5;
-      const baseY = ((time * 14) % (h + bandH)) - bandH * 0.2;
-      const amp = Math.min(46, h * 0.06);
-
-      ctx.beginPath();
-      for (let x = 0; x <= w; x += 8) {
-        const y = baseY + Math.sin(x / 210 + time * 0.5) * amp;
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-      }
-      ctx.strokeStyle = accent.replace(",1)", ",0.16)");
-      ctx.lineWidth = 1.1;
-      ctx.stroke();
-
-      // tokens riding the same curve
-      ctx.font = '500 11px "JetBrains Mono Variable", ui-monospace, monospace';
-      ctx.textBaseline = "middle";
-      const RATE = 2.2;
-      for (let i = 0; i < 9; i++) {
-        const p = ((time * 0.06 + i / 9) % 1);
-        const x = p * (w + 160) - 80;
-        const y = baseY + Math.sin(x / 210 + time * 0.5) * amp;
-        const label = PIECES[(Math.floor(time * RATE) + i) % PIECES.length].replace("▁", " ");
-        const tw = ctx.measureText(label).width + 8;
-        const fade = Math.min(1, p * 8) * Math.min(1, (1 - p) * 8);
-        if (fade <= 0.02) continue;
-        ctx.strokeStyle = ink.replace(",1)", `,${0.1 * fade})`);
-        ctx.lineWidth = 1;
-        ctx.strokeRect(x, y - 9, tw, 18);
-        ctx.fillStyle = i === 0
-          ? accent.replace(",1)", `,${0.5 * fade})`)
-          : ink.replace(",1)", `,${0.3 * fade})`);
-        ctx.fillText(label, x + 4, y);
-      }
-    };
-
-    const draw = (time) => {
+    const draw = () => {
       const ink = token(root, "--c-line-strong", 1);
       const accent = token(root, "--c-accent", 1);
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
-
-      drawWave(time, ink, accent);
+      if (heroVisible <= 0.01) return;
+      ctx.globalAlpha = heroVisible;
 
       if (layers.length >= 2) {
         // every edge, faint
@@ -217,15 +180,21 @@ const NeuralField = () => {
       }
     };
 
-    const frame = (ts) => {
-      if (t0 === null) t0 = ts;
-      const time = (ts - t0) / 1000;
+    const frame = () => {
+      // How much of the hero is still on screen, 1 at the top and 0 once it has
+      // scrolled away. Read from scroll position rather than an observer so the
+      // fade is continuous rather than a step.
+      const hero = document.querySelector('section[aria-label="Intro"]');
+      if (hero) {
+        const b = hero.getBoundingClientRect();
+        heroVisible = Math.max(0, Math.min(1, (b.bottom - h * 0.15) / (h * 0.5)));
+      }
 
       signals.forEach((s) => (s.t += s.speed * 0.016));
       signals = signals.filter((s) => s.t < 1);
-      if (Math.random() < 0.035) spawn();
+      if (heroVisible > 0.05 && Math.random() < 0.035) spawn();
 
-      draw(time);
+      draw();
       raf = requestAnimationFrame(frame);
     };
 
@@ -234,7 +203,6 @@ const NeuralField = () => {
       clearInterval(poll);
       raf = 0;
       poll = 0;
-      t0 = null;
       signals = [];
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, c.width, c.height);
@@ -246,7 +214,7 @@ const NeuralField = () => {
       layers = readLayers();
       if (reduced) {
         // one settled frame — the picture still reads, it just holds still
-        draw(6);
+        draw();
         return;
       }
       if (!raf) raf = requestAnimationFrame(frame);

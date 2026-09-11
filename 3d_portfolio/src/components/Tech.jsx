@@ -4,9 +4,15 @@ import { stackGroups, TERM_HINT } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import TagTerm from "./TagTerm";
+import TokenStream from "./TokenStream";
 
 const Tech = () => (
   <>
+    {/* The token stream lives here and nowhere else: this is the section with
+        the LLM / RAG group, so a stream of sub-word pieces illustrates the
+        content instead of decorating the page. */}
+    <TokenStream />
+
     <motion.div variants={textVariant()}>
       <p className={styles.sectionSubText}>What I use</p>
       <h2 className={styles.sectionHeadText}>Stack.</h2>
