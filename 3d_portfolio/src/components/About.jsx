@@ -57,7 +57,10 @@ const About = () => (
     {/* Portrait in its own column; the bio and the status block share the
         second, so the status no longer drops below the portrait and leaves a
         step of dead space beside it. */}
-    <div className="mt-8 grid gap-8 sm:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)] md:items-start">
+    {/* Same max-w-5xl as the capability grid below, so the status card's right
+        edge lands on the cards' right edge instead of overshooting it by 128px.
+        One measure for the whole section. */}
+    <div className="mt-8 grid gap-8 sm:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)] md:items-start max-w-5xl">
       <motion.div variants={fadeIn("right", "spring", 0.1, 0.7)} className="max-w-[220px]">
         <Portrait />
       </motion.div>

@@ -233,3 +233,27 @@ main:focus:not(:focus-visible) {
     background: rgb(var(--c-primary));
   }
 }
+
+/* A slow specular sweep across the availability card — the one thing on the
+   page that should keep drawing the eye back. 9s, low alpha, and it crosses in
+   under a second, so it reads as light moving over glass rather than as a
+   banner demanding attention. Stopped entirely by the reduced-motion block. */
+@keyframes glass-sweep {
+  0%   { transform: translateX(-140%) skewX(-12deg); opacity: 0; }
+  8%   { opacity: 1; }
+  22%  { transform: translateX(240%) skewX(-12deg); opacity: 0; }
+  100% { transform: translateX(240%) skewX(-12deg); opacity: 0; }
+}
+.glass-sweep {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--c-live) / 0.16),
+    transparent
+  );
+  animation: glass-sweep 9s cubic-bezier(0.3, 0.1, 0.2, 1) infinite;
+}
