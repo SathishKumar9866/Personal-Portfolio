@@ -62,17 +62,21 @@ const Hero = () => {
           variants={rise}
           className={`${styles.heroHeadText} max-w-[18ch]`}
         >
-          I like hard problems and shipped software. That&apos;s the{" "}
-          <span className="text-accent">whole pitch</span>.
+          I ship the model{" "}
+          <span className="whitespace-nowrap">
+            &mdash; and the{" "}
+            <span className="text-accent">evidence it works</span>.
+          </span>
         </motion.h1>
 
         <motion.p
           variants={rise}
           className="mt-7 font-sans text-secondary text-[clamp(1rem,1.6vw,1.3rem)] leading-[1.55] max-w-xl"
         >
-          I&apos;m Sathish — an ML / AI engineer across the full data-to-AI stack:
-          RAG, computer vision, and products shipped offline-first, cited, and
-          evaluated.
+          ML / AI engineer across the data-to-AI stack. Retrieval that cites the
+          passage it used, vision that trains where the data already lives, and
+          results reported as measured &mdash; including the ones that came back
+          negative.
         </motion.p>
 
         <motion.div variants={rise} className="mt-10 flex flex-wrap items-center gap-4">

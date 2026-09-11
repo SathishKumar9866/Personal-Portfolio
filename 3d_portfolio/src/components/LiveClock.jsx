@@ -9,12 +9,13 @@ import { useEffect, useState } from "react";
  * correct EDT time reads it as an hour's error.
  */
 const ZONES = [
+  // His own zone leads: he is in US Central. The others are courtesy for a
+  // reader elsewhere. These two shift with DST, so their labels are derived.
+  { tz: "America/Chicago", full: "US Central time — where I am" },
+  { tz: "America/New_York", full: "US Eastern time" },
   // India observes no DST, so a fixed label is correct year-round — and needed,
   // because Intl's short name for Asia/Kolkata in en-US is "GMT+5:30", not "IST".
   { tz: "Asia/Kolkata", full: "India Standard Time", label: "IST" },
-  // These two DO shift, so their labels are derived rather than hardcoded.
-  { tz: "America/New_York", full: "US Eastern time" },
-  { tz: "America/Chicago", full: "US Central time" },
 ];
 
 const parts = (tz) =>

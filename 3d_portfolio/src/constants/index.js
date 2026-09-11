@@ -8,7 +8,7 @@ export const contact = {
   linkedin: "in/sathishkumarai",
   substack: "https://sathishkumarai.substack.com/",
   availability: "Open to roles",
-  timezone: "IST · UTC+5:30",
+  timezone: "US Central time",
 };
 
 // Portrait. Source is HeadShot.jpg at the repo root (1920x2879, kept out of

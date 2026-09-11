@@ -16,7 +16,14 @@ import { useEffect, useRef } from "react";
  *  - `prefers-reduced-motion` renders a single settled frame and stops
  *  - colours read from the theme tokens, so it follows light/dark
  */
-const TOKENS = 14;
+// Real sub-word pieces, the way a tokenizer actually splits text — so the lane
+// reads as TOKENS being emitted, not as boxes sliding past. Featureless
+// rectangles were the first version and they said nothing.
+const PIECES = [
+  "re", "trie", "val", "▁aug", "ment", "ed", "▁gen", "er", "ation",
+  "▁cites", "▁the", "▁source", "▁it", "▁used", ".", "▁offline", "▁first",
+  "▁eval", "uated", "▁not", "▁demo", "ed", ".",
+];
 const NODES = [5, 7, 7, 4]; // layer sizes
 
 const rgb = (el, name, alpha) => {
@@ -95,15 +102,44 @@ const Backdrop = () => {
         ctx.fill();
       });
 
-      // ---- tokens, generated left to right ----
-      const laneY = h * 0.72;
-      for (let i = 0; i < TOKENS; i++) {
-        const p = ((t * 0.13 + i / TOKENS) % 1);
-        const x = w * 0.06 + p * (w * 0.46);
-        const fade = Math.min(1, p * 6) * Math.min(1, (1 - p) * 6);
-        const tw = 6 + ((i * 13) % 11);
-        ctx.fillStyle = i % 7 === 0 ? accent.replace(",1)", `,${0.5 * fade})`) : ink.replace(",1)", `,${0.16 * fade})`);
-        ctx.fillRect(x, laneY - 3, tw, 6);
+      // ---- tokens, emitted one at a time, left to right ----
+      const laneY = h * 0.84;
+      const RATE = 2.4; // tokens per second
+      ctx.font = '500 11px "JetBrains Mono Variable", ui-monospace, monospace';
+      ctx.textBaseline = "middle";
+
+      const emitted = Math.floor(t * RATE);
+      let penX = w * 0.56;
+      const laneEnd = w * 0.97;
+
+      for (let k = Math.max(0, emitted - 22); k <= emitted; k++) {
+        const piece = PIECES[k % PIECES.length];
+        const label = piece.replace("▁", " ");
+        const tw = ctx.measureText(label).width + 8;
+        if (penX + tw > laneEnd) break;
+
+        const age = t * RATE - k;            // 0 = just emitted
+        const arrive = Math.min(1, age * 3); // slides in and settles
+        const fade = Math.min(1, age * 2) * Math.min(1, (22 - age) / 6);
+        if (fade > 0.02) {
+          const x = penX + (1 - arrive) * 10;
+          // the boundary box a tokenizer would draw around the piece
+          ctx.strokeStyle = ink.replace(",1)", `,${0.1 * fade})`);
+          ctx.lineWidth = 1;
+          ctx.strokeRect(x, laneY - 9, tw, 18);
+          ctx.fillStyle =
+            age < 0.6
+              ? accent.replace(",1)", `,${0.75 * fade})`)   // the newest one
+              : ink.replace(",1)", `,${0.35 * fade})`);
+          ctx.fillText(label, x + 4, laneY);
+        }
+        penX += tw + 3;
+      }
+
+      // the caret, where the next token lands
+      if (Math.floor(t * 2) % 2 === 0 && penX < laneEnd) {
+        ctx.fillStyle = accent.replace(",1)", ",0.6)");
+        ctx.fillRect(penX, laneY - 8, 1.5, 16);
       }
 
       // ---- deploy pulse: one ring every ~7s from the last layer ----
