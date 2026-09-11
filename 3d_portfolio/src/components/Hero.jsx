@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { styles } from "../styles";
 import LiveClock from "./LiveClock";
+import Backdrop from "./Backdrop";
 import { AvailabilityCompact } from "./Availability";
 
 const container = {
@@ -40,6 +41,7 @@ const Hero = () => {
   const reduced = useReducedMotion();
   return (
     <section className="relative w-full min-h-screen min-h-[100svh] flex items-center pt-20" aria-label="Intro">
+      <Backdrop />
       <SignalLine reduced={reduced} />
 
       <motion.div
@@ -86,15 +88,17 @@ const Hero = () => {
           >
             Get in touch
           </a>
-          <span className="ml-1">
-            <AvailabilityCompact />
-          </span>
+
+        </motion.div>
+
+        <motion.div variants={rise} className="mt-5">
+          <AvailabilityCompact />
         </motion.div>
       </motion.div>
 
       <a
         href="#about"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 group"
+        className="absolute bottom-8 right-6 sm:right-10 z-10 hidden sm:flex flex-col items-center gap-2 group"
         aria-label="Scroll to about"
       >
         <span className="font-mono text-[10px] tracking-label uppercase text-faint group-hover:text-accent transition-colors">
