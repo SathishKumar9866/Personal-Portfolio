@@ -9,7 +9,11 @@ const SectionWrapper = (Component, idName) =>
         variants={staggerContainer()}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, amount: 0.25 }}
+        // `amount` is a raw IntersectionObserver threshold, and intersectionRatio
+        // is capped at viewportHeight/elementHeight. Projects is ~3800px tall, so
+        // on a 844px phone the ratio maxes at 0.22 and a 0.25 threshold NEVER
+        // fires — the whole section stayed at opacity 0. "some" is threshold 0.
+        viewport={{ once: true, amount: "some" }}
         className={`${styles.padding} max-w-7xl mx-auto relative z-0`}
       >
         <span className="hash-span" id={idName}>
