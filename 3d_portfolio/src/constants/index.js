@@ -82,6 +82,10 @@ export const glossary = {
   Tauri: { def: "Builds small, fast desktop apps from web code.", link: "https://tauri.app/" },
 };
 
+// Said once per section. The affordance used to be announced on every single
+// chip, which put 33 question marks on one screen.
+export const TERM_HINT = "Dotted terms have a plain-English definition — tap one.";
+
 export const navLinks = [
   { id: "about", title: "About" },
   { id: "stack", title: "Stack" },
@@ -150,7 +154,7 @@ export const projects = [
     outcome: "Production RAG on AWS with a measured retrieval loop and GitOps deploys.",
     stages: ["ingest", "embed", "retrieve", "generate"],
     description:
-      "Production RAG on AWS with a measured retrieval loop and a GitOps deploy path. Built to be evaluated and shipped, not demoed.",
+      "LangChain and LangGraph drive retrieval over a Pinecone store, MLflow tracks every evaluation run, and releases ship through a GitOps path on Kubernetes and Helm.",
     tags: ["RAG", "MLOps", "Kubernetes"],
     source_code_link: `${GH}/rag-pipeline-langchain`,
     live_link: null,
@@ -161,7 +165,7 @@ export const projects = [
     outcome: "Document Q&A that cites the exact source passage behind every answer.",
     stages: ["docs", "index", "ask", "cite"],
     description:
-      "Document Q&A that cites the exact source passage behind every answer. Runs free and offline first; one env var swaps in a hosted model.",
+      "Due-diligence reading over pitch decks, 10-Ks and term sheets. Defaults to a local Ollama model with no account or key; one environment variable switches it to Claude. FastAPI behind a Next.js front end.",
     tags: ["LLM", "RAG", "FastAPI"],
     source_code_link: `${GH}/ai-due-diligence-copilot`,
     live_link: null,
@@ -172,7 +176,7 @@ export const projects = [
     outcome: "YOLOv8 detection trained federated — raw data never leaves the client.",
     stages: ["clients", "local train", "aggregate", "detect"],
     description:
-      "Object detection trained across distributed clients with federated learning, so the raw data never leaves the client that owns it.",
+      "Training is distributed across clients with Flower — only model updates cross the network, never the images. The privacy constraint shapes the architecture rather than sitting on top of it.",
     tags: ["Vision", "Federated", "PyTorch"],
     source_code_link: `${GH}/federated-yolov8-object-detection`,
     live_link: null,
@@ -183,7 +187,7 @@ export const projects = [
     outcome: "Turns video into structured, searchable text via transcript, OCR, and vision.",
     stages: ["video", "transcribe", "index", "search"],
     description:
-      "Turns video into structured, searchable text through transcript, OCR, and vision, then renders a clean document with local semantic search.",
+      "Caption, transcript, OCR and structured vision are merged into one document, rendered as a PDF and a linked docs site, with semantic search that runs entirely on your own machine.",
     tags: ["AppliedML", "Multimodal", "Python"],
     source_code_link: `${GH}/instagram-reels-extractor`,
     live_link: null,
@@ -194,7 +198,7 @@ export const projects = [
     outcome: "Detection + tracking over match footage, split into modular layers.",
     stages: ["video", "vision", "api", "ui"],
     description:
-      "A full detection and tracking pipeline over match footage, split into modular vision, ML, API, and frontend layers.",
+      "Four layers that move independently — vision, ML, API, front end — so the detection model can be replaced without touching the interface that shows its output.",
     tags: ["Vision", "OpenCV", "Docker"],
     source_code_link: `${GH}/pickleball-vision-llm`,
     live_link: null,
@@ -205,7 +209,7 @@ export const projects = [
     outcome: "Live mobile-first scorekeeper — no login, works offline after first load.",
     stages: ["load", "cache", "play", "score"],
     description:
-      "A live, mobile-first web app: draw a twist card mid-match and keep score, with no login and no signal needed after first load.",
+      "A deck of 1,729 twist cards drawn mid-match, alongside side-out scoring. Local-first PWA: no account, no backend, nothing to install.",
     tags: ["Product", "Live", "React"],
     source_code_link: `${GH}/pb-card-deck`,
     live_link: "https://pb-card-deck.vercel.app/",

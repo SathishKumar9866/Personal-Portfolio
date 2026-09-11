@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { styles } from "../styles";
-import { stackGroups } from "../constants";
+import { stackGroups, TERM_HINT } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import TagTerm from "./TagTerm";
@@ -19,6 +19,7 @@ const Tech = () => (
       Not a badge collection — this is what I actually reach for, grouped by where
       it sits on the path from raw data to a running product. I pick tools that
       are boring in production: measurable, reproducible, and easy to hand off.
+      <span className="mt-3 block font-mono text-[12px] text-faint">{TERM_HINT}</span>
     </motion.p>
 
     <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4">

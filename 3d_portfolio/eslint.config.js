@@ -21,6 +21,11 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // tseslint.configs.recommended turns no-undef OFF, on the assumption that
+      // TypeScript catches it. These are .jsx files that tsc never sees, so an
+      // undefined identifier passed lint AND vite build and only failed in the
+      // browser. Turn it back on for the untyped files.
+      'no-undef': 'error',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

@@ -286,11 +286,11 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
 
         <div className="mt-4">
           <span className="font-mono text-[10px] uppercase tracking-label text-faint">
-            built with <span className="normal-case tracking-normal">· tap <span className="text-accent">?</span> to explain</span>
+            built with
           </span>
           <div className="mt-1.5 flex flex-wrap gap-2">
             {tags.map((t) => (
-              <TagTerm key={t} name={t} />
+              <TagTerm key={t} name={t} plain />
             ))}
           </div>
         </div>
@@ -321,10 +321,8 @@ const Works = () => (
       variants={fadeIn("", "", 0.1, 1)}
       className="mt-4 font-sans text-secondary text-[17px] max-w-2xl leading-[1.6]"
     >
-      Six projects that put the stack to work — production RAG on AWS, federated
-      and real-time computer vision, multimodal search, and a live shipped app.
-      Each card visualises what the project actually does and the tools it was
-      built with; each links to its source, and one is live.
+      Production RAG on AWS, federated and real-time computer vision, multimodal
+      search, and one app that is live and in use.
     </motion.p>
 
     <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
