@@ -8,6 +8,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import CommandPalette from "./components/CommandPalette";
 import SideRail from "./components/SideRail";
 import ContactRail from "./components/ContactRail";
+import AgentNote from "./components/AgentNote";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             <Works />
             <Contact />
           </main>
+          <AgentNote />
           <Footer />
           <SideRail />
           <ContactRail />
