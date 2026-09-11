@@ -76,7 +76,7 @@ const About = () => (
           worth building. Calm, disciplined, focused on what I can control.
         </motion.p>
 
-        <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="max-w-[32rem]">
+        <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)}>
           <Availability />
         </motion.div>
       </motion.div>

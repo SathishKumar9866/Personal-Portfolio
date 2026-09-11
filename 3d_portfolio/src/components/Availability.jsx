@@ -36,17 +36,17 @@ const Availability = () => (
       Open to work
     </p>
 
-    <dl className="mt-3 grid gap-x-4 gap-y-2 sm:grid-cols-[7rem_1fr] font-mono text-[12px]">
+    <dl className="mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-[5.5rem_1fr] font-mono text-[12px]">
       <dt className="text-faint">Currently</dt>
-      <dd className="text-white-100">
+      <dd className="text-white-100 whitespace-nowrap">
         {status.role} · {status.company}
       </dd>
 
       <dt className="text-faint">Looking for</dt>
-      <dd className="text-white-100">{status.openTo}</dd>
+      <dd className="text-white-100 whitespace-nowrap">{status.openTo}</dd>
 
       <dt className="text-faint">Where</dt>
-      <dd className="text-white-100">{status.where}</dd>
+      <dd className="text-white-100 whitespace-nowrap">{status.where}</dd>
     </dl>
   </div>
 );

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { styles } from "../styles";
 import { navLinks } from "../constants";
@@ -19,19 +19,57 @@ const Navbar = () => {
   const active = useActiveSection();
   const [toggle, setToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const navRef = useRef(null);
 
+  // Hide on the way down, return on the way up. The bar is 77px of a fixed
+  // viewport — about 9% of a phone screen — held open the whole time someone is
+  // reading a very long page. Four guards, because a naive version of this is
+  // worse than not doing it:
+  //   1. a movement threshold, so a 2px jitter cannot toggle it
+  //   2. never hidden near the top, where there is nothing to reclaim
+  //   3. never hidden while the mobile menu is open — that IS the nav
+  //   4. never hidden while focus is inside it, which would strand a keyboard
+  //      user on a control they cannot see
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let last = window.scrollY;
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const y = window.scrollY;
+      const delta = y - last;
+      setScrolled(y > 24);
+      if (Math.abs(delta) > 6) {
+        const focusInside = navRef.current?.contains(document.activeElement);
+        setHidden(delta > 0 && y > 160 && !focusInside);
+        last = y;
+      }
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(read);
+    };
+    read();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, []);
+
+  // Guard 3: an open menu always shows its own bar.
+  useEffect(() => {
+    if (toggle) setHidden(false);
+  }, [toggle]);
 
   return (
     <nav
-      className={`${styles.paddingX} w-full flex items-center py-4 fixed top-0 z-40 transition-colors duration-300 ${
-        scrolled ? "glass border-b border-line/60" : "bg-transparent"
-      }`}
+      ref={navRef}
+      // Focus anywhere inside brings it straight back, so tabbing never lands on
+      // a control that is off-screen.
+      onFocusCapture={() => setHidden(false)}
+      className={`${styles.paddingX} w-full flex items-center py-4 fixed top-0 z-40 transition-[transform,background-color,border-color] duration-300 ${
+        hidden ? "-translate-y-full" : "translate-y-0"
+      } ${scrolled ? "glass border-b border-line/60" : "bg-transparent"}`}
     >
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
         <a
@@ -48,8 +86,8 @@ const Navbar = () => {
             S
           </span>
           <p className="text-white-100 font-mono text-[14px] tracking-tight flex items-center">
-            sathish
-            <span className="sm:inline hidden text-faint">&nbsp;· ml/ai engineer</span>
+            Sathish
+            <span className="sm:inline hidden text-faint">&nbsp;· ML / AI Engineer</span>
           </p>
         </a>
 
