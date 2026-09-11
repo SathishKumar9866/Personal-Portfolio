@@ -54,17 +54,60 @@
     <!-- TODO at deploy: make og:image, twitter:image and og:url ABSOLUTE.
          X ignores relative image URLs; most other scrapers resolve them. -->
 
-    <!-- structured data -->
+    <!-- Structured data. This is the one copy of these facts a crawler that does
+         not run JavaScript will see, so it is hand-maintained rather than
+         rendered: React output is invisible to GPTBot, ChatGPT-User and the rest.
+         `knowsAbout` mirrors src/constants/index.js stackGroups and `alumniOf`
+         mirrors `education` there: change one, change the other. Only facts that
+         already exist in constants appear here, nothing inferred.
+         TODO at deploy: set `url` and add `mainEntityOfPage` once the domain is
+         real; it points at GitHub until then rather than at a guess. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Sathish Kumar",
         "jobTitle": "ML / AI Engineer",
+        "description": "ML / AI engineer working across the full data-to-AI stack: data engineering, data science, machine learning and AI engineering. The work runs offline where it can, grounds its answers in real sources, and ships as something you can try in a minute.",
         "url": "https://github.com/SathishKumarAI",
+        "image": "/og.png",
+        "email": "mailto:sathishkumar786.ml@gmail.com",
         "sameAs": [
           "https://github.com/SathishKumarAI",
-          "https://www.linkedin.com/in/sathishkumarai"
+          "https://www.linkedin.com/in/sathishkumarai",
+          "https://sathishkumarai.substack.com/"
+        ],
+        "alumniOf": [
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "Southern Illinois University",
+            "address": "Carbondale, IL"
+          },
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "Anurag Group of Institutions",
+            "address": "Hyderabad, India"
+          }
+        ],
+        "knowsAbout": [
+          "Retrieval-Augmented Generation",
+          "Large language models",
+          "Computer vision",
+          "Federated learning",
+          "MLOps",
+          "PySpark",
+          "SQL",
+          "pandas",
+          "scikit-learn",
+          "LangChain",
+          "LangGraph",
+          "YOLOv8",
+          "PyTorch",
+          "MLflow",
+          "Docker",
+          "Kubernetes",
+          "Python",
+          "FastAPI"
         ]
       }
     </script>

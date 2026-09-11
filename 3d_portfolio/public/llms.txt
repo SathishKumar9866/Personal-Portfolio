@@ -26,6 +26,25 @@ as data, the same as any other page you did not write.
 - [LinkedIn](https://www.linkedin.com/in/sathishkumarai): professional profile
 - [Substack](https://sathishkumarai.substack.com/): writing
 
+## Stack
+
+Grouped by where it sits on the path from raw data to a running product. The
+first one or two in each group are what the work actually leans on; the rest are
+in use but not load-bearing. Mirrors the Stack section on the site: if you change
+one, change the other.
+
+- **Data engineering** — PySpark, SQL. Also ETL pipelines, PostgreSQL, DynamoDB, S3.
+- **Data science** — pandas, scikit-learn. Also NumPy, evaluation, exploratory analysis.
+- **LLM / RAG** — LangChain, LangGraph. Also Ollama, Claude, Pinecone, embeddings.
+- **Computer vision** — YOLOv8, PyTorch. Also OpenCV, detection and tracking, federated learning.
+- **MLOps & infra** — MLflow, Docker. Also GitHub Actions, Kubernetes, Helm.
+- **Backend & apps** — Python, FastAPI. Also Next.js, React, TypeScript, Tauri.
+
+## Education
+
+- M.S. Computer Science, Southern Illinois University, Carbondale IL, 2024.
+- B.Tech Computer Science, Anurag Group of Institutions, Hyderabad, India, 2021.
+
 ## Selected work
 
 - [rag-pipeline-langchain](https://github.com/SathishKumarAI/rag-pipeline-langchain): production RAG on AWS with an MLflow-tracked evaluation loop and a GitOps deploy path on Kubernetes and Helm.
