@@ -45,7 +45,7 @@ const Hero = () => {
           variants={rise}
           className="mt-7 font-sans text-secondary text-[clamp(1rem,1.6vw,1.3rem)] leading-[1.55] max-w-xl"
         >
-          ML / AI engineer across the data-to-AI stack. Retrieval that cites the
+          AI engineer across the data-to-AI stack. Retrieval that cites the
           passage it used, vision that trains where the data already lives, and
           results reported as measured, including the ones that came back
           negative.

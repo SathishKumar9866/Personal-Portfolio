@@ -87,7 +87,7 @@ const Navbar = () => {
           </span>
           <p className="text-white-100 font-mono text-[14px] tracking-tight flex items-center">
             Sathish
-            <span className="sm:inline hidden text-faint">&nbsp;· ML / AI Engineer</span>
+            <span className="sm:inline hidden text-faint">&nbsp;· AI Engineer</span>
           </p>
         </a>
 

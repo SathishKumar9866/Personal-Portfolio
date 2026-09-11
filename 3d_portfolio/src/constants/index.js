@@ -29,7 +29,7 @@ export const status = {
   // reads "Machine Learning Engineer | LLMs | MLOps", but that is a headline,
   // not a job title, the two disagreed on the same page until this was settled.
   role: "AI Engineer",
-  openTo: "ML / AI engineering roles",
+  openTo: "AI engineering roles",
   where: "United States: on-site, hybrid or remote",
 };
 
