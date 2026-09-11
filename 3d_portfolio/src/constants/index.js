@@ -18,6 +18,32 @@ export const profile = {
   alt: "Sathish Kumar",
 };
 
+// Employment status. Verified from the LinkedIn profile header saved
+// 2026-09-11: employer, headline, country and the on-site/hybrid/remote
+// preference are his own published words, not inferred.
+export const status = {
+  company: "AdvanSoft International, Inc",
+  role: "Machine Learning Engineer",
+  openTo: "ML / AI engineering roles",
+  where: "United States — on-site, hybrid or remote",
+};
+
+// Roles, newest first. `start`/`end` are ISO "YYYY-MM" or null when not yet
+// supplied; an entry renders whatever it has and nothing it does not, so a role
+// with no dates shows no date range rather than an invented one.
+export const experience = [
+  {
+    company: "AdvanSoft International, Inc",
+    title: "Machine Learning Engineer",
+    location: "United States",
+    start: null,
+    end: null,
+    current: true,
+    summary: null,
+    stack: [],
+  },
+];
+
 export const quotes = [
   {
     text: "If you can't explain it simply, you don't understand it well enough.",
@@ -88,6 +114,7 @@ export const TERM_HINT = "Dotted terms have a plain-English definition — tap o
 
 export const navLinks = [
   { id: "about", title: "About" },
+  { id: "experience", title: "Experience" },
   { id: "stack", title: "Stack" },
   { id: "work", title: "Work" },
   { id: "contact", title: "Contact" },

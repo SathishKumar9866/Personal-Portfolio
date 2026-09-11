@@ -9,7 +9,10 @@ import { useEffect, useState } from "react";
  * correct EDT time reads it as an hour's error.
  */
 const ZONES = [
-  { tz: "Asia/Kolkata", full: "India Standard Time" },
+  // India observes no DST, so a fixed label is correct year-round — and needed,
+  // because Intl's short name for Asia/Kolkata in en-US is "GMT+5:30", not "IST".
+  { tz: "Asia/Kolkata", full: "India Standard Time", label: "IST" },
+  // These two DO shift, so their labels are derived rather than hardcoded.
   { tz: "America/New_York", full: "US Eastern time" },
   { tz: "America/Chicago", full: "US Central time" },
 ];
@@ -23,10 +26,10 @@ const parts = (tz) =>
     timeZoneName: "short",
   }).formatToParts(new Date());
 
-const read = (tz) => {
+const read = ({ tz, label }) => {
   const p = parts(tz);
   const at = (t) => p.find((x) => x.type === t)?.value ?? "";
-  return { time: `${at("hour")}:${at("minute")}`, zone: at("timeZoneName") };
+  return { time: `${at("hour")}:${at("minute")}`, zone: label ?? at("timeZoneName") };
 };
 
 const LiveClock = ({ className = "" }) => {
@@ -49,7 +52,7 @@ const LiveClock = ({ className = "" }) => {
   return (
     <span className={`font-mono tabular-nums ${className}`}>
       {ZONES.map((z, i) => {
-        const { time, zone } = read(z.tz);
+        const { time, zone } = read(z);
         return (
           <span key={z.tz}>
             {i > 0 && <span className="text-faint"> · </span>}

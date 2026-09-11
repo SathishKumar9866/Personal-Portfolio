@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { styles } from "../styles";
 import LiveClock from "./LiveClock";
-import { contact } from "../constants";
+import { AvailabilityCompact } from "./Availability";
 
 const container = {
   hidden: {},
@@ -86,9 +86,8 @@ const Hero = () => {
           >
             Get in touch
           </a>
-          <span className="inline-flex items-center gap-2 font-mono text-[12px] text-live ml-1">
-            <span className="w-2 h-2 rounded-full bg-live" />
-            {contact.availability}
+          <span className="ml-1">
+            <AvailabilityCompact />
           </span>
         </motion.div>
       </motion.div>

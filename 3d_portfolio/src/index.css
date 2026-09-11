@@ -155,3 +155,14 @@ body {
 main:focus:not(:focus-visible) {
   outline: none;
 }
+
+/* Status signal. Slow and low-contrast on purpose — a fast pulse next to
+   "open to work" reads as anxious rather than available. */
+@keyframes status-ping {
+  0%   { transform: scale(0.9); opacity: 0.55; }
+  70%  { transform: scale(2.1); opacity: 0; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+.status-ping {
+  animation: status-ping 2.8s cubic-bezier(0.2, 0.65, 0.3, 0.9) infinite;
+}

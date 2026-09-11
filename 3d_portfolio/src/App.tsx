@@ -1,5 +1,6 @@
 import { MotionConfig } from "framer-motion";
 import { About, Contact, Hero, Navbar, Tech, Works } from "./components";
+import Experience from "./components/Experience";
 import Footer from "./components/Footer";
 import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
@@ -28,6 +29,7 @@ function App() {
               <Hero />
             </div>
             <About />
+            <Experience />
             <Tech />
             <Works />
             <Contact />

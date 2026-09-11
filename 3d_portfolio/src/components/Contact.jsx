@@ -14,6 +14,7 @@ import { contact } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import SocialIcons from "./SocialIcons";
+import Availability from "./Availability";
 
 const Contact = () => {
   const [copied, setCopied] = useState(false);
@@ -43,9 +44,13 @@ const Contact = () => {
         across any domain. If something here is useful to you, reach out.
       </motion.p>
 
+      <motion.div variants={fadeIn("up", "spring", 0.15, 0.7)} className="mt-8">
+        <Availability />
+      </motion.div>
+
       <motion.div
-        variants={fadeIn("up", "spring", 0.2, 0.7)}
-        className="mt-10 rounded-2xl border border-line bg-tertiary p-6 sm:p-8"
+        variants={fadeIn("up", "spring", 0.25, 0.7)}
+        className="mt-6 rounded-2xl border border-line bg-tertiary p-6 sm:p-8"
       >
         <p className="font-mono text-[11px] uppercase tracking-label text-faint">
           Email
