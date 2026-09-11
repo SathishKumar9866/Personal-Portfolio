@@ -6,7 +6,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import CommandPalette from "./components/CommandPalette";
-import ContactRail from "./components/ContactRail";
+import SideRail from "./components/SideRail";
 
 function App() {
   return (
@@ -35,7 +35,7 @@ function App() {
             <Contact />
           </main>
           <Footer />
-          <ContactRail />
+          <SideRail />
           <BackToTop />
           <CommandPalette />
         </div>

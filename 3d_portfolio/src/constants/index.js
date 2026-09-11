@@ -46,6 +46,10 @@ export const experience = [
   },
 ];
 
+// Degrees, newest first. Same contract as `experience`: `start`/`end` are ISO
+// "YYYY-MM" or null, and any field left null simply does not render.
+export const education = [];
+
 export const quotes = [
   {
     text: "If you can't explain it simply, you don't understand it well enough.",

@@ -4,6 +4,7 @@ import { styles } from "../styles";
 import { services, profile } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
+import Availability from "./Availability";
 
 const ServiceCard = ({ index, title, desc }) => (
   <Tilt className="w-full h-full" options={{ max: 8, scale: 1, speed: 450 }}>
@@ -68,6 +69,10 @@ const About = () => (
         worth building. Calm, disciplined, focused on what I can control.
       </motion.p>
     </div>
+
+    <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="mt-8 max-w-[32rem]">
+      <Availability />
+    </motion.div>
 
     <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 max-w-3xl">
       {services.map((s, i) => (

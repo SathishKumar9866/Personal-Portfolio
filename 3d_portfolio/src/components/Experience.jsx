@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { styles } from "../styles";
-import { experience } from "../constants";
+import { experience, education } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import Reveal from "./Reveal";
@@ -87,6 +87,28 @@ const Role = ({ role, index }) => (
   </Reveal>
 );
 
+/**
+ * Education uses the same timeline as roles — a degree is a dated entry with an
+ * institution, which is structurally identical to a job. It lives inside this
+ * section rather than getting its own, so that an empty list leaves no empty
+ * section and no nav item pointing at nothing.
+ */
+const Study = ({ item, index }) => (
+  <Role
+    index={index}
+    role={{
+      title: item.degree,
+      company: item.school,
+      location: item.location,
+      start: item.start,
+      end: item.end,
+      current: item.current,
+      summary: item.summary,
+      stack: item.focus ?? [],
+    }}
+  />
+);
+
 const Experience = () => (
   <>
     <motion.div variants={textVariant()}>
@@ -102,6 +124,21 @@ const Experience = () => (
         <Role key={`${role.company}-${role.title}`} role={role} index={i} />
       ))}
     </motion.ol>
+
+    {education.length > 0 && (
+      <>
+        <Reveal className="mt-16">
+          <h3 className="font-mono text-[12px] uppercase tracking-label text-accent-ink">
+            Education
+          </h3>
+        </Reveal>
+        <ol className="mt-6 list-none max-w-2xl">
+          {education.map((item, i) => (
+            <Study key={`${item.school}-${item.degree}`} item={item} index={i} />
+          ))}
+        </ol>
+      </>
+    )}
   </>
 );
 

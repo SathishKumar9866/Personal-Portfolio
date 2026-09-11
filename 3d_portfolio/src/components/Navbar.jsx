@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { styles } from "../styles";
 import { navLinks } from "../constants";
 import ThemeToggle from "./ThemeToggle";
+import useActiveSection from "../hooks/useActiveSection";
 
 const prefersReduced = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -15,57 +16,16 @@ const isMac = /Mac|iPhone|iPad/.test(
 const SHORTCUT = isMac ? "⌘K" : "Ctrl K";
 
 const Navbar = () => {
-  const [active, setActive] = useState("");
+  const active = useActiveSection();
   const [toggle, setToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // scroll-spy: highlight the section currently in view
   useEffect(() => {
-    const ids = navLinks.map((n) => n.id);
-    // Observe the SECTIONS, not the zero-height .hash-span markers. A marker is
-    // a point, so it crosses the band once and is gone; a section overlaps the
-    // band for as long as you are actually inside it.
-    const els = ids
-      .map((id) => document.getElementById(id)?.closest("section"))
-      .filter(Boolean);
-    // Track the SET of sections in the band and derive `active` from it. The
-    // previous version only ever set an id and never cleared one, so scrolling
-    // back to the hero left WORK lit in accent red over an empty band.
-    const inBand = new Set();
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          const id = e.target.querySelector(".hash-span")?.id ?? e.target.id;
-          if (e.isIntersecting) inBand.add(id);
-          else inBand.delete(id);
-        });
-        setActive([...inBand].at(-1) ?? "");
-      },
-      { rootMargin: "-45% 0px -50% 0px" }
-    );
-    els.forEach((el) => io.observe(el));
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      io.disconnect();
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // The menu is a full-screen overlay, so it needs modal behaviour: Escape to
-  // dismiss, and no scrolling the page underneath it.
-  useEffect(() => {
-    if (!toggle) return;
-    const onKey = (e) => e.key === "Escape" && setToggle(false);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [toggle]);
 
   return (
     <nav
@@ -81,7 +41,6 @@ const Navbar = () => {
             // Without preventDefault the browser also navigates to "#", which
             // pushes a history entry and can jump-cut the smooth scroll.
             e.preventDefault();
-            setActive("");
             window.scrollTo({ top: 0, behavior: prefersReduced() ? "auto" : "smooth" });
           }}
         >
@@ -100,7 +59,6 @@ const Navbar = () => {
               <li key={n.id}>
                 <a
                   href={`#${n.id}`}
-                  onClick={() => setActive(n.id)}
                   className={`relative font-mono text-[13px] uppercase tracking-[0.12em] transition-colors ${
                     active === n.id ? "text-accent-ink" : "text-secondary hover:text-white-100"
                   }`}
@@ -165,7 +123,6 @@ const Navbar = () => {
                       }`}
                       onClick={() => {
                         setToggle(false);
-                        setActive(n.id);
                       }}
                     >
                       {n.title}
