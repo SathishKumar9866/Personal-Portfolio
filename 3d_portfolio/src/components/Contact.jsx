@@ -19,6 +19,7 @@ import { contact } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import { ICON_PATHS, socialLinks } from "./icons";
+import AgentNote from "./AgentNote";
 
 /** github.com/x — the address without the protocol noise. */
 const readable = (href) => href.replace(/^https?:\/\//, "").replace(/\/$/, "");
@@ -141,6 +142,8 @@ const Contact = () => (
           <Row key={l.k} k={l.k} label={l.label} href={l.href} />
         ))}
       </ul>
+
+      <AgentNote />
     </motion.div>
   </div>
 );
