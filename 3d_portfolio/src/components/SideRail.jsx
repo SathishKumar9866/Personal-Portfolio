@@ -10,7 +10,7 @@ import useActiveSection from "../hooks/useActiveSection";
  * where the scrollbar and the back-to-top button already live; reaching him on
  * the left. Nine controls in one column was the thing to avoid.
  *
- * Hidden below the `rail` breakpoint (1400px) — see ContactRail for the
+ * Hidden below the `rail` breakpoint (1024px) — see ContactRail for the
  * measurement behind that number.
  */
 const SideRail = () => {
@@ -31,7 +31,7 @@ const SideRail = () => {
   return (
     <nav
       aria-label="Sections"
-      className="hidden rail:flex fixed right-4 top-1/2 z-40 -translate-y-1/2 flex-col items-center gap-1"
+      className="hidden rail:flex fixed right-2 xl:right-4 top-1/2 z-40 -translate-y-1/2 flex-col items-center gap-1"
     >
       {navLinks.map((n) => {
         const on = active === n.id;
@@ -42,7 +42,7 @@ const SideRail = () => {
             onClick={go(n.id)}
             aria-label={n.title}
             aria-current={on ? "true" : undefined}
-            className="group relative flex h-8 w-11 items-center justify-center"
+            className="group relative flex h-8 w-10 xl:w-11 items-center justify-center"
           >
             <span className="pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-md border border-line bg-primary px-2.5 py-1 font-mono text-[11px] text-secondary opacity-0 translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
               {n.title}

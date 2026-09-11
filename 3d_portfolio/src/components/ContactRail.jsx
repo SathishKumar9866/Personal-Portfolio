@@ -12,9 +12,10 @@ import { ICON_PATHS, socialLinks } from "./icons";
  * on one edge made a single column of nine controls.
  *
  * It steps aside while the Contact section is on screen, so the same four links
- * are never visible twice at once. Hidden below the `rail` breakpoint (1400px),
- * which is where the page actually has margin for an edge dock — below it the
- * dock measured 4px from the text at every width.
+ * are never visible twice at once. Hidden below the `rail` breakpoint (1024px)
+ * and on touch, where an edge dock sits on the content. The cell is 40px there
+ * and 44px from xl up, which keeps it clear of the text column at every
+ * desktop width rather than waiting for the viewport to grow.
  */
 const Label = ({ children }) => (
   // Opens to the RIGHT — this dock is on the left edge, so a label sliding left
@@ -25,7 +26,7 @@ const Label = ({ children }) => (
 );
 
 const cell =
-  "group relative flex h-11 w-11 items-center justify-center rounded-xl border border-line-strong bg-primary/85 backdrop-blur-sm text-secondary transition-colors hover:text-accent hover:border-accent focus-visible:text-accent";
+  "group relative flex h-10 w-10 xl:h-11 xl:w-11 items-center justify-center rounded-xl border border-line-strong bg-primary/85 backdrop-blur-sm text-secondary transition-colors hover:text-accent hover:border-accent focus-visible:text-accent";
 
 const ContactRail = () => {
   const [atContact, setAtContact] = useState(false);
@@ -54,7 +55,7 @@ const ContactRail = () => {
   return (
     <nav
       aria-label="Contact shortcuts"
-      className={`hidden rail:flex fixed left-4 top-1/2 z-40 -translate-y-1/2 flex-col gap-2 transition duration-300 ${
+      className={`hidden rail:flex fixed left-2 xl:left-4 top-1/2 z-40 -translate-y-1/2 flex-col gap-2 transition duration-300 ${
         atContact ? "invisible -translate-x-6 opacity-0" : "visible opacity-100"
       }`}
     >

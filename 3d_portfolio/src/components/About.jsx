@@ -54,25 +54,33 @@ const About = () => (
       <h2 className={styles.sectionHeadText}>Overview.</h2>
     </motion.div>
 
-    <div className="mt-8 grid gap-8 sm:gap-10 sm:grid-cols-[minmax(0,220px)_1fr] sm:items-start">
-      <motion.div variants={fadeIn("right", "spring", 0.1, 0.7)}>
+    {/* Portrait in its own column; the bio and the status block share the
+        second, so the status no longer drops below the portrait and leaves a
+        step of dead space beside it. */}
+    <div className="mt-8 grid gap-8 sm:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)] md:items-start">
+      <motion.div variants={fadeIn("right", "spring", 0.1, 0.7)} className="max-w-[220px]">
         <Portrait />
       </motion.div>
 
-      <motion.p
-        variants={fadeIn("", "", 0.1, 1)}
-        className="font-serif text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
-      >
-        I work across the full data-to-AI stack and care about the problem more
-        than the title. The work tends to run offline, ground its answers in real
-        sources, and be easy to try in a minute, because that is what makes it
-        worth building. Calm, disciplined, focused on what I can control.
-      </motion.p>
-    </div>
+      {/* motion.div, not div: framer propagates variants only through motion
+          components, so a plain wrapper here leaves the children stuck in the
+          `hidden` variant at opacity 0 — the same failure that hid Work. */}
+      <motion.div className="flex flex-col gap-7">
+        <motion.p
+          variants={fadeIn("", "", 0.1, 1)}
+          className="font-serif text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
+        >
+          I work across the full data-to-AI stack and care about the problem more
+          than the title. The work tends to run offline, ground its answers in real
+          sources, and be easy to try in a minute, because that is what makes it
+          worth building. Calm, disciplined, focused on what I can control.
+        </motion.p>
 
-    <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="mt-8 max-w-[32rem]">
-      <Availability />
-    </motion.div>
+        <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="max-w-[32rem]">
+          <Availability />
+        </motion.div>
+      </motion.div>
+    </div>
 
     <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 max-w-3xl">
       {services.map((s, i) => (
