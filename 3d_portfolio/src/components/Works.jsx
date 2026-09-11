@@ -255,6 +255,11 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
     offset: ["start end", "end start"],
   });
   // Small on purpose: enough to read as depth, not enough to look like drift.
+  // Note: framer logs "container has a non-static position" in dev. The container
+  // here is <html>, which is position:static on every site by default; the warning
+  // is dev-only (NODE_ENV guard in on-scroll-handler.mjs) and the measured offsets
+  // are correct. Silencing it would mean position:relative on <html>, which is a
+  // real cascade change for no production benefit.
   const coverY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [14, -14]);
   return (
     <motion.div
