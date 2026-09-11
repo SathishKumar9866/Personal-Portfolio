@@ -68,7 +68,10 @@ const About = () => (
       <motion.div className="flex flex-col gap-7">
         <motion.p
           variants={fadeIn("", "", 0.1, 1)}
-          className="font-serif text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
+          // Widened as a LEDE, not as a longer line. Filling the 892px column at 17px
+          // would run ~126 characters a line, roughly 70% past the readable band.
+          // Larger type on a wider measure fills the space and keeps ~71 characters.
+          className="font-serif text-secondary text-[clamp(1.1rem,1.5vw,1.35rem)] max-w-[40rem] leading-[1.65]"
         >
           I work across the full data-to-AI stack and care about the problem more
           than the title. The work tends to run offline, ground its answers in real
