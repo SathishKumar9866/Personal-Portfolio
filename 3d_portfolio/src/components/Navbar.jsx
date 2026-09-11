@@ -7,6 +7,13 @@ import ThemeToggle from "./ThemeToggle";
 const prefersReduced = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// The palette accepts Meta OR Ctrl, but the button said "⌘K" on every platform,
+// so Windows and Linux visitors were shown a key they do not have.
+const isMac = /Mac|iPhone|iPad/.test(
+  navigator.userAgentData?.platform || navigator.platform || ""
+);
+const SHORTCUT = isMac ? "⌘K" : "Ctrl K";
+
 const Navbar = () => {
   const [active, setActive] = useState("");
   const [toggle, setToggle] = useState(false);
@@ -111,9 +118,9 @@ const Navbar = () => {
           <button
             onClick={() => window.dispatchEvent(new Event("open-command"))}
             className="font-mono text-[11px] text-faint border border-line-strong rounded px-2 py-1 hover:border-accent hover:text-accent transition-colors"
-            aria-label="Open command palette"
+            aria-label={`${SHORTCUT} — open command palette`}
           >
-            ⌘K
+            {SHORTCUT}
           </button>
           <ThemeToggle />
         </div>
@@ -173,7 +180,7 @@ const Navbar = () => {
                 }}
                 className="mt-12 self-start font-mono text-[13px] text-faint border border-line-strong rounded px-3 py-2"
               >
-                ⌘K · quick actions
+                {SHORTCUT} · quick actions
               </button>
             </motion.div>
           )}

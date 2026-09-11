@@ -1,0 +1,29 @@
+# Sathish Kumar
+
+> ML / AI engineer working across the full data-to-AI stack — data engineering, data science, machine learning and AI engineering. The work tends to run offline, ground its answers in real sources, and be easy to try in a minute.
+
+Currently beginning a PhD, and open to roles across any domain. Every figure on this site is measured or absent; nothing here is estimated. This file is maintained by hand and may lag the site, which is canonical.
+
+## Contact
+
+- [Email](mailto:sathishkumar786.ml@gmail.com): sathishkumar786.ml@gmail.com
+- [GitHub](https://github.com/SathishKumarAI): source for everything listed below
+- [LinkedIn](https://www.linkedin.com/in/SathishKumarAI): professional profile
+- [Substack](https://sathishkumarai.substack.com/): writing
+
+## Selected work
+
+- [rag-pipeline-langchain](https://github.com/SathishKumarAI/rag-pipeline-langchain): production RAG on AWS with an MLflow-tracked evaluation loop and a GitOps deploy path on Kubernetes and Helm.
+- [federated-yolov8-object-detection](https://github.com/SathishKumarAI/federated-yolov8-object-detection): YOLOv8 trained across distributed clients with Flower federated learning, so raw data never leaves the client that owns it.
+- [ai-due-diligence-copilot](https://github.com/SathishKumarAI/ai-due-diligence-copilot): document Q&A that cites the exact source passage behind every answer, running offline first with one env var to swap in a hosted model.
+- [instagram-reels-extractor](https://github.com/SathishKumarAI/instagram-reels-extractor): turns video into structured, searchable text through transcript, OCR and vision, with local semantic search.
+- [pickleball-vision-llm](https://github.com/SathishKumarAI/pickleball-vision-llm): detection and tracking over match footage, split into modular vision, ML, API and frontend layers.
+- [pb-card-deck](https://pb-card-deck.vercel.app/): live mobile-first pickleball scorekeeper — no login, works offline after first load.
+
+## Also
+
+- [liver-report-ai-public](https://github.com/SathishKumarAI/liver-report-ai-public): offline pipeline turning scanned lab reports into a verified time series and a self-contained dashboard. Local OCR, no cloud, synthetic demo data only.
+- [engineering-intelligence-hub](https://github.com/SathishKumarAI/engineering-intelligence-hub): RAG over engineering docs — RFCs, runbooks, ADRs, API references — with citations.
+- [healthcare-knowledge-navigator](https://github.com/SathishKumarAI/healthcare-knowledge-navigator): clinical RAG over medical reference documents with citations.
+- [rsna-knee-2026](https://github.com/SathishKumarAI/rsna-knee-2026): Kaggle 2.5D MRI multi-label pipeline for knee abnormality detection.
+- [pediatric-care-platform](https://github.com/SathishKumarAI/pediatric-care-platform): desktop pediatric care app — clinical workflows plus an AI symptom checker over a knowledge graph.
