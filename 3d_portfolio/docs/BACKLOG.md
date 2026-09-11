@@ -5,18 +5,26 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 `[~]` needs input, `[x]` done.
 
 > Current state: Databricks-style site, light/dark, type-led hero, domain-specific
-> animated project covers. Branch `redesign/de-slop-portfolio`.
+> animated project covers, two-tier Stack chips, AI-crawler surface in place.
+> Branch `redesign/highway-premium`.
 
 ---
 
 ## Ship / deploy
 
 - [x] **(P0, S) ~~Push branch + open PR.~~** Done 2026-09-11: PR #4 open against `main`. Blocked on `gh auth login` (token expired).
-- [ ] **(P0, M) Deploy to Vercel.** Zero-config for this Vite app. Yields the
-  production URL that unblocks the two tickets below.
+- [~] **(P0, M) Deploy to Vercel.** Zero-config for this Vite app. Yields the
+  production URL that unblocks the tickets below. *Blocked 2026-09-11:
+  `npx vercel whoami` returns `Logged out` and `vercel login` is interactive, so
+  it has to be run by the owner. Deploy from the subdirectory
+  (`npx vercel --cwd 3d_portfolio`) or set Root Directory to `3d_portfolio` if
+  importing the repo in the dashboard: the site is not at the repo root.*
 - [~] **(P0, S) Set the real canonical domain** in `index.html` (currently a
   commented TODO) once the deploy URL exists.
-- [ ] **(P1, S) `sitemap.xml`** once the domain is known.
+- [x] **(P1, S) ~~`sitemap.xml`~~** Declined 2026-09-11, reasoning recorded in
+  `public/robots.txt`: this is a single page with in-page anchors, so a sitemap
+  would carry exactly one URL and tell a crawler nothing it does not already
+  have. Reopen the day the site grows real routes.
 - [ ] **(P1, M) Cross-browser + real-device QA**, Safari, Firefox, real iOS /
   Android. Only Chrome tested so far (emulated 390/820/1440).
 
@@ -53,8 +61,11 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   text. Consider a darker red token for small text, or navy.
 - [ ] **(P2, S) Smooth theme-toggle transition** on panels/borders (currently only
   `body` fades; other surfaces flip instantly).
-- [x] **(P2, M) ~~OG / Twitter share image.~~** Done 2026-09-11: generated `public/og.png` at 1200x630 plus 180/192/512 icons. Still needs absolute URLs at deploy. Custom-designed card. *Needs a hosted
-  raster image (PNG) at the deploy domain.*
+- [x] **(P2, M) ~~OG / Twitter share image.~~** Done 2026-09-11: `public/og.png`
+  at 1200x630 plus 180/192/512 icons. Regenerated later the same day when the
+  title changed, and given a source: `docs/og-card.html`. It had none, so the
+  card kept saying "ML / AI Engineer" after every string on the site had been
+  updated, because a grep cannot read a PNG. Still needs absolute URLs at deploy.
 - [ ] **(P2, S) Section-header treatment**, the eyebrow+word pattern is fine but
   could be made more distinctly editorial if desired.
 
@@ -64,6 +75,19 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   (~37KB gzip). Replace simple reveals/hovers with CSS where possible.
 - [ ] **(P2, S) Preload the primary font weights** (Barlow 400/700) to cut FOUT.
 - [ ] **(P2, S) CI:** GitHub Action for build + lint + a Lighthouse budget on PRs.
+- [ ] **(P1, L) Prerender for AI crawlers.** The site is a client-rendered SPA,
+  so ChatGPT-User, GPTBot and most AI crawlers see only the `<noscript>` block:
+  they do not execute JavaScript. `public/llms.txt` is the deliberate answer and
+  covers the content, but the HTML itself is empty to them. A build-time
+  prerender (one plugin, one build step) would give them the real page. Weigh
+  against the cost of a new dep and a second render path. This is a
+  rearchitecture, not a refinement, which is why it was flagged rather than
+  started.
+- [ ] **(P2, S) Keep `llms.txt` and the JSON-LD honest.** Both are hand-written
+  copies of facts that live in `src/constants/index.js`, and both now carry a
+  comment naming the constant they mirror. A small check that fails when
+  `stackGroups` or `education` drifts from them would make the comment
+  enforceable instead of aspirational.
 
 ---
 

@@ -22,6 +22,11 @@ Read this table instead of the code.
 | The token wave in Stack | `src/components/TokenStream.jsx` |
 | A project's cover drawing | the drawing functions at the top of `src/components/Works.jsx` |
 | What a tech chip explains | `glossary` in `src/constants/index.js` |
+| Which tools get the filled chip | `primary` per group in `stackGroups` |
+| A Stack category's dot colour | `dot` per group in `stackGroups`, token in `src/index.css` |
+| The og:image social card | `docs/og-card.html`, then re-render over `public/og.png` |
+| What AI crawlers are answered by name | `public/robots.txt` |
+| The machine-readable copy of the site | `public/llms.txt` |
 
 ## Run
 
@@ -64,7 +69,7 @@ hard-coded in a component is a bug.**
 | `education` | degrees, newest first |
 | `projects` | the Work section |
 | `services` | the six capability cards in About |
-| `stackGroups` | the six Stack groups |
+| `stackGroups` | the six Stack groups, each with its dot colour and its primary tools |
 | `glossary` | plain-English definitions behind the dotted terms |
 | `navLinks` | drives the navbar, the right rail, and the command palette |
 | `profile` | portrait path and alt text |
@@ -172,7 +177,7 @@ built stylesheet rather than from source.
 | Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed: it was the fifth route to `#contact` |
 | About | `About.jsx` | Portrait, lede, availability card, six capability cards |
 | Experience | `Experience.jsx` | Roles then education on one timeline, dates right-aligned |
-| Stack | `Tech.jsx` | Six groups. Every chip has a definition on hover |
+| Stack | `Tech.jsx` | Six groups, each with a category dot. Two chip tiers. Every chip has a definition |
 | Work | `Works.jsx` | Six projects, generative canvas covers, plain chips |
 | Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
 | Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs. A notice, never an instruction |
@@ -205,6 +210,19 @@ open, and never while focus is inside it, with any focus bringing it back.
   that a chip is clickable to learn what it means.
 - On **project and experience cards** the chip states, so it is `plain`: the
   expanded name is a native tooltip, and no panel opens inside a tilting card.
+
+In Stack the teaching chip also has **two tiers**. A group's `primary` tools get
+a filled chip, the rest stay outline. The fill inverts per theme rather than
+being dark in both: a dark fill on the dark ground would read as *less* emphasis
+than an outline chip, not more. Light is navy on white at 13.59:1, dark is bone
+on navy at 13.9:1. Hovering a filled chip moves it to an accent fill with
+`--c-strong` ink, which is the only accent pairing that clears AA at 4.68:1;
+`--c-accent-ink` text on that fill would be 3.6:1 and fail, which is why the
+filled tier does not follow the outline tier's hover.
+
+The dotted underline goes **solid** on hover and focus, and a **second tap
+closes** the definition. The older handler only unpinned, leaving the panel open
+and relying on a `mouseleave` that a touch screen never sends.
 
 ## Ambient motion: two effects, each scoped
 

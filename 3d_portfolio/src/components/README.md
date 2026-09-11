@@ -9,7 +9,8 @@ Twenty-three files. Read the table, not the directory.
 | The headline, the CTA, the status line | `Hero.jsx` |
 | Portrait, lede, capability cards | `About.jsx` |
 | Roles and degrees, the timeline, date alignment | `Experience.jsx` |
-| The six tool groups | `Tech.jsx` |
+| The six tool groups, and the category dots | `Tech.jsx` |
+| Which tools get the filled chip, and each dot's colour | `stackGroups` in `../constants/index.js` |
 | Project cards, and the drawings on them | `Works.jsx` |
 | The contact card, and the URLs printed in it | `Contact.jsx` |
 | The notice aimed at crawlers and LLMs | `AgentNote.jsx` |
@@ -17,7 +18,7 @@ Twenty-three files. Read the table, not the directory.
 | Top bar: links, hide-on-scroll, mobile menu | `Navbar.jsx` |
 | Right edge: section markers | `SideRail.jsx` |
 | Left edge: contact icons | `ContactRail.jsx` |
-| What a tech chip does on hover or click | `TagTerm.jsx` |
+| What a tech chip does on hover or click, and its two tiers | `TagTerm.jsx` |
 | Command palette actions | `CommandPalette.jsx` |
 | The hero network drawing | `NeuralField.jsx` |
 | The token wave in Stack | `TokenStream.jsx` |

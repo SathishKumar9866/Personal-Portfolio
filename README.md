@@ -6,6 +6,7 @@ is supporting material.
 ```
 3d_portfolio/    the site. Vite + React. Start here.
 Research_Docs/   notes, command cheat-sheets, brainstorms
+STATUS.md        where work stopped, the next action, the traps. Read on return.
 ```
 
 Despite the folder name there is no 3D in it; the name survives from a version that had it.
