@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Tilt } from "react-tilt";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { styles } from "../styles";
 import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
@@ -188,31 +188,52 @@ const ProjectCover = ({ cover = "embeddings", name }) => {
     const c = ref.current;
     const drawer = DRAWERS[cover];
     if (!c || !drawer) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = c.clientWidth, h = c.clientHeight;
-    c.width = w * dpr; c.height = h * dpr;
     const ctx = c.getContext("2d");
     const seed = hash(name || cover);
+    let dpr = 1, w = 0, h = 0;
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = c.clientWidth;
+      h = c.clientHeight;
+      c.width = w * dpr;
+      c.height = h * dpr;
+    };
 
     const render = (t) => {
+      if (!w || !h) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       ctx.textAlign = "left";
       drawer(ctx, w, h, t, mulberry(seed));
     };
 
-    if (reduced || !ANIMATED.has(cover)) { render(-1); return; }
+    resize();
+
+    // Static covers draw exactly once, so they were the ones that stayed wrong:
+    // squashed after a resize, and stuck in the fallback typeface if the canvas
+    // won the race against the webfonts.
+    if (reduced || !ANIMATED.has(cover)) {
+      render(-1);
+      const ro = new ResizeObserver(() => { resize(); render(-1); });
+      ro.observe(c);
+      let alive = true;
+      document.fonts?.ready.then(() => { if (alive) render(-1); });
+      return () => { alive = false; ro.disconnect(); };
+    }
 
     let raf, start = null, visible = true;
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.1 });
     io.observe(c);
+    const ro = new ResizeObserver(resize);
+    ro.observe(c);
     const loop = (ts) => {
       if (start === null) start = ts;
       if (visible) render(((ts - start) % 3200) / 3200);
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
-    return () => { cancelAnimationFrame(raf); io.disconnect(); };
+    return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); };
   }, [cover, name, reduced]);
 
   return (
@@ -228,8 +249,16 @@ const ProjectCover = ({ cover = "embeddings", name }) => {
 const ProjectCard = ({ index, name, cover, outcome, description, tags, source_code_link, live_link, featured }) => {
   const reduced = useReducedMotion();
   const isLive = Boolean(live_link);
+  const cardRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  });
+  // Small on purpose: enough to read as depth, not enough to look like drift.
+  const coverY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [14, -14]);
   return (
     <motion.div
+      ref={cardRef}
       variants={fadeIn("up", "spring", index * 0.12, 0.6)}
       className={featured ? "sm:col-span-2" : ""}
     >
@@ -237,7 +266,9 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
         options={{ max: reduced ? 0 : 8, scale: 1, speed: 400 }}
         className="h-full bg-tertiary p-5 rounded-2xl border border-line shadow-card hover:border-accent/40 transition-colors flex flex-col"
       >
-        <ProjectCover cover={cover} name={name} />
+        <motion.div style={{ y: coverY }}>
+          <ProjectCover cover={cover} name={name} />
+        </motion.div>
 
         <div className="mt-5 flex items-center gap-3">
           <span
@@ -296,7 +327,7 @@ const Works = () => (
       built with; each links to its source, and one is live.
     </motion.p>
 
-    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
       {projects.map((p, i) => (
         <ProjectCard key={p.name} index={i} featured={i === 0} {...p} />
       ))}
