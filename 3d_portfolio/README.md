@@ -14,7 +14,7 @@ visual system, light + dark themes, no heavy 3D.
 | Styling | Tailwind CSS (CSS-variable design tokens) |
 | Motion | Framer Motion |
 | Type | Barlow (display + body), JetBrains Mono (labels), self-hosted via `@fontsource` |
-| Contact | EmailJS (optional; falls back to `mailto:`) |
+| Contact | Copyable address + `mailto:` — no form, no service |
 
 ## Design system
 
@@ -38,17 +38,11 @@ npm run lint
 
 ## Configuration
 
-Optional — enables the contact form to send email in-page (otherwise it opens
-the visitor's mail client). Copy `.env.example` → `.env.local` and fill in:
+None. The site is static and takes no environment variables.
 
-```
-VITE_EMAILJS_SERVICE_ID=...
-VITE_EMAILJS_TEMPLATE_ID=...
-VITE_EMAILJS_PUBLIC_KEY=...
-```
-
-Full step-by-step (including the required template variables): see
-[`docs/EMAIL-SETUP.md`](docs/EMAIL-SETUP.md).
+Contact is a copyable address plus an icon row — there is no form and no mail
+service. `docs/EMAIL-SETUP.md` and `.env.example` describe the removed EmailJS
+form and are kept only as history.
 
 ## Editing content
 

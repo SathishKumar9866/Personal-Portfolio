@@ -2,13 +2,20 @@ const GH = "https://github.com/SathishKumarAI";
 
 export const contact = {
   email: "sathishkumar786.ml@gmail.com",
+  github: "SathishKumarAI",
+  linkedin: "in/SathishKumarAI",
+  // Full URL once the Substack exists. Null hides its icon rather than
+  // shipping a link that goes nowhere.
+  substack: null,
   availability: "Open to roles",
   timezone: "IST · UTC+5:30",
-  socials: [
-    { k: "github", v: "SathishKumarAI", href: "https://github.com/SathishKumarAI" },
-    { k: "linkedin", v: "in/SathishKumarAI", href: "https://www.linkedin.com/in/SathishKumarAI" },
-    { k: "email", v: "sathishkumar786.ml@gmail.com", href: "mailto:sathishkumar786.ml@gmail.com" },
-  ],
+};
+
+// Portrait: drop a file in public/ and set the path here. Null renders a
+// labelled placeholder, so the layout is already the right shape.
+export const profile = {
+  photo: null,
+  alt: "Sathish Kumar",
 };
 
 export const quotes = [

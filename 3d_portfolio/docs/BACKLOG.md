@@ -25,10 +25,9 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 - [~] **(P1, M) Real project screenshots / GIFs (option A).** Drop images into
   `public/`; layer them over the generative covers for the top 1–2 projects.
   Highest credibility. *Needs assets from Sathish.*
-- [~] **(P1, S) Add EmailJS keys.** Setup is scaffolded — code reads
-  `VITE_EMAILJS_*`, `.env.example` + `docs/EMAIL-SETUP.md` are in place, form
-  falls back to `mailto` until keys are set. *Just needs the 3 keys (local
-  `.env.local` + Vercel env), then verify a test send.*
+- [x] **(P1, S) ~~Add EmailJS keys.~~** Dropped 2026-09-11 — the contact form
+  was removed in favour of a copyable address and an icon row, so there is
+  nothing left to key.
 - [~] **(P1, S) Confirm LinkedIn slug + contact email** are current (LinkedIn
   blocks bot verification; email deliverability untestable here).
 - [~] **(P2, M) Metric covers (option E).** Show a real chart per project
@@ -66,7 +65,6 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   (~37KB gzip). Replace simple reveals/hovers with CSS where possible.
 - [ ] **(P2, S) Preload the primary font weights** (Barlow 400/700) to cut FOUT.
 - [ ] **(P2, S) CI:** GitHub Action for build + lint + a Lighthouse budget on PRs.
-- [ ] **(P2, S) Add `.env.example`** documenting the EmailJS vars.
 
 ---
 

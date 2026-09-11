@@ -1,3 +1,7 @@
+> **Historical.** The contact form described here was removed on 2026-09-11;
+> Contact is now a copyable address and an icon row. Nothing in the app reads
+> the EmailJS variables. Kept as a record of how the form worked.
+
 # Contact form — email setup (EmailJS)
 
 The contact form works out of the box: with no config it opens the visitor's
