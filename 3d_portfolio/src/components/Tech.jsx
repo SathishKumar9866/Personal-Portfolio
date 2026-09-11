@@ -28,7 +28,7 @@ const Tech = () => (
           variants={fadeIn("up", "spring", i * 0.08, 0.5)}
           className="bg-tertiary rounded-2xl p-4 sm:p-6 border border-line hover:border-accent/50 transition-colors"
         >
-          <h3 className="text-accent font-mono text-[12px] uppercase tracking-label mb-1">
+          <h3 className="text-accent-ink font-mono text-[12px] uppercase tracking-label mb-1">
             {g.title}
           </h3>
           {g.note && (

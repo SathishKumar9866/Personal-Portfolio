@@ -150,12 +150,7 @@ export const projects = [
     stages: ["ingest", "embed", "retrieve", "generate"],
     description:
       "Production RAG on AWS with a measured retrieval loop and a GitOps deploy path. Built to be evaluated and shipped, not demoed.",
-    tags: [
-      { name: "RAG", color: "text-mauve" },
-      { name: "MLOps", color: "text-blue" },
-      { name: "Kubernetes", color: "text-green" },
-    ],
-    gradient: "from-[#cba6f7] to-[#89b4fa]",
+    tags: ["RAG", "MLOps", "Kubernetes"],
     source_code_link: `${GH}/rag-pipeline-langchain`,
     live_link: null,
   },
@@ -166,12 +161,7 @@ export const projects = [
     stages: ["docs", "index", "ask", "cite"],
     description:
       "Document Q&A that cites the exact source passage behind every answer. Runs free and offline first; one env var swaps in a hosted model.",
-    tags: [
-      { name: "LLM", color: "text-mauve" },
-      { name: "RAG", color: "text-blue" },
-      { name: "FastAPI", color: "text-green" },
-    ],
-    gradient: "from-[#89b4fa] to-[#74c7ec]",
+    tags: ["LLM", "RAG", "FastAPI"],
     source_code_link: `${GH}/ai-due-diligence-copilot`,
     live_link: null,
   },
@@ -182,12 +172,7 @@ export const projects = [
     stages: ["clients", "local train", "aggregate", "detect"],
     description:
       "Object detection trained across distributed clients with federated learning, so the raw data never leaves the client that owns it.",
-    tags: [
-      { name: "Vision", color: "text-mauve" },
-      { name: "Federated", color: "text-blue" },
-      { name: "PyTorch", color: "text-green" },
-    ],
-    gradient: "from-[#a6e3a1] to-[#89b4fa]",
+    tags: ["Vision", "Federated", "PyTorch"],
     source_code_link: `${GH}/federated-yolov8-object-detection`,
     live_link: null,
   },
@@ -198,12 +183,7 @@ export const projects = [
     stages: ["video", "transcribe", "index", "search"],
     description:
       "Turns video into structured, searchable text through transcript, OCR, and vision, then renders a clean document with local semantic search.",
-    tags: [
-      { name: "AppliedML", color: "text-mauve" },
-      { name: "Multimodal", color: "text-blue" },
-      { name: "Python", color: "text-green" },
-    ],
-    gradient: "from-[#fab387] to-[#cba6f7]",
+    tags: ["AppliedML", "Multimodal", "Python"],
     source_code_link: `${GH}/instagram-reels-extractor`,
     live_link: null,
   },
@@ -214,12 +194,7 @@ export const projects = [
     stages: ["video", "vision", "api", "ui"],
     description:
       "A full detection and tracking pipeline over match footage, split into modular vision, ML, API, and frontend layers.",
-    tags: [
-      { name: "Vision", color: "text-mauve" },
-      { name: "OpenCV", color: "text-blue" },
-      { name: "Docker", color: "text-green" },
-    ],
-    gradient: "from-[#74c7ec] to-[#cba6f7]",
+    tags: ["Vision", "OpenCV", "Docker"],
     source_code_link: `${GH}/pickleball-vision-llm`,
     live_link: null,
   },
@@ -230,12 +205,7 @@ export const projects = [
     stages: ["load", "cache", "play", "score"],
     description:
       "A live, mobile-first web app: draw a twist card mid-match and keep score, with no login and no signal needed after first load.",
-    tags: [
-      { name: "Product", color: "text-mauve" },
-      { name: "Live", color: "text-green" },
-      { name: "React", color: "text-blue" },
-    ],
-    gradient: "from-[#a6e3a1] to-[#fab387]",
+    tags: ["Product", "Live", "React"],
     source_code_link: `${GH}/pb-card-deck`,
     live_link: "https://pb-card-deck.vercel.app/",
   },

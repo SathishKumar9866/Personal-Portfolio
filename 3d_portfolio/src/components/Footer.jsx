@@ -14,7 +14,7 @@ const Footer = () => (
         © 2026 Sathish Kumar <span className="text-line">·</span> <LiveClock />
       </span>
       <span>
-        Type: Bricolage Grotesque · Newsreader · JetBrains Mono ·{" "}
+        Type: Barlow · Newsreader · JetBrains Mono ·{" "}
         <span className="text-secondary">build {BUILD}</span>
       </span>
     </div>

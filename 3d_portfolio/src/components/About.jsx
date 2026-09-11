@@ -12,7 +12,7 @@ const ServiceCard = ({ index, title, desc }) => (
       className="w-full h-full rounded-2xl border border-line bg-tertiary shadow-card hover:border-accent/40 transition-colors"
     >
       <div className="rounded-2xl py-6 px-5 flex flex-col gap-3 h-full">
-        <span className="font-mono text-[13px] text-accent">
+        <span className="font-mono text-[13px] text-accent-ink">
           {String(index + 1).padStart(2, "0")}
         </span>
         <h3 className="font-display text-white-100 text-[19px] leading-tight">

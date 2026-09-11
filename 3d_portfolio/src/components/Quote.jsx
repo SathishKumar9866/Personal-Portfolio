@@ -18,11 +18,11 @@ const Quote = ({ text, author, align = "left" }) => (
   >
     <div className={align === "right" ? "flex justify-end text-right" : ""}>
       <div className="max-w-3xl">
-        <span className="block font-display font-bold text-accent text-[42px] leading-none">“</span>
+        <span className="block font-display font-bold text-accent-ink text-[42px] leading-none">“</span>
         <blockquote className="mt-1 font-display font-semibold text-white-100 tracking-[-0.01em] leading-[1.15] text-[clamp(1.4rem,3.2vw,2.4rem)]">
           {text}
         </blockquote>
-        <figcaption className="mt-5 font-mono text-[12px] uppercase tracking-label text-accent">
+        <figcaption className="mt-5 font-mono text-[12px] uppercase tracking-label text-accent-ink">
           — {author}
         </figcaption>
       </div>

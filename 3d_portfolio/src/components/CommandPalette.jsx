@@ -101,7 +101,7 @@ const CommandPalette = () => {
               onChange={(e) => { setQ(e.target.value); setI(0); }}
               onKeyDown={onInputKey}
               placeholder="Type a command…"
-              className="w-full bg-transparent border-b border-line px-4 py-3.5 font-mono text-[14px] text-white-100 placeholder:text-faint focus:outline-none"
+              className="w-full bg-transparent border-b border-line-strong px-4 py-3.5 font-mono text-[14px] text-white-100 placeholder:text-faint focus:outline-none"
             />
             <ul className="max-h-72 overflow-y-auto py-2">
               {results.length === 0 && (

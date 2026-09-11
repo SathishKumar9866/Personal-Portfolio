@@ -5,6 +5,7 @@ import "@fontsource/barlow/400.css";
 import "@fontsource/barlow/500.css";
 import "@fontsource/barlow/600.css";
 import "@fontsource/barlow/700.css";
+import "@fontsource-variable/newsreader";
 import "@fontsource-variable/jetbrains-mono";
 import App from "./App.tsx";
 import "./index.css";

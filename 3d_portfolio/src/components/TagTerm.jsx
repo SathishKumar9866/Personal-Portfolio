@@ -17,7 +17,7 @@ const TagTerm = ({ name }) => {
 
   if (!g) {
     return (
-      <span className="font-mono text-[11px] text-secondary px-2 py-0.5 rounded border border-line">
+      <span className="font-mono text-[11px] text-secondary px-2 py-0.5 rounded border border-line-strong">
         {name}
       </span>
     );
@@ -29,7 +29,7 @@ const TagTerm = ({ name }) => {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         className={`font-mono text-[11px] px-2 py-0.5 rounded border border-dashed transition-colors ${
-          open ? "border-accent text-accent" : "border-line text-secondary hover:border-accent hover:text-accent"
+          open ? "border-accent text-accent-ink" : "border-line-strong text-secondary hover:border-accent hover:text-accent-ink"
         }`}
       >
         {name}
@@ -43,7 +43,7 @@ const TagTerm = ({ name }) => {
             target="_blank"
             rel="noreferrer"
             onClick={() => setOpen(false)}
-            className="mt-2 block font-mono text-[11px] text-accent hover:underline"
+            className="mt-2 block font-mono text-[11px] text-accent-ink hover:underline"
           >
             Learn more ↗
           </a>

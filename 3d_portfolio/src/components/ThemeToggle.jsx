@@ -19,6 +19,10 @@ const ThemeToggle = () => {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    // Keep mobile browser chrome in step with the page ground.
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "dark" ? "#0F2228" : "#FFFFFF");
     try {
       localStorage.setItem("theme", theme);
     } catch {
@@ -32,7 +36,7 @@ const ThemeToggle = () => {
       onClick={() => setTheme(next)}
       aria-label={`Switch to ${next} mode`}
       title={`Switch to ${next} mode`}
-      className="w-9 h-9 grid place-items-center rounded-md border border-line text-white-100 hover:border-accent hover:text-accent transition-colors"
+      className="w-9 h-9 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
     >
       {theme === "dark" ? <Sun /> : <Moon />}
     </button>

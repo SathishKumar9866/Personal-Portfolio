@@ -9,7 +9,7 @@ import TagTerm from "./TagTerm";
 
 /* ---- cover drawing ---- */
 const RED = "#FF3621";
-const BG = "#11262C";
+const BG = "#11262C"; // keep in step with --c-canvas in index.css
 const bone = (a) => `rgba(233,230,223,${a})`;
 
 // deterministic RNG so each cover is stable
@@ -81,7 +81,7 @@ const citation = (ctx, w, h, t, rng) => {
       ctx.font = '600 10px "JetBrains Mono Variable", monospace';
       ctx.fillStyle = RED; ctx.textAlign = "left"; ctx.fillText("[1]", x1 + 4, y + 3);
     } else {
-      ctx.fillStyle = bone(0.3); roundRect(ctx, x0, y - 2, wid, 4, 2); ctx.fill();
+      ctx.fillStyle = bone(0.45); roundRect(ctx, x0, y - 2, wid, 4, 2); ctx.fill();
     }
   }
 };
@@ -95,7 +95,7 @@ const federated = (ctx, w, h, t) => {
     const a = -Math.PI / 2 + (i * TAU) / N;
     return { x: hub.x + Math.cos(a) * R, y: hub.y + Math.sin(a) * R };
   });
-  ctx.strokeStyle = bone(0.22); ctx.lineWidth = 1;
+  ctx.strokeStyle = bone(0.4); ctx.lineWidth = 1;
   clients.forEach((c) => { ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(hub.x, hub.y); ctx.stroke(); });
   if (t >= 0) {
     const p = t % 1;
@@ -121,7 +121,7 @@ const frames = (ctx, w, h, t, rng) => {
   for (let i = 0; i < 3; i++) {
     const y = top + i * (fh + 8);
     ctx.strokeStyle = bone(0.5); ctx.lineWidth = 1.4; ctx.strokeRect(fx, y, fw, fh);
-    ctx.fillStyle = bone(0.3);
+    ctx.fillStyle = bone(0.45);
     for (let s = 0; s < 3; s++) { ctx.fillRect(fx + 3 + s * (fw / 3), y - 3, 3, 2); ctx.fillRect(fx + 3 + s * (fw / 3), y + fh + 1, 3, 2); }
   }
   const ax = fx + fw + w * 0.05;
@@ -130,7 +130,7 @@ const frames = (ctx, w, h, t, rng) => {
   ctx.beginPath(); ctx.moveTo(ax + w * 0.07, h * 0.47); ctx.lineTo(ax + w * 0.09, h * 0.5); ctx.lineTo(ax + w * 0.07, h * 0.53); ctx.closePath(); ctx.fill();
   const tx = ax + w * 0.13, tw = w * 0.86 - tx;
   for (let i = 0; i < 6; i++) {
-    ctx.fillStyle = bone(0.32);
+    ctx.fillStyle = bone(0.45);
     roundRect(ctx, tx, top + i * (h * 0.6 / 6), tw * (0.5 + rng() * 0.5), 3.5, 2); ctx.fill();
   }
 };
@@ -139,7 +139,7 @@ const frames = (ctx, w, h, t, rng) => {
 const tracking = (ctx, w, h, t) => {
   grid(ctx, w, h);
   const fx = w * 0.12, fy = h * 0.16, fw = w * 0.76, fh = h * 0.64;
-  ctx.strokeStyle = bone(0.3); ctx.lineWidth = 1; ctx.strokeRect(fx, fy, fw, fh);
+  ctx.strokeStyle = bone(0.45); ctx.lineWidth = 1; ctx.strokeRect(fx, fy, fw, fh);
   const bbox = (x, y, bw, bh) => {
     ctx.strokeStyle = RED; ctx.lineWidth = 1.4; ctx.strokeRect(x, y, bw, bh);
     const k = 5; ctx.beginPath();
@@ -167,7 +167,7 @@ const scorecard = (ctx, w, h) => {
   ctx.fillText("SCORE", w * 0.5, py + ph * 0.22);
   ctx.fillStyle = bone(0.9); ctx.font = '700 20px "Barlow", sans-serif';
   ctx.fillText("11 — 9", w * 0.5, py + ph * 0.44);
-  ctx.strokeStyle = bone(0.2); ctx.lineWidth = 1;
+  ctx.strokeStyle = bone(0.4); ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(px + 12, py + ph * 0.56); ctx.lineTo(px + pw - 12, py + ph * 0.56); ctx.stroke();
   ctx.fillStyle = RED; roundRect(ctx, w * 0.5 - pw * 0.32, py + ph * 0.66, pw * 0.64, ph * 0.13, 5); ctx.fill();
   ctx.fillStyle = "#fff"; ctx.font = '700 8px "JetBrains Mono Variable", monospace';
@@ -216,9 +216,9 @@ const ProjectCover = ({ cover = "embeddings", name }) => {
   }, [cover, name, reduced]);
 
   return (
-    <div className="relative w-full rounded-xl overflow-hidden border border-line bg-[#11262C]" style={{ aspectRatio: "16 / 9" }}>
+    <div className="relative w-full rounded-xl overflow-hidden border border-line-strong bg-canvas" style={{ aspectRatio: "16 / 9" }}>
       <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
-      <span className="absolute top-2.5 left-3 font-mono text-[10px] tracking-label uppercase text-faint">
+      <span className="absolute top-2.5 left-3 font-mono text-[10px] tracking-label uppercase text-canvas-ink">
         {LABELS[cover] || "preview"}
       </span>
     </div>
@@ -259,7 +259,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           </span>
           <div className="mt-1.5 flex flex-wrap gap-2">
             {tags.map((t) => (
-              <TagTerm key={t.name} name={t.name} />
+              <TagTerm key={t} name={t} />
             ))}
           </div>
         </div>

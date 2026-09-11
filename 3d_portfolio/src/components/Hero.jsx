@@ -76,13 +76,13 @@ const Hero = () => {
         <motion.div variants={rise} className="mt-10 flex flex-wrap items-center gap-4">
           <a
             href="#work"
-            className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 font-sans font-semibold text-[15px] text-white hover:brightness-95 transition"
+            className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 font-sans font-semibold text-[15px] text-black-100 hover:brightness-95 transition"
           >
             See my work
           </a>
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 rounded-md border border-line px-6 py-3 font-sans font-semibold text-[15px] text-white-100 hover:border-accent hover:text-accent transition-colors"
+            className="inline-flex items-center gap-2 rounded-md border border-line-strong px-6 py-3 font-sans font-semibold text-[15px] text-white-100 hover:border-accent hover:text-accent transition-colors"
           >
             Get in touch
           </a>

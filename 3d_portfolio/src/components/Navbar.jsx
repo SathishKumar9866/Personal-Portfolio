@@ -65,7 +65,7 @@ const Navbar = () => {
                   href={`#${n.id}`}
                   onClick={() => setActive(n.id)}
                   className={`relative font-mono text-[13px] uppercase tracking-[0.12em] transition-colors ${
-                    active === n.id ? "text-accent" : "text-secondary hover:text-white-100"
+                    active === n.id ? "text-accent-ink" : "text-secondary hover:text-white-100"
                   }`}
                 >
                   {n.title}
@@ -80,7 +80,7 @@ const Navbar = () => {
           </ul>
           <button
             onClick={() => window.dispatchEvent(new Event("open-command"))}
-            className="font-mono text-[11px] text-faint border border-line rounded px-2 py-1 hover:border-accent hover:text-accent transition-colors"
+            className="font-mono text-[11px] text-faint border border-line-strong rounded px-2 py-1 hover:border-accent hover:text-accent transition-colors"
             aria-label="Open command palette"
           >
             ⌘K
@@ -119,7 +119,7 @@ const Navbar = () => {
                     <a
                       href={`#${n.id}`}
                       className={`font-display text-[40px] leading-none ${
-                        active === n.id ? "text-accent" : "text-white-100"
+                        active === n.id ? "text-accent-ink" : "text-white-100"
                       }`}
                       onClick={() => {
                         setToggle(false);
@@ -136,7 +136,7 @@ const Navbar = () => {
                   setToggle(false);
                   window.dispatchEvent(new Event("open-command"));
                 }}
-                className="mt-12 self-start font-mono text-[13px] text-faint border border-line rounded px-3 py-2"
+                className="mt-12 self-start font-mono text-[13px] text-faint border border-line-strong rounded px-3 py-2"
               >
                 ⌘K · quick actions
               </button>

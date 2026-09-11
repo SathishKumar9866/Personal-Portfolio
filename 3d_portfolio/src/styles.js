@@ -12,7 +12,7 @@ const styles = {
   sectionHeadText:
     "font-display font-bold text-white-100 tracking-[-0.02em] leading-[1.02] text-[clamp(2rem,5vw,3.5rem)]",
   sectionSubText:
-    "font-mono text-[12px] sm:text-[13px] text-accent uppercase tracking-label",
+    "font-mono text-[12px] sm:text-[13px] text-accent-ink uppercase tracking-label",
 };
 
 export { styles };

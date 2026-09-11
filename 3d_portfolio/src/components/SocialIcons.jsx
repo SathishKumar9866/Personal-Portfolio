@@ -14,7 +14,7 @@ const SocialIcons = ({ size = 20, className = "" }) => (
           rel="noreferrer"
           aria-label={l.label}
           title={l.label}
-          className="flex items-center justify-center rounded-lg border border-line p-2.5 text-secondary hover:text-accent hover:border-accent transition-colors"
+          className="flex items-center justify-center rounded-lg border border-line-strong p-2.5 text-secondary hover:text-accent hover:border-accent transition-colors"
         >
           <svg
             width={size}

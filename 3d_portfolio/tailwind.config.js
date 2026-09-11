@@ -16,20 +16,20 @@ export default {
         "white-100": c("--c-text"), // primary text (navy in light, off-white in dark)
         "black-100": c("--c-strong"),
         "black-200": c("--c-strong"),
-        accent: c("--c-accent"), // Databricks lava red
+        accent: c("--c-accent"), // Databricks lava red — fills only
+        "accent-ink": c("--c-accent-ink"), // the same red, legible as small text
+        "line-strong": c("--c-line-strong"), // boundary of an interactive control
+        canvas: c("--c-canvas"), // project cover ground, theme-invariant
+        "canvas-ink": c("--c-canvas-ink"),
         live: c("--c-live"),
         archive: c("--c-archive"),
-        // legacy aliases → tokens
-        mauve: c("--c-accent"),
-        blue: c("--c-archive"),
-        green: c("--c-live"),
-        peach: c("--c-accent"),
       },
       fontFamily: {
         // Databricks-clean sans (Barlow) + mono for data/labels
         display: ['"Barlow"', "system-ui", "sans-serif"],
         sans: ['"Barlow"', "system-ui", "sans-serif"],
-        serif: ['"Barlow"', "system-ui", "sans-serif"],
+        // Reading face. Prose only — the sans and mono carry the brand.
+        serif: ['"Newsreader Variable"', "Newsreader", "Georgia", "serif"],
         mono: ['"JetBrains Mono Variable"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       spacing: {
@@ -37,7 +37,8 @@ export default {
         u6: "24px", u8: "32px", u12: "48px", u16: "64px", u24: "96px",
       },
       boxShadow: {
-        card: "0 1px 2px rgba(27,49,57,0.04), 0 12px 32px -16px rgba(27,49,57,0.14)",
+        // Tokenised: the literal navy was invisible on the dark ground.
+        card: "0 1px 2px rgb(var(--c-strong) / 0.06), 0 12px 32px -16px rgb(var(--c-strong) / 0.28)",
         glow: "0 0 0 1px rgb(var(--c-accent) / 0.3)",
       },
       screens: { xs: "450px" },
