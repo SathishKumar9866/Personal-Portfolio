@@ -216,35 +216,56 @@ export const services = [
 ];
 
 // Grouped stack, six areas across the data-to-AI path.
+/**
+ * Each group carries its own scan-aid dot class and its own primary tools.
+ * `dot` is a full Tailwind class, not a token fragment, because Tailwind scans
+ * for literal class strings: `bg-${g.dot}` built from "cat-data" would be
+ * purged, while the literal "bg-cat-data" sitting here is found.
+ * `primary` marks the tools that get the filled chip. Everything else stays
+ * outline. Two per group is the ceiling on purpose: mark four and nothing is
+ * marked.
+ */
 export const stackGroups = [
   {
     title: "Data engineering",
     note: "Moving and shaping data so the rest can trust it.",
+    dot: "bg-cat-data",
+    primary: ["PySpark", "SQL"],
     items: ["PySpark", "ETL pipelines", "PostgreSQL", "DynamoDB", "S3", "SQL"],
   },
   {
     title: "Data science",
     note: "Finding what the data actually supports.",
+    dot: "bg-cat-science",
+    primary: ["pandas", "scikit-learn"],
     items: ["pandas", "NumPy", "scikit-learn", "Evaluation", "Exploratory analysis"],
   },
   {
     title: "LLM / RAG",
     note: "Grounded answers with citations, offline-first.",
+    dot: "bg-cat-llm",
+    primary: ["LangChain", "LangGraph"],
     items: ["LangChain", "LangGraph", "Ollama", "Claude", "Pinecone", "Embeddings"],
   },
   {
     title: "Computer vision",
     note: "Detection and tracking on real footage.",
+    dot: "bg-cat-vision",
+    primary: ["YOLOv8", "PyTorch"],
     items: ["YOLOv8", "OpenCV", "Detection & tracking", "Federated learning", "PyTorch"],
   },
   {
     title: "MLOps & infra",
     note: "Shipping models like software: reproducible, deployable.",
+    dot: "bg-cat-mlops",
+    primary: ["MLflow", "Docker"],
     items: ["MLflow", "Docker", "GitHub Actions", "Kubernetes", "Helm"],
   },
   {
     title: "Backend & apps",
     note: "The interface a person actually uses.",
+    dot: "bg-cat-backend",
+    primary: ["Python", "FastAPI"],
     items: ["Python", "FastAPI", "Next.js", "React", "TypeScript", "Tauri"],
   },
 ];

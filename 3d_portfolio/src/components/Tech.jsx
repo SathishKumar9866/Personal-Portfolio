@@ -25,25 +25,52 @@ const Tech = () => (
       Not a badge collection: this is what I actually reach for, grouped by where
       it sits on the path from raw data to a running product. I pick tools that
       are boring in production: measurable, reproducible, and easy to hand off.
-      <span className="mt-3 block font-mono text-[12px] text-faint">{TERM_HINT}</span>
     </motion.p>
 
-    <div className="mt-12 grid grid-cols-2 gap-3 sm:gap-4">
+    {/* The hint is an instruction about the interface, not part of the argument
+        the intro is making, so it gets its own line, its own voice (serif
+        italic, the reading face) and a mark. The info glyph is inline rather
+        than in icons.js: that module owns brand marks and off-site
+        destinations, not one-off affordances. */}
+    <motion.p
+      variants={fadeIn("", "", 0.18, 1)}
+      className="mt-4 flex items-start gap-2 font-serif italic text-faint text-[13.5px] leading-[1.6] max-w-[32rem]"
+    >
+      <svg
+        width="13"
+        height="13"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+        className="mt-[4px] shrink-0"
+      >
+        <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 2a8 8 0 110 16 8 8 0 010-16zm-1 3h2v2h-2V7zm0 4h2v6h-2v-6z" />
+      </svg>
+      {TERM_HINT}
+    </motion.p>
+
+    {/* One column under md. Two 280px-wide cards on a phone was the old
+        behaviour and it wrapped every chip onto its own line. */}
+    <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
       {stackGroups.map((g, i) => (
         <motion.div
           key={g.title}
           variants={fadeIn("up", "spring", i * 0.08, 0.5)}
-          className="glass-card rounded-2xl p-4 sm:p-6 hover:border-accent/50 transition-colors"
+          className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col hover:border-accent/50"
         >
-          <h3 className="text-accent-ink font-mono text-[12px] uppercase tracking-label mb-1">
+          <h3 className="flex items-center gap-2 text-accent-ink font-mono text-[12px] uppercase tracking-label">
+            <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
             {g.title}
           </h3>
           {g.note && (
-            <p className="font-serif text-secondary text-[13px] leading-[1.5] mb-4">{g.note}</p>
+            <p className="mt-2 font-serif text-secondary text-[13px] leading-[1.5]">{g.note}</p>
           )}
-          <div className="flex flex-wrap gap-2">
+          {/* mt-auto is the whole point: grid already equalises card height, but
+              without it the chip row floats up under a one-line note and two
+              cards in a row disagree by up to 34px. */}
+          <div className="mt-auto pt-4 flex flex-wrap gap-2">
             {g.items.map((it) => (
-              <TagTerm key={it} name={it} />
+              <TagTerm key={it} name={it} primary={g.primary?.includes(it)} />
             ))}
           </div>
         </motion.div>

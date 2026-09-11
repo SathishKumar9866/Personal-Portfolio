@@ -23,6 +23,16 @@ export default {
         "canvas-ink": c("--c-canvas-ink"),
         live: c("--c-live"),
         archive: c("--c-archive"),
+        // Stack category dots: scan aid, one per stackGroups entry.
+        "cat-data": c("--c-cat-data"),
+        "cat-science": c("--c-cat-science"),
+        "cat-llm": c("--c-cat-llm"),
+        "cat-vision": c("--c-cat-vision"),
+        "cat-mlops": c("--c-cat-mlops"),
+        "cat-backend": c("--c-cat-backend"),
+        // Filled chip for a group's primary tools.
+        "chip-solid": c("--c-chip-solid"),
+        "chip-solid-ink": c("--c-chip-solid-ink"),
       },
       fontFamily: {
         // Databricks-clean sans (Barlow) + mono for data/labels

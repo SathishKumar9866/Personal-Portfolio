@@ -20,6 +20,22 @@
   --c-archive: 73 103 116;
   --c-canvas: 17 38 44; /* project covers: same in both themes, by design */
   --c-canvas-ink: 140 150 155; /* 5.20:1 on the canvas ground */
+
+  /* Stack category scan-aid dots. Desaturated on purpose: six hues at full
+     chroma is a rainbow, and the dot is there to let the eye find a category
+     again, not to rank it. Decorative only, they carry no text, so no AA floor. */
+  --c-cat-data: 82 106 130;
+  --c-cat-science: 64 116 110;
+  --c-cat-llm: 166 92 66;
+  --c-cat-vision: 122 92 138;
+  --c-cat-mlops: 108 116 66;
+  --c-cat-backend: 92 100 148;
+
+  /* Primary tool chip: filled, inverted against the outline chips. Inverted
+     rather than literally dark-on-light in both themes, because a dark fill on
+     the dark ground is the one thing that would not read as emphasis. */
+  --c-chip-solid: 27 49 57;
+  --c-chip-solid-ink: 255 255 255; /* 13.1:1 on the fill */
 }
 
 :root[data-theme="dark"] {
@@ -38,6 +54,16 @@
   --c-archive: 135 162 178;
   --c-canvas: 17 38 44; /* project covers: same in both themes, by design */
   --c-canvas-ink: 140 150 155; /* 5.20:1 on the canvas ground */
+
+  --c-cat-data: 132 160 186;
+  --c-cat-science: 120 174 166;
+  --c-cat-llm: 206 138 110;
+  --c-cat-vision: 176 146 190;
+  --c-cat-mlops: 164 174 114;
+  --c-cat-backend: 146 154 204;
+
+  --c-chip-solid: 228 225 218;
+  --c-chip-solid-ink: 15 34 40; /* 13.9:1 on the fill */
 }
 
 *,
@@ -217,6 +243,33 @@ main:focus:not(:focus-visible) {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.7),
     0 10px 28px -18px rgb(var(--c-strong) / 0.18);
+}
+
+/* Hover lift for the Stack cards. Shadow deepens and the card rises 2px, both
+   defined here because the light-theme .glass-card shadow override outranks a
+   hover:shadow-* utility and would leave this working in one theme only. */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+@media (hover: hover) {
+  .card-lift:hover {
+    transform: translateY(-2px);
+  }
+  .glass-card.card-lift:hover {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.1),
+      0 18px 40px -22px rgb(var(--c-strong) / 0.5);
+  }
+  :root:not([data-theme="dark"]) .glass-card.card-lift:hover {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.7),
+      0 16px 36px -20px rgb(var(--c-strong) / 0.26);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-lift:hover {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
