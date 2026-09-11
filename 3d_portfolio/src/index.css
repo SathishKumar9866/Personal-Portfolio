@@ -132,13 +132,6 @@ body {
   border: 1px solid rgb(var(--c-line));
 }
 
-@keyframes drift {
-  from { transform: translateX(0); }
-  to { transform: translateX(-25%); }
-}
-.hero-signal {
-  animation: drift 30s linear infinite;
-}
 
 @media (prefers-reduced-motion: reduce) {
   *,

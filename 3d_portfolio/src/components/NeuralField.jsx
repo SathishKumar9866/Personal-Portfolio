@@ -1,0 +1,280 @@
+import { useEffect, useRef } from "react";
+
+/**
+ * Owns: the page-wide ambient field behind everything.
+ *
+ * The idea, and why it is not decoration: the left contact dock and the right
+ * section rail are already two columns of dots on opposite edges of a fixed
+ * viewport. This reads them as the INPUT and OUTPUT layers of a network, puts
+ * two hidden layers between them, and sends activations left to right along real
+ * paths. The nodes are not invented — their coordinates come from
+ * getBoundingClientRect() on the actual controls, so the drawing stays wired to
+ * the interface even when a dock hides itself or the window resizes.
+ *
+ * Underneath, a wave descends the viewport and generated tokens ride along it,
+ * so the two ideas the page is about — a model computing, and text being emitted
+ * — are the same picture.
+ *
+ * Deliberately NOT a 3D engine. three.js plus a renderer is ~150kB gzip against
+ * a ~115kB bundle; this is one 2D canvas and a few hundred lines.
+ *
+ * Cheap by construction:
+ *  - one rAF loop for the whole page, not one per effect
+ *  - devicePixelRatio capped at 2
+ *  - node positions re-read on resize and every 500ms, never per frame
+ *  - `prefers-reduced-motion` paints one settled frame and stops
+ *  - pointer-events: none, and aria-hidden — it is never in anyone's way
+ */
+
+// Real sub-word pieces, the way a tokenizer splits text, so the stream reads as
+// tokens being emitted rather than as boxes sliding past.
+const PIECES = [
+  "re", "trie", "val", "▁aug", "ment", "ed", "▁cites", "▁the", "▁source",
+  "▁it", "▁used", ".", "▁offline", "▁first", "▁eval", "uated", ".",
+];
+
+const HIDDEN = [5, 4]; // two hidden layers, between the two docks
+
+const token = (el, name, alpha) => {
+  const v = getComputedStyle(el).getPropertyValue(name).trim();
+  return v ? `rgba(${v.split(/\s+/).join(",")},${alpha})` : `rgba(128,128,128,${alpha})`;
+};
+
+const centre = (el) => {
+  const b = el.getBoundingClientRect();
+  return { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+};
+
+/** Is this control actually on screen? A hidden dock must not anchor an edge. */
+const shown = (el) => {
+  const s = getComputedStyle(el);
+  if (s.display === "none" || s.visibility === "hidden") return false;
+  const b = el.getBoundingClientRect();
+  return b.width > 0 && b.height > 0;
+};
+
+const NeuralField = () => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const c = ref.current;
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    const root = document.documentElement;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Desktop only. The two docks it wires together do not exist below the
+    // `rail` breakpoint, so there is nothing to draw — and more to the point, a
+    // requestAnimationFrame loop on a phone is battery spent on decoration
+    // nobody asked for. This STOPS the loop rather than hiding the canvas.
+    const wide = window.matchMedia("(min-width: 1024px)");
+
+    let dpr = 1, w = 0, h = 0, raf = 0, t0 = null, poll = 0;
+    let layers = [];      // [inputs, hidden1, hidden2, outputs]
+    let signals = [];
+
+    const resize = () => {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth;
+      h = window.innerHeight;
+      c.width = Math.max(1, w * dpr);
+      c.height = Math.max(1, h * dpr);
+      c.style.width = `${w}px`;
+      c.style.height = `${h}px`;
+    };
+
+    /**
+     * Read the live interface. Inputs are the left contact dock, outputs the
+     * right section rail; both are position:fixed, so their rects are already in
+     * the canvas's coordinate space and need no scroll correction.
+     */
+    const readLayers = () => {
+      const inputs = [
+        ...document.querySelectorAll(
+          'nav[aria-label="Contact shortcuts"] a, nav[aria-label="Contact shortcuts"] button'
+        ),
+      ].filter(shown).map(centre);
+      const outputs = [
+        ...document.querySelectorAll('nav[aria-label="Sections"] a'),
+      ].filter(shown).map(centre);
+
+      if (!inputs.length || !outputs.length) return [];
+
+      const x0 = inputs[0].x, x1 = outputs[0].x;
+      const midY = h / 2;
+      const hidden = HIDDEN.map((count, li) => {
+        const x = x0 + ((x1 - x0) * (li + 1)) / (HIDDEN.length + 1);
+        const spread = h * 0.42;
+        return Array.from({ length: count }, (_, ni) => ({
+          x,
+          y: midY - spread / 2 + (spread * (ni + 0.5)) / count,
+        }));
+      });
+      return [inputs, ...hidden, outputs];
+    };
+
+    // One activation travelling input -> hidden -> hidden -> output.
+    const spawn = () => {
+      if (layers.length < 2) return;
+      const path = layers.map((l) => l[Math.floor(Math.random() * l.length)]);
+      signals.push({ path, t: 0, speed: 0.28 + Math.random() * 0.22 });
+    };
+
+    const drawWave = (time, ink, accent) => {
+      // A wave that descends and wraps, with tokens riding it. The descent is
+      // slow on purpose: it should read as drift, not as a loading bar.
+      const bandH = h * 0.5;
+      const baseY = ((time * 14) % (h + bandH)) - bandH * 0.2;
+      const amp = Math.min(46, h * 0.06);
+
+      ctx.beginPath();
+      for (let x = 0; x <= w; x += 8) {
+        const y = baseY + Math.sin(x / 210 + time * 0.5) * amp;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = accent.replace(",1)", ",0.16)");
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+
+      // tokens riding the same curve
+      ctx.font = '500 11px "JetBrains Mono Variable", ui-monospace, monospace';
+      ctx.textBaseline = "middle";
+      const RATE = 2.2;
+      for (let i = 0; i < 9; i++) {
+        const p = ((time * 0.06 + i / 9) % 1);
+        const x = p * (w + 160) - 80;
+        const y = baseY + Math.sin(x / 210 + time * 0.5) * amp;
+        const label = PIECES[(Math.floor(time * RATE) + i) % PIECES.length].replace("▁", " ");
+        const tw = ctx.measureText(label).width + 8;
+        const fade = Math.min(1, p * 8) * Math.min(1, (1 - p) * 8);
+        if (fade <= 0.02) continue;
+        ctx.strokeStyle = ink.replace(",1)", `,${0.1 * fade})`);
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y - 9, tw, 18);
+        ctx.fillStyle = i === 0
+          ? accent.replace(",1)", `,${0.5 * fade})`)
+          : ink.replace(",1)", `,${0.3 * fade})`);
+        ctx.fillText(label, x + 4, y);
+      }
+    };
+
+    const draw = (time) => {
+      const ink = token(root, "--c-line-strong", 1);
+      const accent = token(root, "--c-accent", 1);
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      drawWave(time, ink, accent);
+
+      if (layers.length >= 2) {
+        // every edge, faint
+        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = ink.replace(",1)", ",0.08)");
+        for (let li = 0; li < layers.length - 1; li++) {
+          layers[li].forEach((a) => {
+            layers[li + 1].forEach((b) => {
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            });
+          });
+        }
+
+        // hidden units
+        layers.slice(1, -1).flat().forEach((n) => {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = ink.replace(",1)", ",0.3)");
+          ctx.fill();
+        });
+
+        // activations in flight
+        signals.forEach((s) => {
+          const segs = s.path.length - 1;
+          const at = s.t * segs;
+          const i = Math.min(segs - 1, Math.floor(at));
+          const f = at - i;
+          const a = s.path[i], b = s.path[i + 1];
+          const x = a.x + (b.x - a.x) * f;
+          const y = a.y + (b.y - a.y) * f;
+
+          // the trail it is leaving on this segment
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(x, y);
+          ctx.strokeStyle = accent.replace(",1)", ",0.3)");
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(x, y, 2.6, 0, Math.PI * 2);
+          ctx.fillStyle = accent.replace(",1)", ",0.85)");
+          ctx.fill();
+        });
+      }
+    };
+
+    const frame = (ts) => {
+      if (t0 === null) t0 = ts;
+      const time = (ts - t0) / 1000;
+
+      signals.forEach((s) => (s.t += s.speed * 0.016));
+      signals = signals.filter((s) => s.t < 1);
+      if (Math.random() < 0.035) spawn();
+
+      draw(time);
+      raf = requestAnimationFrame(frame);
+    };
+
+    const stop = () => {
+      cancelAnimationFrame(raf);
+      clearInterval(poll);
+      raf = 0;
+      poll = 0;
+      t0 = null;
+      signals = [];
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, c.width, c.height);
+    };
+
+    const start = () => {
+      if (!wide.matches) return stop();
+      resize();
+      layers = readLayers();
+      if (reduced) {
+        // one settled frame — the picture still reads, it just holds still
+        draw(6);
+        return;
+      }
+      if (!raf) raf = requestAnimationFrame(frame);
+      // The docks appear, hide and move; re-read on a slow interval rather than
+      // per frame, which would cost a layout flush 60 times a second.
+      if (!poll) poll = setInterval(() => { layers = readLayers(); }, 500);
+    };
+
+    start();
+
+    const onResize = () => start();
+    window.addEventListener("resize", onResize);
+    wide.addEventListener("change", start);
+
+    return () => {
+      stop();
+      window.removeEventListener("resize", onResize);
+      wide.removeEventListener("change", start);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-0 hidden rail:block opacity-[0.55]"
+    />
+  );
+};
+
+export default NeuralField;

@@ -112,6 +112,46 @@ still placeholders (the resume repo's `[X]%`) must not be copied in.
   `prefers-reduced-motion` honored, keyboard-navigable palette.
 - **Performance** — vendor chunks split for caching; no runtime 3D.
 
+## The ambient field
+
+`src/components/NeuralField.jsx` draws one canvas behind the whole page. It is
+not a generic particle background — it is wired to the interface.
+
+**What it depicts.** The left contact dock and the right section rail are already
+two columns of dots on opposite edges of a fixed viewport. The field reads them
+as the **input** and **output** layers of a network, places two hidden layers
+between them, and sends activations left to right along real paths. Underneath,
+a wave descends the viewport and generated tokens ride along it — so the two
+things this site is about, a model computing and text being emitted, are one
+picture.
+
+**The nodes are real.** Coordinates come from `getBoundingClientRect()` on the
+actual controls, so the drawing stays correct when a dock hides itself, when the
+window resizes, or when a nav item is added. Both docks are `position: fixed`,
+so their rects are already in the canvas's coordinate space and need no scroll
+correction. A control that is `display:none` or zero-sized is filtered out
+rather than anchoring an edge to nothing.
+
+**Why 2D canvas and not three.js.** three.js plus a renderer is roughly 150kB
+gzip against a ~115kB bundle — it would more than double the download for a
+background. This is one canvas and a few hundred lines.
+
+**What keeps it cheap:**
+
+| Guard | Why |
+| --- | --- |
+| Desktop only, below 1024px the loop is **stopped**, not hidden | The docks it wires do not exist there, and a rAF loop on a phone is battery spent on decoration |
+| One rAF loop for the page | Not one per effect |
+| `devicePixelRatio` capped at 2 | A 3x phone would trip 9x the fill cost |
+| Node positions re-read on resize and every 500ms | Reading layout 60 times a second forces a flush every frame |
+| `prefers-reduced-motion` paints one settled frame | The picture still reads; it just holds still |
+| `pointer-events: none`, `aria-hidden` | Never in anyone's way, never announced |
+
+**Stacking.** The canvas is `fixed inset-0 z-0` and is the first child of the
+root. Sections come later in the DOM at the same z-index, so they paint over it
+without needing a z-index of their own. The glass surfaces then blur it through
+their `backdrop-filter`, which is where the two ideas meet.
+
 ## Links
 
 **Every off-site link opens in a new tab** — `target="_blank"` with
@@ -149,3 +189,29 @@ Each of these cost real time to find. They are written down so they cost it once
   derived for the US zones (they observe DST) and fixed for India (it does not).
 - **Lighthouse's accessibility category does not check tap-target size.** The
   page scored 100 while 49 of 53 controls were under 44x44 on mobile.
+
+## Content sections, in order
+
+| Section | Component | Notes |
+| --- | --- | --- |
+| Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed — it was the fifth route to `#contact` |
+| About | `About.jsx` | Portrait, lede, the availability card, six capability cards |
+| Experience | `Experience.jsx` | Roles then education on one timeline; dates right-aligned. Renders only fields that exist |
+| Stack | `Tech.jsx` | Six groups; every chip has a definition on hover |
+| Work | `Works.jsx` | Six projects, generative covers, plain chips |
+| Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
+| Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs — a notice, never an instruction |
+
+## Docks and navigation
+
+Two edges, two jobs, both above 1024px only:
+
+- **Right** (`SideRail.jsx`) — where you are and one click to anywhere. Dots
+  driven by `useActiveSection`, the single observer the top navbar also reads, so
+  the two cannot disagree.
+- **Left** (`ContactRail.jsx`) — how to reach him. Steps aside while the Contact
+  section is on screen, so the same links are never visible twice at once.
+
+The top bar hides on scroll down and returns on scroll up, with four guards: a
+6px threshold, never hidden above 160px, never while the mobile menu is open, and
+never while focus is inside it.

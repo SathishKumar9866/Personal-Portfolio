@@ -9,6 +9,7 @@ import CommandPalette from "./components/CommandPalette";
 import SideRail from "./components/SideRail";
 import ContactRail from "./components/ContactRail";
 import AgentNote from "./components/AgentNote";
+import NeuralField from "./components/NeuralField";
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
           framer-motion animation on the page is JS-driven and ignored it. */}
       <MotionConfig reducedMotion="user">
         <div className="relative z-0 bg-primary">
+          {/* Behind everything: reads the two docks as input and output layers.
+              Sections sit later in the DOM at the same z, so they paint over it. */}
+          <NeuralField />
           <ScrollProgress />
           {/* Targets #main, not #about: the old target skipped the whole hero
               — the h1, the pitch and both CTAs. The .hash-span ids are

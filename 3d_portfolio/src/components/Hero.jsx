@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { styles } from "../styles";
 import LiveClock from "./LiveClock";
-import Backdrop from "./Backdrop";
 import { AvailabilityCompact } from "./Availability";
 
 const container = {
@@ -13,36 +12,10 @@ const rise = {
   show: { y: 0, opacity: 1, transition: { duration: 0.6, ease: [0.2, 0.65, 0.3, 0.9] } },
 };
 
-// quiet motion detail — a drifting signal contour in the brand red
-const SignalLine = ({ reduced }) => (
-  <div
-    className="pointer-events-none absolute inset-x-0 bottom-[10vh] z-0 overflow-hidden opacity-60"
-    aria-hidden="true"
-  >
-    <svg
-      className={reduced ? "" : "hero-signal"}
-      width="180%"
-      height="140"
-      viewBox="0 0 2400 140"
-      preserveAspectRatio="none"
-      fill="none"
-    >
-      <path
-        d="M0 90 C 120 90 140 40 260 40 S 400 120 520 120 620 30 720 30 860 100 980 100 1080 45 1200 45 1340 115 1460 115 1560 35 1680 35 1820 95 1940 95 2040 50 2160 50 2300 100 2400 100"
-        stroke="#FF3621"
-        strokeWidth="1.5"
-        strokeOpacity="0.35"
-      />
-    </svg>
-  </div>
-);
-
 const Hero = () => {
   const reduced = useReducedMotion();
   return (
     <section className="relative w-full min-h-screen min-h-[100svh] flex items-center pt-20" aria-label="Intro">
-      <Backdrop />
-      <SignalLine reduced={reduced} />
 
       <motion.div
         variants={container}
