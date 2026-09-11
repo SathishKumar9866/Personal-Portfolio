@@ -10,6 +10,11 @@ import { useEffect, useRef } from "react";
  * nothing and competes with the text. That is the difference between a backdrop
  * that adds something and wallpaper.
  *
+ * Scoped to a BAND, not to the section. Filling the section ran the wave behind
+ * all six stack cards, which is the same wallpaper problem one level down. It
+ * occupies the empty strip to the right of the intro copy and above the card
+ * grid — the one part of this section that had nothing in it.
+ *
  * Section-scoped, so unlike NeuralField it is positioned absolutely inside its
  * own section and needs no fixed-coordinate wiring.
  *
@@ -143,7 +148,11 @@ const TokenStream = () => {
     <canvas
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 -z-10 hidden rail:block h-full w-full opacity-[0.6]"
+      // A BAND, not the section. Filling the section put the wave behind all six
+      // cards — section-scoped wallpaper is still wallpaper. It now occupies only
+      // the empty strip to the right of the intro text, above the grid, so it
+      // crosses no content at all.
+      className="pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[20rem] w-[52%] opacity-[0.6]"
     />
   );
 };

@@ -140,8 +140,13 @@ is continuous rather than a step.
 A wave that descends and wraps, with sub-word tokens riding the curve they were
 emitted onto. It lives in Stack and only in Stack, because that is where the
 `LLM / RAG` group sits — so the stream illustrates the content instead of
-decorating the page. Section-scoped, so it is absolutely positioned inside its
-own section and needs no fixed-coordinate wiring.
+decorating the page.
+
+**Scoped to a band, not to the section.** Filling the section ran the wave behind
+all six stack cards, which is the same wallpaper problem one level down. It now
+occupies a 20rem × 52% strip at the top right — the one part of that section with
+nothing in it. Measured: rightmost rendered text ends at x=614, the canvas starts
+at x=653, and it clears the card grid entirely.
 
 ### What keeps both cheap
 
