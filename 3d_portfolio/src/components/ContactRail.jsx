@@ -1,31 +1,25 @@
-/**
- * Owns: the contact dock pinned to the right edge — persistent, quick access to
- * the same four destinations without scrolling to the bottom.
- * Does not own: the glyphs or addresses (icons.js), or the Contact section
- * itself (Contact.jsx).
- *
- * It hides itself while the Contact section is on screen. That is the whole
- * answer to duplication: the rail and the section never appear together, so the
- * page never shows the same four links twice.
- *
- * Motion is plain CSS transitions, which index.css already neutralises under
- * prefers-reduced-motion — no motion library needed for a slide and a fade.
- */
 import { useEffect, useState } from "react";
 import { contact } from "../constants";
 import { ICON_PATHS, socialLinks } from "./icons";
 
-const Glyph = ({ name }) => (
-  <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d={ICON_PATHS[name]} />
-  </svg>
-);
-
-// Slides out to the left of its icon on hover or keyboard focus. The icon alone
-// is recognisable; the label is what makes it obviously clickable before anyone
-// tries it.
+/**
+ * Owns: the LEFT-edge contact dock — reach him from anywhere on the page.
+ * Does not own: section navigation, which lives on the right (SideRail.jsx), or
+ * the Contact section itself.
+ *
+ * Left and right carry different jobs on purpose: where you can GO is on the
+ * right with the scroll position, how you REACH HIM is on the left. Putting both
+ * on one edge made a single column of nine controls.
+ *
+ * It steps aside while the Contact section is on screen, so the same four links
+ * are never visible twice at once. Hidden below the `rail` breakpoint (1400px),
+ * which is where the page actually has margin for an edge dock — below it the
+ * dock measured 4px from the text at every width.
+ */
 const Label = ({ children }) => (
-  <span className="pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-md border border-line bg-primary px-2.5 py-1 font-mono text-[11px] text-secondary opacity-0 translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
+  // Opens to the RIGHT — this dock is on the left edge, so a label sliding left
+  // would run off the viewport.
+  <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-md border border-line bg-primary px-2.5 py-1 font-mono text-[11px] text-secondary opacity-0 -translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
     {children}
   </span>
 );
@@ -37,7 +31,6 @@ const ContactRail = () => {
   const [atContact, setAtContact] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Hide while the Contact section is anywhere on screen.
   useEffect(() => {
     const section = document.getElementById("contact")?.closest("section");
     if (!section) return;
@@ -61,8 +54,8 @@ const ContactRail = () => {
   return (
     <nav
       aria-label="Contact shortcuts"
-      className={`hidden sm:flex fixed right-4 top-1/2 z-40 -translate-y-1/2 flex-col gap-2 transition duration-300 ${
-        atContact ? "invisible translate-x-6 opacity-0" : "visible opacity-100"
+      className={`hidden rail:flex fixed left-4 top-1/2 z-40 -translate-y-1/2 flex-col gap-2 transition duration-300 ${
+        atContact ? "invisible -translate-x-6 opacity-0" : "visible opacity-100"
       }`}
     >
       {socialLinks()
@@ -77,14 +70,22 @@ const ContactRail = () => {
             className={cell}
           >
             <Label>{l.label}</Label>
-            <Glyph name={l.k} />
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d={ICON_PATHS[l.k]} />
+            </svg>
           </a>
         ))}
 
       <button onClick={copyEmail} aria-label="Copy email address" className={cell}>
         <Label>{copied ? "Copied ✓" : "Copy email"}</Label>
-        <Glyph name="email" />
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d={ICON_PATHS.email} />
+        </svg>
       </button>
+
+      <span aria-live="polite" className="sr-only">
+        {copied ? "Email address copied to clipboard" : ""}
+      </span>
     </nav>
   );
 };

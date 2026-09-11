@@ -41,7 +41,7 @@ export default {
         card: "0 1px 2px rgb(var(--c-strong) / 0.06), 0 12px 32px -16px rgb(var(--c-strong) / 0.28)",
         glow: "0 0 0 1px rgb(var(--c-accent) / 0.3)",
       },
-      screens: { xs: "450px" },
+      screens: { xs: "450px", rail: "1400px" },
       letterSpacing: { label: "0.18em" },
     },
   },

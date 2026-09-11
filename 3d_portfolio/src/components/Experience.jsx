@@ -21,9 +21,10 @@ const month = (iso) => {
 const Range = ({ start, end, current }) => {
   const from = month(start);
   const to = current ? "Present" : month(end);
-  // A lone "Present" with no start date says nothing the `current` pill has not
-  // already said, so the range renders only once there is a start to anchor it.
-  if (!from) return null;
+  // A lone "Present" says nothing the `current` pill has not already said. But a
+  // lone end date is meaningful on its own — that is a graduation.
+  if (!from && !to) return null;
+  if (!from && to === "Present") return null;
   return (
     <span className="font-mono text-[11px] uppercase tracking-label text-faint tabular-nums">
       {[from, to].filter(Boolean).join(" — ")}

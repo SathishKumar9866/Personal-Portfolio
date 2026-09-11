@@ -7,6 +7,7 @@ import BackToTop from "./components/BackToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import CommandPalette from "./components/CommandPalette";
 import SideRail from "./components/SideRail";
+import ContactRail from "./components/ContactRail";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           </main>
           <Footer />
           <SideRail />
+          <ContactRail />
           <BackToTop />
           <CommandPalette />
         </div>

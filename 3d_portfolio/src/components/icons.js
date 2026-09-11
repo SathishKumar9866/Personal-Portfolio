@@ -1,7 +1,7 @@
 /**
  * Owns: the brand glyph paths and the one list of off-site destinations.
  * Does not own: how they are laid out — SocialIcons draws the row in the
- * Contact section, ContactRail draws the edge dock. Both read from here so a
+ * Contact section, ContactRail draws the left-edge dock. Both read from here so a
  * changed address or a new profile is edited once.
  *
  * Inline SVG rather than an icon package: four marks, and brand paths do not
