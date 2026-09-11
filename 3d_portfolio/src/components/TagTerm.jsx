@@ -98,7 +98,7 @@ const TagTerm = ({ name, plain = false }) => {
       {open && (
         <span
           role="tooltip"
-          className="absolute z-30 left-1/2 -translate-x-1/2 top-full mt-1.5 w-[min(17rem,calc(100vw-2rem))] rounded-lg border border-line bg-primary shadow-card p-3 font-sans text-[12.5px] text-secondary leading-snug block text-left normal-case tracking-normal"
+          className="absolute z-30 left-1/2 -translate-x-1/2 top-full mt-1.5 w-[min(17rem,calc(100vw-2rem))] rounded-xl glass p-3 font-sans text-[12.5px] text-secondary leading-snug block text-left normal-case tracking-normal"
         >
           <b className="text-white-100">{name}</b>
           {g.full && g.full !== name && (

@@ -35,7 +35,7 @@ const BackToTop = () => {
             })
           }
           aria-label="Back to top"
-          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full border border-line-strong bg-tertiary/90 backdrop-blur text-white-100 hover:border-accent hover:text-accent transition-colors flex items-center justify-center font-mono"
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full glass text-white-100 hover:border-accent hover:text-accent transition-colors flex items-center justify-center font-mono"
         >
           ↑
         </motion.button>

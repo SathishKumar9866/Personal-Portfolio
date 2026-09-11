@@ -30,7 +30,7 @@ export const AvailabilityCompact = () => (
 );
 
 const Availability = () => (
-  <div className="rounded-xl border border-line bg-tertiary p-4 sm:p-5">
+  <div className="rounded-xl glass-card p-4 sm:p-5">
     <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-label text-live">
       <Dot />
       Open to work

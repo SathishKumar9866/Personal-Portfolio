@@ -10,7 +10,7 @@ const ServiceCard = ({ index, title, desc }) => (
   <Tilt className="w-full h-full" options={{ max: 8, scale: 1, speed: 450 }}>
     <motion.div
       variants={fadeIn("right", "spring", index * 0.2, 0.6)}
-      className="w-full h-full rounded-2xl border border-line bg-tertiary shadow-card hover:border-accent/40 transition-colors"
+      className="w-full h-full rounded-2xl glass-card hover:border-accent/40 transition-colors"
     >
       <div className="rounded-2xl py-6 px-5 flex flex-col gap-3 h-full">
         <span className="font-mono text-[13px] text-accent-ink">

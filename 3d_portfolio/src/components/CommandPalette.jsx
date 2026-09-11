@@ -129,7 +129,7 @@ const CommandPalette = () => {
             ref={panelRef}
             onClick={(e) => e.stopPropagation()}
             onKeyDown={onPanelKey}
-            className="w-full max-w-lg rounded-xl border border-line bg-tertiary shadow-card overflow-hidden"
+            className="w-full max-w-lg rounded-2xl glass overflow-hidden"
           >
             <input
               ref={inputRef}

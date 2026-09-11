@@ -26,7 +26,7 @@ const Label = ({ children }) => (
 );
 
 const cell =
-  "group relative flex h-10 w-10 xl:h-11 xl:w-11 items-center justify-center rounded-xl border border-line-strong bg-primary/85 backdrop-blur-sm text-secondary transition-colors hover:text-accent hover:border-accent focus-visible:text-accent";
+  "group relative flex h-10 w-10 xl:h-11 xl:w-11 items-center justify-center rounded-xl glass text-secondary transition-colors hover:text-accent hover:border-accent focus-visible:text-accent";
 
 const ContactRail = () => {
   const [atContact, setAtContact] = useState(false);

@@ -131,7 +131,7 @@ const Contact = () => (
 
     <motion.div
       variants={fadeIn("left", "spring", 0.2, 0.7)}
-      className="rounded-2xl border border-line bg-tertiary p-5 sm:p-7"
+      className="rounded-2xl glass-card p-5 sm:p-7"
     >
       <p className="font-mono text-[11px] uppercase tracking-label text-faint">
         Every way to reach me

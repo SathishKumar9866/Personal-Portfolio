@@ -269,7 +269,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
     >
       <Tilt
         options={{ max: reduced ? 0 : 8, scale: 1, speed: 400 }}
-        className="h-full bg-tertiary p-5 rounded-2xl border border-line shadow-card hover:border-accent/40 transition-colors flex flex-col"
+        className="h-full glass-card p-5 rounded-2xl hover:border-accent/40 transition-colors flex flex-col"
       >
         <motion.div style={{ y: coverY }}>
           <ProjectCover cover={cover} name={name} />
