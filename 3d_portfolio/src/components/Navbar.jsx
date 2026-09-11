@@ -46,6 +46,20 @@ const Navbar = () => {
     };
   }, []);
 
+  // The menu is a full-screen overlay, so it needs modal behaviour: Escape to
+  // dismiss, and no scrolling the page underneath it.
+  useEffect(() => {
+    if (!toggle) return;
+    const onKey = (e) => e.key === "Escape" && setToggle(false);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [toggle]);
+
   return (
     <nav
       className={`${styles.paddingX} w-full flex items-center py-4 fixed top-0 z-40 transition-colors duration-300 ${
@@ -111,6 +125,7 @@ const Navbar = () => {
             className="relative z-50 text-white-100 text-[22px] leading-none px-2 py-1"
             aria-label={toggle ? "Close menu" : "Open menu"}
             aria-expanded={toggle}
+            aria-controls="mobile-menu"
           >
             {toggle ? "✕" : "☰"}
           </button>
@@ -122,7 +137,11 @@ const Navbar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 sm:hidden bg-primary/95 backdrop-blur-md flex flex-col justify-center px-8"
+              id="mobile-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              className="fixed inset-0 z-40 sm:hidden bg-primary backdrop-blur-md flex flex-col justify-center px-8"
             >
               <ul className="list-none flex flex-col gap-6">
                 {navLinks.map((n, idx) => (

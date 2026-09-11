@@ -3,7 +3,6 @@
 A fast, type-led personal site for an ML / AI engineer. Databricks-inspired
 visual system, light + dark themes, no heavy 3D.
 
-**Live headline:** *"Everyone's building AI agents. I ship the ones that reach production."*
 
 ## Stack
 
@@ -49,8 +48,9 @@ form and are kept only as history.
 All content is data-driven in `src/constants/index.js`:
 
 - `navLinks`, `services` (Overview), `stackGroups` (Stack, each with a `note`),
-- `projects` (each with `outcome`, `description`, `stages` for the pipeline
-  graphic, `tags`, links), `quotes`, and `contact`.
+- `projects` (each with `outcome`, `description`, `tags`, links), `quotes`,
+  and `contact`. Note: `stages` is present on each project but is currently
+  dead data — no component reads it.
 
 ## Structure
 
@@ -68,9 +68,12 @@ src/
 ## Notable details
 
 - **⌘K command palette** — jump to sections, copy email, open socials, toggle theme.
-- **Generative project covers** — each card draws the project's real pipeline
-  (e.g. `ingest → embed → retrieve → generate`).
-- **Live clock** — IST / EST / CST in the hero and footer.
+- **Generative project covers** — each card draws an abstract diagram of what
+  the project does (a retrieval neighbourhood, a cited passage, a federated
+  hub-and-spoke), selected by its `cover` key and seeded deterministically from
+  the project name. Not screenshots, and not the literal pipeline stages.
+- **Live clock** — IST and US Eastern / Central in the hero and footer, with
+  zone abbreviations derived so they track daylight saving.
 - **Accessibility** — semantic landmarks, single `h1`, skip link, visible focus,
   `prefers-reduced-motion` honored, keyboard-navigable palette.
 - **Performance** — vendor chunks split for caching; no runtime 3D.

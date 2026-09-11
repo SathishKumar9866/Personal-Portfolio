@@ -40,6 +40,7 @@ const CommandPalette = () => {
   const [q, setQ] = useState("");
   const [i, setI] = useState(0);
   const inputRef = useRef(null);
+  const panelRef = useRef(null);
 
   const results = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -64,12 +65,23 @@ const CommandPalette = () => {
     };
   }, []);
 
+  const returnFocusRef = useRef(null);
+
   useEffect(() => {
-    if (openState) {
-      setQ("");
-      setI(0);
-      setTimeout(() => inputRef.current?.focus(), 20);
-    }
+    if (!openState) return;
+    // Remember where focus came from so Escape returns it, instead of dumping
+    // focus on <body> and restarting Tab from the top of the document.
+    returnFocusRef.current = document.activeElement;
+    setQ("");
+    setI(0);
+    const t = setTimeout(() => inputRef.current?.focus(), 20);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden"; // page scrolled behind the dialog
+    return () => {
+      clearTimeout(t);
+      document.body.style.overflow = prevOverflow;
+      returnFocusRef.current?.focus?.();
+    };
   }, [openState]);
 
   const run = (idx) => {
@@ -83,6 +95,18 @@ const CommandPalette = () => {
     if (e.key === "ArrowDown") { e.preventDefault(); setI((n) => Math.min(n + 1, results.length - 1)); }
     else if (e.key === "ArrowUp") { e.preventDefault(); setI((n) => Math.max(n - 1, 0)); }
     else if (e.key === "Enter") { e.preventDefault(); run(i); }
+  };
+
+  // Without this, Tab leaves the dialog and lands on nav links that are still
+  // focusable and clickable underneath the overlay.
+  const onPanelKey = (e) => {
+    if (e.key !== "Tab") return;
+    const focusables = panelRef.current?.querySelectorAll("input, button");
+    if (!focusables?.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   };
 
   return (
@@ -102,7 +126,9 @@ const CommandPalette = () => {
             initial={{ y: -12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -12, opacity: 0 }}
+            ref={panelRef}
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={onPanelKey}
             className="w-full max-w-lg rounded-xl border border-line bg-tertiary shadow-card overflow-hidden"
           >
             <input
@@ -110,22 +136,32 @@ const CommandPalette = () => {
               value={q}
               onChange={(e) => { setQ(e.target.value); setI(0); }}
               onKeyDown={onInputKey}
+              role="combobox"
+              aria-expanded="true"
+              aria-controls="cmdk-list"
+              aria-activedescendant={results[i] ? `cmdk-opt-${i}` : undefined}
+              aria-label="Search commands"
               placeholder="Type a command…"
               className="w-full bg-transparent border-b border-line-strong px-4 py-3.5 font-mono text-[14px] text-white-100 placeholder:text-faint focus:outline-none"
             />
-            <ul className="max-h-72 overflow-y-auto py-2">
+            <ul id="cmdk-list" role="listbox" aria-label="Commands" className="max-h-72 overflow-y-auto py-2">
               {results.length === 0 && (
-                <li className="px-4 py-3 font-mono text-[13px] text-faint">No matches</li>
+                <li role="option" aria-selected="false" className="px-4 py-3 font-mono text-[13px] text-faint">No matches</li>
               )}
               {results.map((a, idx) => (
-                <li key={a.label}>
+                <li key={a.label} role="option" id={`cmdk-opt-${idx}`} aria-selected={i === idx}>
                   <button
+                    tabIndex={-1}
                     onMouseEnter={() => setI(idx)}
                     onClick={() => run(idx)}
-                    className={`w-full flex items-center justify-between px-4 py-2.5 text-left font-mono text-[13px] ${
-                      i === idx ? "bg-accent/15 text-accent" : "text-white-100"
+                    className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-left font-mono text-[13px] border-l-2 ${
+                      i === idx
+                        ? "border-accent bg-accent/15 text-white-100"
+                        : "border-transparent text-white-100"
                     }`}
                   >
+                    {/* Selection is carried by the left rule as well as the tint:
+                        a 15%-alpha wash is not a sufficient cue on its own. */}
                     <span>{a.label}</span>
                     <span className="text-[11px] text-faint">{a.hint}</span>
                   </button>
