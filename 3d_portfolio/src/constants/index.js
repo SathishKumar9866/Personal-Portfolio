@@ -252,7 +252,7 @@ export const stackGroups = [
 export const projects = [
   {
     name: "rag-pipeline-langchain",
-    cover: "Embeddings",
+    cover: "retrieval",
     outcome: "Production RAG on AWS with a measured retrieval loop and GitOps deploys.",
     stages: ["ingest", "embed", "retrieve", "generate"],
     description:

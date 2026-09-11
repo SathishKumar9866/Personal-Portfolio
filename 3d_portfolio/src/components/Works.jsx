@@ -6,6 +6,7 @@ import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import TagTerm from "./TagTerm";
+import { ICON_PATHS } from "./icons";
 
 /* ---- cover drawing ---- */
 const RED = "#FF3621";
@@ -43,28 +44,90 @@ const roundRect = (ctx, x, y, w, h, r) => {
 };
 const TAU = Math.PI * 2;
 
-// RAG: retrieval in an embedding space
-const embeddings = (ctx, w, h, t, rng) => {
+// rag-pipeline: a question is embedded, its nearest passages retrieved, and the
+// answer marks the one it cites. Three labelled stages, left to right, so the
+// card states the mechanic rather than decorating it.
+const retrieval = (ctx, w, h, t, rng) => {
   grid(ctx, w, h);
+  const mid = h * 0.5;
+  const labelY = h * 0.88;
+  const stage = (text, cx) => {
+    ctx.font = '600 8px "JetBrains Mono Variable", monospace';
+    ctx.fillStyle = bone(0.45);
+    ctx.textAlign = "center";
+    ctx.fillText(text, cx, labelY);
+    ctx.textAlign = "left";
+  };
+  const arrow = (x0, x1) => {
+    ctx.strokeStyle = bone(0.4); ctx.fillStyle = bone(0.4); ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(x0, mid); ctx.lineTo(x1 - 4, mid); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x1 - 5, mid - 3); ctx.lineTo(x1, mid); ctx.lineTo(x1 - 5, mid + 3);
+    ctx.closePath(); ctx.fill();
+  };
+
+  // 1. the question, as typed
+  const qx = w * 0.05, qw = w * 0.16, qh = h * 0.17;
+  ctx.strokeStyle = bone(0.5); ctx.lineWidth = 1.4;
+  roundRect(ctx, qx, mid - qh / 2, qw, qh, 4); ctx.stroke();
+  ctx.fillStyle = bone(0.5);
+  roundRect(ctx, qx + 6, mid - 6, qw * 0.62, 3.5, 2); ctx.fill();
+  roundRect(ctx, qx + 6, mid + 1.5, qw * 0.4, 3.5, 2); ctx.fill();
+  stage("QUERY", qx + qw / 2);
+
+  arrow(w * 0.215, w * 0.265);
+
+  // 2. the store: the query lands as a point, the three nearest come back
+  const sx = w * 0.27, sw = w * 0.3, sy = mid - h * 0.26, sh = h * 0.52;
+  ctx.strokeStyle = bone(0.22); ctx.lineWidth = 1;
+  ctx.setLineDash([3, 4]);
+  roundRect(ctx, sx, sy, sw, sh, 6); ctx.stroke();
+  ctx.setLineDash([]);
   const dots = [];
-  [[0.28, 0.4], [0.64, 0.34], [0.52, 0.7]].forEach(([fx, fy]) => {
-    for (let i = 0; i < 9; i++) dots.push({ x: fx * w + (rng() - 0.5) * w * 0.18, y: fy * h + (rng() - 0.5) * h * 0.26 });
+  for (let i = 0; i < 22; i++) {
+    dots.push({ x: sx + 10 + rng() * (sw - 20), y: sy + 9 + rng() * (sh - 18) });
+  }
+  dots.forEach((d) => {
+    ctx.beginPath(); ctx.arc(d.x, d.y, 2, 0, TAU); ctx.fillStyle = bone(0.35); ctx.fill();
   });
-  dots.forEach((d) => { ctx.beginPath(); ctx.arc(d.x, d.y, 2, 0, TAU); ctx.fillStyle = bone(0.4); ctx.fill(); });
-  const q = { x: w * 0.42, y: h * 0.5 };
-  const near = dots.map((d, i) => ({ i, dd: (d.x - q.x) ** 2 + (d.y - q.y) ** 2 })).sort((a, b) => a.dd - b.dd).slice(0, 3);
+  const q = { x: sx + sw * 0.3, y: sy + sh * 0.5 };
+  const near = dots
+    .map((d, i) => ({ i, dd: (d.x - q.x) ** 2 + (d.y - q.y) ** 2 }))
+    .sort((a, b) => a.dd - b.dd)
+    .slice(0, 3);
   ctx.strokeStyle = "rgba(255,54,33,0.7)"; ctx.lineWidth = 1.2;
   near.forEach((o) => {
     const d = dots[o.i];
     ctx.beginPath(); ctx.moveTo(q.x, q.y); ctx.lineTo(d.x, d.y); ctx.stroke();
-    ctx.beginPath(); ctx.arc(d.x, d.y, 3, 0, TAU); ctx.fillStyle = RED; ctx.fill();
+    ctx.beginPath(); ctx.arc(d.x, d.y, 3.2, 0, TAU); ctx.fillStyle = RED; ctx.fill();
   });
   if (t >= 0) {
     const p = t % 1;
-    ctx.beginPath(); ctx.arc(q.x, q.y, 6 + p * 24, 0, TAU);
+    ctx.beginPath(); ctx.arc(q.x, q.y, 6 + p * 26, 0, TAU);
     ctx.strokeStyle = `rgba(255,54,33,${0.5 * (1 - p)})`; ctx.lineWidth = 1.5; ctx.stroke();
   }
   ctx.beginPath(); ctx.arc(q.x, q.y, 4.5, 0, TAU); ctx.fillStyle = RED; ctx.fill();
+  stage("TOP-3 PASSAGES", sx + sw / 2);
+
+  arrow(w * 0.585, w * 0.612);
+
+  // 3. the answer, with the retrieved passage marked in it
+  const ax = w * 0.63, aw = w * 0.27, rows = 6, rh = (sh - 12) / (rows - 1);
+  for (let i = 0; i < rows; i++) {
+    const y = sy + 8 + i * rh;
+    const wid = aw * (0.5 + rng() * 0.5);
+    if (i === 3) {
+      ctx.fillStyle = "rgba(255,54,33,0.14)"; ctx.fillRect(ax - 6, y - 5, aw + 12, 12);
+      ctx.fillStyle = RED; ctx.fillRect(ax - 6, y - 5, 2.5, 12);
+      roundRect(ctx, ax, y - 2, wid, 4, 2); ctx.fill();
+      ctx.font = '600 9px "JetBrains Mono Variable", monospace';
+      ctx.fillText("[1]", ax + aw + 5, y + 3);
+    } else {
+      ctx.fillStyle = bone(0.45);
+      roundRect(ctx, ax, y - 2, wid, 4, 2); ctx.fill();
+    }
+  }
+  stage("CITED ANSWER", ax + aw / 2);
 };
 
 // due-diligence: cited answer
@@ -86,7 +149,10 @@ const citation = (ctx, w, h, t, rng) => {
   }
 };
 
-// federated: updates flow in, data stays local
+// federated: one training round is two trips, not one. Local updates travel in,
+// the aggregated global model travels back out to every client. Animating only
+// the inbound leg said the clients give and never receive, which is the half of
+// federated learning that is not federated.
 const federated = (ctx, w, h, t) => {
   grid(ctx, w, h);
   const hub = { x: w * 0.5, y: h * 0.5 };
@@ -97,21 +163,58 @@ const federated = (ctx, w, h, t) => {
   });
   ctx.strokeStyle = bone(0.4); ctx.lineWidth = 1;
   clients.forEach((c) => { ctx.beginPath(); ctx.moveTo(c.x, c.y); ctx.lineTo(hub.x, hub.y); ctx.stroke(); });
-  if (t >= 0) {
-    const p = t % 1;
+
+  // Filled red inbound (this client's update), hollow outbound (the shared
+  // model). Same two marks the rest of the covers use for "mine" and "given".
+  const travel = (frac, inbound) => {
     clients.forEach((c, i) => {
-      const pp = (p + i / N) % 1;
-      ctx.beginPath();
-      ctx.arc(c.x + (hub.x - c.x) * pp, c.y + (hub.y - c.y) * pp, 2.5, 0, TAU);
-      ctx.fillStyle = RED; ctx.fill();
+      const pp = (frac + i / N) % 1;
+      const k = inbound ? pp : 1 - pp;
+      const x = c.x + (hub.x - c.x) * k;
+      const y = c.y + (hub.y - c.y) * k;
+      ctx.beginPath(); ctx.arc(x, y, 2.6, 0, TAU);
+      if (inbound) {
+        ctx.fillStyle = RED; ctx.fill();
+      } else {
+        ctx.fillStyle = BG; ctx.fill();
+        ctx.strokeStyle = bone(0.85); ctx.lineWidth = 1.4; ctx.stroke();
+      }
     });
+  };
+
+  const inbound = t < 0 ? null : (t % 1) < 0.5;
+  const p = t < 0 ? 0.5 : ((t % 1) % 0.5) / 0.5;
+
+  if (inbound === null) {
+    // Static cover: show both legs mid-flight so the round still reads.
+    travel(0.5, true);
+    travel(0.5, false);
+  } else {
+    travel(p, inbound);
+    // the aggregate step, at the moment the round turns around
+    if (!inbound && p < 0.4) {
+      const q = p / 0.4;
+      ctx.beginPath(); ctx.arc(hub.x, hub.y, 12 + q * 20, 0, TAU);
+      ctx.strokeStyle = `rgba(233,230,223,${0.45 * (1 - q)})`; ctx.lineWidth = 1.5; ctx.stroke();
+    }
   }
+
   clients.forEach((c) => {
     ctx.beginPath(); ctx.arc(c.x, c.y, 7, 0, TAU); ctx.fillStyle = BG; ctx.fill();
     ctx.strokeStyle = bone(0.7); ctx.lineWidth = 1.4; ctx.stroke();
     ctx.fillStyle = bone(0.55); ctx.fillRect(c.x - 2, c.y - 2, 4, 4);
   });
   ctx.beginPath(); ctx.arc(hub.x, hub.y, 10, 0, TAU); ctx.fillStyle = RED; ctx.fill();
+
+  ctx.font = '600 8px "JetBrains Mono Variable", monospace';
+  ctx.fillStyle = bone(0.45);
+  ctx.textAlign = "center";
+  ctx.fillText(
+    inbound === null ? "ONE ROUND" : inbound ? "LOCAL UPDATES IN" : "GLOBAL MODEL OUT",
+    w * 0.5,
+    h * 0.94
+  );
+  ctx.textAlign = "left";
 };
 
 // reels: video frames become text
@@ -174,20 +277,28 @@ const scorecard = (ctx, w, h) => {
   ctx.fillText("TWIST", w * 0.5, py + ph * 0.735);
 };
 
-const DRAWERS = { embeddings, citation, federated, frames, tracking, scorecard };
+const DRAWERS = { retrieval, citation, federated, frames, tracking, scorecard };
 const LABELS = {
-  embeddings: "vector space", citation: "cited answer", federated: "federated",
+  retrieval: "retrieve, then cite", citation: "cited answer", federated: "federated",
   frames: "video → text", tracking: "detection", scorecard: "live app",
 };
-const ANIMATED = new Set(["embeddings", "federated", "tracking"]);
+const ANIMATED = new Set(["retrieval", "federated", "tracking"]);
 
-const ProjectCover = ({ cover = "embeddings", name }) => {
+const ProjectCover = ({ cover = "retrieval", name }) => {
   const ref = useRef(null);
   const reduced = useReducedMotion();
   useEffect(() => {
     const c = ref.current;
     const drawer = DRAWERS[cover];
-    if (!c || !drawer) return;
+    if (!c) return;
+    if (!drawer) {
+      // A typo in a cover key used to render as an empty panel labelled
+      // "preview", which reads like an intentional placeholder. It is not.
+      if (import.meta.env.DEV) {
+        console.warn(`ProjectCover: no drawer named "${cover}". Keys: ${Object.keys(DRAWERS).join(", ")}`);
+      }
+      return;
+    }
     const ctx = c.getContext("2d");
     const seed = hash(name || cover);
     let dpr = 1, w = 0, h = 0;
@@ -305,7 +416,10 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
         </div>
 
         <div className="mt-5 pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-[12px]">
-          <a href={source_code_link} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 sm:min-h-0 text-secondary hover:text-accent transition-colors">
+          <a href={source_code_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 min-h-11 sm:min-h-0 text-secondary hover:text-accent transition-colors">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d={ICON_PATHS.github} />
+            </svg>
             repo ↗
           </a>
           {live_link && (
