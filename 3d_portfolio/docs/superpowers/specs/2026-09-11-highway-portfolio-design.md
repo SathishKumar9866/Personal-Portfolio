@@ -71,6 +71,11 @@ A sticky full-height left rail, replacing the current top-hairline
  ▼ 100%
 ```
 
+Exits are numbered from the sections that actually render. Writing is blocked
+on real posts; when they exist it becomes exit 05 and Contact renumbers to 06.
+Markers are generated from the rendered section list, never hardcoded, so this
+costs nothing.
+
 - Collapses to the existing hairline below `sm`.
 - Reuses the `IntersectionObserver` already in `Navbar.jsx`. One observer, two
   consumers — not a second observer.
