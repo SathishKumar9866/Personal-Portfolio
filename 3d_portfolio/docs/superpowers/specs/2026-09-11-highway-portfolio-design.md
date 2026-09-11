@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-11
 **Branch:** `redesign/highway-premium` (cut from `redesign/de-slop-portfolio`, 26 commits ahead of `main`)
-**Status:** approved in chat, not yet implemented
+**Status:** approved in chat. Contact/footer/photo-slot pass shipped 2026-09-11; rail, routes and Work tiers not yet built.
 
 ## Why
 
@@ -48,6 +48,45 @@ session does not relitigate it.
 | Deploy | After the redesign lands | Owner's call. Domain-dependent work (canonical URL, sitemap, OG image, frame-ancestors) is sequenced behind it. |
 | Photo | In About, not the hero | Matches the inspiration reference; keeps the type-led hero uncluttered. |
 | Résumé button | Dropped | Owner's call. Contact carries email and LinkedIn. |
+| Direction | Footnotes for the narrative, highway for Work | Owner's call, 2026-09-11. See "Two ideas, one page" below — including the risk the owner accepted. |
+
+## Two ideas, one page
+
+The archived `sathishkumarai.github.io` carried a `docs/DECISIONS.md` that opened with
+"Read this before redesigning anything." It is now at
+`~/coding/archive/portfolio-github-pages-annotated`. Its reasoning is copied here because
+a spec that contradicts an archived decision without acknowledging it is how the same
+mistake gets made twice.
+
+**Its one idea.** The work is about grounding — retrieval that cites its source, outputs a
+person can check. So the page does the same thing it describes: a claim in the opening is
+highlighted, carries an `[nn]` marker, and opening it retrieves the project the claim rests
+on into the margin, where a source belongs. The `[01]`-`[15]` numbering indexes real
+entries; renumbering an entry changes what the opening cites. Each highlight is a real
+anchor, so with JavaScript off a click still lands the reader on the source.
+
+**Its warning**, which this spec is deliberately going against: *"When a change would
+compete with it, the change loses. A second bold thing does not make the page twice as
+interesting; it makes the first thing half as clear."*
+
+**What was decided anyway.** Both, split by region:
+
+- **Narrative regions** (hero, About) use the citation mechanic. Claims carry `[nn]`
+  markers that retrieve the backing project. This is the page's one loud idea.
+- **Work** uses the highway tiering and detail routes. Twelve projects is a density
+  problem the citation mechanic does not solve.
+
+**The accepted risk, stated plainly:** two structural ideas on one page can blunt each
+other, exactly as the archived note warns. The mitigation is that they never appear in the
+same region — by the time a reader reaches Work, the citation apparatus has done its job
+and stops. If, once built, the page reads as two designs stapled together, the citation
+mechanic wins and the rail goes. That is the tie-breaker, decided now rather than mid-build.
+
+**Also worth keeping from that file:** generation 2 was abandoned for being "the current
+house style of generated UI — every element a default rather than a choice." Rounded cards,
+outlined tag chips, uniform radii, grid-with-fade backdrop. The current site still uses
+uniform `rounded-2xl` on every panel. That is the same smell, and this redesign should not
+reproduce it.
 
 ## Architecture
 
