@@ -149,3 +149,9 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* <main> takes focus from the skip link but must never show an outline ring
+   just because it was programmatically focused. */
+main:focus:not(:focus-visible) {
+  outline: none;
+}

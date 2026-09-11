@@ -84,6 +84,7 @@ export const glossary = {
 
 export const navLinks = [
   { id: "about", title: "About" },
+  { id: "stack", title: "Stack" },
   { id: "work", title: "Work" },
   { id: "contact", title: "Contact" },
 ];

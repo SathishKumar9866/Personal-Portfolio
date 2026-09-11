@@ -1,17 +1,29 @@
 {
-  "name": "Sathish Kumar — ML / AI Engineer",
+  "name": "Sathish Kumar \u2014 ML / AI Engineer",
   "short_name": "Sathish",
   "description": "ML / AI engineer. RAG, computer vision, and products people actually use.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#16181D",
-  "theme_color": "#FF3621",
+  "background_color": "#FFFFFF",
+  "theme_color": "#0F2228",
   "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
     {
       "src": "/favicon.svg",
       "type": "image/svg+xml",
       "sizes": "any",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ]
 }

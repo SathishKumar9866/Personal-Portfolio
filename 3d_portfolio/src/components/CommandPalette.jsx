@@ -1,28 +1,38 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { contact } from "../constants";
+import { contact, navLinks } from "../constants";
+import { socialLinks } from "./icons";
 
-const go = (id) => () => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+// An explicit `behavior: "smooth"` beats the CSS reduced-motion reset, and these
+// are the longest scrolls on the site.
+const smooth = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+const go = (id) => () =>
+  document.getElementById(id)?.scrollIntoView({ behavior: smooth() });
 const open = (url) => () => window.open(url, "_blank", "noreferrer");
-const toggleTheme = () => {
-  const el = document.documentElement;
-  const next = el.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  el.setAttribute("data-theme", next);
+
+// The palette does NOT own the theme. ThemeToggle does; writing data-theme here
+// too left its useState stale, so the button then needed two clicks and
+// announced the wrong mode to a screen reader in between.
+const toggleTheme = () => window.dispatchEvent(new Event("toggle-theme"));
+
+const copyEmail = async () => {
   try {
-    localStorage.setItem("theme", next);
+    await navigator.clipboard.writeText(contact.email);
   } catch {
-    /* ignore */
+    window.location.href = `mailto:${contact.email}`;
   }
 };
 
+// Built from the same sources the nav and the icon rows read, so a changed
+// handle or a new profile cannot leave the palette pointing somewhere stale.
 const ACTIONS = [
-  { label: "Go to About", hint: "section", run: go("about") },
-  { label: "Go to Work", hint: "section", run: go("work") },
-  { label: "Go to Contact", hint: "section", run: go("contact") },
+  ...navLinks.map((n) => ({ label: `Go to ${n.title}`, hint: "section", run: go(n.id) })),
   { label: "Toggle light / dark", hint: "theme", run: toggleTheme },
-  { label: "Copy email", hint: contact.email, run: () => navigator.clipboard?.writeText(contact.email) },
-  { label: "Open GitHub", hint: "SathishKumarAI", run: open("https://github.com/SathishKumarAI") },
-  { label: "Open LinkedIn", hint: "in/SathishKumarAI", run: open("https://www.linkedin.com/in/SathishKumarAI") },
+  { label: "Copy email", hint: contact.email, run: copyEmail },
+  ...socialLinks()
+    .filter((l) => l.k !== "email")
+    .map((l) => ({ label: `Open ${l.label}`, hint: l.href.replace(/^https?:\/\//, ""), run: open(l.href) })),
 ];
 
 const CommandPalette = () => {

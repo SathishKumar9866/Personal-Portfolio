@@ -17,14 +17,18 @@ function App() {
       <MotionConfig reducedMotion="user">
         <div className="relative z-0 bg-primary">
           <ScrollProgress />
-          <a href="#about" className="skip-link">
+          {/* Targets #main, not #about: the old target skipped the whole hero
+              — the h1, the pitch and both CTAs. The .hash-span ids are
+              non-focusable spans, so tabIndex={-1} on <main> is what actually
+              moves the focus point. */}
+          <a href="#main" className="skip-link">
             Skip to content
           </a>
-          <div className="hero-bg bg-cover bg-no-repeat bg-center">
-            <Navbar />
-            <Hero />
-          </div>
-          <main id="main">
+          <Navbar />
+          <main id="main" tabIndex={-1}>
+            <div className="hero-bg bg-cover bg-no-repeat bg-center">
+              <Hero />
+            </div>
             <About />
             <Quote text={quotes[0].text} author={quotes[0].author} />
             <Tech />

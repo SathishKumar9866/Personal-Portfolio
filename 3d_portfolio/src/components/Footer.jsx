@@ -11,7 +11,7 @@ const Footer = () => (
   <footer className="relative z-10 border-t border-line bg-primary">
     <div className="max-w-7xl mx-auto px-6 sm:px-16 pt-5 pb-20 sm:py-5 flex flex-col sm:flex-row gap-2 sm:items-center sm:justify-between font-mono text-[11px] text-faint">
       <span className="flex flex-wrap items-center gap-x-2">
-        © 2026 Sathish Kumar <span className="text-line">·</span> <LiveClock />
+        © {new Date().getFullYear()} Sathish Kumar <span className="text-line">·</span> <LiveClock />
       </span>
       <span>
         Type: Barlow · Newsreader · JetBrains Mono ·{" "}

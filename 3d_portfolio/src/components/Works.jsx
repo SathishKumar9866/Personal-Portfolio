@@ -247,7 +247,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           >
             {isLive ? "live" : "source"}
           </span>
-          <span className="font-mono text-[12px] text-faint truncate">{name}</span>
+          <span className="font-mono text-[12px] text-faint truncate" title={name}>{name}</span>
         </div>
 
         <h3 className="mt-3 font-display text-[19px] leading-tight text-white-100">{outcome}</h3>

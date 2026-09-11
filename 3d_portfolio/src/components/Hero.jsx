@@ -39,7 +39,7 @@ const SignalLine = ({ reduced }) => (
 const Hero = () => {
   const reduced = useReducedMotion();
   return (
-    <section className="relative w-full min-h-screen flex items-center" aria-label="Intro">
+    <section className="relative w-full min-h-screen min-h-[100svh] flex items-center pt-20" aria-label="Intro">
       <SignalLine reduced={reduced} />
 
       <motion.div

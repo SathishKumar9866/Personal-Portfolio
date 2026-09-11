@@ -30,6 +30,14 @@ const ThemeToggle = () => {
     }
   }, [theme]);
 
+  // The command palette asks for a toggle rather than writing the DOM itself,
+  // so this component stays the single source of truth for the current theme.
+  useEffect(() => {
+    const onToggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+    window.addEventListener("toggle-theme", onToggle);
+    return () => window.removeEventListener("toggle-theme", onToggle);
+  }, []);
+
   const next = theme === "dark" ? "light" : "dark";
   return (
     <button
