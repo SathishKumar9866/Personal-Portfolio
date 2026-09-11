@@ -1,4 +1,4 @@
-# Highway portfolio — design
+# Highway portfolio: design
 
 **Date:** 2026-09-11
 **Branch:** `redesign/highway-premium` (cut from `redesign/de-slop-portfolio`, 26 commits ahead of `main`)
@@ -21,7 +21,7 @@ wrong with it as a hiring artifact:
 - One legible route through the content, with a visible position indicator.
 - Project depth that survives being sent to a stranger: real URLs, real detail.
 - More motion, with each tier of it paying for its own weight.
-- Every claim on the page traceable to something real — a repo, a deploy, a
+- Every claim on the page traceable to something real, a repo, a deploy, a
   measured number, or nothing at all.
 
 ## Non-goals
@@ -48,7 +48,7 @@ session does not relitigate it.
 | Deploy | After the redesign lands | Owner's call. Domain-dependent work (canonical URL, sitemap, OG image, frame-ancestors) is sequenced behind it. |
 | Photo | In About, not the hero | Matches the inspiration reference; keeps the type-led hero uncluttered. |
 | Résumé button | Dropped | Owner's call. Contact carries email and LinkedIn. |
-| Direction | Footnotes for the narrative, highway for Work | Owner's call, 2026-09-11. See "Two ideas, one page" below — including the risk the owner accepted. |
+| Direction | Footnotes for the narrative, highway for Work | Owner's call, 2026-09-11. See "Two ideas, one page" below, including the risk the owner accepted. |
 
 ## Two ideas, one page
 
@@ -58,7 +58,7 @@ The archived `sathishkumarai.github.io` carried a `docs/DECISIONS.md` that opene
 a spec that contradicts an archived decision without acknowledging it is how the same
 mistake gets made twice.
 
-**Its one idea.** The work is about grounding — retrieval that cites its source, outputs a
+**Its one idea.** The work is about grounding, retrieval that cites its source, outputs a
 person can check. So the page does the same thing it describes: a claim in the opening is
 highlighted, carries an `[nn]` marker, and opening it retrieves the project the claim rests
 on into the margin, where a source belongs. The `[01]`-`[15]` numbering indexes real
@@ -78,12 +78,12 @@ interesting; it makes the first thing half as clear."*
 
 **The accepted risk, stated plainly:** two structural ideas on one page can blunt each
 other, exactly as the archived note warns. The mitigation is that they never appear in the
-same region — by the time a reader reaches Work, the citation apparatus has done its job
+same region: by the time a reader reaches Work, the citation apparatus has done its job
 and stops. If, once built, the page reads as two designs stapled together, the citation
 mechanic wins and the rail goes. That is the tie-breaker, decided now rather than mid-build.
 
 **Also worth keeping from that file:** generation 2 was abandoned for being "the current
-house style of generated UI — every element a default rather than a choice." Rounded cards,
+house style of generated UI: every element a default rather than a choice." Rounded cards,
 outlined tag chips, uniform radii, grid-with-fade backdrop. The current site still uses
 uniform `rounded-2xl` on every panel. That is the same smell, and this redesign should not
 reproduce it.
@@ -117,7 +117,7 @@ costs nothing.
 
 - Collapses to the existing hairline below `sm`.
 - Reuses the `IntersectionObserver` already in `Navbar.jsx`. One observer, two
-  consumers — not a second observer.
+  consumers: not a second observer.
 - On a detail route the spine greys out and one lit spur marks the current
   project, so leaving the main road is visible.
 - Reduced motion: fill jumps rather than tweens, markers unchanged. The rail is
@@ -128,7 +128,7 @@ costs nothing.
 Every section, same three zones, so the page has a rhythm instead of six
 card grids in a row.
 
-| Zone | Holds | Example — Work |
+| Zone | Holds | Example, Work |
 |---|---|---|
 | Orient | exit marker, eyebrow, headline, one-sentence lede | "EXIT 03 · WORK" + what counts as a project worth listing |
 | Act | the interactive substance | featured cards, dive-in links |
@@ -180,7 +180,7 @@ render.** No placeholder bars, no invented percentages.
 
 ### News feed
 
-Reverse-chronological, date-badged, type-labelled — taken from
+Reverse-chronological, date-badged, type-labelled: taken from
 `adewynter.github.io`. Entries are real events: pushes, deploys, competition
 entries. A timeline is a road, so it fits the spine better than any other
 section would.
@@ -200,12 +200,12 @@ model to the same chip.
 
 Three tiers, each justifying its cost:
 
-1. **Scroll-linked** — rail fill, marker states, headers settling on entry.
+1. **Scroll-linked**. rail fill, marker states, headers settling on entry.
    `useScroll`/`useTransform`, or CSS where CSS suffices.
-2. **Shared-element dive-in** — `layoutId` grows a project cover into the
+2. **Shared-element dive-in**. `layoutId` grows a project cover into the
    detail hero. The one premium moment; makes a route change read as movement
    along the road. Genuinely needs Framer Motion.
-3. **Ambient** — canvas covers animate on hover/in-view only. Gated behind
+3. **Ambient**. canvas covers animate on hover/in-view only. Gated behind
    `IntersectionObserver` so twelve canvases never run at once.
 
 Every tier has a `prefers-reduced-motion` path that is a designed state, not a
@@ -260,7 +260,7 @@ These do not block the build; each renders nothing until its input exists.
 |---|---|
 | A photo file | About portrait |
 | One sentence: what you are building this month | Now line |
-| 2–3 real posts | Writing exit — otherwise it does not render |
+| 2: 3 real posts | Writing exit, otherwise it does not render |
 | Confirmation of drafted case-study text and any metric | Metrics rows, detail prose |
 | `npx vercel login` | Deploy, canonical URL, sitemap, OG image, live embed |
 
@@ -281,5 +281,5 @@ These do not block the build; each renders nothing until its input exists.
   no longer relying on GitHub's rename redirect.
 - `rag-project/ai-due-diligence-copilot/.env` is a real credential file in an
   unversioned 6.6 GB folder with no `.gitignore`. Outside this repo, so outside
-  this spec — but it should be gitignored before that folder ever becomes a git
+  this spec, but it should be gitignored before that folder ever becomes a git
   repo.

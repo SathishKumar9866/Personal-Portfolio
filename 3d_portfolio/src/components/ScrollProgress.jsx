@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Owns: the hairline scroll readout pinned to the top of the page.
+ * Owns, the hairline scroll readout pinned to the top of the page.
  *
  * Writes the width directly to the DOM inside a rAF rather than going through
  * React state. The previous version called setState on every scroll event and
- * read documentElement.scrollHeight inside the handler — a layout-forcing
- * property — which made it the most expensive thing happening during a scroll
+ * read documentElement.scrollHeight inside the handler, a layout-forcing
+ * property, which made it the most expensive thing happening during a scroll
  * on the ~10,000px page.
  */
 const ScrollProgress = () => {

@@ -12,8 +12,7 @@ import { glossary } from "../constants";
  *    expanded name is a native tooltip, so a definition panel never opens inside
  *    a tilting card or competes with the card's own links.
  *
- * Whether a definition exists is signalled by a dotted underline on the word —
- * the long-standing convention — not a dashed box and a "?" on every chip.
+ * Whether a definition exists is signalled by a dotted underline on the word, * the long-standing convention: not a dashed box and a "?" on every chip.
  */
 const CHIP =
   "font-mono text-[11px] px-2 rounded border transition-colors " +
@@ -49,8 +48,8 @@ const TagTerm = ({ name, plain = false }) => {
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
 
-  // Plain chip: states a fact. The expanded name — "Retrieval-Augmented
-  // Generation" behind "RAG" — is still available, on hover, without opening
+  // Plain chip: states a fact. The expanded name: "Retrieval-Augmented
+  // Generation" behind "RAG": is still available, on hover, without opening
   // anything that could cover the card.
   if (!g) {
     const hint = entry?.full ?? entry?.def ?? undefined;
@@ -85,7 +84,7 @@ const TagTerm = ({ name, plain = false }) => {
         onFocus={show}
         onBlur={hide}
         aria-expanded={open}
-        aria-label={`${name} — what is this?`}
+        aria-label={`${name}: what is this?`}
         className={`${CHIP} ${
           open
             ? "border-accent text-accent-ink"

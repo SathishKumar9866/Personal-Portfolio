@@ -1,19 +1,19 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Owns: the page-wide ambient field behind everything.
+ * Owns, the page-wide ambient field behind everything.
  *
- * The idea, and why it is not decoration: the left contact dock and the right
+ * The idea, and why it is not decoration, the left contact dock and the right
  * section rail are already two columns of dots on opposite edges of a fixed
  * viewport. This reads them as the INPUT and OUTPUT layers of a network, puts
  * two hidden layers between them, and sends activations left to right along real
- * paths. The nodes are not invented — their coordinates come from
+ * paths. The nodes are not invented: their coordinates come from
  * getBoundingClientRect() on the actual controls, so the drawing stays wired to
  * the interface even when a dock hides itself or the window resizes.
  *
  * Scoped to the LANDING VIEW and faded out as the hero leaves. The token stream
  * lives separately, in the one section where tokens mean something
- * (TokenStream.jsx) — a backdrop that follows the reader everywhere is wallpaper.
+ * (TokenStream.jsx): a backdrop that follows the reader everywhere is wallpaper.
  *
  * Deliberately NOT a 3D engine. three.js plus a renderer is ~150kB gzip against
  * a ~115kB bundle; this is one 2D canvas and a few hundred lines.
@@ -23,12 +23,25 @@ import { useEffect, useRef } from "react";
  *  - devicePixelRatio capped at 2
  *  - node positions re-read on resize and every 500ms, never per frame
  *  - `prefers-reduced-motion` paints one settled frame and stops
- *  - pointer-events: none, and aria-hidden — it is never in anyone's way
+ *  - pointer-events: none, and aria-hidden, it is never in anyone's way
  */
 
 // Real sub-word pieces, the way a tokenizer splits text, so the stream reads as
 // tokens being emitted rather than as boxes sliding past.
-const HIDDEN = [5, 4]; // two hidden layers, between the two docks
+// Hidden widths. The input (4) and output (5) counts are fixed by the interface,
+// four contact links and five sections, so only these are free, and they are
+// chosen so the shape is one an ML reader would not query.
+//
+// 4 -> 8 -> 6 -> 5 is a plain MLP funnel: expand into a wider representation,
+// then taper to the output dimension. The previous 4 -> 5 -> 4 -> 5 was not
+// wrong, but it oscillated and put a 4-unit layer immediately before a 5-unit
+// output, which is a bottleneck nobody draws by accident. A diagram on a
+// portfolio should not invite a question the owner then has to answer.
+const HIDDEN = [8, 6];
+
+// Labelled, because an unlabelled lattice is just lines moving. Naming the
+// layers is what turns it from decoration into a diagram a reader can follow.
+const LAYER_LABELS = ["INPUT", "HIDDEN 1", "HIDDEN 2", "OUTPUT"];
 
 const token = (el, name, alpha) => {
   const v = getComputedStyle(el).getPropertyValue(name).trim();
@@ -59,13 +72,13 @@ const NeuralField = () => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // Desktop only. The two docks it wires together do not exist below the
-    // `rail` breakpoint, so there is nothing to draw — and more to the point, a
+    // `rail` breakpoint, so there is nothing to draw, and more to the point, a
     // requestAnimationFrame loop on a phone is battery spent on decoration
     // nobody asked for. This STOPS the loop rather than hiding the canvas.
     const wide = window.matchMedia("(min-width: 1024px)");
 
     // Scoped to the landing view. The canvas must stay position:fixed, because
-    // it is wired to two docks that are themselves fixed — so it is scoped by
+    // it is wired to two docks that are themselves fixed, so it is scoped by
     // FADING OUT as the hero leaves and halting the loop, not by re-parenting.
     // A field that follows the reader through Experience and Contact is
     // wallpaper competing with text, which is the opposite of what it is for.
@@ -134,7 +147,7 @@ const NeuralField = () => {
       if (layers.length >= 2) {
         // every edge, faint
         ctx.lineWidth = 0.7;
-        ctx.strokeStyle = ink.replace(",1)", ",0.08)");
+        ctx.strokeStyle = ink.replace(",1)", ",0.055)");
         for (let li = 0; li < layers.length - 1; li++) {
           layers[li].forEach((a) => {
             layers[li + 1].forEach((b) => {
@@ -145,6 +158,40 @@ const NeuralField = () => {
             });
           });
         }
+
+        // Layer labels, on a baseline along the bottom with a tick rising to each
+        // column. They sit there rather than above the nodes because the columns
+        // pass behind the headline, and a caption landing on the type would cost
+        // more than it explains.
+        const labelY = h - 54;
+        ctx.font = '500 10px "JetBrains Mono Variable", ui-monospace, monospace';
+        ctx.textAlign = "center";
+        ctx.textBaseline = "alphabetic";
+        layers.forEach((layer, li) => {
+          const label = LAYER_LABELS[li];
+          if (!label || !layer.length) return;
+          const x = layer[0].x;
+          const lowest = Math.max(...layer.map((n) => n.y));
+
+          // tick from the column down to the baseline
+          ctx.beginPath();
+          ctx.moveTo(x, lowest + 10);
+          ctx.lineTo(x, labelY - 12);
+          ctx.strokeStyle = ink.replace(",1)", ",0.22)");
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          ctx.fillStyle =
+            li === 0 || li === layers.length - 1
+              ? accent.replace(",1)", ",0.85)")  // the two the reader can point at
+              : ink.replace(",1)", ",0.7)");
+          ctx.fillText(label, x, labelY);
+
+          // node count under the name, the one number that explains the shape
+          ctx.fillStyle = ink.replace(",1)", ",0.45)");
+          ctx.fillText(`${layer.length} nodes`, x, labelY + 11);
+        });
+        ctx.textAlign = "start";
 
         // hidden units
         layers.slice(1, -1).flat().forEach((n) => {
@@ -213,7 +260,7 @@ const NeuralField = () => {
       resize();
       layers = readLayers();
       if (reduced) {
-        // one settled frame — the picture still reads, it just holds still
+        // one settled frame, the picture still reads, it just holds still
         draw();
         return;
       }

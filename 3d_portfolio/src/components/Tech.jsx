@@ -22,7 +22,7 @@ const Tech = () => (
       variants={fadeIn("", "", 0.1, 1)}
       className="mt-4 font-sans text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
     >
-      Not a badge collection — this is what I actually reach for, grouped by where
+      Not a badge collection: this is what I actually reach for, grouped by where
       it sits on the path from raw data to a running product. I pick tools that
       are boring in production: measurable, reproducible, and easy to hand off.
       <span className="mt-3 block font-mono text-[12px] text-faint">{TERM_HINT}</span>

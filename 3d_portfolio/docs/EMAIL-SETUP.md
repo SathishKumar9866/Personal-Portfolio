@@ -2,7 +2,7 @@
 > Contact is now a copyable address and an icon row. Nothing in the app reads
 > the EmailJS variables. Kept as a record of how the form worked.
 
-# Contact form — email setup (EmailJS)
+# Contact form: email setup (EmailJS)
 
 The contact form works out of the box: with no config it opens the visitor's
 mail client prefilled. To make it **send email in-page** (type → Send → done),
@@ -12,8 +12,8 @@ wire up EmailJS. Free tier is plenty for a portfolio.
 
 At <https://dashboard.emailjs.com/>:
 
-1. **Email Service** — connect an inbox (e.g. Gmail). Note the **Service ID**.
-2. **Email Template** — create one and note the **Template ID**. The template
+1. **Email Service**. connect an inbox (e.g. Gmail). Note the **Service ID**.
+2. **Email Template**. create one and note the **Template ID**. The template
    **must** use these exact variables (this is what the code sends):
 
    | Variable | Meaning |
@@ -30,11 +30,11 @@ At <https://dashboard.emailjs.com/>:
    {{message}}
    ```
 
-3. **Public Key** — Account → General → **Public Key** (a.k.a. API key).
+3. **Public Key**. Account → General → **Public Key** (a.k.a. API key).
 
 ## 2. Add the keys
 
-Local dev — copy the example and fill it in (`.env.local` is git-ignored):
+Local dev: copy the example and fill it in (`.env.local` is git-ignored):
 
 ```bash
 cp .env.example .env.local
@@ -46,7 +46,7 @@ VITE_EMAILJS_TEMPLATE_ID=template_xxxxxxx
 VITE_EMAILJS_PUBLIC_KEY=xxxxxxxxxxxxxxxx
 ```
 
-Production (Vercel) — add the same three variables under **Project → Settings →
+Production (Vercel): add the same three variables under **Project → Settings →
 Environment Variables**, then redeploy.
 
 ## 3. Verify
@@ -67,4 +67,4 @@ the form falls back to opening the mail client (so it never hard-fails).
 - **Not configured** → builds a `mailto:` with the message and opens the
   visitor's mail app.
 
-No secrets live in the repo — only `.env.example` (blank) is tracked.
+No secrets live in the repo, only `.env.example` (blank) is tracked.

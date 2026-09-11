@@ -1,6 +1,6 @@
 /**
- * Owns: the clickable icon row inside the Contact section.
- * Does not own: the glyphs or the addresses — both live in icons.js.
+ * Owns, the clickable icon row inside the Contact section.
+ * Does not own, the glyphs or the addresses: both live in icons.js.
  */
 import { ICON_PATHS, socialLinks } from "./icons";
 

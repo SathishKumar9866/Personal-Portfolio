@@ -1,7 +1,7 @@
 /**
- * Owns: the closing section — the invitation on the left, every way to reach him
+ * Owns, the closing section, the invitation on the left, every way to reach him
  * on the right.
- * Does not own: the addresses (constants/index.js) or the glyphs (icons.js).
+ * Does not own, the addresses (constants/index.js) or the glyphs (icons.js).
  *
  * There is deliberately no form. A form asks a stranger to type into a box and
  * trust it went somewhere; a copyable address and a mail link do the same job
@@ -20,7 +20,7 @@ import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import { ICON_PATHS, socialLinks } from "./icons";
 
-/** github.com/x — the address without the protocol noise. */
+/** github.com/x, the address without the protocol noise. */
 const readable = (href) => href.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
 const Glyph = ({ name }) => (
@@ -89,7 +89,7 @@ const Row = ({ k, label, href }) => {
 
       {/* The address is readable on its own; the link is on top of it, not
           instead of it. External targets open in a new tab so the portfolio
-          stays put — see README, "Links". */}
+          stays put: see README, "Links". */}
       <a
         href={href}
         target={isEmail ? undefined : "_blank"}

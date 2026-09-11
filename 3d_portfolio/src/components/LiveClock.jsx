@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 
 /**
- * Owns: the three-timezone readout in the hero rule and the footer colophon.
+ * Owns, the three-timezone readout in the hero rule and the footer colophon.
  *
  * Zone abbreviations are DERIVED, never hardcoded. New York and Chicago are on
  * daylight time for about eight months a year, so a literal "EST"/"CST" is
- * wrong more often than it is right — and a US reader seeing "EST" beside a
+ * wrong more often than it is right, and a US reader seeing "EST" beside a
  * correct EDT time reads it as an hour's error.
  */
 const ZONES = [
   // His own zone leads: he is in US Central. The others are courtesy for a
   // reader elsewhere. These two shift with DST, so their labels are derived.
-  { tz: "America/Chicago", full: "US Central time — where I am" },
+  { tz: "America/Chicago", full: "US Central time: where I am" },
   { tz: "America/New_York", full: "US Eastern time" },
-  // India observes no DST, so a fixed label is correct year-round — and needed,
+  // India observes no DST, so a fixed label is correct year-round, and needed,
   // because Intl's short name for Asia/Kolkata in en-US is "GMT+5:30", not "IST".
   { tz: "Asia/Kolkata", full: "India Standard Time", label: "IST" },
 ];
@@ -57,7 +57,7 @@ const LiveClock = ({ className = "" }) => {
         return (
           <span key={z.tz}>
             {i > 0 && <span className="text-faint"> · </span>}
-            {/* No aria-label on the wrapper: it would override the subtree and
+            {/* No aria-label on the wrapper, it would override the subtree and
                 a screen reader would announce the label instead of the times. */}
             <abbr className="text-faint no-underline" title={z.full}>
               {zone}

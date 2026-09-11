@@ -2,13 +2,13 @@ import { motion } from "framer-motion";
 import { status } from "../constants";
 
 /**
- * Owns: the employment-status signal — that he is looking NOW, what for, and
+ * Owns, the employment-status signal, that he is looking NOW, what for, and
  * how to start the conversation without scrolling further.
  * Does not own: contact routes (Contact.jsx, ContactRail.jsx).
  *
  * Two sizes, one source. `compact` is the hero's one-line version; the full
- * version carries the detail a recruiter actually needs — employer, country and
- * work arrangement — which was previously only on LinkedIn.
+ * version carries the detail a recruiter actually needs, employer, country and
+ * work arrangement, which was previously only on LinkedIn.
  *
  * This is the one block on the page whose job is to convert, so it is the one
  * place that earns sustained motion: a live dot, a slow specular sweep, and rows
@@ -16,7 +16,7 @@ import { status } from "../constants";
  * what makes this read as emphasis rather than noise.
  *
  * All of it is CSS animation or framer, both already neutralised by the
- * reduced-motion handling — and the card still states every fact with zero
+ * reduced-motion handling, and the card still states every fact with zero
  * movement, because the facts are the point and the motion is only emphasis.
  */
 const Dot = () => (

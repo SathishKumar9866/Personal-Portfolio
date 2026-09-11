@@ -3,7 +3,7 @@ import { contact } from "../constants";
 import { ICON_PATHS, socialLinks } from "./icons";
 
 /**
- * Owns: the LEFT-edge contact dock — reach him from anywhere on the page.
+ * Owns, the LEFT-edge contact dock: reach him from anywhere on the page.
  * Does not own: section navigation, which lives on the right (SideRail.jsx), or
  * the Contact section itself.
  *
@@ -18,7 +18,7 @@ import { ICON_PATHS, socialLinks } from "./icons";
  * desktop width rather than waiting for the viewport to grow.
  */
 const Label = ({ children }) => (
-  // Opens to the RIGHT — this dock is on the left edge, so a label sliding left
+  // Opens to the RIGHT: this dock is on the left edge, so a label sliding left
   // would run off the viewport.
   <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-md border border-line bg-primary px-2.5 py-1 font-mono text-[11px] text-secondary opacity-0 -translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
     {children}

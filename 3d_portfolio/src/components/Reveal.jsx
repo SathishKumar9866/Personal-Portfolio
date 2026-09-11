@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 
 /**
- * Owns: the one scroll-reveal used across the page.
- * Does not own: section-level staggering — SectionWrapper already does that.
+ * Owns, the one scroll-reveal used across the page.
+ * Does not own: section-level staggering: SectionWrapper already does that.
  *
  * One primitive instead of a `fadeIn(direction, type, delay, duration)` call
  * written differently at every site. The amount is "some" (threshold 0) on

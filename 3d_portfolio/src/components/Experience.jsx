@@ -16,18 +16,18 @@ const month = (iso) => {
 
 /**
  * A range renders only what exists. No dates at all renders nothing rather than
- * a placeholder — the house rule is that unverified content does not ship.
+ * a placeholder, the house rule is that unverified content does not ship.
  */
 const Range = ({ start, end, current }) => {
   const from = month(start);
   const to = current ? "Present" : month(end);
   // A lone "Present" says nothing the `current` pill has not already said. But a
-  // lone end date is meaningful on its own — that is a graduation.
+  // lone end date is meaningful on its own, that is a graduation.
   if (!from && !to) return null;
   if (!from && to === "Present") return null;
   return (
     <span className="font-mono text-[11px] uppercase tracking-label text-faint tabular-nums">
-      {[from, to].filter(Boolean).join(" — ")}
+      {[from, to].filter(Boolean).join(": ")}
     </span>
   );
 };
@@ -95,7 +95,7 @@ const Role = ({ role, index }) => (
 );
 
 /**
- * Education uses the same timeline as roles — a degree is a dated entry with an
+ * Education uses the same timeline as roles, a degree is a dated entry with an
  * institution, which is structurally identical to a job. It lives inside this
  * section rather than getting its own, so that an empty list leaves no empty
  * section and no nav item pointing at nothing.

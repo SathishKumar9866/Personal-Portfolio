@@ -40,7 +40,7 @@ const Portrait = () => (
       <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-faint">
         <span className="font-display text-[34px] leading-none text-line">S</span>
         <span className="font-mono text-[10px] uppercase tracking-label">
-          portrait — to come
+          portrait: to come
         </span>
       </div>
     )}
@@ -67,7 +67,7 @@ const About = () => (
 
       {/* motion.div, not div: framer propagates variants only through motion
           components, so a plain wrapper here leaves the children stuck in the
-          `hidden` variant at opacity 0 — the same failure that hid Work. */}
+          `hidden` variant at opacity 0, the same failure that hid Work. */}
       <motion.div className="flex flex-col gap-7">
         <motion.p
           variants={fadeIn("", "", 0.1, 1)}

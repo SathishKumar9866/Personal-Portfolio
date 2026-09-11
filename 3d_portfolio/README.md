@@ -1,4 +1,4 @@
-# Sathish Kumar — portfolio
+# Sathish Kumar: portfolio
 
 A fast, type-led personal site for an ML / AI engineer. Databricks-inspired
 visual system, light + dark themes, no heavy 3D.
@@ -13,7 +13,7 @@ visual system, light + dark themes, no heavy 3D.
 | Styling | Tailwind CSS (CSS-variable design tokens) |
 | Motion | Framer Motion |
 | Type | Barlow (display + UI), Newsreader (prose), JetBrains Mono (labels), self-hosted via `@fontsource` |
-| Contact | Copyable address + `mailto:` — no form, no service |
+| Contact | Copyable address + `mailto:`, no form, no service |
 
 ## Design system
 
@@ -24,13 +24,13 @@ visual system, light + dark themes, no heavy 3D.
 - **Palette.** Databricks-style: white / navy ink / oat in light, deep navy in
   dark, one lava-red accent (`#FF3621`).
 - **The accent has two roles, and they are different tokens.** `--c-accent` is
-  the lava red and is for FILLS only — as text it measures 3.62:1 on white and
+  the lava red and is for FILLS only, as text it measures 3.62:1 on white and
   fails AA. `--c-accent-ink` is the same red darkened for text (5.78:1 light,
   6.00:1 dark). Using `text-accent` on small type is a bug.
 - **`--c-line` vs `--c-line-strong`.** The hairline is deliberately faint
   (1.22:1) and is right for decorative card edges. Anything that bounds an
   *interactive control* uses `--c-line-strong`, which clears WCAG 1.4.11 at 3:1.
-- **Every text pair passes WCAG AA in both themes** — 22 pairs measured from the
+- **Every text pair passes WCAG AA in both themes**, 22 pairs measured from the
   built stylesheet, not from the source.
 - **Type scale + spacing.** 4px base; fluid `clamp()` headings. Prose is capped
   near 72 characters a line; the featured card once ran 117.
@@ -49,7 +49,7 @@ npm run lint
 
 None. The site is static and takes no environment variables.
 
-Contact is a copyable address plus an icon row — there is no form and no mail
+Contact is a copyable address plus an icon row, there is no form and no mail
 service. `docs/EMAIL-SETUP.md` and `.env.example` describe the removed EmailJS
 form and are kept only as history.
 
@@ -60,7 +60,7 @@ All content is data-driven in `src/constants/index.js`:
 - `navLinks`, `services` (Overview), `stackGroups` (Stack, each with a `note`),
 - `projects` (each with `outcome`, `description`, `tags`, links), `quotes`,
   and `contact`. Note: `stages` is present on each project but is currently
-  dead data — no component reads it.
+  dead data: no component reads it.
 
 ## Structure
 
@@ -99,26 +99,26 @@ still placeholders (the resume repo's `[X]%`) must not be copied in.
 
 - **Two edge docks, different jobs.** Section navigation on the right (where you
   are, one click to anywhere); contact on the left. Both appear only above the
-  `rail` breakpoint (1400px) — below it a 44px dock measured 4px from the text at
+  `rail` breakpoint (1400px): below it a 44px dock measured 4px from the text at
   every width, because the content container is `max-w-7xl` plus fixed padding.
-- **⌘K command palette** — jump to sections, copy email, open socials, toggle theme.
-- **Generative project covers** — each card draws an abstract diagram of what
+- **⌘K command palette**. jump to sections, copy email, open socials, toggle theme.
+- **Generative project covers**. each card draws an abstract diagram of what
   the project does (a retrieval neighbourhood, a cited passage, a federated
   hub-and-spoke), selected by its `cover` key and seeded deterministically from
   the project name. Not screenshots, and not the literal pipeline stages.
-- **Live clock** — IST and US Eastern / Central in the hero and footer, with
+- **Live clock**. IST and US Eastern / Central in the hero and footer, with
   zone abbreviations derived so they track daylight saving.
-- **Accessibility** — semantic landmarks, single `h1`, skip link, visible focus,
+- **Accessibility**. semantic landmarks, single `h1`, skip link, visible focus,
   `prefers-reduced-motion` honored, keyboard-navigable palette.
-- **Performance** — vendor chunks split for caching; no runtime 3D.
+- **Performance**. vendor chunks split for caching; no runtime 3D.
 
-## Ambient motion — two effects, each scoped
+## Ambient motion: two effects, each scoped
 
 Two canvases, and the scoping is the whole design decision. A backdrop that
 follows the reader down the page is wallpaper competing with text; a backdrop
 that appears where it illustrates something is an illustration.
 
-### `NeuralField.jsx` — landing view only
+### `NeuralField.jsx`: landing view only
 
 The left contact dock and the right section rail are already two columns of dots
 on opposite edges of a fixed viewport. The field reads them as the **input** and
@@ -130,29 +130,42 @@ actual controls, so the drawing stays correct when a dock hides itself, when the
 window resizes, or when a nav item is added. A control that is `display:none` or
 zero-sized is filtered out rather than anchoring an edge to nothing.
 
-**It must stay `position: fixed`,** because the docks it wires are fixed — so it
+**It must stay `position: fixed`,** because the docks it wires are fixed, so it
 is scoped by *fading out as the hero leaves* and halting, not by re-parenting.
 Opacity is derived from the hero's `getBoundingClientRect().bottom`, so the fade
 is continuous rather than a step.
 
-### `TokenStream.jsx` — the Stack section only
+### `TokenStream.jsx`, the Stack section only
 
 A wave that descends and wraps, with sub-word tokens riding the curve they were
 emitted onto. It lives in Stack and only in Stack, because that is where the
-`LLM / RAG` group sits — so the stream illustrates the content instead of
+`LLM / RAG` group sits, so the stream illustrates the content instead of
 decorating the page.
 
 **Scoped to a band, not to the section.** Filling the section ran the wave behind
 all six stack cards, which is the same wallpaper problem one level down. It now
-occupies a 20rem × 52% strip at the top right — the one part of that section with
+occupies a 20rem × 52% strip at the top right, the one part of that section with
 nothing in it. Measured: rightmost rendered text ends at x=614, the canvas starts
 at x=653, and it clears the card grid entirely.
+
+**The architecture is chosen, not incidental.** `4 -> 8 -> 6 -> 5`. The input and
+output widths are fixed by the interface (four contact links, five sections), so
+only the hidden layers were free. They are wider than both ends and taper toward
+the output, which is a plain MLP funnel nobody queries. The earlier
+`4 -> 5 -> 4 -> 5` was not invalid, but it oscillated and placed a 4-unit layer
+immediately before a 5-unit output, a bottleneck no one draws by accident. A
+diagram on a portfolio should not invite a question its owner then has to answer.
+
+**Layers are labelled.** `INPUT / HIDDEN 1 / HIDDEN 2 / OUTPUT` with node counts,
+on a baseline along the bottom with a tick rising to each column. They sit at the
+bottom because the columns pass behind the headline, and a caption landing on the
+type costs more than it explains. An unlabelled lattice is just lines moving.
 
 ### What keeps both cheap
 
 | Guard | Why |
 | --- | --- |
-| Desktop only — below 1024px the loop is **stopped**, not hidden | A rAF loop on a phone is battery spent on decoration. Verified by reading an empty pixel buffer, not just `display:none` |
+| Desktop only: below 1024px the loop is **stopped**, not hidden | A rAF loop on a phone is battery spent on decoration. Verified by reading an empty pixel buffer, not just `display:none` |
 | Each loop runs only where it belongs | The field halts once the hero is gone; the stream runs only while Stack is on screen |
 | `devicePixelRatio` capped at 2 | A 3x phone would otherwise cost 9x the fill |
 | Node positions re-read on resize and every 500ms | Reading layout 60 times a second forces a flush every frame |
@@ -160,7 +173,7 @@ at x=653, and it clears the card grid entirely.
 | `pointer-events: none`, `aria-hidden` | Never in the way, never announced |
 
 **Why 2D canvas and not three.js.** three.js plus a renderer is roughly 150kB
-gzip against a ~115kB bundle — more than doubling the download for a background.
+gzip against a ~115kB bundle: more than doubling the download for a background.
 Both canvases together cost about 2kB.
 
 **Stacking.** `NeuralField` is `fixed inset-0 z-0` as the first child of the
@@ -171,7 +184,7 @@ which is `isolate`. Glass surfaces then blur whichever is behind them through
 
 ## Links
 
-**Every off-site link opens in a new tab** — `target="_blank"` with
+**Every off-site link opens in a new tab**, `target="_blank"` with
 `rel="noreferrer"`. The portfolio is the thing the visitor came for; sending them
 away in the same tab costs a back-press and, on a slow connection, a full
 re-render. Internal anchors (`#about`) stay in the tab. `mailto:` stays in the
@@ -184,6 +197,18 @@ Contact card prints the full URL next to every destination.
 
 Verified in the browser rather than by grep: 13 external links, 13 with
 `target="_blank"`, 0 without `rel`.
+
+## House style
+
+**No long dashes.** Not em, not en, not `&mdash;`. They read as machine-written
+now, and the alternatives are almost always clearer anyway: a colon where a label
+introduces its definition, a comma where a clause is parenthetical, a full stop
+where two sentences were being held together against their will. Swept the whole
+repo to zero, source and prose alike, and the check is one line:
+
+```bash
+grep -rn $'—\|–\|&mdash;\|&ndash;' src public index.html README.md
+```
 
 ## Traps
 
@@ -211,22 +236,22 @@ Each of these cost real time to find. They are written down so they cost it once
 
 | Section | Component | Notes |
 | --- | --- | --- |
-| Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed — it was the fifth route to `#contact` |
+| Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed, it was the fifth route to `#contact` |
 | About | `About.jsx` | Portrait, lede, the availability card, six capability cards |
 | Experience | `Experience.jsx` | Roles then education on one timeline; dates right-aligned. Renders only fields that exist |
 | Stack | `Tech.jsx` | Six groups; every chip has a definition on hover |
 | Work | `Works.jsx` | Six projects, generative covers, plain chips |
 | Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
-| Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs — a notice, never an instruction |
+| Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs, a notice, never an instruction |
 
 ## Docks and navigation
 
 Two edges, two jobs, both above 1024px only:
 
-- **Right** (`SideRail.jsx`) — where you are and one click to anywhere. Dots
+- **Right** (`SideRail.jsx`): where you are and one click to anywhere. Dots
   driven by `useActiveSection`, the single observer the top navbar also reads, so
   the two cannot disagree.
-- **Left** (`ContactRail.jsx`) — how to reach him. Steps aside while the Contact
+- **Left** (`ContactRail.jsx`): how to reach him. Steps aside while the Contact
   section is on screen, so the same links are never visible twice at once.
 
 The top bar hides on scroll down and returns on scroll up, with four guards: a

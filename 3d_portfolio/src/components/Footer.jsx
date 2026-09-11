@@ -1,5 +1,5 @@
 /**
- * Owns: the closing rule under the page — colophon only.
+ * Owns, the closing rule under the page, colophon only.
  * Does not own: navigation or contact links. Both sit above it and repeating
  * them here was the duplication this footer used to be made of.
  */

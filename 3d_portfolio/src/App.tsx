@@ -22,8 +22,7 @@ function App() {
               Sections sit later in the DOM at the same z, so they paint over it. */}
           <NeuralField />
           <ScrollProgress />
-          {/* Targets #main, not #about: the old target skipped the whole hero
-              — the h1, the pitch and both CTAs. The .hash-span ids are
+          {/* Targets #main, not #about, the old target skipped the whole hero, the h1, the pitch and both CTAs. The .hash-span ids are
               non-focusable spans, so tabIndex={-1} on <main> is what actually
               moves the focus point. */}
           <a href="#main" className="skip-link">

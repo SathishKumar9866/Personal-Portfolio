@@ -2,7 +2,7 @@ import { navLinks } from "../constants";
 import useActiveSection from "../hooks/useActiveSection";
 
 /**
- * Owns: the RIGHT-edge section rail — where you are in the page, and one click
+ * Owns, the RIGHT-edge section rail: where you are in the page, and one click
  * to anywhere else.
  * Does not own: contact routes, which sit on the left edge (ContactRail.jsx).
  *
@@ -10,7 +10,7 @@ import useActiveSection from "../hooks/useActiveSection";
  * where the scrollbar and the back-to-top button already live; reaching him on
  * the left. Nine controls in one column was the thing to avoid.
  *
- * Hidden below the `rail` breakpoint (1024px) — see ContactRail for the
+ * Hidden below the `rail` breakpoint (1024px), see ContactRail for the
  * measurement behind that number.
  */
 const SideRail = () => {

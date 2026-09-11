@@ -43,7 +43,7 @@ const roundRect = (ctx, x, y, w, h, r) => {
 };
 const TAU = Math.PI * 2;
 
-// RAG — retrieval in an embedding space
+// RAG: retrieval in an embedding space
 const embeddings = (ctx, w, h, t, rng) => {
   grid(ctx, w, h);
   const dots = [];
@@ -67,7 +67,7 @@ const embeddings = (ctx, w, h, t, rng) => {
   ctx.beginPath(); ctx.arc(q.x, q.y, 4.5, 0, TAU); ctx.fillStyle = RED; ctx.fill();
 };
 
-// due-diligence — cited answer
+// due-diligence: cited answer
 const citation = (ctx, w, h, t, rng) => {
   grid(ctx, w, h);
   const x0 = w * 0.14, x1 = w * 0.86, rows = 7, top = h * 0.2, rh = (h * 0.6) / rows, hi = 3;
@@ -86,7 +86,7 @@ const citation = (ctx, w, h, t, rng) => {
   }
 };
 
-// federated — updates flow in, data stays local
+// federated: updates flow in, data stays local
 const federated = (ctx, w, h, t) => {
   grid(ctx, w, h);
   const hub = { x: w * 0.5, y: h * 0.5 };
@@ -114,7 +114,7 @@ const federated = (ctx, w, h, t) => {
   ctx.beginPath(); ctx.arc(hub.x, hub.y, 10, 0, TAU); ctx.fillStyle = RED; ctx.fill();
 };
 
-// reels — video frames become text
+// reels: video frames become text
 const frames = (ctx, w, h, t, rng) => {
   grid(ctx, w, h);
   const fw = w * 0.14, fh = fw * 0.68, fx = w * 0.12, top = h * 0.24;
@@ -135,7 +135,7 @@ const frames = (ctx, w, h, t, rng) => {
   }
 };
 
-// pickleball vision — detection + tracking
+// pickleball vision: detection + tracking
 const tracking = (ctx, w, h, t) => {
   grid(ctx, w, h);
   const fx = w * 0.12, fy = h * 0.16, fw = w * 0.76, fh = h * 0.64;
@@ -156,7 +156,7 @@ const tracking = (ctx, w, h, t) => {
   bbox(mx, fy + fh * 0.45, fw * 0.2, fh * 0.3);
 };
 
-// pickleball shuffle — live scorekeeper app
+// pickleball shuffle: live scorekeeper app
 const scorecard = (ctx, w, h) => {
   grid(ctx, w, h);
   const pw = w * 0.26, ph = h * 0.74, px = w * 0.5 - pw / 2, py = h * 0.5 - ph / 2;
@@ -166,7 +166,7 @@ const scorecard = (ctx, w, h) => {
   ctx.fillStyle = bone(0.45); ctx.font = '600 8px "JetBrains Mono Variable", monospace';
   ctx.fillText("SCORE", w * 0.5, py + ph * 0.22);
   ctx.fillStyle = bone(0.9); ctx.font = '700 20px "Barlow", sans-serif';
-  ctx.fillText("11 — 9", w * 0.5, py + ph * 0.44);
+  ctx.fillText("11: 9", w * 0.5, py + ph * 0.44);
   ctx.strokeStyle = bone(0.4); ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(px + 12, py + ph * 0.56); ctx.lineTo(px + pw - 12, py + ph * 0.56); ctx.stroke();
   ctx.fillStyle = RED; roundRect(ctx, w * 0.5 - pw * 0.32, py + ph * 0.66, pw * 0.64, ph * 0.13, 5); ctx.fill();

@@ -8,7 +8,7 @@ export default tseslint.config(
   { ignores: ['dist'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    // Was ['**/*.{ts,tsx}'] — the project has two .tsx files and ~20 .jsx
+    // Was ['**/*.{ts,tsx}'], the project has two .tsx files and ~20 .jsx
     // components, so lint ran on almost nothing and exited 0 regardless.
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {

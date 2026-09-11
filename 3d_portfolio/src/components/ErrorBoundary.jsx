@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-// App-level safety net — never white-screen the visitor.
+// App-level safety net: never white-screen the visitor.
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ class ErrorBoundary extends Component {
           <p className="font-mono text-[12px] uppercase tracking-label text-accent-ink">Something broke</p>
           <h1 className="mt-3 font-display text-white-100 text-[32px]">This page hit an error.</h1>
           <p className="mt-3 font-serif text-secondary">
-            Reload to try again — or reach me at{" "}
+            Reload to try again: or reach me at{" "}
             <a className="text-accent-ink" href="mailto:sathishkumar786.ml@gmail.com">
               sathishkumar786.ml@gmail.com
             </a>

@@ -1,6 +1,6 @@
 # Worklog
 
-## 2026-07-02 → 07-03 — De-slop redesign → Databricks direction
+## 2026-07-02 → 07-03: De-slop redesign → Databricks direction
 
 Full rebuild of the portfolio from a generic "3D template" look into a clean,
 type-led, Databricks-style site with light/dark themes. Branch:
@@ -27,7 +27,7 @@ type-led, Databricks-style site with light/dark themes. Branch:
 7. **Direction reset → Databricks (per feedback: still read AI-generated).**
    - Removed the spinning 3D wireframe globe entirely; **uninstalled the whole
      three.js stack** (`three`, `@react-three/*`, `maath`).
-   - CSS-variable **theme system**: light default (white / navy / oat) + dark
+   - CSS-variable **theme system**. light default (white / navy / oat) + dark
      (deep navy), one **lava-red** accent (`#FF3621`). No-flash inline script,
      persisted sun/moon `ThemeToggle`, respects `prefers-color-scheme`.
    - Type switched to **Barlow** (Databricks heritage font) + JetBrains Mono.
@@ -55,6 +55,6 @@ Chrome, light + dark, desktop + tablet (820) + mobile (390); no console errors;
 no horizontal scroll; production build green throughout.
 
 ### Open / blocked
-- **Push + PR** — blocked on an expired GitHub token (`gh auth login` needed).
-- **Deploy domain** — needed for the real canonical URL + OG image.
+- **Push + PR**. blocked on an expired GitHub token (`gh auth login` needed).
+- **Deploy domain**. needed for the real canonical URL + OG image.
 - See `docs/BACKLOG.md` for the future ticket list.

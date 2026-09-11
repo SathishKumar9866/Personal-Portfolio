@@ -35,10 +35,9 @@ const Hero = () => {
           variants={rise}
           className={`${styles.heroHeadText} max-w-[18ch]`}
         >
-          I ship the model{" "}
+          I ship the model.{" "}
           <span className="whitespace-nowrap">
-            &mdash; and the{" "}
-            <span className="text-accent">evidence it works</span>.
+            And the <span className="text-accent">evidence it works</span>.
           </span>
         </motion.h1>
 
@@ -48,12 +47,11 @@ const Hero = () => {
         >
           ML / AI engineer across the data-to-AI stack. Retrieval that cites the
           passage it used, vision that trains where the data already lives, and
-          results reported as measured &mdash; including the ones that came back
+          results reported as measured, including the ones that came back
           negative.
         </motion.p>
 
-        {/* One CTA, not two. "Get in touch" was the fifth route to #contact —
-            navbar, right rail, palette, and "Reach out →" in the status card a
+        {/* One CTA, not two. "Get in touch" was the fifth route to #contact, navbar, right rail, palette, and "Reach out →" in the status card a
             screen below, which carries context a bare button cannot. A secondary
             button beside a primary splits the click rather than adding a path. */}
         <motion.div variants={rise} className="mt-10 flex flex-wrap items-center gap-4">

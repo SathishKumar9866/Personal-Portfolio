@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Owns: the wave of generated tokens behind ONE section.
+ * Owns, the wave of generated tokens behind ONE section.
  *
  * It lives in Stack, and only in Stack, because that is where the `LLM / RAG`
- * group sits — so a stream of sub-word pieces is an illustration of the content
+ * group sits, so a stream of sub-word pieces is an illustration of the content
  * rather than decoration behind it. The same effect running the length of the
  * page would trail the reader through Experience and Contact, where it means
  * nothing and competes with the text. That is the difference between a backdrop
@@ -13,7 +13,7 @@ import { useEffect, useRef } from "react";
  * Scoped to a BAND, not to the section. Filling the section ran the wave behind
  * all six stack cards, which is the same wallpaper problem one level down. It
  * occupies the empty strip to the right of the intro copy and above the card
- * grid — the one part of this section that had nothing in it.
+ * grid, the one part of this section that had nothing in it.
  *
  * Section-scoped, so unlike NeuralField it is positioned absolutely inside its
  * own section and needs no fixed-coordinate wiring.
@@ -66,7 +66,7 @@ const TokenStream = () => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      // The wave descends and wraps. Slow on purpose — drift, not a progress bar.
+      // The wave descends and wraps. Slow on purpose: drift, not a progress bar.
       const bandH = h * 0.55;
       const baseY = ((time * 11) % (h + bandH)) - bandH * 0.3;
       const amp = Math.min(38, h * 0.05);
@@ -149,7 +149,7 @@ const TokenStream = () => {
       ref={ref}
       aria-hidden="true"
       // A BAND, not the section. Filling the section put the wave behind all six
-      // cards — section-scoped wallpaper is still wallpaper. It now occupies only
+      // cards: section-scoped wallpaper is still wallpaper. It now occupies only
       // the empty strip to the right of the intro text, above the grid, so it
       // crosses no content at all.
       className="pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[20rem] w-[52%] opacity-[0.6]"

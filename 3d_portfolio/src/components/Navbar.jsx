@@ -23,12 +23,12 @@ const Navbar = () => {
   const navRef = useRef(null);
 
   // Hide on the way down, return on the way up. The bar is 77px of a fixed
-  // viewport — about 9% of a phone screen — held open the whole time someone is
+  // viewport: about 9% of a phone screen, held open the whole time someone is
   // reading a very long page. Four guards, because a naive version of this is
   // worse than not doing it:
   //   1. a movement threshold, so a 2px jitter cannot toggle it
   //   2. never hidden near the top, where there is nothing to reclaim
-  //   3. never hidden while the mobile menu is open — that IS the nav
+  //   3. never hidden while the mobile menu is open, that IS the nav
   //   4. never hidden while focus is inside it, which would strand a keyboard
   //      user on a control they cannot see
   useEffect(() => {
@@ -114,7 +114,7 @@ const Navbar = () => {
           <button
             onClick={() => window.dispatchEvent(new Event("open-command"))}
             className="font-mono text-[11px] text-faint border border-line-strong rounded px-2 py-1 hover:border-accent hover:text-accent transition-colors"
-            aria-label={`${SHORTCUT} — open command palette`}
+            aria-label={`${SHORTCUT}: open command palette`}
           >
             {SHORTCUT}
           </button>

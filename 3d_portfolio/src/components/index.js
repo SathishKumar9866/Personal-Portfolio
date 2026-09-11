@@ -1,5 +1,5 @@
 // Canvases are code-split and lazy-imported at their use sites (Hero, App),
-// so they are intentionally NOT re-exported here — that keeps three.js out of
+// so they are intentionally NOT re-exported here, that keeps three.js out of
 // the initial bundle.
 import Hero from "./Hero";
 import Navbar from "./Navbar";

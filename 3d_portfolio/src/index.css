@@ -12,13 +12,13 @@
   --c-secondary: 76 92 97; /* prose. 6.97:1 on white */
   --c-faint: 104 114 119; /* 10-13px labels. 4.93:1 on white, 4.53:1 on oat */
   --c-strong: 20 30 35;
-  --c-accent: 255 54 33; /* lava red — FILLS ONLY. 3.62:1 as text, fails AA */
+  --c-accent: 255 54 33; /* lava red: FILLS ONLY. 3.62:1 as text, fails AA */
   --c-accent-ink: 196 38 15; /* lava red for TEXT. 5.78:1 on white */
   --c-line: 226 223 216; /* decorative hairline; 1.22:1 is the intended look */
   --c-line-strong: 143 135 118; /* boundary of an interactive control. 3.56:1 */
   --c-live: 46 110 91;
   --c-archive: 73 103 116;
-  --c-canvas: 17 38 44; /* project covers — same in both themes, by design */
+  --c-canvas: 17 38 44; /* project covers: same in both themes, by design */
   --c-canvas-ink: 140 150 155; /* 5.20:1 on the canvas ground */
 }
 
@@ -26,7 +26,7 @@
   --c-primary: 15 34 40; /* deep navy */
   --c-tertiary: 20 44 51;
   --c-surface: 27 54 62;
-  --c-text: 228 225 218; /* was 236 234 229 — 13.65:1 halates in long reading */
+  --c-text: 228 225 218; /* was 236 234 229: 13.65:1 halates in long reading */
   --c-secondary: 168 186 190; /* prose. 8.15:1 on ground */
   --c-faint: 131 153 160; /* 5.49:1 on ground, 4.89:1 on card */
   --c-strong: 8 20 24;
@@ -36,13 +36,13 @@
   --c-line-strong: 95 134 148; /* control boundary. 4.16:1 */
   --c-live: 122 168 146;
   --c-archive: 135 162 178;
-  --c-canvas: 17 38 44; /* project covers — same in both themes, by design */
+  --c-canvas: 17 38 44; /* project covers: same in both themes, by design */
   --c-canvas-ink: 140 150 155; /* 5.20:1 on the canvas ground */
 }
 
 *,
-*::before,
-*::after {
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
@@ -72,9 +72,9 @@ body {
   outline: none;
 }
 
-::selection {
+:selection {
   background: rgb(var(--c-accent));
-  color: rgb(var(--c-strong)); /* white on lava is 3.62:1 — fails AA */
+  color: rgb(var(--c-strong)); /* white on lava is 3.62:1, fails AA */
 }
 
 .skip-link {
@@ -94,14 +94,14 @@ body {
   top: 16px;
 }
 
-*::-webkit-scrollbar {
+*:-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-*::-webkit-scrollbar-track {
+*:-webkit-scrollbar-track {
   background: rgb(var(--c-tertiary));
 }
-*::-webkit-scrollbar-thumb {
+*:-webkit-scrollbar-thumb {
   background: rgb(var(--c-line));
   border-radius: 6px;
   border: 2px solid rgb(var(--c-tertiary));
@@ -135,8 +135,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   *,
-  *::before,
-  *::after {
+  *:before,
+  *:after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
@@ -150,7 +150,7 @@ main:focus:not(:focus-visible) {
   outline: none;
 }
 
-/* Status signal. Slow and low-contrast on purpose — a fast pulse next to
+/* Status signal. Slow and low-contrast on purpose: a fast pulse next to
    "open to work" reads as anxious rather than available. */
 @keyframes status-ping {
   0%   { transform: scale(0.9); opacity: 0.55; }
@@ -176,14 +176,14 @@ main:focus:not(:focus-visible) {
    Two materials, on purpose.
 
    `.glass` is the real thing: backdrop-filter refracting whatever is behind it.
-   It is reserved for surfaces that FLOAT over content — the nav, the two edge
-   docks, the command palette, tooltips — where there is something behind to
+   It is reserved for surfaces that FLOAT over content, the nav, the two edge
+   docks, the command palette, tooltips: where there is something behind to
    refract and the effect means something.
 
    `.glass-card` is the same material WITHOUT the filter, for cards sitting in
    the flow. A dozen backdrop-filtered layers in a scrolling page is the classic
    cause of jank on a phone, and behind an in-flow card there is only the page
-   ground anyway — so it gets the gradient, the inner highlight and the soft
+   ground anyway, so it gets the gradient, the inner highlight and the soft
    shadow, and skips the expensive part. It looks nearly identical and scrolls.
 
    Both keep their text on a token, so the AA contrast measured for the palette
@@ -227,7 +227,7 @@ main:focus:not(:focus-visible) {
   }
 }
 
-/* A slow specular sweep across the availability card — the one thing on the
+/* A slow specular sweep across the availability card, the one thing on the
    page that should keep drawing the eye back. 9s, low alpha, and it crosses in
    under a second, so it reads as light moving over glass rather than as a
    banner demanding attention. Stopped entirely by the reduced-motion block. */

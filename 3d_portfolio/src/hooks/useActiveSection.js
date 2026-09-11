@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { navLinks } from "../constants";
 
 /**
- * Owns: which section the reader is currently inside.
+ * Owns, which section the reader is currently inside.
  * Used by the top navbar and the right-hand rail, so the two can never disagree
- * about where you are — and so there is one observer, not one per consumer.
+ * about where you are, and so there is one observer, not one per consumer.
  *
  * Two details that were bugs before:
  *  - It observes the SECTIONS, not the zero-height `.hash-span` anchors. A point

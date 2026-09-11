@@ -4,7 +4,7 @@ import { styles } from "../styles";
 /**
  * Editorial interstitial pull-quote between sections.
  *
- * The container must mirror SectionWrapper exactly — padding INSIDE
+ * The container must mirror SectionWrapper exactly, padding INSIDE
  * `max-w-7xl mx-auto`, on one element. Nesting them the other way round puts
  * the quote 64px left of every section heading on the page.
  */
@@ -22,8 +22,7 @@ const Quote = ({ text, author, align = "left" }) => (
         <blockquote className="mt-1 font-display font-semibold text-white-100 tracking-[-0.01em] leading-[1.15] text-[clamp(1.4rem,3.2vw,2.4rem)]">
           {text}
         </blockquote>
-        <figcaption className="mt-5 font-mono text-[12px] uppercase tracking-label text-accent-ink">
-          — {author}
+        <figcaption className="mt-5 font-mono text-[12px] uppercase tracking-label text-accent-ink">, {author}
         </figcaption>
       </div>
     </div>
