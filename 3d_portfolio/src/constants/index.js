@@ -25,7 +25,10 @@ export const profile = {
 // preference are his own published words, not inferred.
 export const status = {
   company: "AdvanSoft International, Inc",
-  role: "Machine Learning Engineer",
+  // Confirmed by the owner: "AI Engineer" is the title. The LinkedIn header
+  // reads "Machine Learning Engineer | LLMs | MLOps", but that is a headline,
+  // not a job title — the two disagreed on the same page until this was settled.
+  role: "AI Engineer",
   openTo: "ML / AI engineering roles",
   where: "United States — on-site, hybrid or remote",
 };
