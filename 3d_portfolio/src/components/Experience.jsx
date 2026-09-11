@@ -52,24 +52,30 @@ const Role = ({ role, index }) => (
       }`}
     />
 
-    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-      <h3 className="font-display font-semibold text-[clamp(1.05rem,1.4vw,1.25rem)] leading-tight text-white-100">
-        {role.title}
-      </h3>
-      {role.current && (
-        <span className="font-mono text-[10px] uppercase tracking-label text-live border border-live/50 rounded px-1.5 py-0.5">
-          current
-        </span>
-      )}
-    </div>
+    {/* Title and employer read as one block on the left; the dates sit right,
+        right-aligned, so a reader scanning "when" never has to pick the dates
+        out of the middle of a sentence. */}
+    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-8">
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 className="font-display font-semibold text-[clamp(1.05rem,1.4vw,1.25rem)] leading-tight text-white-100">
+            {role.title}
+          </h3>
+          {role.current && (
+            <span className="font-mono text-[10px] uppercase tracking-label text-live border border-live/50 rounded px-1.5 py-0.5">
+              current
+            </span>
+          )}
+        </div>
+        <p className="mt-1 font-mono text-[12px] text-secondary">
+          {role.company}
+          {role.location && <span className="text-faint"> · {role.location}</span>}
+        </p>
+      </div>
 
-    <p className="mt-1 font-mono text-[12px] text-secondary">
-      {role.company}
-      {role.location && <span className="text-faint"> · {role.location}</span>}
-    </p>
-
-    <div className="mt-1">
-      <Range start={role.start} end={role.end} current={role.current} />
+      <div className="shrink-0 sm:text-right sm:pt-0.5">
+        <Range start={role.start} end={role.end} current={role.current} />
+      </div>
     </div>
 
     {role.summary && (

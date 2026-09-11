@@ -65,7 +65,7 @@ export const experience = [
     current: false,
     summary:
       "Built and compared predictive models on behavioural and cognitive research data, and ran computer-vision work with CNNs and YOLOv5 for object detection. Trialled federated learning to train across separate datasets without moving them, which the project's privacy rules required — the same constraint behind the federated detection project below.",
-    stack: ["PyTorch", "scikit-learn", "federated learning", "OpenCV", "Docker"],
+    stack: ["PyTorch", "scikit-learn", "Federated learning", "OpenCV", "Docker"],
   },
   {
     company: "DotIn Solutions",
@@ -124,49 +124,52 @@ export const quotes = [
 // concepts, official site for tools, Hugging Face for model/task terms).
 // Any term without a link falls back to a Google search of the term.
 export const glossary = {
-  RAG: { def: "Retrieval-Augmented Generation — the AI looks things up in real documents before answering, so it cites sources instead of guessing.", link: "https://en.wikipedia.org/wiki/Retrieval-augmented_generation" },
-  LLM: { def: "Large Language Model — the kind of AI (like ChatGPT) that understands and writes text.", link: "https://en.wikipedia.org/wiki/Large_language_model" },
-  MLOps: { def: "The tooling and process to ship, monitor, and update ML models reliably — DevOps, but for models.", link: "https://en.wikipedia.org/wiki/MLOps" },
-  Kubernetes: { def: "An industry-standard system that runs and scales apps across many servers automatically.", link: "https://kubernetes.io/" },
-  FastAPI: { def: "A fast Python framework for building web APIs — the backend that serves the model.", link: "https://fastapi.tiangolo.com/" },
-  Vision: { def: "Computer vision — teaching software to understand images and video.", link: "https://en.wikipedia.org/wiki/Computer_vision" },
-  Federated: { def: "Federated learning — training a model across many devices without their raw data ever leaving them (privacy-preserving).", link: "https://en.wikipedia.org/wiki/Federated_learning" },
+  RAG: { def: "Retrieval-Augmented Generation — the AI looks things up in real documents before answering, so it cites sources instead of guessing.", link: "https://en.wikipedia.org/wiki/Retrieval-augmented_generation", full: "Retrieval-Augmented Generation" },
+  LLM: { def: "Large Language Model — the kind of AI (like ChatGPT) that understands and writes text.", link: "https://en.wikipedia.org/wiki/Large_language_model", full: "Large Language Model" },
+  MLOps: { def: "The tooling and process to ship, monitor, and update ML models reliably — DevOps, but for models.", link: "https://en.wikipedia.org/wiki/MLOps", full: "Machine Learning Operations" },
+  Kubernetes: { def: "An industry-standard system that runs and scales apps across many servers automatically.", link: "https://kubernetes.io/", full: "Kubernetes container orchestration" },
+  FastAPI: { def: "A fast Python framework for building web APIs — the backend that serves the model.", link: "https://fastapi.tiangolo.com/", full: "FastAPI web framework" },
+  Vision: { def: "Computer vision — teaching software to understand images and video.", link: "https://en.wikipedia.org/wiki/Computer_vision", full: "Computer vision" },
+  Federated: { def: "Federated learning — training a model across many devices without their raw data ever leaving them (privacy-preserving).", link: "https://en.wikipedia.org/wiki/Federated_learning", full: "Federated learning" },
   PyTorch: { def: "A popular open-source library for building and training neural networks.", link: "https://pytorch.org/" },
-  OpenCV: { def: "A widely-used library for processing images and video.", link: "https://opencv.org/" },
+  OpenCV: { def: "A widely-used library for processing images and video.", link: "https://opencv.org/", full: "Open Source Computer Vision Library" },
   Docker: { def: "Packages an app with everything it needs so it runs the same anywhere.", link: "https://www.docker.com/" },
   React: { def: "A popular library for building interactive web interfaces.", link: "https://react.dev/" },
-  AppliedML: { def: "Applied machine learning — using ML to solve a real, practical problem.", link: "https://en.wikipedia.org/wiki/Machine_learning" },
-  Multimodal: { def: "Works across several data types at once — e.g. video, audio, and text together.", link: "https://huggingface.co/tasks" },
+  "Applied ML": { def: "Applied machine learning — using ML to solve a real, practical problem.", link: "https://en.wikipedia.org/wiki/Machine_learning", full: "Applied machine learning" },
+  Multimodal: { def: "Works across several data types at once — e.g. video, audio, and text together.", link: "https://huggingface.co/tasks", full: "Multimodal machine learning" },
   Python: { def: "The main programming language for data and AI work.", link: "https://www.python.org/" },
   Product: { def: "A finished, usable app — not a prototype.", link: null },
   Live: { def: "Deployed and running in the real world right now.", link: null },
   // stack tools
-  PySpark: { def: "Python for Apache Spark — processing very large datasets across many machines.", link: "https://spark.apache.org/docs/latest/api/python/" },
-  "ETL pipelines": { def: "Extract, Transform, Load — the plumbing that moves and cleans data between systems.", link: "https://en.wikipedia.org/wiki/Extract,_transform,_load" },
+  PySpark: { def: "Python for Apache Spark — processing very large datasets across many machines.", link: "https://spark.apache.org/docs/latest/api/python/", full: "Python API for Apache Spark" },
+  "ETL pipelines": { def: "Extract, Transform, Load — the plumbing that moves and cleans data between systems.", link: "https://en.wikipedia.org/wiki/Extract,_transform,_load", full: "Extract, Transform, Load" },
   PostgreSQL: { def: "A powerful open-source relational database.", link: "https://www.postgresql.org/" },
-  DynamoDB: { def: "Amazon's fully-managed NoSQL database for fast, large-scale apps.", link: "https://aws.amazon.com/dynamodb/" },
-  S3: { def: "Amazon's cloud object storage — where files and data live.", link: "https://aws.amazon.com/s3/" },
-  SQL: { def: "The standard language for querying databases.", link: "https://en.wikipedia.org/wiki/SQL" },
+  DynamoDB: { def: "Amazon's fully-managed NoSQL database for fast, large-scale apps.", link: "https://aws.amazon.com/dynamodb/", full: "Amazon DynamoDB" },
+  S3: { def: "Amazon's cloud object storage — where files and data live.", link: "https://aws.amazon.com/s3/", full: "Amazon Simple Storage Service" },
+  SQL: { def: "The standard language for querying databases.", link: "https://en.wikipedia.org/wiki/SQL", full: "Structured Query Language" },
   pandas: { def: "The go-to Python library for working with tables of data.", link: "https://pandas.pydata.org/" },
-  NumPy: { def: "The core Python library for fast numerical computing.", link: "https://numpy.org/" },
+  NumPy: { def: "The core Python library for fast numerical computing.", link: "https://numpy.org/", full: "Numerical Python" },
   "scikit-learn": { def: "The standard Python library for classical machine learning.", link: "https://scikit-learn.org/" },
-  evaluation: { def: "Measuring how good a model actually is, with real metrics — not vibes.", link: "https://huggingface.co/docs/evaluate/index" },
-  "exploratory analysis": { def: "Digging through data first to understand what's there before modelling.", link: "https://en.wikipedia.org/wiki/Exploratory_data_analysis" },
+  Evaluation: { def: "Measuring how good a model actually is, with real metrics — not vibes.", link: "https://huggingface.co/docs/evaluate/index" },
+  "Exploratory analysis": { def: "Digging through data first to understand what's there before modelling.", link: "https://en.wikipedia.org/wiki/Exploratory_data_analysis" },
   LangChain: { def: "A framework for building apps around large language models.", link: "https://www.langchain.com/" },
   LangGraph: { def: "A framework for building AI agents as controllable, stateful graphs.", link: "https://www.langchain.com/langgraph" },
   Ollama: { def: "Runs open large language models locally on your own machine.", link: "https://ollama.com/" },
   Claude: { def: "Anthropic's family of AI assistants (large language models).", link: "https://www.anthropic.com/claude" },
   Pinecone: { def: "A vector database — stores embeddings for fast similarity search (powers RAG).", link: "https://www.pinecone.io/" },
-  embeddings: { def: "Turning text or images into numbers that capture meaning, so similar things sit close together.", link: "https://huggingface.co/blog/getting-started-with-embeddings" },
-  YOLOv8: { def: "A fast, popular real-time object-detection model.", link: "https://docs.ultralytics.com/" },
-  "detection & tracking": { def: "Finding objects in each frame and following them across a video.", link: "https://en.wikipedia.org/wiki/Object_detection" },
-  "federated learning": { def: "Training a model across many devices without their raw data ever leaving them.", link: "https://en.wikipedia.org/wiki/Federated_learning" },
-  MLflow: { def: "Tracks ML experiments and manages model versions.", link: "https://mlflow.org/" },
+  Embeddings: { def: "Turning text or images into numbers that capture meaning, so similar things sit close together.", link: "https://huggingface.co/blog/getting-started-with-embeddings" },
+  YOLOv8: { def: "A fast, popular real-time object-detection model.", link: "https://docs.ultralytics.com/", full: "You Only Look Once, version 8" },
+  "Detection & tracking": { def: "Finding objects in each frame and following them across a video.", link: "https://en.wikipedia.org/wiki/Object_detection" },
+  "Federated learning": { def: "Training a model across many devices without their raw data ever leaving them.", link: "https://en.wikipedia.org/wiki/Federated_learning" },
+  MLflow: { def: "Tracks ML experiments and manages model versions.", link: "https://mlflow.org/", full: "MLflow experiment tracking" },
   "GitHub Actions": { def: "Automation that builds, tests, and deploys code on every change (CI/CD).", link: "https://github.com/features/actions" },
   Helm: { def: "A package manager for deploying apps onto Kubernetes.", link: "https://helm.sh/" },
   "Next.js": { def: "A popular React framework for building fast, production web apps.", link: "https://nextjs.org/" },
   TypeScript: { def: "JavaScript with types — catches bugs before the code runs.", link: "https://www.typescriptlang.org/" },
   Tauri: { def: "Builds small, fast desktop apps from web code.", link: "https://tauri.app/" },
+  Neo4j: { def: "A graph database — stores data as nodes and the relationships between them, which makes connected questions cheap to ask.", link: "https://neo4j.com/", full: "Neo4j graph database" },
+  Azure: { def: "Microsoft's cloud platform — the servers, storage and managed services an app runs on.", link: "https://azure.microsoft.com/", full: "Microsoft Azure" },
+  Databricks: { def: "A platform for large-scale data and ML work, built around Apache Spark.", link: "https://www.databricks.com/", full: "Databricks Lakehouse Platform" },
 };
 
 // Said once per section. The affordance used to be announced on every single
@@ -188,6 +191,10 @@ export const services = [
     desc: "Pipelines that move and shape data reliably — Spark, SQL, and cloud storage the rest of the stack can trust.",
   },
   {
+    title: "Data Analytics",
+    desc: "Turning warehoused data into the dashboards and answers a business actually acts on — Synapse, Power BI, and SQL against a modelled source of truth.",
+  },
+  {
     title: "Data Science",
     desc: "Turning raw data into decisions — analysis, evaluation, and models grounded in what the data actually supports.",
   },
@@ -198,6 +205,10 @@ export const services = [
   {
     title: "AI Engineering",
     desc: "Shipping LLM and RAG systems to production: cited, offline-capable, and evaluated like software.",
+  },
+  {
+    title: "Software & Full-Stack",
+    desc: "The parts either side of the model: FastAPI and Next.js services, Terraform and Kubernetes underneath, CI/CD that ships them.",
   },
 ];
 
@@ -211,17 +222,17 @@ export const stackGroups = [
   {
     title: "Data science",
     note: "Finding what the data actually supports.",
-    items: ["pandas", "NumPy", "scikit-learn", "evaluation", "exploratory analysis"],
+    items: ["pandas", "NumPy", "scikit-learn", "Evaluation", "Exploratory analysis"],
   },
   {
     title: "LLM / RAG",
     note: "Grounded answers with citations, offline-first.",
-    items: ["LangChain", "LangGraph", "Ollama", "Claude", "Pinecone", "embeddings"],
+    items: ["LangChain", "LangGraph", "Ollama", "Claude", "Pinecone", "Embeddings"],
   },
   {
     title: "Computer vision",
     note: "Detection and tracking on real footage.",
-    items: ["YOLOv8", "OpenCV", "detection & tracking", "federated learning", "PyTorch"],
+    items: ["YOLOv8", "OpenCV", "Detection & tracking", "Federated learning", "PyTorch"],
   },
   {
     title: "MLOps & infra",
@@ -238,7 +249,7 @@ export const stackGroups = [
 export const projects = [
   {
     name: "rag-pipeline-langchain",
-    cover: "embeddings",
+    cover: "Embeddings",
     outcome: "Production RAG on AWS with a measured retrieval loop and GitOps deploys.",
     stages: ["ingest", "embed", "retrieve", "generate"],
     description:
@@ -276,7 +287,7 @@ export const projects = [
     stages: ["video", "transcribe", "index", "search"],
     description:
       "Caption, transcript, OCR and structured vision are merged into one document, rendered as a PDF and a linked docs site, with semantic search that runs entirely on your own machine.",
-    tags: ["AppliedML", "Multimodal", "Python"],
+    tags: ["Applied ML", "Multimodal", "Python"],
     source_code_link: `${GH}/instagram-reels-extractor`,
     live_link: null,
   },

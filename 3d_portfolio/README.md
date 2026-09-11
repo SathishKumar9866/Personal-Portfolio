@@ -112,6 +112,22 @@ still placeholders (the resume repo's `[X]%`) must not be copied in.
   `prefers-reduced-motion` honored, keyboard-navigable palette.
 - **Performance** — vendor chunks split for caching; no runtime 3D.
 
+## Links
+
+**Every off-site link opens in a new tab** — `target="_blank"` with
+`rel="noreferrer"`. The portfolio is the thing the visitor came for; sending them
+away in the same tab costs a back-press and, on a slow connection, a full
+re-render. Internal anchors (`#about`) stay in the tab. `mailto:` stays in the
+tab, because a new tab for a mail client leaves an empty one behind.
+
+**Addresses are shown as readable text, not only as icons.** A visitor may want
+to write one down, check where a link goes before following it, or reach him when
+the target site will not load for them. An icon answers none of those, so the
+Contact card prints the full URL next to every destination.
+
+Verified in the browser rather than by grep: 13 external links, 13 with
+`target="_blank"`, 0 without `rel`.
+
 ## Traps
 
 Each of these cost real time to find. They are written down so they cost it once.

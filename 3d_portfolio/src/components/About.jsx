@@ -82,7 +82,7 @@ const About = () => (
       </motion.div>
     </div>
 
-    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 max-w-3xl">
+    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 max-w-5xl">
       {services.map((s, i) => (
         <ServiceCard key={s.title} index={i} title={s.title} desc={s.desc} />
       ))}
