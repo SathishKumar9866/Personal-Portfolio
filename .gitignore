@@ -213,3 +213,7 @@ test/
 innit/
 SathishKumarAI/
 sathishkumarai.github.io/
+
+# Portrait source. The optimised 600x750 crop in 3d_portfolio/public/ is what
+# ships; this 1MB original stays local.
+/HeadShot.jpg

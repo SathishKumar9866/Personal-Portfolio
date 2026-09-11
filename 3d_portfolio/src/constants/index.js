@@ -9,10 +9,12 @@ export const contact = {
   timezone: "IST · UTC+5:30",
 };
 
-// Portrait: drop a file in public/ and set the path here. Null renders a
-// labelled placeholder, so the layout is already the right shape.
+// Portrait. Source is HeadShot.jpg at the repo root (1920x2879, kept out of
+// git); this is a top-anchored 4:5 crop of it, resized to 600x750 and stripped
+// of metadata. Regenerate with:
+//   magick HeadShot.jpg -auto-orient -strip -crop 1920x2400+0+0 +repage //     -resize 600x750 -quality 82 -interlace Plane 3d_portfolio/public/headshot.jpg
 export const profile = {
-  photo: null,
+  photo: "/headshot.jpg",
   alt: "Sathish Kumar",
 };
 
