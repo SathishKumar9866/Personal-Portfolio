@@ -60,7 +60,7 @@ const About = () => (
 
       <motion.p
         variants={fadeIn("", "", 0.1, 1)}
-        className="font-serif text-secondary text-[17px] max-w-2xl leading-[1.6]"
+        className="font-serif text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
       >
         I work across the full data-to-AI stack and care about the problem more
         than the title. The work tends to run offline, ground its answers in real
@@ -69,7 +69,7 @@ const About = () => (
       </motion.p>
     </div>
 
-    <div className="mt-16 grid grid-cols-2 gap-3 sm:gap-6 max-w-3xl">
+    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 max-w-3xl">
       {services.map((s, i) => (
         <ServiceCard key={s.title} index={i} title={s.title} desc={s.desc} />
       ))}

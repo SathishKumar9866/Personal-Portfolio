@@ -2,13 +2,32 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BackToTop = () => {
-  const [show, setShow] = useState(false);
+  const [past, setPast] = useState(false);
+  const [atEnd, setAtEnd] = useState(false);
+
   useEffect(() => {
-    const on = () => setShow(window.scrollY > window.innerHeight);
+    const on = () => setPast(window.scrollY > window.innerHeight);
     on();
     window.addEventListener("scroll", on, { passive: true });
     return () => window.removeEventListener("scroll", on);
   }, []);
+
+  // A fixed control sitting over text is a defect, not a trade-off: it painted a
+  // translucent scrim across the footer colophon and the pull-quotes. Padding
+  // fixed the footer only, so it now steps aside whenever the end of the page is
+  // in view — the same IntersectionObserver pattern ContactRail uses.
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    if (!footer) return;
+    const io = new IntersectionObserver(([e]) => setAtEnd(e.isIntersecting), {
+      threshold: 0,
+    });
+    io.observe(footer);
+    return () => io.disconnect();
+  }, []);
+
+  const show = past && !atEnd;
+
   return (
     <AnimatePresence>
       {show && (

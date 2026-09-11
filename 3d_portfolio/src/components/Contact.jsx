@@ -37,7 +37,7 @@ const Contact = () => {
 
       <motion.p
         variants={fadeIn("", "", 0.1, 1)}
-        className="mt-4 font-serif text-secondary text-[17px] leading-[1.6] max-w-xl"
+        className="mt-4 font-serif text-secondary text-[17px] leading-[1.7] max-w-[32rem]"
       >
         Open to data engineering, data science, ML, and AI engineering roles,
         across any domain. If something here is useful to you, reach out.

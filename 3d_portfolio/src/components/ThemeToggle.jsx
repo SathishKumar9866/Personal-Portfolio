@@ -44,7 +44,7 @@ const ThemeToggle = () => {
       onClick={() => setTheme(next)}
       aria-label={`Switch to ${next} mode`}
       title={`Switch to ${next} mode`}
-      className="w-9 h-9 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
+      className="w-11 h-11 sm:w-9 sm:h-9 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
     >
       {theme === "dark" ? <Sun /> : <Moon />}
     </button>

@@ -286,8 +286,12 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           <span className="font-mono text-[12px] text-faint truncate" title={name}>{name}</span>
         </div>
 
-        <h3 className="mt-3 font-display text-[19px] leading-tight text-white-100">{outcome}</h3>
-        <p className="mt-2 font-sans text-secondary text-[14px] leading-[1.55]">{description}</p>
+        <h3 className="mt-3 font-display font-semibold text-[clamp(1.15rem,1.6vw,1.5rem)] leading-[1.2] tracking-[-0.01em] text-white-100">
+          {outcome}
+        </h3>
+        <p className="mt-2 font-sans text-secondary text-[14px] leading-[1.6] max-w-[28rem]">
+          {description}
+        </p>
 
         <div className="mt-4">
           <span className="font-mono text-[10px] uppercase tracking-label text-faint">
@@ -301,7 +305,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
         </div>
 
         <div className="mt-5 pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-[12px]">
-          <a href={source_code_link} target="_blank" rel="noreferrer" className="text-secondary hover:text-accent transition-colors">
+          <a href={source_code_link} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 sm:min-h-0 text-secondary hover:text-accent transition-colors">
             repo ↗
           </a>
           {live_link && (
@@ -324,7 +328,7 @@ const Works = () => (
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-4 font-sans text-secondary text-[17px] max-w-2xl leading-[1.6]"
+      className="mt-4 font-sans text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
     >
       Production RAG on AWS, federated and real-time computer vision, multimodal
       search, and one app that is live and in use.

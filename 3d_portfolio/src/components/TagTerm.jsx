@@ -11,7 +11,10 @@ import { glossary } from "../constants";
  * affordance and started reading as texture.
  */
 const CHIP =
-  "font-mono text-[11px] px-2 py-0.5 rounded border transition-colors";
+  "font-mono text-[11px] px-2 rounded border transition-colors " +
+  // Touch first: 44x44 minimum on phones, back to the dense rhythm from sm up.
+  "inline-flex items-center justify-center min-h-11 min-w-11 py-0 " +
+  "sm:min-h-0 sm:min-w-0 sm:py-0.5 sm:inline";
 
 const TagTerm = ({ name, plain = false }) => {
   const g = plain ? null : glossary[name];

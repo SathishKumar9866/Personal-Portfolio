@@ -14,7 +14,7 @@ const Tech = () => (
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-4 font-sans text-secondary text-[17px] max-w-2xl leading-[1.6]"
+      className="mt-4 font-sans text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
     >
       Not a badge collection — this is what I actually reach for, grouped by where
       it sits on the path from raw data to a running product. I pick tools that
@@ -33,7 +33,7 @@ const Tech = () => (
             {g.title}
           </h3>
           {g.note && (
-            <p className="font-serif text-secondary text-[13px] leading-snug mb-4">{g.note}</p>
+            <p className="font-serif text-secondary text-[13px] leading-[1.5] mb-4">{g.note}</p>
           )}
           <div className="flex flex-wrap gap-2">
             {g.items.map((it) => (

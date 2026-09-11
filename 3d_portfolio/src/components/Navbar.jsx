@@ -76,7 +76,7 @@ const Navbar = () => {
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
         <a
           href="#"
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 min-h-11"
           onClick={(e) => {
             // Without preventDefault the browser also navigates to "#", which
             // pushes a history entry and can jump-cut the smooth scroll.
@@ -129,7 +129,7 @@ const Navbar = () => {
           <ThemeToggle />
           <button
             onClick={() => setToggle(!toggle)}
-            className="relative z-50 text-white-100 text-[22px] leading-none px-2 py-1"
+            className="relative z-50 text-white-100 text-[22px] leading-none w-11 h-11 grid place-items-center"
             aria-label={toggle ? "Close menu" : "Open menu"}
             aria-expanded={toggle}
             aria-controls="mobile-menu"

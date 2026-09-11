@@ -217,3 +217,8 @@ sathishkumarai.github.io/
 # Portrait source. The optimised 600x750 crop in 3d_portfolio/public/ is what
 # ships; this 1MB original stays local.
 /HeadShot.jpg
+
+# Saved LinkedIn profile page (45MB, ~58 files incl. tracking scripts and
+# recaptcha). Kept locally as a content source; never committed.
+Satish Kumar _ LinkedIn.html
+Satish Kumar _ LinkedIn_files/
