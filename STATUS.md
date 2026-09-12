@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `refactor/less-template-more-evidence` merged and is gone.
+**Branch:** `main`. `fix/code-band-flicker` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -16,7 +16,17 @@ The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
 flight and nothing half-applied.
 
-`refactor/less-template-more-evidence` squash-merged and deleted, after the
+`fix/code-band-flicker` squash-merged and deleted — **the first fix in this
+sequence that came from a real phone rather than an emulated viewport.** The
+hero's code band flickered while scrolling, because a mobile browser collapses
+its URL bar as you scroll and the hero is a viewport-height box: the slack the
+band measures itself against changed by the bar's height several times per
+gesture, walking it 7 lines → 5 lines → hidden and back. It now decides against
+the SMALLEST room it has seen rather than the current one, and debounces, so the
+answer settles once and stays. **A viewport-height box on mobile is not a fixed
+height — anything measuring against one has to assume it moves.**
+
+Before it, `refactor/less-template-more-evidence` squash-merged and deleted, after the
 question "does this read as AI slop". The craft did not; the skeleton did.
 Three changes, and the first is the one that mattered:
 

@@ -189,20 +189,58 @@ const CodeCompletion = () => {
    *  - the reader's text-size control changes the content's height without
    *    changing anything a media query can see
    *
-   * So it measures the real gap against its own real height, on mount and
-   * whenever either side of that sum changes, and spends what it finds on as
-   * many lines of the function as will fit between MIN_LINES and MAX_LINES.
-   * Only when even MIN_LINES will not fit does it hide.
+   * So it measures the real gap against its own real height and spends what it
+   * finds on as many lines of the function as will fit between MIN_LINES and
+   * MAX_LINES. Only when even MIN_LINES will not fit does it hide.
    *
-   * This cannot oscillate: both quantities it divides by — the chrome around
-   * the code, and one line's height — are independent of how many lines are
-   * currently shown, so the second pass computes the same answer as the first.
+   * It cannot oscillate on the line count: both quantities it divides by — the
+   * chrome around the code, and one line's height — are independent of how many
+   * lines are currently shown, so a second pass computes the same answer.
+   *
+   * ## Why it measures the WORST viewport, not the current one
+   *
+   * Reported from a real phone: the band flickered while scrolling. The
+   * measurement was right and the thing it measured genuinely moves. A mobile
+   * browser collapses its URL bar as you scroll down and restores it as you
+   * scroll up, and the hero is a viewport-height box, so its height — and
+   * therefore the slack under its copy — changes by the height of that bar
+   * several times in one gesture. Reproduced by stepping the hero through
+   * 844 / 784 / 744px, which is that bar appearing and disappearing:
+   *
+   *   844px -> room 213 -> 7 lines, shown
+   *   784px -> room 153 -> 5 lines, shown   (the window resizes under you)
+   *   744px -> room 113 -> 2 lines          (below MIN_LINES: fades out)
+   *
+   * Two changes make that still. The decision is taken against `floor`, the
+   * SMALLEST room seen since the last real layout change, so once the bar has
+   * been up once the answer stops moving: the band shows only if it fits with
+   * the bar showing, which is the only honest question. And measurements are
+   * debounced, so a gesture that changes the height four times produces one
+   * decision at the end of it rather than four.
+   *
+   * The floor resets on the two things that are real changes of layout rather
+   * than browser chrome: rotation, and the reader's text-size control (which
+   * reflows the copy, so the copy's own resize is the signal).
    */
   useLayoutEffect(() => {
     if (!enabled) return;
     const el = boxRef.current;
     const hero = el?.parentElement;
     if (!hero) return;
+
+    // Smallest room seen since the last real layout change. A URL bar that
+    // hides makes the room grow; that must not re-open a decision already
+    // taken against the smaller viewport.
+    let floor = Infinity;
+    let debounce = 0;
+    // ...but not every early reading deserves to be latched forever. The hero's
+    // copy arrives on a framer transform, so for the first few hundred ms its
+    // bottom edge is 16px low and the room reads smaller than it will ever be
+    // again. Latching that cost two lines of the window permanently. While
+    // warming, a measurement REPLACES the floor; only after the layout settles
+    // does it start taking the minimum.
+    let warm = false;
+    let warmTimer = 0;
 
     const measure = () => {
       // The hero's in-flow child is the copy; this band and the scroll cue are
@@ -227,19 +265,61 @@ const CodeCompletion = () => {
       const lineH = parseFloat(getComputedStyle(pre).lineHeight) || 0;
       if (!lineH) return;
 
-      const linesThatFit = Math.floor((room - chrome) / lineH);
+      floor = warm ? Math.min(floor, room) : room;
+      const linesThatFit = Math.floor((floor - chrome) / lineH);
       setFits(linesThatFit >= MIN_LINES);
       setWindowLines(Math.max(MIN_LINES, Math.min(MAX_LINES, linesThatFit)));
     };
 
+    // One decision per gesture, not one per frame of a collapsing URL bar.
+    const settle = () => {
+      clearTimeout(debounce);
+      debounce = setTimeout(measure, 180);
+    };
+
+    // A real layout change: forget the worst case, and warm up again so the
+    // reflow settling does not get latched either.
+    const reset = () => {
+      floor = Infinity;
+      warm = false;
+      clearTimeout(warmTimer);
+      // Past the hero's entrance: `container` staggers its children 0.1s apart
+      // after a 0.08s delay and each runs 0.6s, so the last one settles around
+      // 1.2s. At 700ms the floor still latched the tail of that and the window
+      // came out a line short of what fits.
+      warmTimer = setTimeout(() => {
+        // Warm on a FRESH reading, not on whatever the last warm-up
+        // measurement happened to be: nothing else re-measures once the page is
+        // still, so without this the floor keeps a mid-animation value forever
+        // and the window comes out a line short.
+        warm = true;
+        floor = Infinity;
+        measure();
+      }, 1500);
+      settle();
+    };
+
     measure();
-    const ro = new ResizeObserver(measure);
+    reset();
+    // Fonts change the copy's height, and therefore the room. Measuring before
+    // they land is measuring the fallback face.
+    document.fonts?.ready.then(reset);
+    // The hero's height is what the URL bar moves, so its resizes only ever
+    // lower the floor — they never reopen the decision.
+    const ro = new ResizeObserver(settle);
     ro.observe(hero);
-    [...hero.children].forEach((c) => ro.observe(c));
-    window.addEventListener("resize", measure);
+    // The copy reflowing IS the text-size control, and that is a real change.
+    const copyRo = new ResizeObserver(reset);
+    [...hero.children].forEach((c) => {
+      if (c !== el) copyRo.observe(c);
+    });
+    window.addEventListener("orientationchange", reset);
     return () => {
+      clearTimeout(debounce);
+      clearTimeout(warmTimer);
       ro.disconnect();
-      window.removeEventListener("resize", measure);
+      copyRo.disconnect();
+      window.removeEventListener("orientationchange", reset);
     };
   }, [enabled]);
 
