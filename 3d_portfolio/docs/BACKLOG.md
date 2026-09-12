@@ -19,8 +19,20 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   it has to be run by the owner. Deploy from the subdirectory
   (`npx vercel --cwd 3d_portfolio`) or set Root Directory to `3d_portfolio` if
   importing the repo in the dashboard: the site is not at the repo root.*
-- [~] **(P0, S) Set the real canonical domain** in `index.html` (currently a
-  commented TODO) once the deploy URL exists.
+- [x] **(P0, S) ~~Set the real canonical domain.~~** Done 2026-09-11:
+  <https://sathishkumarai.github.io/>. The canonical, `og:url`, `og:image`,
+  `twitter:image` and the JSON-LD `url`/`image` are the only place the domain is
+  hard-coded, and `index.html` says so, so moving to a Vercel address later is
+  those lines and nothing else.
+- [x] **(P0, M) ~~Deploy to GitHub Pages.~~** Done 2026-09-11: live at
+  <https://sathishkumarai.github.io/>, built by Actions in the
+  `SathishKumarAI.github.io` repo, which holds no site code. That repo name is
+  load-bearing: only `<user>.github.io` serves from the domain root, which keeps
+  Vite's `base` at `/` so one build serves both Pages and Vercel.
+- [ ] **(P0, S) Flip `SOURCE_REF` to `main`** in
+  `SathishKumarAI.github.io/.github/workflows/deploy.yml` once PR #4 is
+  squash-merged. It builds from `redesign/highway-premium` today, which works
+  but will silently stop tracking `main`.
 - [x] **(P1, S) ~~`sitemap.xml`~~** Declined 2026-09-11, reasoning recorded in
   `public/robots.txt`: this is a single page with in-page anchors, so a sitemap
   would carry exactly one URL and tell a crawler nothing it does not already

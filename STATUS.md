@@ -4,28 +4,40 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-11
-**Branch:** `redesign/highway-premium`, 71 commits ahead of `main`, pushed
+**Branch:** `redesign/highway-premium`, pushed, open as PR #4
+**Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else in this directory is supporting
 material. There is no 3D in it; the folder name survives from a version that had it.
 
 ## Where it stopped
 
-The site is feature-complete and verified, and **not deployed anywhere**. That is
-the only thing standing between this branch and being done.
-
-Four commits landed in the last session:
+The site is live, verified against the deployed URL, and the branch is not
+merged. Six commits landed in the last session:
 
 | Commit | What |
 | --- | --- |
-| `f6f6cea` | RAG project cover drawn (it was shipping an empty panel), federated cover animates a full round both ways, GitHub icon on repo links |
+| `f6f6cea` | RAG project cover drawn (it had been shipping an empty panel), federated cover animates a full round both ways, GitHub icon on repo links |
 | `8037811` | Stack: two chip tiers, six category dots, chip row anchored to the card bottom, one column under `md`, second-tap dismiss on definitions |
 | `a92ca51` | 16 AI crawlers answered by name in `robots.txt`, Stack and Education added to `llms.txt`, JSON-LD widened |
 | `4924be9` | One title everywhere, "AI Engineer". `og.png` regenerated and given a source at `docs/og-card.html` |
+| `951e747` | Session logged, the maps the changes invalidated fixed, this file added |
+| (next) | Absolute canonical, `og:url` and image URLs now that a domain exists |
 
 ## The next action
 
-Deploy. It is blocked on one interactive step that only the owner can run:
+**Merge PR #4**, then flip one line. In order:
+
+1. Squash-merge <https://github.com/SathishKumarAI/Personal-Portfolio/pull/4>
+   and delete the branch.
+2. In `SathishKumarAI.github.io`, set `SOURCE_REF` in
+   `.github/workflows/deploy.yml` from `redesign/highway-premium` to `main`.
+   It is marked with a TODO and it is the only line in that repo that goes
+   stale. Until it is flipped, Pages keeps building from the feature branch,
+   which works but will silently stop tracking `main`.
+3. Redeploy: `gh workflow run deploy.yml -R SathishKumarAI/SathishKumarAI.github.io`
+
+**Vercel is still not set up**, and only the owner can start it:
 
 ```bash
 npx vercel login                    # interactive, cannot be automated
@@ -33,23 +45,44 @@ npx vercel --cwd 3d_portfolio       # preview
 npx vercel --prod --cwd 3d_portfolio
 ```
 
-`npx vercel whoami` currently returns `Logged out`.
+`npx vercel whoami` returns `Logged out`. If a Vercel URL ever becomes the
+primary address, four lines in `3d_portfolio/index.html` change together and
+nothing else does: the canonical, `og:url`, `og:image`, `twitter:image`, plus
+`url` and `image` in the JSON-LD. They are the only place the live domain is
+hard-coded, and there is a comment in the file saying so.
 
-Then, immediately after, three TODOs in `3d_portfolio/index.html` unblock and
-should go in one commit:
+## How the deploy works
 
-1. `og:image` and `twitter:image` to absolute URLs. X ignores relative ones, so
-   social cards are broken until this is done.
-2. `og:url`.
-3. The canonical `<link>`, currently commented out.
+Two repos, one source of truth.
 
-Then open the PR for the branch. There isn't one yet for this run of work.
+- **`Personal-Portfolio`** holds the site, in `3d_portfolio/`. Edit here.
+- **`SathishKumarAI.github.io`** holds no site code. It exists only because a
+  repo named exactly `<user>.github.io` is served from the domain root, which
+  keeps Vite's `base` at `/` so one build serves both Pages and Vercel. Any
+  other repo name would force `base` to `/Personal-Portfolio/` and split the
+  build into two modes.
+
+Its workflow checks out this repo, runs `npm ci && npm run lint && npm run build`
+in `3d_portfolio/`, fails if `robots.txt`, `llms.txt`, `og.png` or the JSON-LD
+are missing from `dist/`, and publishes. No build output is committed and no PAT
+secret is needed: this repo is public, so the default token can read it.
+
+**A push here cannot trigger that workflow** — the source is in a different
+repository. Deploy on demand:
+
+```bash
+gh workflow run deploy.yml -R SathishKumarAI/SathishKumarAI.github.io
+```
 
 ## Traps, each one already paid for
 
 - **The site is not at the repo root.** Vercel needs `--cwd 3d_portfolio`, or
   Root Directory set to `3d_portfolio` when importing the repo in the dashboard.
   Deploying the root gives you a directory listing.
+- **Enabling Pages by pushing auto-selects the legacy branch build**, which
+  serves the repo's README instead of the workflow's output. `POST /pages`
+  returns 409 once that has happened; `PUT /pages` with
+  `build_type=workflow` is what actually switches it.
 - **`node_modules` installed under Linux will not work on Windows** and vice
   versa: no `.bin` shims and none of the platform binaries
   (`@rollup/rollup-win32-x64-msvc`, `@esbuild/win32-x64`). Re-run
@@ -88,10 +121,9 @@ Then open the PR for the branch. There isn't one yet for this run of work.
   engineering roles"** while the title everywhere else is now just "AI Engineer".
   That is on purpose: what he calls himself and what he will be hired for are
   different decisions, and that sentence is the only place the second is stated.
-- **No GitHub Pages deploy.** If one is wanted, note that this repo is
-  `Personal-Portfolio`, so Pages serves it from `/Personal-Portfolio/` and Vite
-  needs a matching `base`. Only a repo named exactly `SathishKumarAI.github.io`
-  serves from the domain root.
+- **`llms.txt` and the JSON-LD are hand-written copies** of facts that live in
+  `src/constants/index.js`. Both carry a comment naming the constant they mirror.
+  A check that fails when they drift is filed in `docs/BACKLOG.md`.
 
 ## Where the rest of the reasoning lives
 
@@ -102,3 +134,4 @@ Then open the PR for the branch. There isn't one yet for this run of work.
 | Which file to open for a given change | `3d_portfolio/README.md` |
 | Which component owns what | `3d_portfolio/src/components/README.md` |
 | Where the five earlier drafts went | `README.md` |
+| How the Pages deploy is wired | `SathishKumarAI.github.io/README.md` |

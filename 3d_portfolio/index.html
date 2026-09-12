@@ -27,8 +27,11 @@
       name="description"
       content="I take a real problem from the data and the model to a working interface, RAG, computer vision, and shipped products across the data-to-AI stack."
     />
-    <!-- TODO: set canonical to the real production domain once deployed (e.g. Vercel URL) -->
-    <!-- <link rel="canonical" href="https://YOUR-REAL-DOMAIN/" /> -->
+    <!-- The four absolute URLs below are the only place the live domain is
+         hard-coded: this canonical, og:url, og:image and twitter:image. If a
+         Vercel deployment ever becomes the primary address, those four change
+         together and nothing else does. -->
+    <link rel="canonical" href="https://sathishkumarai.github.io/" />
 
     <!-- monogram favicon (red, white S) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -39,20 +42,19 @@
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sathishkumarai.github.io/" />
     <meta property="og:title" content="Sathish Kumar: AI Engineer" />
     <meta
       property="og:description"
       content="Data to AI, end to end. RAG, computer vision, and shipped products."
     />
     <meta property="og:site_name" content="Sathish Kumar" />
-    <meta property="og:image" content="/og.png" />
+    <meta property="og:image" content="https://sathishkumarai.github.io/og.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Sathish Kumar: AI Engineer" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="/og.png" />
-    <!-- TODO at deploy: make og:image, twitter:image and og:url ABSOLUTE.
-         X ignores relative image URLs; most other scrapers resolve them. -->
+    <meta name="twitter:image" content="https://sathishkumarai.github.io/og.png" />
 
     <!-- Structured data. This is the one copy of these facts a crawler that does
          not run JavaScript will see, so it is hand-maintained rather than
@@ -60,8 +62,8 @@
          `knowsAbout` mirrors src/constants/index.js stackGroups and `alumniOf`
          mirrors `education` there: change one, change the other. Only facts that
          already exist in constants appear here, nothing inferred.
-         TODO at deploy: set `url` and add `mainEntityOfPage` once the domain is
-         real; it points at GitHub until then rather than at a guess. -->
+         `url` is the live site now that one exists; it pointed at GitHub while
+         there was no domain, rather than at a guess. -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -69,8 +71,8 @@
         "name": "Sathish Kumar",
         "jobTitle": "AI Engineer",
         "description": "AI engineer working across the full data-to-AI stack: data engineering, data science, machine learning and AI engineering. The work runs offline where it can, grounds its answers in real sources, and ships as something you can try in a minute.",
-        "url": "https://github.com/SathishKumarAI",
-        "image": "/og.png",
+        "url": "https://sathishkumarai.github.io/",
+        "image": "https://sathishkumarai.github.io/og.png",
         "email": "mailto:sathishkumar786.ml@gmail.com",
         "sameAs": [
           "https://github.com/SathishKumarAI",
