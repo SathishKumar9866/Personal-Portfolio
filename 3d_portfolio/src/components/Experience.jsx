@@ -5,6 +5,7 @@ import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import Reveal from "./Reveal";
 import TagTerm from "./TagTerm";
+import CareerTrack from "./CareerTrack";
 
 /** "2024-03" -> "Mar 2024". Returns null for null, so callers can omit cleanly. */
 const month = (iso) => {
@@ -32,10 +33,14 @@ const Range = ({ start, end, current }) => {
   );
 };
 
-const Role = ({ role, index }) => (
+const Role = ({ role, index, trackIndex = null }) => (
   <Reveal
     as="li"
     delay={index * 0.08}
+    // Only set for jobs. The margin diagram keys off this, and education
+    // renders through this same component: sharing the numbering pointed the
+    // diagram at the wrong entry.
+    {...(trackIndex === null ? {} : { "data-role-index": trackIndex })}
     className="relative pl-8 sm:pl-10 pb-10 last:pb-0"
   >
     {/* the rail, and this role's marker on it */}
@@ -140,14 +145,26 @@ const Experience = () => (
       <h2 className={styles.sectionHeadText}>Experience.</h2>
     </motion.div>
 
-    <motion.ol
+    {/* A motion.div, not a div. Framer propagates variants down the motion
+        tree, so a plain wrapper between the section's animated parent and this
+        list cuts the chain: the `show` state never arrived and the whole roles
+        column rendered at opacity 0. The variant moves up here with it. */}
+    <motion.div
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-10 list-none max-w-2xl"
+      className="mt-10 rail:grid rail:grid-cols-[minmax(0,42rem)_minmax(0,1fr)] rail:gap-10 rail:items-start"
     >
-      {experience.map((role, i) => (
-        <Role key={`${role.company}-${role.title}`} role={role} index={i} />
-      ))}
-    </motion.ol>
+      <ol className="list-none max-w-2xl">
+        {experience.map((role, i) => (
+          <Role key={`${role.company}-${role.title}`} role={role} index={i} trackIndex={i} />
+        ))}
+      </ol>
+
+      {/* The margin. Sticky, so the diagram stays level with the role being
+          read rather than scrolling away from the thing it describes. */}
+      <div className="hidden rail:block sticky top-32">
+        <CareerTrack glyphs={experience.map((r) => r.glyph)} />
+      </div>
+    </motion.div>
 
     {education.length > 0 && (
       <>

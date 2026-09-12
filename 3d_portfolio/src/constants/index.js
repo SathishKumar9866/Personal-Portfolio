@@ -40,6 +40,8 @@ export const experience = [
   {
     company: "AdvanSoft International, Inc",
     title: "AI Engineer",
+    // drives the diagram in the margin; see CareerTrack.jsx GLYPHS
+    glyph: "graph",
     location: "United States",
     start: "2024-12",
     end: null,
@@ -54,6 +56,8 @@ export const experience = [
   {
     company: "Integer IT Solutions",
     title: "Machine Learning Engineer",
+    // drives the diagram in the margin; see CareerTrack.jsx GLYPHS
+    glyph: "triage",
     location: "United States",
     start: "2024-05",
     end: "2024-12",
@@ -68,6 +72,8 @@ export const experience = [
   {
     company: "Southern Illinois University",
     title: "Research Engineer",
+    // drives the diagram in the margin; see CareerTrack.jsx GLYPHS
+    glyph: "vision",
     location: "Carbondale, IL",
     start: "2022-01",
     end: "2023-12",
@@ -82,6 +88,8 @@ export const experience = [
   {
     company: "DotIn Solutions",
     title: "Software Engineer",
+    // drives the diagram in the margin; see CareerTrack.jsx GLYPHS
+    glyph: "pipeline",
     location: "India",
     start: "2020-01",
     end: "2021-12",

@@ -7,25 +7,12 @@ import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import TagTerm from "./TagTerm";
 import { ICON_PATHS } from "./icons";
+import { TAU, roundRect, hash, mulberry } from "../utils/draw";
 
 /* ---- cover drawing ---- */
 const RED = "#FF3621";
 const BG = "#11262C"; // keep in step with --c-canvas in index.css
 const bone = (a) => `rgba(233,230,223,${a})`;
-
-// deterministic RNG so each cover is stable
-const mulberry = (seed) => () => {
-  seed |= 0;
-  seed = (seed + 0x6d2b79f5) | 0;
-  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-};
-const hash = (s) => {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
-  return h >>> 0;
-};
 
 const grid = (ctx, w, h) => {
   ctx.strokeStyle = "rgba(255,255,255,0.05)";
@@ -33,17 +20,6 @@ const grid = (ctx, w, h) => {
   for (let x = 24; x < w; x += 24) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
   for (let y = 24; y < h; y += 24) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
 };
-const roundRect = (ctx, x, y, w, h, r) => {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
-};
-const TAU = Math.PI * 2;
-
 // rag-pipeline: a question is embedded, its nearest passages retrieved, and the
 // answer marks the one it cites. Three labelled stages, left to right, so the
 // card states the mechanic rather than decorating it.
