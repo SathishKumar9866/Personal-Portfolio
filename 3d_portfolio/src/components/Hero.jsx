@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { styles } from "../styles";
 import LiveClock from "./LiveClock";
+import CodeCompletion from "./CodeCompletion";
 import { AvailabilityCompact } from "./Availability";
 
 const container = {
@@ -85,6 +86,13 @@ const Hero = () => {
           <AvailabilityCompact />
         </motion.div>
       </motion.div>
+
+      {/* The lower slack, below `rail`. The hero is `min-h-screen` and
+          top-aligned, so its content ends at 591 of 844 on a phone and the rest
+          was empty: the scroll cue that earns that space on a desktop is
+          `hidden sm:flex`. Absolute, so it fills what was already there and
+          adds no height. */}
+      <CodeCompletion />
 
       <a
         href="#about"

@@ -1,5 +1,86 @@
 # Worklog
 
+## 2026-09-12: the hero's empty third, and what went in it
+
+### The space was left over, not designed
+
+The hero is `min-h-screen` and top-aligned. On a phone its content ends at 591
+of 844, so 253px of it is slack, and the About section's padding takes the gap
+from the last hero element to the word "Overview" to **331px — thirty-nine
+percent of the screen with nothing in it**. The thing that earns that space on a
+desktop is the scroll cue, and the scroll cue is `hidden sm:flex`. At 768x900
+the same measurement is 346px.
+
+### What went in it
+
+A band that completes a Python binary search and then runs it, with the array
+it is searching drawn underneath. Three cases cycle in a fixed order, and the
+values are random every time, so it is never the same search twice:
+
+| Case | What the reader sees |
+| --- | --- |
+| `found` | the window narrows onto the target, `return mid` |
+| `missing` | the loop exhausts, `return -1` |
+| `empty` | `if not nums` is the only line that runs |
+
+Which case comes next is deliberately **not** random. An edge case that only
+appears by luck is one a reader may never see, and the guard clause earning its
+place is the entire point — the page claims "the evidence it works" and
+"measured, not estimated", and this is that claim in miniature.
+
+**The steps are the execution.** `trace()` runs the same algorithm the band
+prints and records which line it was on, so the highlighted line and the drawn
+`lo..hi` window cannot disagree: there is only one traversal. Verified against a
+real run, `[4,12,16,18,21,27,32]` with target 19 — guard, init, then three
+rounds of while/mid/branch, then exhausted, then `-1`.
+
+### It is DOM, and it yields
+
+Two decisions worth keeping.
+
+**No canvas and no requestAnimationFrame.** It is a dozen lines of text and
+seven boxes, so it is DOM on a `setTimeout` chain at about 11 frames a second,
+not 60. Its two siblings are canvases because they draw geometry; this draws
+text, and text in a canvas is text nobody can select, scale or theme.
+
+**It measures whether it fits, rather than assuming a breakpoint.** The slack is
+the hero's height minus its content's, so it depends on the screen *and* on how
+tall the copy wrapped *and* on the reader's text-size control, which changes the
+content's height without changing anything a media query can see. Measured:
+
+| Condition | Slack | Band |
+| --- | --- | --- |
+| 390x844 | 253px | shown |
+| 430x932 | 406px | shown |
+| 768x900 | 346px | shown, clearing the scroll cue by 16px |
+| 360x640 | 49px | hidden |
+| 740x360 landscape | 0px | hidden |
+| 390x844 at 112% text | 221px | hidden |
+| 390x844 at 140% text | 18px | hidden |
+
+Drawn without that check at 360x640, it overlapped the lede by 156px. When it
+hides, its timer chain does not run either.
+
+### Verified
+
+- the trace is a real binary search: window narrows, `mid` tracks it, and the
+  returned index is the cell that holds the target
+- on every settled result the line that produced it is inside the scrolled code
+  window — `missing` shows lines 6..12 with `return -1` active, `empty` shows
+  0..6 with the guard's `return -1` active, `found` shows 2..8 with `return mid`
+- `prefers-reduced-motion` verified by running it, not by reading it: all 13
+  lines present, the final state shown, and byte-identical after 2.5s
+- not rendered at all at 1440, where `NeuralField` already owns the landing view
+- both themes; `scrollWidth` never exceeds the viewport at any width tested
+
+`npm run lint` 0 errors (27 pre-existing warnings), `npm run build` exit 0.
+
+### Not done
+
+Real-device QA on iOS and Android, still. And a band that shrank to fit instead
+of hiding would survive the 112% case, which currently misses by one pixel —
+221px of slack against 222px needed.
+
 ## 2026-09-12: four layout faults on a phone, all found by measuring
 
 Branch `fix/mobile-layout-and-nav`. Every number below was read off the running
