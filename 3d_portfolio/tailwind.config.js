@@ -58,14 +58,25 @@ export default {
       // also scale every rem-based padding, margin and max-width, and max-w-7xl
       // at 140% is wider than the viewport.
       fontSize: {
-        micro: ["calc(0.6875rem * var(--type-scale, 1))", { lineHeight: "1.4" }], // stamps ON artwork
-        label: ["calc(0.75rem * var(--type-scale, 1))", { lineHeight: "1.45" }], // eyebrows, field names
-        nav: ["calc(0.8125rem * var(--type-scale, 1))", { lineHeight: "1.4" }], // nav, section eyebrows
-        chip: ["calc(0.8125rem * var(--type-scale, 1))", { lineHeight: "1.4" }], // technology chips
-        data: ["calc(0.875rem * var(--type-scale, 1))", { lineHeight: "1.5" }], // mono facts
-        body: ["calc(0.9375rem * var(--type-scale, 1))", { lineHeight: "1.6" }], // card prose
-        prose: ["calc(1rem * var(--type-scale, 1))", { lineHeight: "1.65" }], // full-measure prose
-        lede: ["calc(1.125rem * var(--type-scale, 1))", { lineHeight: "1.7" }], // section intros
+        // Fluid, not stepped. Each size interpolates with the viewport between
+        // a floor and a ceiling instead of jumping at a breakpoint, so a 360px
+        // phone, a 600px tablet and a 1600px monitor each get type suited to
+        // them rather than to the nearest of two buckets.
+        //
+        // Every clamp keeps a rem term alongside the vw term. A pure-vw size
+        // ignores the reader's browser font-size setting entirely, which trades
+        // one accessibility problem for another. The rem term is what keeps it
+        // responsive to that; the vw term is what makes it responsive to the
+        // screen; and --type-scale multiplies the result so the on-page control
+        // still works on top of both.
+        micro: ["calc(clamp(0.6875rem, 0.66rem + 0.10vw, 0.75rem) * var(--type-scale, 1))", { lineHeight: "1.4" }],
+        label: ["calc(clamp(0.75rem, 0.72rem + 0.12vw, 0.8125rem) * var(--type-scale, 1))", { lineHeight: "1.45" }],
+        nav: ["calc(clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem) * var(--type-scale, 1))", { lineHeight: "1.4" }],
+        chip: ["calc(clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem) * var(--type-scale, 1))", { lineHeight: "1.4" }],
+        data: ["calc(clamp(0.875rem, 0.84rem + 0.16vw, 0.9375rem) * var(--type-scale, 1))", { lineHeight: "1.5" }],
+        body: ["calc(clamp(0.9375rem, 0.90rem + 0.20vw, 1rem) * var(--type-scale, 1))", { lineHeight: "1.6" }],
+        prose: ["calc(clamp(1rem, 0.95rem + 0.22vw, 1.125rem) * var(--type-scale, 1))", { lineHeight: "1.65" }],
+        lede: ["calc(clamp(1.125rem, 1.05rem + 0.32vw, 1.375rem) * var(--type-scale, 1))", { lineHeight: "1.7" }],
       },
       spacing: {
         u1: "4px", u2: "8px", u3: "12px", u4: "16px",

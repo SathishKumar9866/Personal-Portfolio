@@ -50,36 +50,59 @@ const Tech = () => (
       {TERM_HINT}
     </motion.p>
 
-    {/* One column under md, two at md, three from lg. Six groups land as 3x2
-        rather than 2x3, which is a whole row less scrolling for the same
-        content. Two 280px-wide cards on a phone was the old behaviour and it
-        wrapped every chip onto its own line. */}
-    <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 items-stretch">
-      {stackGroups.map((g, i) => (
-        <Reveal
-          key={g.title}
-          // Each card waits for its own viewport entry. The small delay is by
-          // column, so a row arrives as a row rather than all six at once.
-          delay={(i % 3) * 0.07}
-          className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col h-full hover:border-accent/50"
-        >
-          <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
-            {g.title}
-          </h3>
-          {g.note && (
-            <p className="mt-2 font-serif text-secondary text-body leading-[1.5]">{g.note}</p>
-          )}
-          {/* mt-auto is the whole point: grid already equalises card height, but
-              without it the chip row floats up under a one-line note and two
-              cards in a row disagree by up to 34px. */}
-          <div className="mt-auto pt-4 flex flex-wrap gap-2">
-            {g.items.map((it) => (
-              <TagTerm key={it} name={it} primary={g.primary?.includes(it)} />
-            ))}
-          </div>
-        </Reveal>
-      ))}
+    {/* Two shapes, because a phone and a desktop want different things here.
+        On a phone this is one block with six labelled rows: six bordered cards
+        each carrying a description was most of a screen per card for content
+        that is really a list. Cards return at md, where there is room for the
+        description to earn its place. Each row and each card still reveals on
+        its own viewport entry, so the section animates as the reader arrives at
+        it rather than all at once. */}
+    <div className="mt-10 sm:mt-12">
+      {/* phone: one card, six rows */}
+      <div className="md:hidden glass-card rounded-2xl p-4 divide-y divide-line">
+        {stackGroups.map((g, i) => (
+          <Reveal key={g.title} delay={i * 0.06} y={12} className="py-4 first:pt-0 last:pb-0">
+            <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
+              <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
+              {g.title}
+            </h3>
+            <div className="mt-2.5 flex flex-wrap gap-2">
+              {g.items.map((it) => (
+                <TagTerm key={it} name={it} primary={g.primary?.includes(it)} />
+              ))}
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      {/* md and up: the cards, with the descriptions */}
+      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 items-stretch">
+        {stackGroups.map((g, i) => (
+          <Reveal
+            key={g.title}
+            // Delay by column, so a row arrives as a row rather than all six
+            // off one event.
+            delay={(i % 3) * 0.07}
+            className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col h-full hover:border-accent/50"
+          >
+            <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
+              <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
+              {g.title}
+            </h3>
+            {g.note && (
+              <p className="mt-2 font-serif text-secondary text-body leading-[1.5]">{g.note}</p>
+            )}
+            {/* mt-auto is the whole point: grid already equalises card height,
+                but without it the chip row floats up under a one-line note and
+                two cards in a row disagree by up to 34px. */}
+            <div className="mt-auto pt-4 flex flex-wrap gap-2">
+              {g.items.map((it) => (
+                <TagTerm key={it} name={it} primary={g.primary?.includes(it)} />
+              ))}
+            </div>
+          </Reveal>
+        ))}
+      </div>
     </div>
   </>
 );

@@ -38,12 +38,12 @@ function App() {
             <Experience />
             <Tech />
             <Works />
-            {/* Between the work and the contact details, because it is about
-                the repositories the reader has just seen, not about hiring.
-                Inside <main>, not between two of them: a page gets one main
-                landmark, and splitting it gave screen readers two. */}
-            <Collaborate />
             <Contact />
+            {/* Last on the page, and desktop only. It is a closing note rather
+                than a section someone came for, and on a phone it is in the
+                menu instead. Inside <main>, not after it: a page gets one main
+                landmark, and an earlier version split it in two. */}
+            <Collaborate />
           </main>
           <AgentNote />
           <Footer />

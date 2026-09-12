@@ -21,7 +21,13 @@ import Reveal from "./Reveal";
  */
 
 const Collaborate = () => (
-  <aside aria-labelledby="collab-title" className="w-full border-t border-line bg-tertiary/40">
+  <aside
+    aria-labelledby="collab-title"
+    // Desktop only. On a phone this lives in the menu instead: the job of the
+    // mobile page is who he is, what he has built and where he has worked, and
+    // an invitation to contribute is not that.
+    className="hidden md:block w-full border-t border-line bg-tertiary/40"
+  >
     <div className="max-w-7xl mx-auto px-6 sm:px-16 py-12 sm:py-16">
       <Reveal>
         <p className="font-mono text-label uppercase tracking-label text-faint">
@@ -31,46 +37,42 @@ const Collaborate = () => (
           id="collab-title"
           className="mt-2 font-display font-semibold text-[calc(clamp(1.3rem,2.2vw,1.9rem)*var(--type-scale,1))] leading-tight tracking-[-0.01em] text-white-100 max-w-[34rem]"
         >
-          If something here is useful to you, it is yours to build on.
+          If something here is useful, take it.
         </h2>
       </Reveal>
 
       <ul className="mt-8 grid gap-x-10 gap-y-6 list-none sm:grid-cols-2 lg:grid-cols-3">
         <Reveal as="li" delay={0.05} className="border-t border-line pt-4">
           <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
-            Issues and pull requests
+            Open an issue or a PR
           </h3>
           <p className="mt-2 font-sans text-secondary text-body leading-[1.65]">
-            On any repository linked from this page. You do not need permission
-            and you do not need to know the codebase. A question counts: if
-            something was unclear enough to ask about, the documentation has a
-            gap, and that is worth knowing.
+            On any repo linked from this page. You do not need permission, and
+            you do not need to know the code. Questions count too: if you had to
+            ask, the docs have a gap.
           </p>
         </Reveal>
 
         <Reveal as="li" delay={0.12} className="border-t border-line pt-4">
           <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
-            Write it with an LLM
+            Written with an LLM is fine
           </h3>
           <p className="mt-2 font-sans text-secondary text-body leading-[1.65]">
-            Claude, Codex, Gemini, Grok, whatever you already have open. That is
-            not something to apologise for here. One condition, and it is the
-            same one a human patch has: the pull request has to explain its
-            reasoning, not its diff, so that a reviewer or a model reading it
-            later can follow why.
+            Claude, Codex, Gemini, Grok, whatever you use. One ask: say
+            <em> why</em> in the pull request, not what the diff does. Someone
+            has to understand it in six months, and that is the same thing I
+            would ask of anyone.
           </p>
         </Reveal>
 
         <Reveal as="li" delay={0.19} className="border-t border-line pt-4">
           <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
-            Or just work together
+            Or just talk to me
           </h3>
           <p className="mt-2 font-sans text-secondary text-body leading-[1.65]">
-            I am interested in people who think differently to me: different
-            field, different stack, different reason for caring. I pick things
-            up quickly, I would rather ask the obvious question than guess, and
-            I try to explain things plainly enough to follow from outside the
-            specialism.
+            I like working with people who think differently to me: another
+            field, another stack. I learn fast, I ask the obvious question
+            rather than guess, and I try to explain things without the jargon.
           </p>
         </Reveal>
       </ul>
@@ -82,13 +84,13 @@ const Collaborate = () => (
           rel="noreferrer"
           className="inline-flex items-center min-h-11 sm:min-h-0 font-mono text-data text-accent-ink hover:underline"
         >
-          LinkedIn, for a conversation or a call ↗
+          LinkedIn, to talk ↗
         </a>
         <a
           href={`mailto:${contact.email}`}
           className="inline-flex items-center min-h-11 sm:min-h-0 font-mono text-data text-accent-ink hover:underline"
         >
-          Email, for anything with detail attached ↗
+          Email, for detail ↗
         </a>
         <a
           href={SITE_REPO}

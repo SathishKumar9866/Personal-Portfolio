@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { styles } from "../styles";
-import { navLinks } from "../constants";
+import { navLinks, SITE_REPO } from "../constants";
 import ThemeToggle from "./ThemeToggle";
 import FontSizeToggle from "./FontSizeToggle";
 import { ICON_PATHS, socialLinks } from "./icons";
@@ -238,7 +238,31 @@ const Navbar = () => {
                 </ul>
               </div>
 
-              <div className="mt-8 flex items-center gap-3">
+              {/* The collaboration note lives here on a phone, not in the page
+                  flow. A reader on a phone is there for who he is, what he has
+                  built and where he has worked; an invitation to send patches
+                  is something you go looking for, so it sits where you look. */}
+              <div className="mt-8 pt-6 border-t border-line">
+                <p className="font-mono text-label uppercase tracking-label text-faint">
+                  Open to collaborators
+                </p>
+                <p className="mt-2 font-sans text-secondary text-body leading-[1.6]">
+                  Issues and pull requests welcome on any repo linked here,
+                  written with an LLM or not. Say why in the PR and that is
+                  enough.
+                </p>
+                <a
+                  href={SITE_REPO}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => setToggle(false)}
+                  className="mt-2 inline-flex items-center min-h-11 font-mono text-data text-accent-ink hover:underline"
+                >
+                  CONTRIBUTING.md ↗
+                </a>
+              </div>
+
+              <div className="mt-6 flex items-center gap-3">
                 <FontSizeToggle />
                 <button
                   onClick={() => {
