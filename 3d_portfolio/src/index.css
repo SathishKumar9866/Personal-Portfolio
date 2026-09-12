@@ -329,3 +329,61 @@ main:focus:not(:focus-visible) {
   );
   animation: glass-sweep 9s cubic-bezier(0.3, 0.1, 0.2, 1) infinite;
 }
+
+/* The contact card is the one block on the page whose layout has to react to
+   its own width, not the viewport's. It is full width in a single column up to
+   lg, then the grid splits and it shrinks to ~460px, so a viewport breakpoint
+   puts the roomiest layout exactly where there is least room. Measured at a
+   1024 viewport: the address column was 193px wide against a 281px address,
+   and every one of them broke mid-domain — `sathishkumar786.ml@gm / ail.com` —
+   while the ↗ floated alone at the right edge, detached from its text.
+
+   The threshold is arithmetic, not taste, all four measured in the browser:
+   7rem label + 0.75rem + the longest address, LinkedIn at 281px, + 0.75rem +
+   the copy button at 74px = 491px. 32em is that plus 21px of slack at the
+   default text size, and the card measures 529px at a 1440 viewport, its
+   narrowest single-row case.
+
+   Below it a row is two lines — label and Copy on the first, the address given
+   the whole of the second — not the three the viewport version stacked on a
+   phone. */
+.contact-rows {
+  container-type: inline-size;
+  /* The threshold below is in `em`, and a container query resolves font-relative
+     units against the container's own font-size, so this one line is what makes
+     the breakpoint follow the reader's text-size control. A `rem` threshold does
+     not: --type-scale multiplies the type tokens but never the root font size,
+     so at 140% the addresses grew past a frozen 32rem and the copy button was
+     left wrapping onto a line of its own. var() is not substituted inside a
+     query condition, which is why the scale has to arrive this way. */
+  font-size: calc(1rem * var(--type-scale));
+}
+
+.contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0.25rem;
+}
+.contact-row > .contact-copy {
+  order: 1;
+  margin-left: auto;
+}
+.contact-row > .contact-addr {
+  order: 2;
+  flex: 0 0 100%;
+}
+
+@container (min-width: 32em) {
+  .contact-row > .contact-label {
+    width: 7rem;
+  }
+  /* No flex-grow: the auto margin on the button already holds the right edge,
+     and a growing anchor makes the empty space after a short address a live
+     link. */
+  .contact-row > .contact-addr {
+    order: 0;
+    flex: 0 1 auto;
+  }
+}

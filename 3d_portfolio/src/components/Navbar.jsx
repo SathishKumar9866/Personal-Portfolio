@@ -5,7 +5,7 @@ import { styles } from "../styles";
 import { navLinks, SITE_REPO } from "../constants";
 import ThemeToggle from "./ThemeToggle";
 import FontSizeToggle from "./FontSizeToggle";
-import { ICON_PATHS, socialLinks } from "./icons";
+import { ICON_PATHS, readable, socialLinks } from "./icons";
 import useActiveSection from "../hooks/useActiveSection";
 
 const prefersReduced = () =>
@@ -27,13 +27,15 @@ const Navbar = () => {
 
   // Hide on the way down, return on the way up. The bar is 77px of a fixed
   // viewport: about 9% of a phone screen, held open the whole time someone is
-  // reading a very long page. Four guards, because a naive version of this is
+  // reading a very long page. Five guards, because a naive version of this is
   // worse than not doing it:
   //   1. a movement threshold, so a 2px jitter cannot toggle it
   //   2. never hidden near the top, where there is nothing to reclaim
   //   3. never hidden while the mobile menu is open, that IS the nav
   //   4. never hidden while focus is inside it, which would strand a keyboard
   //      user on a control they cannot see
+  //   5. never hidden during a jump the reader asked for, which is a scroll
+  //      they did not make with their thumb
   useEffect(() => {
     let last = window.scrollY;
     let raf = 0;
@@ -55,6 +57,32 @@ const Navbar = () => {
     // position is clamped before the delta is taken.
     const HIDE_AFTER = 12;
     const SHOW_AFTER = -2;
+
+    // Guard 5: a jump is not a reading gesture. Tapping Experience in the menu
+    // smooth-scrolls about 3,000px downward, which arrives as hundreds of
+    // positive deltas, so the bar hid itself on the way and the reader landed
+    // on the section with no hamburger and no way back into the menu short of
+    // scrolling to the top. Measured before this: every menu link left the bar
+    // at translateY(-100%), and the jump to Contact takes 1.5s of scrolling to
+    // do it, so a fixed timeout long enough for that would be a long time to
+    // freeze the bar for the short jumps too.
+    //
+    // So the jump owns the scroll until it stops owning it, and what ends it is
+    // the reader taking hold of the page. The timeout is only a backstop for a
+    // jump to the section you are already on, which scrolls nothing.
+    let jumping = false;
+    let settle = 0;
+    const endJump = () => {
+      jumping = false;
+      clearTimeout(settle);
+    };
+    const startJump = () => {
+      jumping = true;
+      setHidden(false);
+      clearTimeout(settle);
+      settle = setTimeout(endJump, 2500);
+    };
+
     const read = () => {
       raf = 0;
       // Clamped: iOS rubber-banding reports negative scrollY past the top and
@@ -66,9 +94,10 @@ const Navbar = () => {
       setScrolled(y > 24);
 
       const focusInside = navRef.current?.contains(document.activeElement);
-      if (focusInside || y <= 160) {
-        // Near the top there is nothing to reclaim, and a focused control
-        // inside the bar must never be scrolled out from under a keyboard user.
+      if (jumping || focusInside || y <= 160) {
+        // Near the top there is nothing to reclaim, a focused control inside
+        // the bar must never be scrolled out from under a keyboard user, and a
+        // jump the reader asked for must not cost them the bar they asked from.
         setHidden(false);
         last = y;
         return;
@@ -86,8 +115,22 @@ const Navbar = () => {
     };
     read();
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Every in-page anchor on the site changes the hash, which covers the menu,
+    // the desktop links, the Hero CTA and Availability. The two that scroll
+    // without one, CommandPalette and SideRail, say so with `section-jump`.
+    window.addEventListener("hashchange", startJump);
+    window.addEventListener("section-jump", startJump);
+    window.addEventListener("touchstart", endJump, { passive: true });
+    window.addEventListener("wheel", endJump, { passive: true });
+    window.addEventListener("keydown", endJump);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("hashchange", startJump);
+      window.removeEventListener("section-jump", startJump);
+      window.removeEventListener("touchstart", endJump);
+      window.removeEventListener("wheel", endJump);
+      window.removeEventListener("keydown", endJump);
+      clearTimeout(settle);
       cancelAnimationFrame(raf);
     };
   }, []);
@@ -199,19 +242,38 @@ const Navbar = () => {
               role="dialog"
               aria-modal="true"
               aria-label="Menu"
-              className="fixed inset-0 z-50 md:hidden bg-primary backdrop-blur-md flex flex-col justify-center px-8 py-24 overflow-y-auto"
+              // `justify-start` with auto margins, not `justify-center`. The
+              // menu is 961px of content in an 844px box on a 390x844 phone,
+              // and a centred flex container splits negative free space evenly:
+              // measured, the first link sat at top -21 with scrollTop already
+              // at its minimum of 0, so About was cut off and no amount of
+              // scrolling could reach it. Auto margins centre the same way when
+              // there is room and collapse to 0 when there is not, which is the
+              // whole difference.
+              className="fixed inset-0 z-50 md:hidden bg-primary flex flex-col justify-start px-8 py-24 overflow-y-auto"
             >
+              {/* Fixed, not absolute. Absolute inside a scroll container scrolls
+                  with the content: at the bottom of the menu this button sat at
+                  top -97, and the hamburger that opened it is underneath the
+                  overlay, so a phone had nothing left to close the menu with.
+
+                  `backdrop-blur-md` had to go for that to work: a backdrop
+                  filter makes its element the containing block for fixed
+                  descendants, so the button kept scrolling. It was blurring
+                  nothing anyway, `bg-primary` is rgb(15 34 40) with no alpha,
+                  and index.css already says what a full-screen backdrop filter
+                  costs a phone. */}
               <button
                 onClick={() => setToggle(false)}
                 aria-label="Close menu"
-                className="absolute top-5 right-5 w-11 h-11 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
+                className="fixed top-5 right-5 w-11 h-11 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                   <path d="M6 6l12 12M18 6L6 18" />
                 </svg>
               </button>
 
-              <ul className="list-none flex flex-col gap-6">
+              <ul className="mt-auto list-none flex flex-col gap-6">
                 {navLinks.map((n, idx) => (
                   <motion.li
                     key={n.id}
@@ -258,11 +320,11 @@ const Navbar = () => {
                             {l.label}
                           </span>
                           {/* The destination in full. A label alone asks the
-                              reader to trust where the tap goes. */}
+                              reader to trust where the tap goes. Same
+                              `readable` as the contact card, so the two never
+                              print the same address two ways. */}
                           <span className="block font-mono text-chip text-white-100 break-all">
-                            {l.k === "email"
-                              ? l.href.replace(/^mailto:/, "")
-                              : l.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                            {readable(l.href)}
                           </span>
                         </span>
                       </a>
@@ -308,7 +370,7 @@ const Navbar = () => {
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center gap-3">
+              <div className="mt-6 mb-auto flex items-center gap-3">
                 <FontSizeToggle />
                 <button
                   onClick={() => {

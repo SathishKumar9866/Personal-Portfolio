@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { glossary } from "../constants";
 
 /**
@@ -48,7 +48,11 @@ const TagTerm = ({ name, plain = false, primary = false }) => {
   const g = plain ? null : entry;
   const [open, setOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
+  // Where the panel sits, in wrapper-local px. Centred on the chip until that
+  // would put it off the screen, see the layout effect below.
+  const [left, setLeft] = useState(0);
   const ref = useRef(null);
+  const tipRef = useRef(null);
   const closeTimer = useRef(null);
 
   useEffect(() => {
@@ -70,6 +74,42 @@ const TagTerm = ({ name, plain = false, primary = false }) => {
   }, [open]);
 
   useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+  // The panel used to be `left-1/2 -translate-x-1/2`: centred on its chip, with
+  // nothing holding it inside the viewport. `w-[min(17rem,calc(100vw-2rem))]`
+  // caps the width and says nothing about the position, so a chip near either
+  // edge threw the panel off the screen. Measured at 390px: React's panel ran
+  // from 163 to 435 and took the document's scrollWidth to 435 with it, so the
+  // whole page scrolled sideways; PySpark's started at -63, where nothing can
+  // reach it.
+  //
+  // So the panel is centred on the chip only while that fits, and slides along
+  // the edge when it does not. A layout effect and not an effect, because this
+  // runs between the panel existing and the browser painting it: an effect
+  // would show it in the wrong place for one frame first.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const place = () => {
+      const wrap = ref.current;
+      const tip = tipRef.current;
+      if (!wrap || !tip) return;
+      const r = wrap.getBoundingClientRect();
+      const w = tip.offsetWidth;
+      // clientWidth, not innerWidth: innerWidth counts a desktop scrollbar as
+      // usable space and would push the panel under it.
+      const vw = document.documentElement.clientWidth;
+      const PAD = 12;
+      const centred = (r.width - w) / 2;
+      const min = PAD - r.left;
+      const max = vw - PAD - w - r.left;
+      setLeft(Math.max(min, Math.min(centred, max)));
+    };
+    place();
+    // Rotating a phone with a definition open changes every one of those
+    // numbers.
+    window.addEventListener("resize", place);
+    return () => window.removeEventListener("resize", place);
+  }, [open]);
 
   // Plain chip: states a fact. The expanded name: "Retrieval-Augmented
   // Generation" behind "RAG": is still available, on hover, without opening
@@ -131,8 +171,10 @@ const TagTerm = ({ name, plain = false, primary = false }) => {
 
       {open && (
         <span
+          ref={tipRef}
           role="tooltip"
-          className="absolute z-30 left-1/2 -translate-x-1/2 top-full mt-1.5 w-[min(17rem,calc(100vw-2rem))] rounded-xl glass p-3 font-sans text-data text-secondary leading-snug block text-left normal-case tracking-normal"
+          style={{ left }}
+          className="absolute z-30 top-full mt-1.5 w-[min(17rem,calc(100vw-1.5rem))] rounded-xl glass p-3 font-sans text-data text-secondary leading-snug block text-left normal-case tracking-normal"
         >
           <b className="text-white-100">{name}</b>
           {g.full && g.full !== name && (

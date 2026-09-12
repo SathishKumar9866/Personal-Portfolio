@@ -18,11 +18,8 @@ import { styles } from "../styles";
 import { contact } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
-import { ICON_PATHS, socialLinks } from "./icons";
+import { ICON_PATHS, readable, socialLinks } from "./icons";
 import Reveal from "./Reveal";
-
-/** github.com/x, the address without the protocol noise. */
-const readable = (href) => href.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
 const Glyph = ({ name }) => (
   <svg
@@ -53,7 +50,7 @@ const CopyButton = ({ value, label }) => {
       <button
         onClick={copy}
         aria-label={`Copy ${label}`}
-        className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 min-h-11 sm:min-h-9 font-mono text-chip transition-colors ${
+        className={`contact-copy inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 min-h-11 sm:min-h-9 font-mono text-chip transition-colors ${
           copied
             ? "border-live text-live"
             : "border-line-strong text-secondary hover:border-accent hover:text-accent-ink"
@@ -80,16 +77,15 @@ const CopyButton = ({ value, label }) => {
 
 const Row = ({ k, label, href }) => {
   const isEmail = k === "email";
-  const value = isEmail ? contact.email : readable(href);
+  const value = readable(href);
   return (
-    // Stacked on a phone, one row from sm up. Three things competing for a
-    // 350px line meant the address, the longest and the only one worth reading
-    // character by character, got whatever was left after a fixed 7rem label
-    // and a copy button: it wrapped mid-domain and sat under the button. On a
-    // phone the label is its own line, the address gets the full width, and the
-    // copy button sits below it.
-    <li className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-x-3 gap-y-2 py-3 border-b border-line last:border-b-0">
-      <span className="flex items-center gap-2 sm:w-28 shrink-0 font-mono text-label uppercase tracking-label text-faint">
+    // Layout lives in index.css, `.contact-row`, because the deciding width is
+    // the card's and not the viewport's: it is widest below lg and narrowest
+    // just after. A container query splits one row into two lines — label and
+    // Copy, then the address across the full width — whenever the row cannot
+    // hold all three without breaking an address mid-domain.
+    <li className="contact-row py-3 border-b border-line last:border-b-0">
+      <span className="contact-label flex items-center gap-2 shrink-0 font-mono text-label uppercase tracking-label text-faint">
         <Glyph name={k} />
         {label}
       </span>
@@ -101,15 +97,13 @@ const Row = ({ k, label, href }) => {
         href={href}
         target={isEmail ? undefined : "_blank"}
         rel={isEmail ? undefined : "noreferrer"}
-        className="min-w-0 w-full sm:w-auto sm:flex-1 inline-flex items-center min-h-11 sm:min-h-0 break-all font-mono text-data text-white-100 hover:text-accent-ink transition-colors"
+        className="contact-addr min-w-0 inline-flex items-center min-h-11 sm:min-h-0 break-all font-mono text-data text-white-100 hover:text-accent-ink transition-colors"
       >
         {value}
         {!isEmail && <span className="text-faint"> ↗</span>}
       </a>
 
-      <div className="sm:contents">
-        <CopyButton value={isEmail ? contact.email : href} label={label} />
-      </div>
+      <CopyButton value={isEmail ? contact.email : href} label={label} />
     </li>
   );
 };
@@ -151,7 +145,7 @@ const Contact = () => (
       <p className="font-mono text-label uppercase tracking-label text-faint">
         Every way to reach me
       </p>
-      <ul className="mt-3 list-none">
+      <ul className="contact-rows mt-3 list-none">
         {socialLinks().map((l) => (
           <Row key={l.k} k={l.k} label={l.label} href={l.href} />
         ))}

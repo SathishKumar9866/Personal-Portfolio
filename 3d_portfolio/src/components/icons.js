@@ -20,6 +20,25 @@ export const ICON_PATHS = {
     "M2 5a2 2 0 012-2h16a2 2 0 012 2v14a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm2 .9v.3l8 5 8-5v-.3H4zm16 2.66l-7.47 4.67a1 1 0 01-1.06 0L4 8.56V19h16V8.56z",
 };
 
+/**
+ * A URL as a human would write it down: no scheme, no `www.`, no trailing
+ * slash, and a `mailto:` reduced to the address itself.
+ *
+ * It lives here because it is the other half of `socialLinks()` — four places
+ * print these addresses and each had grown its own version of this line, which
+ * is how the contact card came to say `linkedin.com` while the mobile menu
+ * said `www.linkedin.com` on the same visit. The `www.` is not a detail: four
+ * characters of monospace is 36px, and that was the 36px that decided whether
+ * a contact row fit on one line.
+ *
+ * Display only. Every caller keeps the real href for the link itself.
+ */
+export const readable = (href) =>
+  href
+    .replace(/^mailto:/, "")
+    .replace(/^https?:\/\/(www\.)?/, "")
+    .replace(/\/$/, "");
+
 // Ordered as a reader scans: code, network, writing, then the direct line.
 // An entry with no href is dropped rather than shipped as a dead link.
 export const socialLinks = () =>
