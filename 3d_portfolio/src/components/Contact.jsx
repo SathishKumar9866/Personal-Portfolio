@@ -19,6 +19,7 @@ import { contact } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import { ICON_PATHS, socialLinks } from "./icons";
+import Reveal from "./Reveal";
 
 /** github.com/x, the address without the protocol noise. */
 const readable = (href) => href.replace(/^https?:\/\//, "").replace(/\/$/, "");
@@ -129,10 +130,16 @@ const Contact = () => (
       </motion.p>
     </div>
 
-    <motion.div
-      variants={fadeIn("left", "spring", 0.2, 0.7)}
-      className="rounded-2xl glass-card p-5 sm:p-7"
-    >
+    {/* A y-only reveal, not fadeIn("left"). That variant parks the element at
+        x: +100 until the section scrolls into view, and this card runs to the
+        right edge of the content column: measured at a 700px viewport it sat at
+        left 164 inside a cell at left 64 and pushed the document to 721px, so
+        the page carried a horizontal scrollbar until the reader reached
+        Contact. Clipping it with overflow-x on an ancestor would have hidden
+        the symptom and broken the sticky diagram in Experience, because an
+        overflow container is also a scroll container and sticky stops working
+        inside one. */}
+    <Reveal delay={0.15} className="rounded-2xl glass-card p-5 sm:p-7">
       <p className="font-mono text-label uppercase tracking-label text-faint">
         Every way to reach me
       </p>
@@ -141,7 +148,7 @@ const Contact = () => (
           <Row key={l.k} k={l.k} label={l.label} href={l.href} />
         ))}
       </ul>
-    </motion.div>
+    </Reveal>
   </div>
 );
 

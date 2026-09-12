@@ -37,6 +37,17 @@ const Navbar = () => {
   useEffect(() => {
     let last = window.scrollY;
     let raf = 0;
+    // Guard 5, and the one that matters most in practice: never hide the bar on
+    // a phone. Reclaiming 77px is a good trade on a desktop, where the section
+    // rail, the contact rail and the command palette all still offer a way
+    // around, and where a wheel flick brings the bar straight back. On a phone
+    // none of those exist (both rails are gated at 1024px, the palette wants a
+    // keyboard) so this bar IS the navigation, and hiding it means the only
+    // route to any other section is off screen for as long as the reader is
+    // moving down the page. Measured: it took about 120px of deliberate upward
+    // scroll plus a 300ms transition to get it back, which is not something a
+    // reader should have to discover.
+    const canHide = window.matchMedia("(min-width: 768px)");
     const read = () => {
       raf = 0;
       const y = window.scrollY;
@@ -44,7 +55,7 @@ const Navbar = () => {
       setScrolled(y > 24);
       if (Math.abs(delta) > 6) {
         const focusInside = navRef.current?.contains(document.activeElement);
-        setHidden(delta > 0 && y > 160 && !focusInside);
+        setHidden(canHide.matches && delta > 0 && y > 160 && !focusInside);
         last = y;
       }
     };
@@ -107,11 +118,11 @@ const Navbar = () => {
           </span>
           <p className="text-white-100 font-mono text-data tracking-tight flex items-center">
             Sathish
-            <span className="sm:inline hidden text-faint">&nbsp;· AI Engineer</span>
+            <span className="md:inline hidden text-faint">&nbsp;· AI Engineer</span>
           </p>
         </a>
 
-        <div className="hidden sm:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8">
           <ul className="list-none flex flex-row gap-9">
             {navLinks.map((n) => (
               <li key={n.id}>
@@ -142,7 +153,7 @@ const Navbar = () => {
           <ThemeToggle />
         </div>
 
-        <div className="sm:hidden flex flex-1 justify-end items-center gap-2">
+        <div className="md:hidden flex flex-1 justify-end items-center gap-2">
           <ThemeToggle />
           <button
             onClick={() => setToggle(!toggle)}
@@ -166,7 +177,7 @@ const Navbar = () => {
               role="dialog"
               aria-modal="true"
               aria-label="Menu"
-              className="fixed inset-0 z-50 sm:hidden bg-primary backdrop-blur-md flex flex-col justify-center px-8 py-24 overflow-y-auto"
+              className="fixed inset-0 z-50 md:hidden bg-primary backdrop-blur-md flex flex-col justify-center px-8 py-24 overflow-y-auto"
             >
               <button
                 onClick={() => setToggle(false)}
