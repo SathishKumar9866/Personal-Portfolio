@@ -273,15 +273,28 @@ const Navbar = () => {
                   written with an LLM or not. Say why in the PR and that is
                   enough.
                 </p>
-                <a
-                  href={SITE_REPO}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => setToggle(false)}
-                  className="mt-2 inline-flex items-center min-h-11 font-mono text-data text-accent-ink hover:underline"
-                >
-                  CONTRIBUTING.md ↗
-                </a>
+                <div className="flex flex-wrap items-center gap-x-5">
+                  <a
+                    href={SITE_REPO}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setToggle(false)}
+                    className="mt-2 inline-flex items-center min-h-11 font-mono text-data text-accent-ink hover:underline"
+                  >
+                    CONTRIBUTING.md ↗
+                  </a>
+                  {/* The crawler notice is desktop-only on the page now, so the
+                      one thing a curious human might want from it lives here. */}
+                  <a
+                    href="/llms.txt"
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => setToggle(false)}
+                    className="mt-2 inline-flex items-center min-h-11 font-mono text-data text-secondary hover:text-accent-ink transition-colors"
+                  >
+                    /llms.txt ↗
+                  </a>
+                </div>
               </div>
 
               <div className="mt-6 flex items-center gap-3">

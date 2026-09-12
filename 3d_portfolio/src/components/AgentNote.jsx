@@ -30,7 +30,14 @@ const Item = ({ label, children }) => (
 const AgentNote = () => (
   <aside
     aria-label="Note for automated readers"
-    className="w-full border-t border-line bg-tertiary/40"
+    // Desktop only, visually. It stays in the DOM at every width, which is the
+    // point: `hidden` is display:none, and a crawler that runs JavaScript still
+    // reads it, while one that does not was only ever seeing the <noscript>
+    // block and /llms.txt anyway. So nothing addressed to machines is lost by
+    // hiding it from a phone, and a human reading on a phone is not made to
+    // scroll through a notice written for crawlers. The menu carries a pointer
+    // to /llms.txt for anyone who does want it.
+    className="hidden md:block w-full border-t border-line bg-tertiary/40"
   >
     <div className="max-w-7xl mx-auto px-6 sm:px-16 py-12 sm:py-16">
       <p className="font-mono text-chip text-secondary">
