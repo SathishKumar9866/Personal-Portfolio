@@ -35,7 +35,13 @@ export const status = {
   // not a job title, the two disagreed on the same page until this was settled.
   role: "AI Engineer",
   openTo: "AI engineering roles",
-  where: "United States: on-site, hybrid or remote",
+  // Was one string, "United States: on-site, hybrid or remote". Two fields now,
+  // so the card can give the country and the arrangement a line each instead of
+  // wrapping the sentence mid-phrase — it broke as "hybrid or / remote" at
+  // 390px. The words are his, unchanged; only the punctuation between them is
+  // gone, and the layout supplies what the colon used to.
+  country: "United States",
+  arrangement: "on-site, hybrid or remote",
 };
 
 // Roles, newest first. `start`/`end` are ISO "YYYY-MM" or null when not yet

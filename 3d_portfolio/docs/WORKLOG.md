@@ -1,5 +1,62 @@
 # Worklog
 
+## 2026-09-12: the availability card, and a reduced-motion claim that was false
+
+### The layout problem was spacing, not wrapping
+
+The card listed six rows — three labels, three values — in a one-column grid
+with `gap-y-2`. That 8px sat between a label and its value AND between that
+value and the next label, so every row was equidistant and nothing said which
+value belonged to which label. On top of that, two values broke mid-phrase at
+390px: "AdvanSoft / International, Inc" and "hybrid or / remote", because a
+317px column was being asked to hold a sentence.
+
+Each fact is now a block: label, a rule, then the value. **28px between facts
+against 15px from a label to its value** — the ratio is what does the grouping,
+and at `gap-5` it was 20 against 15, close enough that the six rows read evenly
+spaced again.
+
+The parts that were one sentence get a line each: role above employer, country
+above arrangement. `status.where` was one string, `"United States: on-site,
+hybrid or remote"`, and is now `country` and `arrangement`. His words are
+unchanged; the layout supplies what the colon used to. Nothing wraps at any
+width now — verified at 390 and 1440, every value exactly one line box.
+
+### The motion
+
+Three things, all measured running:
+
+| What | Measured |
+| --- | --- |
+| Facts arrive in sequence | fact 1 at t=270ms, fact 2 at 360, fact 3 at 450 — the 90ms `staggerChildren` |
+| A rule draws under each label | `scaleX` 0 → 1 in step with its fact: 0.36, 0.71, 0.87, 0.94, 1 |
+| A rail fills as the card crosses the screen | `scaleY` 0.12 → 0.39 → 0.70 → 1.00, monotonic, then holds |
+
+The rail is scroll-linked with `useScroll` on the same `offset` pair Works.jsx
+uses for its cover parallax, so both scroll-driven things on the page are driven
+the same way. It starts at 0.12 rather than 0, because a rail that is empty
+until the card is halfway up the screen reads as broken rather than as progress.
+
+### The reduced-motion claim was false, and had been
+
+The old docstring said "all of it is CSS animation or framer, both already
+neutralised by the reduced-motion handling". **Half of that was wrong, and it is
+worth writing down because the assumption is a natural one.** The
+`@media (prefers-reduced-motion: reduce)` block in index.css zeroes
+`animation-duration` and `transition-duration`, which does cover the ping and
+the specular sweep. Framer writes `opacity` and `y` as inline styles from its
+own rAF loop, so that block never touched them.
+
+Measured under an emulated reduced-motion preference: the three facts still slid
+8px and faded in. `initial={reduced ? false : "hidden"}` is what actually stops
+it — the same thing Hero.jsx already does — and the rail is pinned to full
+through `useReducedMotion`. Re-measured after: sampled ten frames through the
+window where the animation used to run, and opacity never left 1 and the
+translate never left 0.
+
+This was pre-existing, not introduced by the redesign. It is fixed now, and the
+docstring says what is true instead of what was assumed.
+
 ## 2026-09-12: the hero's empty third, and what went in it
 
 ### The space was left over, not designed
