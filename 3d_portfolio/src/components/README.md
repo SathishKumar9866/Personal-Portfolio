@@ -8,7 +8,7 @@ Thirty files. Read the table, not the directory.
 | --- | --- |
 | The headline, the CTA, the status line | `Hero.jsx` |
 | How a section announces itself, and its fact line | `SectionHead.jsx` |
-| Portrait, lede, capability cards | `About.jsx` |
+| Portrait, lede, availability card | `About.jsx` |
 | Roles and degrees, the timeline, date alignment | `Experience.jsx` |
 | The six tool groups, and the category dots | `Tech.jsx` |
 | Which tools get the filled chip, and each dot's colour | `stackGroups` in `../constants/index.js` |
@@ -29,7 +29,7 @@ Thirty files. Read the table, not the directory.
 | Shared canvas geometry and the seeded RNG | `../utils/draw.js` |
 | Command palette actions | `CommandPalette.jsx` |
 | The hero network drawing | `NeuralField.jsx` |
-| The token wave in Stack | `TokenStream.jsx` |
+| The token wave in Stack, desktop only | `TokenStream.jsx` |
 | The Python search band on a phone | `CodeCompletion.jsx` |
 | Brand glyph paths, and the list of off-site links | `icons.js` |
 | Scroll-reveal timing used across the page | `Reveal.jsx` |
