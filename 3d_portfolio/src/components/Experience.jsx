@@ -58,7 +58,7 @@ const Role = ({ role, index }) => (
     <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-8">
       <div className="min-w-0">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h3 className="font-display font-semibold text-[clamp(1.05rem,1.4vw,1.25rem)] leading-tight text-white-100">
+          <h3 className="font-display font-semibold text-[calc(clamp(1.05rem,1.4vw,1.25rem)*var(--type-scale,1))] leading-tight text-white-100">
             {role.title}
           </h3>
           {role.current && (

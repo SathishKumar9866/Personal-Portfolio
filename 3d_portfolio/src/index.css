@@ -3,6 +3,13 @@
 @tailwind utilities;
 
 /* ---- theme tokens (RGB triplets for tailwind alpha support) ---- */
+:root {
+  /* Reader-controlled text size. Multiplies every type token; never touches
+     spacing or max-widths, so enlarging text cannot break the layout.
+     FontSizeToggle writes this; index.html restores it before first paint. */
+  --type-scale: 1;
+}
+
 :root,
 :root[data-theme="light"] {
   --c-primary: 255 255 255;

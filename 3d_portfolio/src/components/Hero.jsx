@@ -14,8 +14,13 @@ const rise = {
 
 const Hero = () => {
   const reduced = useReducedMotion();
+  // Top-aligned, not centred. Centring a 549px composition in a 900px viewport
+  // left 140px of dead space between the navbar and the name, and the matching
+  // 136px at the bottom was not dead: the scroll cue lives there. So the slack
+  // was only ever visible at the top. An explicit top padding puts the gap
+  // where it was chosen rather than where the arithmetic landed.
   return (
-    <section className="relative w-full min-h-screen min-h-[100svh] flex items-center pt-20" aria-label="Intro">
+    <section className="relative w-full min-h-screen min-h-[100svh] flex items-start pt-28 sm:pt-32" aria-label="Intro">
 
       <motion.div
         variants={container}
@@ -36,14 +41,20 @@ const Hero = () => {
           className={`${styles.heroHeadText} max-w-[18ch]`}
         >
           I ship the model.{" "}
-          <span className="whitespace-nowrap">
+          {/* No `whitespace-nowrap` here. It kept the second sentence on one
+              line, which held at 100% and overflowed the viewport by 11px once
+              the reader's text-size control reached 140%: the span measured
+              1314px against a 1440px window and was the only thing on the page
+              that overflowed. `max-w-[18ch]` on the h1 already governs where
+              this breaks. */}
+          <span>
             And the <span className="text-accent-ink">evidence it works</span>.
           </span>
         </motion.h1>
 
         <motion.p
           variants={rise}
-          className="mt-7 font-sans text-secondary text-[clamp(1rem,1.6vw,1.3rem)] leading-[1.55] max-w-xl"
+          className="mt-7 font-sans text-secondary text-[calc(clamp(1rem,1.6vw,1.3rem)*var(--type-scale,1))] leading-[1.55] max-w-xl"
         >
           AI engineer across the data-to-AI stack. Retrieval that cites the
           passage it used, vision that trains where the data already lives, and

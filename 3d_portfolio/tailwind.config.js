@@ -52,15 +52,20 @@ export default {
       //
       // The line heights here are defaults; an explicit `leading-*` on the
       // element still wins, because Tailwind emits fontSize before lineHeight.
+      // Each size is a rem base multiplied by --type-scale, so the reader's own
+      // size control (FontSizeToggle) can enlarge every piece of text on the
+      // page without touching layout. Scaling the root font-size instead would
+      // also scale every rem-based padding, margin and max-width, and max-w-7xl
+      // at 140% is wider than the viewport.
       fontSize: {
-        micro: ["11px", { lineHeight: "1.4" }], // stamps sitting ON artwork, nothing else
-        label: ["12px", { lineHeight: "1.45" }], // uppercase tracked eyebrows, field names
-        nav: ["13px", { lineHeight: "1.4" }], // nav items and section eyebrows
-        chip: ["13px", { lineHeight: "1.4" }], // technology chips
-        data: ["14px", { lineHeight: "1.5" }], // mono facts: employers, dates, URLs, repos
-        body: ["15px", { lineHeight: "1.6" }], // prose inside a card, narrow measure
-        prose: ["16px", { lineHeight: "1.65" }], // prose at full measure
-        lede: ["18px", { lineHeight: "1.7" }], // section intros
+        micro: ["calc(0.6875rem * var(--type-scale, 1))", { lineHeight: "1.4" }], // stamps ON artwork
+        label: ["calc(0.75rem * var(--type-scale, 1))", { lineHeight: "1.45" }], // eyebrows, field names
+        nav: ["calc(0.8125rem * var(--type-scale, 1))", { lineHeight: "1.4" }], // nav, section eyebrows
+        chip: ["calc(0.8125rem * var(--type-scale, 1))", { lineHeight: "1.4" }], // technology chips
+        data: ["calc(0.875rem * var(--type-scale, 1))", { lineHeight: "1.5" }], // mono facts
+        body: ["calc(0.9375rem * var(--type-scale, 1))", { lineHeight: "1.6" }], // card prose
+        prose: ["calc(1rem * var(--type-scale, 1))", { lineHeight: "1.65" }], // full-measure prose
+        lede: ["calc(1.125rem * var(--type-scale, 1))", { lineHeight: "1.7" }], // section intros
       },
       spacing: {
         u1: "4px", u2: "8px", u3: "12px", u4: "16px",

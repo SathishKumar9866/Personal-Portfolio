@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { styles } from "../styles";
 import { navLinks } from "../constants";
 import ThemeToggle from "./ThemeToggle";
+import FontSizeToggle from "./FontSizeToggle";
+import { ICON_PATHS, socialLinks } from "./icons";
 import useActiveSection from "../hooks/useActiveSection";
 
 const prefersReduced = () =>
@@ -59,6 +62,23 @@ const Navbar = () => {
   // Guard 3: an open menu always shows its own bar.
   useEffect(() => {
     if (toggle) setHidden(false);
+  }, [toggle]);
+
+  // The menu is a modal dialog, so it behaves like one: Escape closes it, the
+  // page behind it does not scroll, and focus returns to the control that
+  // opened it rather than to the top of the document.
+  useEffect(() => {
+    if (!toggle) return;
+    const opener = document.activeElement;
+    const onKey = (e) => e.key === "Escape" && setToggle(false);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+      if (opener instanceof HTMLElement) opener.focus();
+    };
   }, [toggle]);
 
   return (
@@ -118,6 +138,7 @@ const Navbar = () => {
           >
             {SHORTCUT}
           </button>
+          <FontSizeToggle />
           <ThemeToggle />
         </div>
 
@@ -134,9 +155,10 @@ const Navbar = () => {
           </button>
         </div>
 
-        <AnimatePresence>
-          {toggle && (
-            <motion.div
+        {createPortal(
+          <AnimatePresence>
+            {toggle && (
+              <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -144,8 +166,18 @@ const Navbar = () => {
               role="dialog"
               aria-modal="true"
               aria-label="Menu"
-              className="fixed inset-0 z-40 sm:hidden bg-primary backdrop-blur-md flex flex-col justify-center px-8"
+              className="fixed inset-0 z-50 sm:hidden bg-primary backdrop-blur-md flex flex-col justify-center px-8 py-24 overflow-y-auto"
             >
+              <button
+                onClick={() => setToggle(false)}
+                aria-label="Close menu"
+                className="absolute top-5 right-5 w-11 h-11 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
+
               <ul className="list-none flex flex-col gap-6">
                 {navLinks.map((n, idx) => (
                   <motion.li
@@ -156,7 +188,7 @@ const Navbar = () => {
                   >
                     <a
                       href={`#${n.id}`}
-                      className={`font-display text-[40px] leading-none ${
+                      className={`font-display text-[clamp(1.75rem,9vw,2.35rem)] leading-none flex items-center min-h-11 ${
                         active === n.id ? "text-accent-ink" : "text-white-100"
                       }`}
                       onClick={() => {
@@ -168,18 +200,50 @@ const Navbar = () => {
                   </motion.li>
                 ))}
               </ul>
-              <button
-                onClick={() => {
-                  setToggle(false);
-                  window.dispatchEvent(new Event("open-command"));
-                }}
-                className="mt-12 self-start font-mono text-nav text-faint border border-line-strong rounded px-3 py-2"
-              >
-                {SHORTCUT} · quick actions
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <div className="mt-10 pt-8 border-t border-line">
+                <p className="font-mono text-label uppercase tracking-label text-faint">
+                  Reach me
+                </p>
+                <ul className="mt-4 flex flex-wrap gap-3 list-none">
+                  {socialLinks().map((l) => (
+                    <li key={l.k}>
+                      <a
+                        href={l.href}
+                        // Every one of these leaves the site, so every one opens
+                        // in a new tab: a recruiter who taps GitHub should still
+                        // have the CV behind them when they come back.
+                        target={l.k === "email" ? undefined : "_blank"}
+                        rel="noreferrer"
+                        onClick={() => setToggle(false)}
+                        className="inline-flex items-center gap-2 rounded-lg border border-line-strong px-4 min-h-11 font-mono text-chip text-secondary hover:border-accent hover:text-accent-ink transition-colors"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path d={ICON_PATHS[l.k]} />
+                        </svg>
+                        {l.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8 flex items-center gap-3">
+                <FontSizeToggle />
+                <button
+                  onClick={() => {
+                    setToggle(false);
+                    window.dispatchEvent(new Event("open-command"));
+                  }}
+                  className="font-mono text-nav text-faint border border-line-strong rounded px-3 min-h-11 flex items-center"
+                >
+                  {SHORTCUT} · quick actions
+                </button>
+              </div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body
+        )}
       </div>
     </nav>
   );

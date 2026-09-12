@@ -13,6 +13,11 @@
           var t = localStorage.getItem("theme");
           if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           document.documentElement.setAttribute("data-theme", t);
+          // Restore the reader's text size in the same pre-paint pass as the
+          // theme, or the page renders at 100% and jumps when FontSizeToggle
+          // mounts.
+          var ts = localStorage.getItem("type-scale");
+          if (ts) document.documentElement.style.setProperty("--type-scale", ts);
           document
             .querySelector('meta[name="theme-color"]')
             .setAttribute("content", t === "dark" ? "#0F2228" : "#FFFFFF");

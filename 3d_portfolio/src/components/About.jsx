@@ -74,7 +74,7 @@ const About = () => (
           // Widened as a LEDE, not as a longer line. Filling the 892px column at 17px
           // would run ~126 characters a line, roughly 70% past the readable band.
           // Larger type on a wider measure fills the space and keeps ~71 characters.
-          className="font-serif text-secondary text-[clamp(1.1rem,1.5vw,1.35rem)] max-w-[40rem] leading-[1.65]"
+          className="font-serif text-secondary text-[calc(clamp(1.1rem,1.5vw,1.35rem)*var(--type-scale,1))] max-w-[40rem] leading-[1.65]"
         >
           I work across the full data-to-AI stack and care about the problem more
           than the title. The work tends to run offline, ground its answers in real

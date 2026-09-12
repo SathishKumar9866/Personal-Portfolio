@@ -397,7 +397,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           <span className="font-mono text-data text-faint truncate" title={name}>{name}</span>
         </div>
 
-        <h3 className="mt-3 font-display font-semibold text-[clamp(1.15rem,1.6vw,1.5rem)] leading-[1.2] tracking-[-0.01em] text-white-100">
+        <h3 className="mt-3 font-display font-semibold text-[calc(clamp(1.15rem,1.6vw,1.5rem)*var(--type-scale,1))] leading-[1.2] tracking-[-0.01em] text-white-100">
           {outcome}
         </h3>
         <p className="mt-2 font-sans text-secondary text-body leading-[1.6] max-w-[28rem]">
