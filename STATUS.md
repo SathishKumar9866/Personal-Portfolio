@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `fix/code-band-shrink-to-fit` merged and is gone.
+**Branch:** `main`. `feat/availability-stacked-facts` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -16,7 +16,19 @@ The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
 flight and nothing half-applied.
 
-`feat/hero-code-completion-band` squash-merged and deleted: the hero's lower
+`feat/availability-stacked-facts` squash-merged and deleted: the "Open to work"
+card is a stack of grouped facts instead of six evenly spaced rows, with the
+parts that were one sentence given a line each, plus a per-fact stagger, a rule
+that draws under each label, and a rail that fills as the card crosses the
+screen. **It also fixed a reduced-motion claim that had been false since the
+card was written:** the `prefers-reduced-motion` block in index.css zeroes CSS
+`animation-duration` and `transition-duration` only, and framer writes `opacity`
+and `y` as inline styles from its own rAF loop, so those were never neutralised
+— the facts still slid 8px. `initial={reduced ? false : "hidden"}` is what stops
+framer, and Hero.jsx was already doing it. **Assume nothing about that CSS block
+covering framer.**
+
+Before it, `feat/hero-code-completion-band` squash-merged and deleted: the hero's lower
 slack on a phone — 253px of it at 390x844, and 331px from the last hero element
 to "Overview" — now holds a Python binary search being completed and then run,
 cycling found / missing / empty so the guard clause is always seen earning its
