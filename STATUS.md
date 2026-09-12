@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. The redesign branch merged and is gone.
+**Branch:** `main`. `fix/mobile-layout-and-nav` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -12,11 +12,32 @@ There is no 3D in it; the folder name survives from a version that had it.
 
 ## Where it stopped
 
-The site is live, merged to `main`, and verified at five viewport widths in both
-themes. There is no work in flight and nothing half-applied.
+The site is live, merged to `main`, and verified at seven viewport widths in
+both themes and at both ends of the text-size control. There is no work in
+flight and nothing half-applied.
 
-`redesign/highway-premium` squash-merged as `630a38f` (81 commits), branch
-deleted. Six commits on `main` after it, all shipped and deployed:
+`fix/mobile-layout-and-nav` squash-merged and deleted, four commits, all four
+phone-layout faults found by measuring the running page. Full reasoning in
+`3d_portfolio/docs/WORKLOG.md`, the 2026-09-12 entry headed "four layout faults
+on a phone":
+
+| What | Where it lives now |
+| --- | --- |
+| Contact rows sized by the card, not the viewport — a container query, threshold in `em` so it follows the A+ control | `.contact-row` in `src/index.css` |
+| The nav bar stops hiding during a jump the reader asked for; `section-jump` for the two jumps that change no hash | `Navbar.jsx`, `CommandPalette.jsx`, `SideRail.jsx` |
+| The Stack glossary panel is clamped inside the viewport instead of centred off the edge of it | `TagTerm.jsx` |
+| The mobile menu stops clipping its own top, and its close button stops scrolling away | `Navbar.jsx` |
+| One `readable()` for a URL printed to a human, was four copies that had drifted | `icons.js` |
+
+**Two traps that cost real time here, both about what a box is measured
+against.** A container query resolves `em` against the *container's*
+font-size — that is the only reason the contact breakpoint can follow
+`--type-scale`, which never touches the root font size. And a `backdrop-filter`
+makes its element the containing block for `position: fixed` descendants, which
+is why the menu's close button kept scrolling until the blur came off.
+
+Before that, `redesign/highway-premium` squash-merged as `630a38f` (81 commits),
+branch deleted, then six commits on `main`, all shipped and deployed:
 
 | Commit | What |
 | --- | --- |

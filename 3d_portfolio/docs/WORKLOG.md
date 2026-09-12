@@ -1,5 +1,129 @@
 # Worklog
 
+## 2026-09-12: four layout faults on a phone, all found by measuring
+
+Branch `fix/mobile-layout-and-nav`. Every number below was read off the running
+page in Chrome, not inferred from the rule that produced it.
+
+### The contact card was sized by the wrong width
+
+The rows used viewport breakpoints, and the card's width does not follow the
+viewport monotonically: full width in one column up to `lg`, then the grid
+splits and it shrinks to ~460px. So `sm:flex-row` handed the roomiest layout to
+exactly the width with the least room. At a 1024 viewport the address column was
+193px against a 281px address and all four broke mid-domain —
+`sathishkumar786.ml@gm / ail.com` — while the `↗` floated alone at the right
+edge.
+
+A container query on the list replaced them, so the decision is made by the
+width that actually constrains the row. Below 32em a row is two lines, label and
+Copy on the first, the address given the whole of the second: one line fewer
+than the three the viewport version stacked on a phone, and the card is 538px
+tall instead of 656px at 380px wide.
+
+The threshold is arithmetic: 7rem label + 0.75rem + the longest address
+(LinkedIn, 281px) + 0.75rem + the copy button (74px) = 491px. 32em is that plus
+21px of slack against a card measuring 529px at 1440, its narrowest single-row
+case.
+
+**It is `em` and not `rem`, and that is the part worth remembering.**
+`--type-scale` multiplies the type tokens without touching the root font size,
+so a `rem` threshold is frozen while the text grows. A container query resolves
+font-relative units against the *container's* font-size, so setting
+`font-size: calc(1rem * var(--type-scale))` on the container is what makes the
+breakpoint follow the reader's A+ control. At 140% with a frozen 32rem the
+addresses grew past the row and the copy button wrapped onto a line of its own.
+
+### A jump is not a reading gesture
+
+Tapping Experience in the mobile menu smooth-scrolls about 3,000px downward. The
+hide-on-scroll handler counted that as hundreds of positive deltas, hid the bar
+on the way, and the reader landed on the section with no hamburger — and no
+route back into the menu except scrolling to the top, because the only other
+path to `setHidden(false)` is the `y <= 160` guard. Measured before: all five
+menu links landed with the bar at `translateY(-100%)`.
+
+It cannot be a fixed timeout, because the browser scales the smooth scroll with
+the distance — 433ms to About, 1,517ms to Contact — and a window long enough for
+the longest jump would freeze the bar well past the end of the shortest. So the
+jump holds the bar until the reader takes hold of the page: a `touchstart`, a
+`wheel` or a `keydown` ends it, whatever the animation is still doing. The 2.5s
+timeout is only a backstop for a jump to the section you are already on, which
+scrolls nothing and so would never end on its own.
+
+Every in-page anchor changes the hash, which covers the menu, the desktop links,
+the Hero CTA and Availability. The two that scroll without one, `CommandPalette`
+and `SideRail`, dispatch `section-jump` — the same window-event idiom the
+palette already uses for `open-command` and `toggle-theme`.
+
+### Three things positioned against the wrong box
+
+All the same shape: an element positioned against its parent when it had to fit
+inside the screen.
+
+1. **The Stack glossary panel.** `left-1/2 -translate-x-1/2` centres it on its
+   chip, and `w-[min(17rem,calc(100vw-2rem))]` caps the width while saying
+   nothing about the position. At 390px, React's panel ran 163 to 435 and took
+   the document's `scrollWidth` to 435 with it, so opening it made the whole
+   page scroll sideways; PySpark's started at -63, where nothing can reach it.
+   Now centred on the chip only while that fits, sliding along the edge when it
+   does not, from a **layout** effect so it is never painted in the wrong place
+   first.
+2. **The mobile menu clipped its own top.** A centred flex column that is also
+   its own scroll container splits negative free space evenly: 961px of content
+   in an 844px box put the first link at top -21 with `scrollTop` already at its
+   minimum of 0. About was cut off and no amount of scrolling could reach it.
+   `justify-start` with `mt-auto`/`mb-auto` centres identically when there is
+   room — verified symmetric at 390x1400, 257px above and below — and collapses
+   to 0 when there is not.
+3. **The close button scrolled away.** `absolute` inside that scroll container
+   put it at top -97 at the bottom of the menu, and the hamburger that opened it
+   is underneath the overlay, so a phone had nothing left to close with; Escape
+   needs a keyboard. `fixed` now — which needed `backdrop-blur-md` to go, since
+   a backdrop filter makes its element the containing block for fixed
+   descendants. That blur was doing nothing anyway: `bg-primary` is
+   `rgb(15 34 40)` with no alpha.
+
+### One `readable()`, because four copies had drifted
+
+Four components turned an href into text for a human, each with its own version
+of the line, and three disagreed on the same visit: the contact card said
+`linkedin.com/in/sathishkumarai`, the mobile menu said `www.linkedin.com/...`,
+the palette said `www.linkedin.com/.../` with the slash still on. It now lives
+next to `socialLinks()` in `icons.js`, which already owns the one list of
+destinations all four are printing, and strips scheme, `www.`, trailing slash
+and `mailto:`. Display only; every caller keeps the real href.
+
+The `www.` was not cosmetic: four characters of monospace is 36px, and that was
+the 36px deciding whether a contact row fit on one line.
+
+### Verified
+
+Dev build, both themes, at 390x844, 740x360 landscape, 390x1400, 1024x860,
+1150, 1280 and 1440x900, and at both ends of the text-size control:
+
+- no address breaks mid-word at any width, and `scrollWidth` never exceeds the
+  viewport, including with a glossary panel open
+- all five menu links land with the bar at `translateY(0)` and the hamburger
+  passing an `elementFromPoint` hit test at its centre
+- the palette's "Go to Contact" (8,903px, no hashchange) and the SideRail dot
+  both land with the bar visible
+- hide-on-scroll still works after a jump: reading down hides it, a 45px upward
+  flick returns it, and a wheel 200ms into a 1.5s jump ends the suspension at
+  once
+- in the menu, the first link is reachable and the close button holds top 20
+  from the first scroll position to the last
+- all 66 glossary panels sit inside the viewport at 390px, all 33 at 1440px
+
+`npm run lint` 0 errors (27 pre-existing `react-refresh` warnings),
+`npm run build` exit 0.
+
+### Still not done
+
+Real-device QA on iOS and Android. Everything here is Chrome with emulated
+viewports, and the iOS rubber-band clamp in the scroll handler has still never
+run on a real iPhone.
+
 ## 2026-09-12: merged, deployed, and made to work on a phone
 
 Branch `redesign/highway-premium` squash-merged as `630a38f` and deleted. Six
