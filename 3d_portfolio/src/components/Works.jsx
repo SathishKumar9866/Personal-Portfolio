@@ -375,7 +375,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           >
             {isLive ? "live" : "source"}
           </span>
-          <span className="font-mono text-data text-faint truncate" title={name}>{name}</span>
+          <span className="font-mono text-data text-faint min-w-0 break-all sm:truncate" title={name}>{name}</span>
         </div>
 
         <h3 className="mt-3 font-display font-semibold text-[calc(clamp(1.15rem,1.6vw,1.5rem)*var(--type-scale,1))] leading-[1.2] tracking-[-0.01em] text-white-100">

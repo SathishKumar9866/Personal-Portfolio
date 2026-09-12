@@ -85,10 +85,18 @@ const Role = ({ role, index, trackIndex = null }) => (
     </div>
 
     <MobileCollapse label="What I did">
+    {/* Justified from md up, ragged-right below it. Justification needs roughly
+        sixty characters to distribute space without showing the seams; at the
+        ~40 a phone gives it, the browser stretches word gaps until the lines
+        visibly comb, and auto-hyphenation starts breaking "product" into
+        "prod-uct" to cope. Every line then ends flush hard against the right
+        edge, which reads as text running into the edge rather than as a tidy
+        column. The academic audience this was asked for reads on a desktop,
+        which is where it still applies. */}
     {role.points?.length > 0 && (
       <ul className="mt-3 list-none max-w-[34rem] space-y-2">
         {role.points.map((point) => (
-          <li key={point} className="relative pl-5 font-sans text-secondary text-prose leading-[1.6] text-justify hyphens-auto">
+          <li key={point} className="relative pl-5 font-sans text-secondary text-prose leading-[1.6] md:text-justify md:hyphens-auto">
             {/* A rule, not a bullet glyph: the timeline already owns the round
                 marks in this section, and a second kind of dot competes. */}
             <span

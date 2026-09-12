@@ -47,7 +47,7 @@ const Line = ({ label, children }) => (
     <motion.dt variants={row} className="text-faint">
       {label}
     </motion.dt>
-    <motion.dd variants={row} className="text-white-100 whitespace-nowrap">
+    <motion.dd variants={row} className="min-w-0 break-words text-white-100 md:whitespace-nowrap">
       {children}
     </motion.dd>
   </>
@@ -59,7 +59,7 @@ const Availability = () => (
     whileInView="show"
     viewport={{ once: true, amount: "some" }}
     variants={{ hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
-    className="relative overflow-hidden rounded-xl glass-card p-4 sm:p-5"
+    className="relative min-w-0 overflow-hidden rounded-xl glass-card p-4 sm:p-5"
   >
     <span aria-hidden="true" className="glass-sweep" />
 
@@ -72,7 +72,7 @@ const Availability = () => (
       <span className="font-normal text-faint normal-case tracking-normal">· available now</span>
     </motion.p>
 
-    <dl className="relative mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-[5.5rem_1fr] font-mono text-data">
+    <dl className="relative mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-[5.5rem_minmax(0,1fr)] font-mono text-data">
       <Line label="Currently">
         {status.role} · {status.company}
       </Line>

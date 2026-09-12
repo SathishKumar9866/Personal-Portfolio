@@ -37,25 +37,47 @@ const Navbar = () => {
   useEffect(() => {
     let last = window.scrollY;
     let raf = 0;
-    // Guard 5, and the one that matters most in practice: never hide the bar on
-    // a phone. Reclaiming 77px is a good trade on a desktop, where the section
-    // rail, the contact rail and the command palette all still offer a way
-    // around, and where a wheel flick brings the bar straight back. On a phone
-    // none of those exist (both rails are gated at 1024px, the palette wants a
-    // keyboard) so this bar IS the navigation, and hiding it means the only
-    // route to any other section is off screen for as long as the reader is
-    // moving down the page. Measured: it took about 120px of deliberate upward
-    // scroll plus a 300ms transition to get it back, which is not something a
-    // reader should have to discover.
-    const canHide = window.matchMedia("(min-width: 768px)");
+    // Hiding on the way down is wanted on a phone too: 77px is 9% of the
+    // screen and the reader is there to read. The earlier complaint was not
+    // that it hid, it was that it did not come back, so the thresholds are
+    // asymmetric rather than symmetric.
+    //
+    // The old rule was one `Math.abs(delta) > 6` gate for both directions,
+    // which meant a small upward flick did nothing and the bar stayed gone:
+    // measured, about 120px of deliberate upward scroll plus the 300ms
+    // transition before it returned. Now it takes a deliberate push to hide
+    // (12px) and almost nothing to bring back (2px), so the bar gets out of the
+    // way while reading and is there the instant you reach for it.
+    //
+    // iOS and Android both fire momentum scroll events after the finger lifts,
+    // and iOS additionally rubber-bands past the top and bottom. A negative
+    // scrollY during a rubber-band would read as "scrolling up" forever, so the
+    // position is clamped before the delta is taken.
+    const HIDE_AFTER = 12;
+    const SHOW_AFTER = -2;
     const read = () => {
       raf = 0;
-      const y = window.scrollY;
+      // Clamped: iOS rubber-banding reports negative scrollY past the top and
+      // an over-scrolled value past the bottom, and both produce deltas that
+      // are not gestures.
+      const max = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const y = Math.min(Math.max(window.scrollY, 0), max);
       const delta = y - last;
       setScrolled(y > 24);
-      if (Math.abs(delta) > 6) {
-        const focusInside = navRef.current?.contains(document.activeElement);
-        setHidden(canHide.matches && delta > 0 && y > 160 && !focusInside);
+
+      const focusInside = navRef.current?.contains(document.activeElement);
+      if (focusInside || y <= 160) {
+        // Near the top there is nothing to reclaim, and a focused control
+        // inside the bar must never be scrolled out from under a keyboard user.
+        setHidden(false);
+        last = y;
+        return;
+      }
+      if (delta > HIDE_AFTER) {
+        setHidden(true);
+        last = y;
+      } else if (delta < SHOW_AFTER) {
+        setHidden(false);
         last = y;
       }
     };
