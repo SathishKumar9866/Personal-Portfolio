@@ -144,6 +144,14 @@ const trace = ({ nums, target }) => {
   return steps;
 };
 
+// How many lines of the function are on screen at once. It shrinks before it
+// hides: at 112% text the band missed fitting by a single pixel — 221px of
+// slack against 222px needed — and vanishing over one pixel is a worse answer
+// than showing one line fewer. Below MIN_LINES there is not enough of the
+// function visible to follow, and then it does hide.
+const MAX_LINES = 7;
+const MIN_LINES = 4;
+
 const TYPE_MS = 85;   // one line of the completion
 const STEP_MS = 620;  // one step of the run
 const HOLD_MS = 1900; // the result, before the next case
@@ -158,8 +166,10 @@ const CodeCompletion = () => {
   );
   const boxRef = useRef(null);
   const [frame, setFrame] = useState({ typed: GIVEN, step: null, caseIdx: 0, data: null });
-  // Whether the hero's slack can actually hold this. See the layout effect.
+  // Whether the hero's slack can hold this, and how many lines of the function
+  // fit in what there is. Both come from the layout effect below.
   const [fits, setFits] = useState(false);
+  const [windowLines, setWindowLines] = useState(MAX_LINES);
 
   useEffect(() => {
     const gate = window.matchMedia("(max-width: 1023px)");
@@ -180,7 +190,13 @@ const CodeCompletion = () => {
    *    changing anything a media query can see
    *
    * So it measures the real gap against its own real height, on mount and
-   * whenever either side of that sum changes.
+   * whenever either side of that sum changes, and spends what it finds on as
+   * many lines of the function as will fit between MIN_LINES and MAX_LINES.
+   * Only when even MIN_LINES will not fit does it hide.
+   *
+   * This cannot oscillate: both quantities it divides by — the chrome around
+   * the code, and one line's height — are independent of how many lines are
+   * currently shown, so the second pass computes the same answer as the first.
    */
   useLayoutEffect(() => {
     if (!enabled) return;
@@ -200,7 +216,20 @@ const CodeCompletion = () => {
       const offset = parseFloat(getComputedStyle(el).bottom) || 0;
       // 16px of air between the copy and the band, so "it fits" never means
       // "it touches".
-      setFits(heroBottom - offset - contentBottom >= el.offsetHeight + 16);
+      const room = heroBottom - offset - contentBottom - 16;
+
+      const pre = el.querySelector("pre");
+      if (!pre) return;
+      // Everything that is not the code window: the filename row, the array
+      // row, the padding. Independent of the line count, which is what makes
+      // the division below stable.
+      const chrome = el.offsetHeight - pre.offsetHeight;
+      const lineH = parseFloat(getComputedStyle(pre).lineHeight) || 0;
+      if (!lineH) return;
+
+      const linesThatFit = Math.floor((room - chrome) / lineH);
+      setFits(linesThatFit >= MIN_LINES);
+      setWindowLines(Math.max(MIN_LINES, Math.min(MAX_LINES, linesThatFit)));
     };
 
     measure();
@@ -292,9 +321,11 @@ const CodeCompletion = () => {
 
   // The window follows the caret while typing and the active line while
   // running, so the part that matters is always the part on screen.
-  const WINDOW = 7;
   const focus = active >= 0 ? active : typed - 1;
-  const top = Math.max(0, Math.min(CODE.length - WINDOW, focus - WINDOW + 2));
+  const top = Math.max(
+    0,
+    Math.min(CODE.length - windowLines, focus - windowLines + 2)
+  );
 
   return (
     <div
@@ -323,7 +354,7 @@ const CodeCompletion = () => {
 
       <pre
         className="mt-1.5 overflow-hidden font-mono text-micro leading-[1.5]"
-        style={{ height: `calc(${WINDOW} * 1.5em)` }}
+        style={{ height: `calc(${windowLines} * 1.5em)` }}
       >
         <code
           className="block transition-transform duration-200"
