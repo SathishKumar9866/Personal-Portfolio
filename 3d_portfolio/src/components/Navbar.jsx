@@ -242,19 +242,38 @@ const Navbar = () => {
               role="dialog"
               aria-modal="true"
               aria-label="Menu"
-              className="fixed inset-0 z-50 md:hidden bg-primary backdrop-blur-md flex flex-col justify-center px-8 py-24 overflow-y-auto"
+              // `justify-start` with auto margins, not `justify-center`. The
+              // menu is 961px of content in an 844px box on a 390x844 phone,
+              // and a centred flex container splits negative free space evenly:
+              // measured, the first link sat at top -21 with scrollTop already
+              // at its minimum of 0, so About was cut off and no amount of
+              // scrolling could reach it. Auto margins centre the same way when
+              // there is room and collapse to 0 when there is not, which is the
+              // whole difference.
+              className="fixed inset-0 z-50 md:hidden bg-primary flex flex-col justify-start px-8 py-24 overflow-y-auto"
             >
+              {/* Fixed, not absolute. Absolute inside a scroll container scrolls
+                  with the content: at the bottom of the menu this button sat at
+                  top -97, and the hamburger that opened it is underneath the
+                  overlay, so a phone had nothing left to close the menu with.
+
+                  `backdrop-blur-md` had to go for that to work: a backdrop
+                  filter makes its element the containing block for fixed
+                  descendants, so the button kept scrolling. It was blurring
+                  nothing anyway, `bg-primary` is rgb(15 34 40) with no alpha,
+                  and index.css already says what a full-screen backdrop filter
+                  costs a phone. */}
               <button
                 onClick={() => setToggle(false)}
                 aria-label="Close menu"
-                className="absolute top-5 right-5 w-11 h-11 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
+                className="fixed top-5 right-5 w-11 h-11 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                   <path d="M6 6l12 12M18 6L6 18" />
                 </svg>
               </button>
 
-              <ul className="list-none flex flex-col gap-6">
+              <ul className="mt-auto list-none flex flex-col gap-6">
                 {navLinks.map((n, idx) => (
                   <motion.li
                     key={n.id}
@@ -351,7 +370,7 @@ const Navbar = () => {
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center gap-3">
+              <div className="mt-6 mb-auto flex items-center gap-3">
                 <FontSizeToggle />
                 <button
                   onClick={() => {
