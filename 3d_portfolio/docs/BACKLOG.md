@@ -78,6 +78,15 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   title changed, and given a source: `docs/og-card.html`. It had none, so the
   card kept saying "ML / AI Engineer" after every string on the site had been
   updated, because a grep cannot read a PNG. Still needs absolute URLs at deploy.
+- [x] **(P1, M) ~~Legibility / type-size audit.~~** Done 2026-09-11: the page was
+  typeset as a dashboard, 137 text elements at 10-11px including every fact a
+  recruiter came for. Replaced sixty-four size literals with a named scale in
+  `tailwind.config.js`. Two contrast failures fixed (logo monogram 3.62:1, footer
+  separator 1.33:1) and three sub-44px touch targets. Full reasoning and
+  measurements in `docs/TYPE-AUDIT.md`.
+- [ ] **(P2, S) Delete `Quote.jsx`.** Dead since the interstitial quotations were
+  removed; nothing imports it. Left in place during the type audit because
+  deleting a component is a separate decision from resizing type.
 - [ ] **(P2, S) Section-header treatment**, the eyebrow+word pattern is fine but
   could be made more distinctly editorial if desired.
 

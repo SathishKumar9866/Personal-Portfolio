@@ -25,10 +25,10 @@ const Hero = () => {
       >
         <motion.div
           variants={rise}
-          className="flex items-center justify-between border-b border-line pb-4 mb-10 sm:mb-14 font-mono text-[11px] uppercase tracking-label"
+          className="flex items-center justify-between border-b border-line pb-4 mb-10 sm:mb-14 font-mono text-label uppercase tracking-label"
         >
           <span className="text-secondary">Sathish Kumar</span>
-          <LiveClock className="text-[11px] hidden sm:inline" />
+          <LiveClock className="text-label hidden sm:inline" />
         </motion.div>
 
         <motion.h1
@@ -37,7 +37,7 @@ const Hero = () => {
         >
           I ship the model.{" "}
           <span className="whitespace-nowrap">
-            And the <span className="text-accent">evidence it works</span>.
+            And the <span className="text-accent-ink">evidence it works</span>.
           </span>
         </motion.h1>
 
@@ -74,7 +74,7 @@ const Hero = () => {
         className="absolute bottom-8 right-6 sm:right-10 z-10 hidden sm:flex flex-col items-center gap-2 group"
         aria-label="Scroll to about"
       >
-        <span className="font-mono text-[10px] tracking-label uppercase text-faint group-hover:text-accent transition-colors">
+        <span className="font-mono text-micro tracking-label uppercase text-faint group-hover:text-accent transition-colors">
           scroll
         </span>
         <span className="relative block w-px h-10 bg-line overflow-hidden">

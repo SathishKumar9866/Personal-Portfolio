@@ -142,11 +142,11 @@ const CommandPalette = () => {
               aria-activedescendant={results[i] ? `cmdk-opt-${i}` : undefined}
               aria-label="Search commands"
               placeholder="Type a command…"
-              className="w-full bg-transparent border-b border-line-strong px-4 py-3.5 font-mono text-[14px] text-white-100 placeholder:text-faint focus:outline-none"
+              className="w-full bg-transparent border-b border-line-strong px-4 py-3.5 font-mono text-data text-white-100 placeholder:text-faint focus:outline-none"
             />
             <ul id="cmdk-list" role="listbox" aria-label="Commands" className="max-h-72 overflow-y-auto py-2">
               {results.length === 0 && (
-                <li role="option" aria-selected="false" className="px-4 py-3 font-mono text-[13px] text-faint">No matches</li>
+                <li role="option" aria-selected="false" className="px-4 py-3 font-mono text-chip text-faint">No matches</li>
               )}
               {results.map((a, idx) => (
                 <li key={a.label} role="option" id={`cmdk-opt-${idx}`} aria-selected={i === idx}>
@@ -154,7 +154,7 @@ const CommandPalette = () => {
                     tabIndex={-1}
                     onMouseEnter={() => setI(idx)}
                     onClick={() => run(idx)}
-                    className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-left font-mono text-[13px] border-l-2 ${
+                    className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-left font-mono text-data border-l-2 ${
                       i === idx
                         ? "border-accent bg-accent/15 text-white-100"
                         : "border-transparent text-white-100"
@@ -163,12 +163,12 @@ const CommandPalette = () => {
                     {/* Selection is carried by the left rule as well as the tint:
                         a 15%-alpha wash is not a sufficient cue on its own. */}
                     <span>{a.label}</span>
-                    <span className="text-[11px] text-faint">{a.hint}</span>
+                    <span className="text-label text-faint">{a.hint}</span>
                   </button>
                 </li>
               ))}
             </ul>
-            <div className="border-t border-line px-4 py-2 font-mono text-[10px] text-faint flex gap-4">
+            <div className="border-t border-line px-4 py-2 font-mono text-label text-faint flex gap-4">
               <span>↑↓ move</span><span>↵ select</span><span>esc close</span>
             </div>
           </motion.div>

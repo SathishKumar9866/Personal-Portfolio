@@ -350,7 +350,7 @@ const ProjectCover = ({ cover = "retrieval", name }) => {
   return (
     <div className="relative w-full rounded-xl overflow-hidden border border-line-strong bg-canvas" style={{ aspectRatio: "16 / 9" }}>
       <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
-      <span className="absolute top-2.5 left-3 font-mono text-[10px] tracking-label uppercase text-canvas-ink">
+      <span className="absolute top-2.5 left-3 font-mono text-micro tracking-label uppercase text-canvas-ink">
         {LABELS[cover] || "preview"}
       </span>
     </div>
@@ -388,24 +388,24 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
 
         <div className="mt-5 flex items-center gap-3">
           <span
-            className={`font-mono text-[10px] uppercase tracking-label px-2 py-0.5 rounded ${
+            className={`font-mono text-label uppercase tracking-label px-2 py-0.5 rounded ${
               isLive ? "text-live border border-live/40" : "text-archive border border-archive/40"
             }`}
           >
             {isLive ? "live" : "source"}
           </span>
-          <span className="font-mono text-[12px] text-faint truncate" title={name}>{name}</span>
+          <span className="font-mono text-data text-faint truncate" title={name}>{name}</span>
         </div>
 
         <h3 className="mt-3 font-display font-semibold text-[clamp(1.15rem,1.6vw,1.5rem)] leading-[1.2] tracking-[-0.01em] text-white-100">
           {outcome}
         </h3>
-        <p className="mt-2 font-sans text-secondary text-[14px] leading-[1.6] max-w-[28rem]">
+        <p className="mt-2 font-sans text-secondary text-body leading-[1.6] max-w-[28rem]">
           {description}
         </p>
 
         <div className="mt-4">
-          <span className="font-mono text-[10px] uppercase tracking-label text-faint">
+          <span className="font-mono text-label uppercase tracking-label text-faint">
             built with
           </span>
           <div className="mt-1.5 flex flex-wrap gap-2">
@@ -415,7 +415,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           </div>
         </div>
 
-        <div className="mt-5 pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-[12px]">
+        <div className="mt-5 pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-data">
           <a href={source_code_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 min-h-11 sm:min-h-0 text-secondary hover:text-accent transition-colors">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d={ICON_PATHS.github} />
@@ -423,7 +423,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
             repo ↗
           </a>
           {live_link && (
-            <a href={live_link} target="_blank" rel="noreferrer" className="text-live hover:text-accent transition-colors">
+            <a href={live_link} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 sm:min-h-0 text-live hover:text-accent transition-colors">
               {live_link.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗
             </a>
           )}
@@ -442,7 +442,7 @@ const Works = () => (
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-4 font-sans text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
+      className="mt-4 font-sans text-secondary text-lede max-w-[34rem] leading-[1.7]"
     >
       Production RAG on AWS, federated and real-time computer vision, multimodal
       search, and one app that is live and in use.

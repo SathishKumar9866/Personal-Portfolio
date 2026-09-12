@@ -20,7 +20,7 @@ const Tech = () => (
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-4 font-sans text-secondary text-[17px] max-w-[32rem] leading-[1.7]"
+      className="mt-4 font-sans text-secondary text-lede max-w-[34rem] leading-[1.7]"
     >
       Not a badge collection: this is what I actually reach for, grouped by where
       it sits on the path from raw data to a running product. I pick tools that
@@ -34,7 +34,7 @@ const Tech = () => (
         destinations, not one-off affordances. */}
     <motion.p
       variants={fadeIn("", "", 0.18, 1)}
-      className="mt-4 flex items-start gap-2 font-serif italic text-faint text-[13.5px] leading-[1.6] max-w-[32rem]"
+      className="mt-4 flex items-start gap-2 font-serif italic text-faint text-body leading-[1.6] max-w-[32rem]"
     >
       <svg
         width="13"
@@ -58,12 +58,12 @@ const Tech = () => (
           variants={fadeIn("up", "spring", i * 0.08, 0.5)}
           className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col hover:border-accent/50"
         >
-          <h3 className="flex items-center gap-2 text-accent-ink font-mono text-[12px] uppercase tracking-label">
+          <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
             <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
             {g.title}
           </h3>
           {g.note && (
-            <p className="mt-2 font-serif text-secondary text-[13px] leading-[1.5]">{g.note}</p>
+            <p className="mt-2 font-serif text-secondary text-body leading-[1.5]">{g.note}</p>
           )}
           {/* mt-auto is the whole point: grid already equalises card height, but
               without it the chip row floats up under a one-line note and two

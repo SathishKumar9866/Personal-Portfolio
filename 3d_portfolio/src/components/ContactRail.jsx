@@ -20,7 +20,7 @@ import { ICON_PATHS, socialLinks } from "./icons";
 const Label = ({ children }) => (
   // Opens to the RIGHT: this dock is on the left edge, so a label sliding left
   // would run off the viewport.
-  <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-md border border-line bg-primary px-2.5 py-1 font-mono text-[11px] text-secondary opacity-0 -translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
+  <span className="pointer-events-none absolute left-full ml-2 whitespace-nowrap rounded-md border border-line bg-primary px-2.5 py-1 font-mono text-chip text-secondary opacity-0 -translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
     {children}
   </span>
 );

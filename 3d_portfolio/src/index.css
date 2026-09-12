@@ -112,7 +112,12 @@ body {
   color: rgb(var(--c-strong)); /* 4.68:1; white was 3.62:1 */
   font-family: "JetBrains Mono Variable", ui-monospace, monospace;
   font-size: 13px;
-  padding: 10px 14px;
+  /* 10px/14px measured 40px tall: an accessibility affordance that missed the
+     44px target it exists to serve. */
+  padding: 12px 16px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   border-radius: 6px;
   transition: top 0.18s ease;
 }

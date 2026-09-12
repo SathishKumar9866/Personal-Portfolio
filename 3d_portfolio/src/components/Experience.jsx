@@ -26,7 +26,7 @@ const Range = ({ start, end, current }) => {
   if (!from && !to) return null;
   if (!from && to === "Present") return null;
   return (
-    <span className="font-mono text-[11px] uppercase tracking-label text-faint tabular-nums">
+    <span className="font-mono text-label uppercase tracking-label text-faint tabular-nums">
       {[from, to].filter(Boolean).join(": ")}
     </span>
   );
@@ -62,12 +62,12 @@ const Role = ({ role, index }) => (
             {role.title}
           </h3>
           {role.current && (
-            <span className="font-mono text-[10px] uppercase tracking-label text-live border border-live/50 rounded px-1.5 py-0.5">
+            <span className="font-mono text-label uppercase tracking-label text-live border border-live/50 rounded px-1.5 py-0.5">
               current
             </span>
           )}
         </div>
-        <p className="mt-1 font-mono text-[12px] text-secondary">
+        <p className="mt-1 font-mono text-data text-secondary">
           {role.company}
           {role.location && <span className="text-faint"> · {role.location}</span>}
         </p>
@@ -79,7 +79,7 @@ const Role = ({ role, index }) => (
     </div>
 
     {role.summary && (
-      <p className="mt-3 font-sans text-secondary text-[14px] leading-[1.6] max-w-[32rem]">
+      <p className="mt-3 font-sans text-secondary text-prose leading-[1.6] max-w-[34rem]">
         {role.summary}
       </p>
     )}
@@ -135,7 +135,7 @@ const Experience = () => (
     {education.length > 0 && (
       <>
         <Reveal className="mt-16">
-          <h3 className="font-mono text-[12px] uppercase tracking-label text-accent-ink">
+          <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
             Education
           </h3>
         </Reveal>

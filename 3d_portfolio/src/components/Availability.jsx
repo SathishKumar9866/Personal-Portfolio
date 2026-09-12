@@ -27,7 +27,7 @@ const Dot = () => (
 );
 
 export const AvailabilityCompact = () => (
-  <span className="inline-flex items-center gap-2 font-mono text-[12px] text-live">
+  <span className="inline-flex items-center gap-2 font-mono text-chip text-live">
     <Dot />
     Open to {status.openTo}
   </span>
@@ -65,14 +65,14 @@ const Availability = () => (
 
     <motion.p
       variants={row}
-      className="relative flex flex-wrap items-center gap-x-2 gap-y-1 font-mono font-bold text-[11px] uppercase tracking-label text-live"
+      className="relative flex flex-wrap items-center gap-x-2 gap-y-1 font-mono font-bold text-label uppercase tracking-label text-live"
     >
       <Dot />
       Open to work
       <span className="font-normal text-faint normal-case tracking-normal">· available now</span>
     </motion.p>
 
-    <dl className="relative mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-[5.5rem_1fr] font-mono text-[12px]">
+    <dl className="relative mt-3 grid gap-x-5 gap-y-2 sm:grid-cols-[5.5rem_1fr] font-mono text-data">
       <Line label="Currently">
         {status.role} · {status.company}
       </Line>
@@ -85,7 +85,7 @@ const Availability = () => (
     <motion.a
       variants={row}
       href="#contact"
-      className="group relative mt-4 inline-flex items-center gap-2 rounded-lg border border-live/60 px-3 min-h-11 sm:min-h-10 font-mono text-[12px] text-live transition-colors hover:bg-live/10 hover:border-live"
+      className="group relative mt-4 inline-flex items-center gap-2 rounded-lg border border-live/60 px-3 min-h-11 sm:min-h-10 font-mono text-data text-live transition-colors hover:bg-live/10 hover:border-live"
     >
       Reach out
       <span

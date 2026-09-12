@@ -82,10 +82,10 @@ const Navbar = () => {
             window.scrollTo({ top: 0, behavior: prefersReduced() ? "auto" : "smooth" });
           }}
         >
-          <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-white font-display font-bold text-[15px]">
+          <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-black-100 font-display font-bold text-[15px]">
             S
           </span>
-          <p className="text-white-100 font-mono text-[14px] tracking-tight flex items-center">
+          <p className="text-white-100 font-mono text-data tracking-tight flex items-center">
             Sathish
             <span className="sm:inline hidden text-faint">&nbsp;· AI Engineer</span>
           </p>
@@ -97,7 +97,7 @@ const Navbar = () => {
               <li key={n.id}>
                 <a
                   href={`#${n.id}`}
-                  className={`relative font-mono text-[13px] uppercase tracking-[0.12em] transition-colors ${
+                  className={`relative font-mono text-nav uppercase tracking-[0.12em] transition-colors ${
                     active === n.id ? "text-accent-ink" : "text-secondary hover:text-white-100"
                   }`}
                 >
@@ -113,7 +113,7 @@ const Navbar = () => {
           </ul>
           <button
             onClick={() => window.dispatchEvent(new Event("open-command"))}
-            className="font-mono text-[11px] text-faint border border-line-strong rounded px-2 py-1 hover:border-accent hover:text-accent transition-colors"
+            className="font-mono text-label text-faint border border-line-strong rounded px-2 py-1 hover:border-accent hover:text-accent transition-colors"
             aria-label={`${SHORTCUT}: open command palette`}
           >
             {SHORTCUT}
@@ -173,7 +173,7 @@ const Navbar = () => {
                   setToggle(false);
                   window.dispatchEvent(new Event("open-command"));
                 }}
-                className="mt-12 self-start font-mono text-[13px] text-faint border border-line-strong rounded px-3 py-2"
+                className="mt-12 self-start font-mono text-nav text-faint border border-line-strong rounded px-3 py-2"
               >
                 {SHORTCUT} · quick actions
               </button>

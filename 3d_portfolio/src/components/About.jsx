@@ -13,13 +13,13 @@ const ServiceCard = ({ index, title, desc }) => (
       className="w-full h-full rounded-2xl glass-card hover:border-accent/40 transition-colors"
     >
       <div className="rounded-2xl py-6 px-5 flex flex-col gap-3 h-full">
-        <span className="font-mono text-[13px] text-accent-ink">
+        <span className="font-mono text-chip text-accent-ink">
           {String(index + 1).padStart(2, "0")}
         </span>
         <h3 className="font-display text-white-100 text-[19px] leading-tight">
           {title}
         </h3>
-        <p className="font-sans text-secondary text-[14px] leading-[1.5]">{desc}</p>
+        <p className="font-sans text-secondary text-body leading-[1.5]">{desc}</p>
       </div>
     </motion.div>
   </Tilt>
@@ -39,7 +39,7 @@ const Portrait = () => (
     ) : (
       <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-faint">
         <span className="font-display text-[34px] leading-none text-line">S</span>
-        <span className="font-mono text-[10px] uppercase tracking-label">
+        <span className="font-mono text-label uppercase tracking-label">
           portrait: to come
         </span>
       </div>

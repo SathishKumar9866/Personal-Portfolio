@@ -52,7 +52,7 @@ const CopyButton = ({ value, label }) => {
       <button
         onClick={copy}
         aria-label={`Copy ${label}`}
-        className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 min-h-11 sm:min-h-9 font-mono text-[11px] transition-colors ${
+        className={`inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 min-h-11 sm:min-h-9 font-mono text-chip transition-colors ${
           copied
             ? "border-live text-live"
             : "border-line-strong text-secondary hover:border-accent hover:text-accent-ink"
@@ -82,7 +82,7 @@ const Row = ({ k, label, href }) => {
   const value = isEmail ? contact.email : readable(href);
   return (
     <li className="flex flex-wrap items-center gap-x-3 gap-y-2 py-3 border-b border-line last:border-b-0">
-      <span className="flex items-center gap-2 w-28 shrink-0 font-mono text-[11px] uppercase tracking-label text-faint">
+      <span className="flex items-center gap-2 w-28 shrink-0 font-mono text-label uppercase tracking-label text-faint">
         <Glyph name={k} />
         {label}
       </span>
@@ -94,7 +94,7 @@ const Row = ({ k, label, href }) => {
         href={href}
         target={isEmail ? undefined : "_blank"}
         rel={isEmail ? undefined : "noreferrer"}
-        className="min-w-0 flex-1 break-all font-mono text-[13px] text-white-100 hover:text-accent-ink transition-colors"
+        className="min-w-0 flex-1 inline-flex items-center min-h-11 sm:min-h-0 break-all font-mono text-data text-white-100 hover:text-accent-ink transition-colors"
       >
         {value}
         {!isEmail && <span className="text-faint"> ↗</span>}
@@ -115,7 +115,7 @@ const Contact = () => (
 
       <motion.p
         variants={fadeIn("", "", 0.1, 1)}
-        className="mt-4 font-serif text-secondary text-[17px] leading-[1.7] max-w-[32rem]"
+        className="mt-4 font-serif text-secondary text-lede leading-[1.7] max-w-[32rem]"
       >
         Open to data engineering, data science, ML, and AI engineering roles,
         across any domain. If something here is useful to you, reach out.
@@ -123,7 +123,7 @@ const Contact = () => (
 
       <motion.p
         variants={fadeIn("", "", 0.15, 1)}
-        className="mt-4 font-mono text-[12px] text-faint"
+        className="mt-4 font-mono text-chip text-faint"
       >
         {contact.timezone} · usually replies within a day
       </motion.p>
@@ -133,7 +133,7 @@ const Contact = () => (
       variants={fadeIn("left", "spring", 0.2, 0.7)}
       className="rounded-2xl glass-card p-5 sm:p-7"
     >
-      <p className="font-mono text-[11px] uppercase tracking-label text-faint">
+      <p className="font-mono text-label uppercase tracking-label text-faint">
         Every way to reach me
       </p>
       <ul className="mt-3 list-none">

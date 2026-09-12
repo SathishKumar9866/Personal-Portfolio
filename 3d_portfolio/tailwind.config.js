@@ -42,6 +42,26 @@ export default {
         serif: ['"Newsreader Variable"', "Newsreader", "Georgia", "serif"],
         mono: ['"JetBrains Mono Variable"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
+      // A recruiter reads this page as a document, on a laptop, in about thirty
+      // seconds. It was typeset as a dashboard: an audit found 220 of 273 text
+      // elements rendering at 13px or smaller, and every fact one of them
+      // actually needs, employer, dates, project name, repo link, was in the
+      // 11-13px band. These are named for the job they do rather than for their
+      // size, so the scale stays auditable in this one file instead of drifting
+      // back across sixty-odd arbitrary literals.
+      //
+      // The line heights here are defaults; an explicit `leading-*` on the
+      // element still wins, because Tailwind emits fontSize before lineHeight.
+      fontSize: {
+        micro: ["11px", { lineHeight: "1.4" }], // stamps sitting ON artwork, nothing else
+        label: ["12px", { lineHeight: "1.45" }], // uppercase tracked eyebrows, field names
+        nav: ["13px", { lineHeight: "1.4" }], // nav items and section eyebrows
+        chip: ["13px", { lineHeight: "1.4" }], // technology chips
+        data: ["14px", { lineHeight: "1.5" }], // mono facts: employers, dates, URLs, repos
+        body: ["15px", { lineHeight: "1.6" }], // prose inside a card, narrow measure
+        prose: ["16px", { lineHeight: "1.65" }], // prose at full measure
+        lede: ["18px", { lineHeight: "1.7" }], // section intros
+      },
       spacing: {
         u1: "4px", u2: "8px", u3: "12px", u4: "16px",
         u6: "24px", u8: "32px", u12: "48px", u16: "64px", u24: "96px",

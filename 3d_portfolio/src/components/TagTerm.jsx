@@ -25,7 +25,7 @@ import { glossary } from "../constants";
  * the fill would not.
  */
 const CHIP =
-  "font-mono text-[11px] px-2 rounded border transition-colors " +
+  "font-mono text-chip px-2 rounded border transition-colors " +
   // Touch first: 44x44 minimum on phones, back to the dense rhythm from sm up.
   "inline-flex items-center justify-center min-h-11 min-w-11 py-0 " +
   "sm:min-h-0 sm:min-w-0 sm:py-0.5 sm:inline";
@@ -132,11 +132,11 @@ const TagTerm = ({ name, plain = false, primary = false }) => {
       {open && (
         <span
           role="tooltip"
-          className="absolute z-30 left-1/2 -translate-x-1/2 top-full mt-1.5 w-[min(17rem,calc(100vw-2rem))] rounded-xl glass p-3 font-sans text-[12.5px] text-secondary leading-snug block text-left normal-case tracking-normal"
+          className="absolute z-30 left-1/2 -translate-x-1/2 top-full mt-1.5 w-[min(17rem,calc(100vw-2rem))] rounded-xl glass p-3 font-sans text-data text-secondary leading-snug block text-left normal-case tracking-normal"
         >
           <b className="text-white-100">{name}</b>
           {g.full && g.full !== name && (
-            <span className="block font-mono text-[11px] text-faint mt-0.5">
+            <span className="block font-mono text-label text-faint mt-0.5">
               {g.full}
             </span>
           )}
@@ -150,7 +150,7 @@ const TagTerm = ({ name, plain = false, primary = false }) => {
                 setOpen(false);
                 setPinned(false);
               }}
-              className="mt-2 block font-mono text-[11px] text-accent-ink hover:underline"
+              className="mt-2 block font-mono text-chip text-accent-ink hover:underline"
             >
               Learn more ↗
             </a>

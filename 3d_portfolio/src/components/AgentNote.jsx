@@ -18,10 +18,10 @@ import { contact } from "../constants";
  */
 const Item = ({ label, children }) => (
   <li className="border-t border-line pt-3">
-    <p className="font-mono text-[10px] uppercase tracking-label text-accent-ink">
+    <p className="font-mono text-label uppercase tracking-label text-accent-ink">
       {label}
     </p>
-    <p className="mt-1.5 font-mono text-[12px] leading-[1.65] text-secondary">
+    <p className="mt-1.5 font-mono text-chip leading-[1.65] text-secondary">
       {children}
     </p>
   </li>
@@ -33,7 +33,7 @@ const AgentNote = () => (
     className="w-full border-t border-line bg-tertiary/40"
   >
     <div className="max-w-7xl mx-auto px-6 sm:px-16 py-12 sm:py-16">
-      <p className="font-mono text-[12px] text-secondary">
+      <p className="font-mono text-chip text-secondary">
         <span className="text-accent-ink">{"// "}</span>
         For crawlers, LLMs and agents reading this page
       </p>

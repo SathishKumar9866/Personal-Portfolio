@@ -165,10 +165,35 @@ the blur entirely.
 ### Type
 
 Barlow for display and UI, Newsreader for prose, JetBrains Mono for labels and
-data. Prose is capped near 72 characters a line. Headings use fluid `clamp()`.
+data. Headings use fluid `clamp()`; everything below heading size uses a **named
+scale in `tailwind.config.js`**, not literals:
 
-**Every text pair passes WCAG AA in both themes**, 22 pairs measured from the
-built stylesheet rather than from source.
+| Token | px | For |
+| --- | --- | --- |
+| `text-micro` | 11 | stamps sitting **on** artwork, and nothing else |
+| `text-label` | 12 | uppercase tracked eyebrows, field names |
+| `text-nav` | 13 | nav items, section eyebrows |
+| `text-chip` | 13 | technology chips |
+| `text-data` | 14 | mono facts: employers, dates, URLs, repo names |
+| `text-body` | 15 | prose inside a card, narrow measure |
+| `text-prose` | 16 | prose at full measure |
+| `text-lede` | 18 | section intros |
+
+**Do not add a bare `text-[Npx]`.** The scale is named so the page can be audited
+from one file. It exists because it once could not be: the page had twenty
+distinct sizes and 137 text elements at 10-11px, including every fact a recruiter
+came for. See `docs/TYPE-AUDIT.md` for the measurements and the judgement calls.
+
+Prose measure lands between 39 and 70 characters; the Experience bullets, the
+most-read block on the page, sit at 70.
+
+**Every text pair passes WCAG AA in both themes**, measured on the running page
+against composited backgrounds, not read from source.
+
+Two tokens are easy to misuse, and both were: `--c-accent` is **fills only**
+(3.62:1 as text, so `--c-accent-ink` carries it as text), and `--c-line` is a
+**decorative hairline**, never a text colour: it measured 1.33:1 when used for
+the footer separator.
 
 ## Sections, in order
 
