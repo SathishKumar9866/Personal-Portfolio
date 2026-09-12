@@ -2,6 +2,33 @@
 
 ## 2026-09-12: the premium pass
 
+### Stack on a phone: the boxes came off
+
+Thirty-three tools rendered as thirty-three bordered rectangles, each 44px tall
+in rows of two or three, inside one long card. That is a form, not a vocabulary,
+and it ran most of a screen per group. Above it sat the token wave in a strip of
+its own, which at 390px is too short for a wave and too narrow for a sentence of
+tokens: it rendered as struck-through fragments floating in empty space and read
+as a rendering fault rather than an effect.
+
+The terms are bare now — a `flow` variant of `TagTerm` with the box taken off.
+The dotted underline was already marking which terms are definable, which is the
+only thing the border was communicating, so removing the border loses nothing.
+The two tiers move from fill to weight and colour: a headline tool reads as the
+page's own text, the rest as prose beside it. Each group gains its count on the
+right, which is the one number a reader might want from a list of tools.
+
+**Measured, 390x844: the section went 1,364px to 1,131px, 233px shorter, 17%.**
+Four groups now fit in a screen where two and a half did. All 33 terms still
+clear the 44px touch target — it moved from the box to the line box — all 33
+definition panels still open inside the viewport, and `scrollWidth` stays at the
+viewport.
+
+The phone strip took the `inline` variant of `TokenStream` with it; it was the
+only caller, so the branch is gone rather than orphaned. The wave is desktop
+only now, where it has a real band to live in.
+
+
 Feedback: "looks like a website from 1990". It did not — it looked like **2020
 developer-brand**, which is a different and more fixable problem. Four things
 were doing it, and none of them was the content.

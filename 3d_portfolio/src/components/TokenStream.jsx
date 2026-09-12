@@ -15,6 +15,13 @@ import { useEffect, useRef } from "react";
  * occupies the empty strip to the right of the intro copy and above the card
  * grid, the one part of this section that had nothing in it.
  *
+ * DESKTOP ONLY, and that is a design decision rather than a performance one.
+ * There was a phone variant that took a strip of its own above the stack list.
+ * At 390px the band is too short for a wave and too narrow for a sentence of
+ * tokens, so it rendered as struck-through fragments floating in empty space
+ * and read as a rendering fault. The strip came out with it; a phone has no
+ * empty band here to fill.
+ *
  * Section-scoped, so unlike NeuralField it is positioned absolutely inside its
  * own section and needs no fixed-coordinate wiring.
  *
@@ -45,7 +52,7 @@ const cssColor = (el, name, alpha) => {
   return v ? `rgba(${v.split(/\s+/).join(",")},${alpha})` : `rgba(128,128,128,${alpha})`;
 };
 
-const TokenStream = ({ inline = false }) => {
+const TokenStream = () => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -54,9 +61,7 @@ const TokenStream = ({ inline = false }) => {
     const ctx = c.getContext("2d");
     const root = document.documentElement;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const gate = window.matchMedia(
-      inline ? "(max-width: 1023px)" : "(min-width: 1024px)"
-    );
+    const gate = window.matchMedia("(min-width: 1024px)");
 
     let dpr = 1, w = 0, h = 0, raf = 0, t0 = null, onScreen = false;
 
@@ -167,7 +172,7 @@ const TokenStream = ({ inline = false }) => {
       ro.disconnect();
       gate.removeEventListener("change", start);
     };
-  }, [inline]);
+  }, []);
 
   return (
     <canvas
@@ -177,13 +182,7 @@ const TokenStream = ({ inline = false }) => {
       // cards: section-scoped wallpaper is still wallpaper. It now occupies only
       // the empty strip to the right of the intro text, above the grid, so it
       // crosses no content at all.
-      className={
-        inline
-          ? // Its own row on a phone, so it crosses no text: the band the
-            // desktop version borrows does not exist at 390px wide.
-            "pointer-events-none block rail:hidden w-full h-24 opacity-[0.95]"
-          : "pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[22rem] w-[52%] opacity-[0.95]"
-      }
+      className="pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[22rem] w-[52%] opacity-[0.95]"
     />
   );
 };
