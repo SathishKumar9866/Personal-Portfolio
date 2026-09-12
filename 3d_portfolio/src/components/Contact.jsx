@@ -18,14 +18,8 @@ import { styles } from "../styles";
 import { contact } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
-import { ICON_PATHS, socialLinks } from "./icons";
+import { ICON_PATHS, readable, socialLinks } from "./icons";
 import Reveal from "./Reveal";
-
-/** github.com/x, the address without the protocol noise. `www.` goes too: it
- *  is four characters of nothing that made the LinkedIn address 317px wide and
- *  pushed the single-row layout past what the card can hold. */
-const readable = (href) =>
-  href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 
 const Glyph = ({ name }) => (
   <svg
@@ -83,7 +77,7 @@ const CopyButton = ({ value, label }) => {
 
 const Row = ({ k, label, href }) => {
   const isEmail = k === "email";
-  const value = isEmail ? contact.email : readable(href);
+  const value = readable(href);
   return (
     // Layout lives in index.css, `.contact-row`, because the deciding width is
     // the card's and not the viewport's: it is widest below lg and narrowest

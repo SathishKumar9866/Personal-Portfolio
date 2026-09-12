@@ -5,7 +5,7 @@ import { styles } from "../styles";
 import { navLinks, SITE_REPO } from "../constants";
 import ThemeToggle from "./ThemeToggle";
 import FontSizeToggle from "./FontSizeToggle";
-import { ICON_PATHS, socialLinks } from "./icons";
+import { ICON_PATHS, readable, socialLinks } from "./icons";
 import useActiveSection from "../hooks/useActiveSection";
 
 const prefersReduced = () =>
@@ -320,11 +320,11 @@ const Navbar = () => {
                             {l.label}
                           </span>
                           {/* The destination in full. A label alone asks the
-                              reader to trust where the tap goes. */}
+                              reader to trust where the tap goes. Same
+                              `readable` as the contact card, so the two never
+                              print the same address two ways. */}
                           <span className="block font-mono text-chip text-white-100 break-all">
-                            {l.k === "email"
-                              ? l.href.replace(/^mailto:/, "")
-                              : l.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                            {readable(l.href)}
                           </span>
                         </span>
                       </a>

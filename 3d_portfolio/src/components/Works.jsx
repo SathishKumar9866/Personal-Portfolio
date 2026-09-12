@@ -5,6 +5,7 @@ import { styles } from "../styles";
 import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
+import { readable } from "./icons";
 import TagTerm from "./TagTerm";
 import Reveal from "./Reveal";
 import MobileCollapse from "./MobileCollapse";
@@ -409,7 +410,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           </a>
           {live_link && (
             <a href={live_link} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 sm:min-h-0 text-live hover:text-accent transition-colors">
-              {live_link.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗
+              {readable(live_link)} ↗
             </a>
           )}
         </div>

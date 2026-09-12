@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { contact, navLinks } from "../constants";
-import { socialLinks } from "./icons";
+import { readable, socialLinks } from "./icons";
 
 // An explicit `behavior: "smooth"` beats the CSS reduced-motion reset, and these
 // are the longest scrolls on the site.
@@ -39,7 +39,7 @@ const ACTIONS = [
   { label: "Copy email", hint: contact.email, run: copyEmail },
   ...socialLinks()
     .filter((l) => l.k !== "email")
-    .map((l) => ({ label: `Open ${l.label}`, hint: l.href.replace(/^https?:\/\//, ""), run: open(l.href) })),
+    .map((l) => ({ label: `Open ${l.label}`, hint: readable(l.href), run: open(l.href) })),
 ];
 
 const CommandPalette = () => {
