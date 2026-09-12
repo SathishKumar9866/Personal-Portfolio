@@ -85,7 +85,7 @@ const Row = ({ k, label, href }) => {
     // Copy, then the address across the full width — whenever the row cannot
     // hold all three without breaking an address mid-domain.
     <li className="contact-row py-3 border-b border-line last:border-b-0">
-      <span className="contact-label flex items-center gap-2 shrink-0 font-mono text-label uppercase tracking-label text-faint">
+      <span className="contact-label flex items-center gap-2 shrink-0 font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-faint">
         <Glyph name={k} />
         {label}
       </span>
@@ -142,8 +142,8 @@ const Contact = () => (
         the symptom and broken the sticky diagram in Experience, because an
         overflow container is also a scroll container and sticky stops working
         inside one. */}
-    <Reveal delay={0.15} className="rounded-2xl glass-card p-5 sm:p-7">
-      <p className="font-mono text-label uppercase tracking-label text-faint">
+    <Reveal delay={0.15} className="rounded-[22px] glass-card p-5 sm:p-7">
+      <p className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-faint">
         Every way to reach me
       </p>
       <ul className="contact-rows mt-3 list-none">

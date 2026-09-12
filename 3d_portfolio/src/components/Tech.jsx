@@ -74,7 +74,7 @@ const Tech = () => (
       <div className="md:hidden glass-card rounded-2xl p-4 divide-y divide-line">
         {stackGroups.map((g, i) => (
           <Reveal key={g.title} delay={i * 0.06} y={12} className="py-4 first:pt-0 last:pb-0">
-            <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
+            <h3 className="flex items-center gap-2 text-accent-ink font-sans text-[12px] font-medium uppercase tracking-[0.09em]">
               <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
               {g.title}
             </h3>
@@ -97,7 +97,7 @@ const Tech = () => (
             delay={(i % 3) * 0.07}
             className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col h-full hover:border-accent/50"
           >
-            <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
+            <h3 className="flex items-center gap-2 text-accent-ink font-sans text-[12px] font-medium uppercase tracking-[0.09em]">
               <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
               {g.title}
             </h3>

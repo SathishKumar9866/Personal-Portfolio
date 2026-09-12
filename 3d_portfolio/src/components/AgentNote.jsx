@@ -18,7 +18,7 @@ import { contact } from "../constants";
  */
 const Item = ({ label, children }) => (
   <li className="border-t border-line pt-3">
-    <p className="font-mono text-label uppercase tracking-label text-accent-ink">
+    <p className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">
       {label}
     </p>
     <p className="mt-1.5 font-mono text-chip leading-[1.65] text-secondary">

@@ -69,7 +69,7 @@ const FontSizeToggle = () => {
         disabled={atMin}
         aria-label="Decrease text size"
         title="Decrease text size"
-        className={`${btn} rounded-l-md -mr-px`}
+        className={`${btn} rounded-l-xl -mr-px`}
       >
         <Glyph sign="-" />
       </button>
@@ -79,7 +79,7 @@ const FontSizeToggle = () => {
         disabled={atMax}
         aria-label="Increase text size"
         title="Increase text size"
-        className={`${btn} rounded-r-md`}
+        className={`${btn} rounded-r-xl`}
       >
         <Glyph sign="+" />
       </button>

@@ -28,7 +28,7 @@ const Range = ({ start, end, current }) => {
   if (!from && !to) return null;
   if (!from && to === "Present") return null;
   return (
-    <span className="font-mono text-label uppercase tracking-label text-faint tabular-nums">
+    <span className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-faint tabular-nums">
       {[from, to].filter(Boolean).join(": ")}
     </span>
   );
@@ -80,7 +80,7 @@ const Role = ({ role, index, trackIndex = null }) => {
             {role.title}
           </h3>
           {role.current && (
-            <span className="font-mono text-label uppercase tracking-label text-live border border-live/50 rounded px-1.5 py-0.5">
+            <span className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-live border border-live/50 rounded px-1.5 py-0.5">
               current
             </span>
           )}
@@ -200,7 +200,7 @@ const Experience = () => (
     {education.length > 0 && (
       <>
         <Reveal className="mt-16">
-          <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
+          <h3 className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">
             Education
           </h3>
         </Reveal>

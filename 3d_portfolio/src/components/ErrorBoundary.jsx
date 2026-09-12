@@ -14,7 +14,7 @@ class ErrorBoundary extends Component {
     return (
       <div className="min-h-screen bg-primary flex items-center justify-center px-6">
         <div className="max-w-md text-center">
-          <p className="font-mono text-label uppercase tracking-label text-accent-ink">Something broke</p>
+          <p className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">Something broke</p>
           <h1 className="mt-3 font-display text-white-100 text-[32px]">This page hit an error.</h1>
           <p className="mt-3 font-serif text-secondary">
             Reload to try again: or reach me at{" "}

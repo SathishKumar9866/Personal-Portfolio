@@ -46,7 +46,7 @@ const SideRail = () => {
             aria-current={on ? "true" : undefined}
             className="group relative flex h-8 w-10 xl:w-11 items-center justify-center"
           >
-            <span className="pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-md border border-line bg-primary px-2.5 py-1 font-mono text-chip text-secondary opacity-0 translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
+            <span className="pointer-events-none absolute right-full mr-2 whitespace-nowrap rounded-xl border border-line bg-primary px-2.5 py-1 font-mono text-chip text-secondary opacity-0 translate-x-1 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0">
               {n.title}
             </span>
             <span

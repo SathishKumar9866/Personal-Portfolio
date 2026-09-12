@@ -181,9 +181,9 @@ const Navbar = () => {
           <span className="w-8 h-8 rounded-md bg-accent flex items-center justify-center text-black-100 font-display font-bold text-[15px]">
             S
           </span>
-          <p className="text-white-100 font-mono text-data tracking-tight flex items-center">
+          <p className="text-white-100 font-sans text-[17px] font-semibold tracking-[-0.02em] flex items-center">
             Sathish
-            <span className="md:inline hidden text-faint">&nbsp;· AI Engineer</span>
+            <span className="md:inline hidden font-normal text-faint">&nbsp;· AI Engineer</span>
           </p>
         </a>
 
@@ -193,7 +193,7 @@ const Navbar = () => {
               <li key={n.id}>
                 <a
                   href={`#${n.id}`}
-                  className={`relative font-mono text-nav uppercase tracking-[0.12em] transition-colors ${
+                  className={`relative ${styles.uiNav} transition-colors ${
                     active === n.id ? "text-accent-ink" : "text-secondary hover:text-white-100"
                   }`}
                 >
@@ -209,7 +209,7 @@ const Navbar = () => {
           </ul>
           <button
             onClick={() => window.dispatchEvent(new Event("open-command"))}
-            className="font-mono text-label text-faint border border-line-strong rounded px-2 py-1 hover:border-accent hover:text-accent transition-colors"
+            className="font-mono text-label text-faint border border-line-strong rounded-lg px-2.5 py-1 hover:border-accent hover:text-accent transition-colors"
             aria-label={`${SHORTCUT}: open command palette`}
           >
             {SHORTCUT}
@@ -266,7 +266,7 @@ const Navbar = () => {
               <button
                 onClick={() => setToggle(false)}
                 aria-label="Close menu"
-                className="fixed top-5 right-5 w-11 h-11 grid place-items-center rounded-md border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
+                className="fixed top-5 right-5 w-11 h-11 grid place-items-center rounded-xl border border-line-strong text-white-100 hover:border-accent hover:text-accent transition-colors"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                   <path d="M6 6l12 12M18 6L6 18" />
@@ -283,7 +283,7 @@ const Navbar = () => {
                   >
                     <a
                       href={`#${n.id}`}
-                      className={`font-display text-[clamp(1.75rem,9vw,2.35rem)] leading-none flex items-center min-h-11 ${
+                      className={`font-display font-semibold tracking-[-0.02em] text-[clamp(1.75rem,9vw,2.35rem)] leading-none flex items-center min-h-11 ${
                         active === n.id ? "text-accent-ink" : "text-white-100"
                       }`}
                       onClick={() => {
@@ -296,7 +296,7 @@ const Navbar = () => {
                 ))}
               </ul>
               <div className="mt-10 pt-8 border-t border-line">
-                <p className="font-mono text-label uppercase tracking-label text-secondary">
+                <p className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-secondary">
                   Reach me
                 </p>
                 <ul className="mt-4 flex flex-col gap-1 list-none">
@@ -316,7 +316,7 @@ const Navbar = () => {
                           <path d={ICON_PATHS[l.k]} />
                         </svg>
                         <span className="min-w-0">
-                          <span className="block font-mono text-label uppercase tracking-label text-faint group-hover:text-accent-ink transition-colors">
+                          <span className="block font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-faint group-hover:text-accent-ink transition-colors">
                             {l.label}
                           </span>
                           {/* The destination in full. A label alone asks the
@@ -338,7 +338,7 @@ const Navbar = () => {
                   built and where he has worked; an invitation to send patches
                   is something you go looking for, so it sits where you look. */}
               <div className="mt-8 pt-6 border-t border-line">
-                <p className="font-mono text-label uppercase tracking-label text-secondary">
+                <p className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-secondary">
                   Open to collaborators
                 </p>
                 <p className="mt-2 font-sans text-secondary text-body leading-[1.6]">

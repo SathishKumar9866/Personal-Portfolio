@@ -19,7 +19,7 @@ const Portrait = () => (
     ) : (
       <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-faint">
         <span className="font-display text-[34px] leading-none text-line">S</span>
-        <span className="font-mono text-label uppercase tracking-label">
+        <span className="font-sans text-[12px] font-medium uppercase tracking-[0.09em]">
           portrait: to come
         </span>
       </div>

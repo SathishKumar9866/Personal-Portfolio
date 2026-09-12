@@ -22,7 +22,7 @@ const Quote = ({ text, author, align = "left" }) => (
         <blockquote className="mt-1 font-display font-semibold text-white-100 tracking-[-0.01em] leading-[1.15] text-[clamp(1.4rem,3.2vw,2.4rem)]">
           {text}
         </blockquote>
-        <figcaption className="mt-5 font-mono text-label uppercase tracking-label text-accent-ink">, {author}
+        <figcaption className="mt-5 font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">, {author}
         </figcaption>
       </div>
     </div>
