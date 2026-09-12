@@ -6,7 +6,9 @@ is supporting material.
 ```
 3d_portfolio/    the site. Vite + React. Start here.
 Research_Docs/   notes, command cheat-sheets, brainstorms
+docs/            account-level notes that are not about the site
 STATUS.md        where work stopped, the next action, the traps. Read on return.
+CONTRIBUTING.md  how to contribute, including with an LLM
 ```
 
 Despite the folder name there is no 3D in it; the name survives from a version that had it.
@@ -49,6 +51,12 @@ not the site were moved out, keeping their git history. Nothing was deleted.
   repos. Append with `printf` or an editor, never `>>` from Windows PowerShell.
 - Nested clones in this directory are ignored by name. Cloning something new here will not
   be ignored automatically.
+
+## Live
+
+<https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
+in `SathishKumarAI.github.io`, which holds no site code. See `STATUS.md` for how
+the two repos relate and why the second one has to exist.
 
 ## License
 

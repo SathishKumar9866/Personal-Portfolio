@@ -1,6 +1,6 @@
 # src/components
 
-Twenty-three files. Read the table, not the directory.
+Thirty files. Read the table, not the directory.
 
 ## Change to file
 
@@ -19,6 +19,12 @@ Twenty-three files. Read the table, not the directory.
 | Right edge: section markers | `SideRail.jsx` |
 | Left edge: contact icons | `ContactRail.jsx` |
 | What a tech chip does on hover or click, and its two tiers | `TagTerm.jsx` |
+| The reader's own text-size control (A- / A+) | `FontSizeToggle.jsx` |
+| What collapses behind a disclosure on a phone | `MobileCollapse.jsx` |
+| The diagram in the margin beside each role | `CareerTrack.jsx` |
+| The "open to collaborators" closing band | `Collaborate.jsx` |
+| The one scroll-reveal used by every card | `Reveal.jsx` |
+| Shared canvas geometry and the seeded RNG | `../utils/draw.js` |
 | Command palette actions | `CommandPalette.jsx` |
 | The hero network drawing | `NeuralField.jsx` |
 | The token wave in Stack | `TokenStream.jsx` |

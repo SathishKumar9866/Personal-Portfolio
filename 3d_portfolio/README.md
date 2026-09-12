@@ -25,6 +25,10 @@ Read this table instead of the code.
 | Which tools get the filled chip | `primary` per group in `stackGroups` |
 | A Stack category's dot colour | `dot` per group in `stackGroups`, token in `src/index.css` |
 | The og:image social card | `docs/og-card.html`, then re-render over `public/og.png` |
+| How big any text is | the named scale in `tailwind.config.js`, never a literal |
+| How much a section is padded | `styles.padding` in `src/styles.js`, one clamp |
+| What a phone hides that a desktop shows | `MobileCollapse.jsx`, plus `md:` classes at the call site |
+| The diagram beside each Experience role | `CareerTrack.jsx`, keyed by `glyph` in `stackGroups`' sibling `experience` |
 | What AI crawlers are answered by name | `public/robots.txt` |
 | The machine-readable copy of the site | `public/llms.txt` |
 
@@ -179,6 +183,23 @@ scale in `tailwind.config.js`**, not literals:
 | `text-prose` | 16 | prose at full measure |
 | `text-lede` | 18 | section intros |
 
+Every one of those is **fluid**, not stepped: each is
+`calc(clamp(min, rem + vw, max) * var(--type-scale))`. Three things ride on that
+single expression, so it is worth reading once:
+
+- the `clamp` interpolates with the viewport, so a 600px tablet gets type sized
+  for 600px rather than for whichever of two breakpoints it fell nearest;
+- the **rem term inside the clamp** is what keeps the reader's own browser
+  font-size setting working. A pure-`vw` size ignores it, which trades one
+  accessibility problem for another;
+- `--type-scale` is the on-page A- / A+ control (`FontSizeToggle.jsx`),
+  multiplying the result. It is a variable rather than a root font-size because
+  rem also drives every padding and `max-width` in Tailwind, and `max-w-7xl` at
+  140% is wider than the viewport.
+
+Section padding is fluid for the same reason: `clamp(1.25rem, 4.5vw, 4rem)`,
+where it used to jump from 24px to 64px at exactly 640px.
+
 **Do not add a bare `text-[Npx]`.** The scale is named so the page can be audited
 from one file. It exists because it once could not be: the page had twenty
 distinct sizes and 137 text elements at 10-11px, including every fact a recruiter
@@ -202,10 +223,11 @@ the footer separator.
 | Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed: it was the fifth route to `#contact` |
 | About | `About.jsx` | Portrait, lede, availability card, six capability cards |
 | Experience | `Experience.jsx` | Roles then education on one timeline, dates right-aligned |
-| Stack | `Tech.jsx` | Six groups, each with a category dot. Two chip tiers. Every chip has a definition |
+| Stack | `Tech.jsx` | Six groups, each with a category dot. Two chip tiers. One block on a phone, cards from md |
 | Work | `Works.jsx` | Six projects, generative canvas covers, plain chips |
 | Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
-| Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs. A notice, never an instruction |
+| Collaborate | `Collaborate.jsx` | Closing band, desktop only. On a phone it lives in the menu |
+| Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs. A notice, never an instruction. Short form on a phone |
 
 ## Navigation and docks
 
@@ -248,6 +270,44 @@ filled tier does not follow the outline tier's hover.
 The dotted underline goes **solid** on hover and focus, and a **second tap
 closes** the definition. The older handler only unpinned, leaving the panel open
 and relying on a `mouseleave` that a touch screen never sends.
+
+## What a phone gets, and what it does not
+
+A phone and a desktop are given deliberately different pages, and `md` (768px)
+is the single line between them. It is the same line the content grids and the
+navigation use, so there is never a width with a phone's navigation and a
+desktop's content.
+
+| | Phone | md and up |
+| --- | --- | --- |
+| Navigation | Hamburger, full-screen menu | Inline links |
+| Stack | One block, six labelled rows | Six cards, each with its description |
+| Stack intro copy | Hidden | Shown |
+| Role points, project copy, About cards | Behind a disclosure (Work, Experience) or inline (About) | All inline |
+| Role points alignment | Ragged right | Justified, auto-hyphenated |
+| Collaborate band | In the menu | Closing section after Contact |
+| Agent note | Two sentences plus `/llms.txt` | Six-point grid |
+| Contact rows | Label, then address, then Copy, stacked | One row |
+| Body weight | 500 | 400 |
+| Ambient motion | Token wave in its own strip; project covers | Neural field, token wave, career diagram, covers |
+
+Three rules behind that table:
+
+1. **A disclosure has to save more than it costs.** Hiding something behind a
+   44px summary row is only worth it if what is hidden is meaningfully taller.
+   It is in Work (852px) and Experience (1,189px). It was not in About, where
+   six two-line descriptions bought 114px for six taps, so those are inline.
+2. **A disclosure is never drawn empty.** Education renders through the same
+   component as a job but has no points and no stack, so the control is omitted
+   rather than opening onto nothing.
+3. **Motion has to be honest about what it draws.** `TokenStream` moves to a
+   strip of its own on a phone because at 390px there is no empty band to
+   borrow, and running it behind the cards is the wallpaper problem it was
+   scoped to avoid. `NeuralField` does **not** move, and the reason is not
+   caution: every node in it is read from `getBoundingClientRect()` on the two
+   edge docks, which exist only from 1024px. Below that there is nothing to
+   read, and inventing coordinates would contradict the one claim that makes it
+   a diagram rather than decoration.
 
 ## Ambient motion: two effects, each scoped
 

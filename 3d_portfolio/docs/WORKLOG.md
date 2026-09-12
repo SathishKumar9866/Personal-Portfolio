@@ -1,5 +1,250 @@
 # Worklog
 
+## 2026-09-12: merged, deployed, and made to work on a phone
+
+Branch `redesign/highway-premium` squash-merged as `630a38f` and deleted. Six
+commits on `main` since: `4b0c58f`, `632b392`, `dd2c5c1`, `8fad65f`, `0c8b15d`,
+`d9e8a7f`. Live at <https://sathishkumarai.github.io/>, built from `main` by
+Actions in the `SathishKumarAI.github.io` repo.
+
+### The bug that mattered
+
+**The mobile menu had never covered the screen.** `fixed inset-0` inside a
+`<nav>` that always carries a transform for hide-on-scroll, and a transformed
+ancestor becomes the containing block for its fixed descendants. So the overlay
+resolved against the 76px nav box: measured 192px tall against a 1009px
+viewport, with the page showing through the rest of it. Broken since
+hide-on-scroll landed, and not something a screenshot of the nav would reveal.
+Portalled to `document.body`, and given what a modal owes its reader and never
+had: Escape, scroll lock, focus restoration, its own close button.
+
+### "There is no hamburger on mobile" was three separate faults
+
+Worth separating, because only one of them was the thing being described.
+
+1. **Between 640px and 768px there was no hamburger at all.** The nav switched
+   at `sm` while the content collapse and both content grids switch at `md`. At
+   700px the desktop cluster measured 684px wide inside a 555px row,
+   overflowing by 129px with zero gap to the identity. All three switch at `md`
+   now, so exactly one navigation exists at every width.
+2. **The bar hid and did not come back.** One symmetric `Math.abs(delta) > 6`
+   gate for both directions meant a small upward flick did nothing: measured,
+   about 120px of deliberate upward scroll plus a 300ms transition. Now
+   asymmetric, 12px to hide and 2px to show, so it returns on a single 40px
+   flick. Scroll position is clamped to `[0, maxScroll]` first, because iOS
+   rubber-bands past both ends and those are not gestures.
+3. **The page scrolled sideways.** The Contact card used `fadeIn("left")`, which
+   parks an element at `x: +100` until its section scrolls into view. At 700px it
+   sat at left 164 inside a cell at left 64 and pushed the document to 721px, so
+   the page carried a horizontal scrollbar from load until the reader reached
+   Contact.
+
+The tempting fix for the third, `overflow-x: hidden` on an ancestor, would have
+hidden the symptom at every width and broken the sticky career diagram in
+Experience: an overflow container is also a scroll container, and `sticky` stops
+working inside one.
+
+### Text that was clipped, not overflowing
+
+Reported as "the text is overflowing on mobile", in the Overview section. The
+cause was the opposite of overflow.
+
+The status card's value lines carried `whitespace-nowrap`. A grid item defaults
+to `min-width: auto`, whose floor is the min-content width of its contents, and
+a line that may never wrap has a min-content width equal to the entire string.
+"AI Engineer &middot; AdvanSoft International, Inc" therefore held the card at
+388px inside a 350px column, and because the card also has `overflow-hidden`,
+the excess was not spilling out, it was being **cut off mid-word**: the bio read
+"...because tha" and "Calm, disciplined,".
+
+`whitespace-nowrap` applies from `md` up now, values get `min-w-0` and wrap, and
+the About grid declares `grid-cols-[minmax(0,1fr)]` so an unbreakable string can
+never widen the column again.
+
+Two smaller cases of the same complaint: the role points were **justified at a
+40-character measure**, where the browser stretches word gaps until the lines
+comb and auto-hyphenation starts breaking "product" into "prod-uct", every line
+ending flush hard against the right edge; and a repo name was being `truncate`d
+by 55px behind an ellipsis. Justification is `md`-and-up now, and the repo name
+wraps on a phone.
+
+### A phone and a desktop are different pages now
+
+The page ran **14,494px at phone width** at the start of the session, about
+fourteen screens, and reaching the contact details meant scrolling past all of
+it. It is **10,520px** now, a 27% cut, with every headline still on the page.
+
+What changed, and the rule behind each:
+
+- **Secondary detail collapses behind a native `<details>`**, but only where it
+  pays: Work (852px saved) and Experience (1,189px). Not About, where six
+  two-line descriptions bought 114px in exchange for six taps. A disclosure has
+  to save more than it costs.
+- **A disclosure is never drawn empty.** Education renders through the same
+  `Role` component as a job but carries no points and no stack, so a phone was
+  getting a "WHAT I DID" control that opened onto nothing.
+- **Stack is one block with six labelled rows on a phone**, cards from `md`.
+  Six bordered cards each with a description was close to a screen per card for
+  content that is really a list. 1,809px to 1,465px.
+- **The Collaborate band is desktop-only**, in the menu on a phone, and moved to
+  the end of the page. **The agent note is present at both widths in two
+  lengths**: two sentences plus the `/llms.txt` pointer on a phone, the
+  six-point grid on desktop. Hiding it outright was wrong, since it is the one
+  part of the page written for the readers who summarise him to other people.
+- **Contact rows stack.** Three things were competing for a 350px line: a fixed
+  7rem label, the address and a copy button. The address is the longest and the
+  only one worth reading character by character, and it got whatever was left.
+- **Body text is weight 500 on phones.** Barlow at 400 is airy by design, and
+  that airiness reads as thin at arm's length, especially light-on-dark.
+
+### Type and padding are fluid
+
+Every size in the named scale interpolates with the viewport between a floor and
+a ceiling, and section padding went from a hard 24px-to-64px jump at exactly
+640px to `clamp(1.25rem, 4.5vw, 4rem)`. Measured: padding 20px at 390, 34.5px at
+767, 64px at the ceiling; chips 13.07, 13.63, 14px across the same widths.
+
+Every clamp keeps a **rem term beside the vw term** deliberately. A pure-vw size
+ignores the reader's own browser font-size setting, which would trade one
+accessibility problem for another.
+
+### A reader-controlled text size
+
+Four steps, 100 to 140 percent, beside the theme toggle on desktop and in the
+menu on a phone, persisted and restored in the same pre-paint pass as the theme.
+
+It multiplies one variable rather than setting a root font-size, and that is the
+whole design: rem drives every padding, margin and `max-width` in Tailwind, and
+`max-w-7xl` at 140% is wider than the viewport. Text is what a reader wants
+bigger; the layout is not.
+
+Getting there surfaced one overflow: the hero headline's second sentence carried
+`whitespace-nowrap`, which held at 100% and pushed 1314px against a 1440px
+window at 140%.
+
+### A diagram in the margin beside each role
+
+The roles list is `max-w-2xl` inside a `max-w-7xl` section, which left a 480px
+column empty down the whole section: the largest unclaimed horizontal space on
+the page. It now holds a labelled schematic of the role the reader is level
+with, changing as they scroll. One canvas and one rAF loop for four diagrams,
+not four canvases.
+
+Two bugs while wiring it, both caught by measuring rather than looking:
+education was getting `data-role-index` values that collided with the first two
+jobs, and wrapping the list in a plain `<div>` to build the two-column grid cut
+framer-motion's variant propagation, rendering the entire roles column at
+opacity 0.
+
+### The token wave was on screen six seconds in every fifty
+
+Reported as "it only shows once". It did. The baseline translated downward at
+11px/s and wrapped over a range of `h + 0.55h`, a period of about fifty seconds
+at a 352px canvas, and the tokens ride that baseline so they left with it.
+Measured: painted ink fell 3.37% to 0.00% over five seconds and stayed empty.
+
+It was also drawing at 0.14 alpha inside a 0.6 opacity layer, about 8%
+effective, and each box picked its label from the current time, so twelve boxes
+flickered through a seventeen-piece list twice a second instead of carrying
+anything. The baseline oscillates inside the band now, the label is indexed by
+emission order so a token holds one piece for its whole crossing, and there are
+six sentences instead of one.
+
+It runs on a phone too, in a strip of its own above the stack block, because at
+390px there is no empty band to borrow. `NeuralField` does not, and that is
+structural rather than cautious: every node in it is read from
+`getBoundingClientRect()` on the two edge docks, which exist only from 1024px.
+
+### Smaller, but each one a real defect
+
+- **The hero CTA skipped the career history.** "See my work" pointed at `#work`,
+  jumping from the hero straight to the project grid. It reads "Start with my
+  experience" and lands on `#experience`.
+- **And then landed in the wrong place.** `.hash-span` carried
+  `scroll-margin-top: 10.5rem`, parking the anchor 168px down the viewport with
+  a 78px bar over the top, so jumping to Experience left most of Overview on
+  screen. 5.5rem clears the bar and nothing more.
+- **The landing page had 140px of dead space** between the navbar and the name.
+  The hero centred a 549px composition in a 900px viewport, and the matching
+  136px at the bottom was not dead: the scroll cue lives there. Top-aligned with
+  an explicit padding now, 140px to 52px.
+- **"repo" became "GitHub repo"**, and the menu prints full destinations under
+  each label the way Contact does, because a label alone asks the reader to
+  trust where a tap goes.
+- **The colophon was checked rather than trusted.** Barlow, Newsreader and
+  JetBrains Mono are all imported in `main.tsx` and all three are in use, so the
+  type credit is accurate. It now also records that the site started in
+  **August 2024** (first commit) and that this version is **September 2026**, in
+  "Month YYYY", the same shape the Experience timeline prints. The old "2026.09"
+  was the only `YYYY.MM` on the page.
+
+### Contributions, and a licence that says what it covers
+
+`CONTRIBUTING.md` plus a closing band on the site. LLM-written patches are
+welcome explicitly, with one condition, the same one a human patch has: the pull
+request explains its reasoning rather than its diff. A patch a model wrote and
+nobody can explain is a patch nobody can safely change later.
+
+The MIT LICENSE had been in the repo since 2024 and neither README mentioned it.
+Both now carry a License section that draws a line the MIT text does not: the
+grant covers the software, the written content and images are reserved. On a
+portfolio that distinction is the point, because the text *is* the product.
+
+### Repository protection
+
+28 public repos across the account now refuse force-pushes and deletion of the
+default branch and require linear history. 23 private repos could not be: branch
+protection on private repositories is a paid feature for personal accounts. 9
+forks were skipped deliberately.
+
+The full reasoning, including why requiring pull requests would have locked the
+owner out of his own `main`, is in `../docs/REPO-SECURITY.md`. The short version
+worth repeating: **outside contributors were never able to push anyway.** Anyone
+without write access can only fork and open a PR. Protection guards against the
+owner's own mistakes, not against strangers who were never getting in.
+
+### Verification
+
+Measured in Chrome against the running app and the deployed URL, at 390, 408,
+700, 767 and 1440px, in both themes.
+
+| Claim | Measurement |
+| --- | --- |
+| Phone page length | 14,494px to 10,520px |
+| Contrast failures | 0, both themes, both widths |
+| Text below 12px | 6-7, all canvas captions |
+| Horizontal overflow | none at any width tested |
+| Touch targets under 44px | 0 non-exempt; 2 are inline links in sentences, which WCAG 2.5.8 exempts |
+| Mobile menu | 1009px of a 1009px viewport, parented to BODY |
+| Nav return on scroll up | ~120px to a single 40px flick |
+| Text size control | 4 steps, proportional, 0 overflow at any step |
+| Token wave | ink 3.44-3.90% across 8 samples, was decaying to 0.00% |
+| Token wave on phone | ink 18.32-19.09%, crosses 0 text glyphs |
+| Career diagram | 4 tracked roles, 4 distinct diagrams, 0 text glyphs crossed |
+| Card heights | 0px delta per row, both grids |
+| Status card | 388px in a 350px column, now 350px |
+| CTA landing | Overview bottom at 40px, entirely under the 78px nav |
+| Public repos protected | 28 of 28, re-queried from the API |
+| Build and lint | 0 errors, 27 pre-existing react-refresh warnings |
+
+Console is clean apart from the pre-existing framer-motion "non-static position"
+dev warning, which is documented in `Works.jsx` and `NODE_ENV`-guarded.
+
+### Still open
+
+- **Twelve screens is still twelve screens.** Six projects, four roles, six
+  stack groups and six capability cards is a lot of page at 390px, and the
+  remaining height is content rather than padding. The hamburger is the fast
+  route to Contact.
+- **The site is still client-rendered**, so AI crawlers see only the
+  `<noscript>` block. `public/llms.txt` is the deliberate answer. A build-time
+  prerender is filed in `BACKLOG.md` as P1/L.
+- **23 private repos are unprotected** pending GitHub Pro.
+- **A theme picker on first load was proposed and advised against**: the site
+  already reads `prefers-color-scheme`, so a modal asks something the OS has
+  already answered and puts a decision between a recruiter and the content.
+
+
 ## 2026-09-11 (second session): covers, Stack tiers, one title, AI-crawler surface
 
 Branch `redesign/highway-premium`. Four commits: `f6f6cea`, `8037811`,
