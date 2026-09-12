@@ -1,5 +1,71 @@
 # Worklog
 
+## 2026-09-12: the hero band flickered on a real phone
+
+First real-device report of the session, and it found something no emulated
+viewport could: **the code band flickered while scrolling.**
+
+### The measurement was right; the thing it measured moves
+
+A mobile browser collapses its URL bar as you scroll down and restores it as you
+scroll up. The hero is a viewport-height box, so its height — and therefore the
+slack under its copy, which is what the band measures itself against — changes
+by the height of that bar several times in one gesture. Reproduced by stepping
+the hero through the heights a ~100px bar produces:
+
+| Hero height | Room | Lines that fit | Band |
+| --- | --- | --- | --- |
+| 844px | 213 | 8, renders 7 | shown |
+| 784px | 153 | 5 | shown, window resizes under you |
+| 744px | 113 | 2 | below MIN_LINES, fades out |
+
+Back and forth, several times per scroll. That is the flicker, and every step of
+it was the fit logic working exactly as written.
+
+### Decide against the worst viewport, and stop deciding mid-gesture
+
+Two changes:
+
+- **`floor`** — the decision is taken against the smallest room seen, not the
+  current one. Once the bar has been up once, the answer stops moving: the band
+  shows only if it fits with the bar showing, which is the only honest question
+  to ask. A bar that hides makes the room grow, and growth must never reopen a
+  decision already taken against the smaller viewport.
+- **debounce, 180ms** — a gesture that changes the height four times produces
+  one decision at the end of it instead of four.
+
+The floor resets on the two things that are real layout changes rather than
+browser chrome: rotation, and the reader's text-size control, whose reflow of
+the copy is the signal.
+
+### Two bugs found while fixing it
+
+**The floor latched a mid-animation reading and kept it forever.** The hero's
+copy arrives on a framer transform, so for the first second its bottom edge is
+16px low and the room reads smaller than it ever will again. Latching that cost
+two lines of the window permanently. Fixed with a warm-up: while warming, a
+measurement replaces the floor rather than min-ing with it.
+
+**The warm-up then kept whatever the last warm measurement was**, because
+nothing re-measures once the page is still — so it still latched a value from
+mid-animation. It now takes a *fresh* reading at the moment it goes warm, from a
+settled layout. The timer is 1500ms, past the hero's entrance: `container`
+staggers six children 0.1s apart after a 0.08s delay, each running 0.6s, so the
+last settles around 1.2s.
+
+### Verified
+
+At 390x844, type scale 1: room 213, chrome 66, line 16.5 — **7 lines, which is
+exactly what fits**, and identical across ten samples over three seconds. Then
+through the URL-bar sequence: it adjusts once as the bar first appears and never
+moves again.
+
+A note on the measuring, since it cost time: an earlier run of this check said
+the band was rendering a line short. It was not. The browser had `type-scale
+1.12` persisted in localStorage from earlier testing, which makes the line
+height 18.48 and the room 181, and 5 lines is the right answer there. **Clear
+the reader's own settings before trusting a layout measurement.**
+
 ## 2026-09-12: taking the template out of it
 
 Asked whether the site reads as generated. Honest answer at the time: the craft
