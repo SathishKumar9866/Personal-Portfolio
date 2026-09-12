@@ -112,11 +112,11 @@ grid shortens the measure to about 37 characters, which reads choppy. 15px holds
 measure, get the full 16px: they land at 70 characters, the comfortable middle of
 the 45-75 range.
 
-**The About capability cards are the narrowest text on the page at 39
-characters.** I accepted that rather than widening the grid. Those cards hold
-two- to three-line blurbs, not sustained reading, and the grid's `max-w-5xl` is
-deliberately shared with the status card above it so their right edges align.
-Widening for five more characters would break a documented invariant.
+**The About capability cards were the narrowest text on the page at 39
+characters**, and that finding is now void: the cards were deleted in the
+de-template pass, because they restated Stack's six groups in adjectives rather
+than tools. The `max-w-5xl` measure they shared with the status card survives
+them — it is what still keeps the status card from overshooting the lede.
 
 **The hint stayed italic.** Italic serif at 13.5px was the least legible text on
 the page, and the instinct is to remove the italic. But the italic was asked for

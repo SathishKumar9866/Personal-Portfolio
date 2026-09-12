@@ -72,7 +72,6 @@ hard-coded in a component is a bug.**
 | `experience` | roles, newest first |
 | `education` | degrees, newest first |
 | `projects` | the Work section |
-| `services` | the six capability cards in About |
 | `stackGroups` | the six Stack groups, each with its dot colour and its primary tools |
 | `glossary` | plain-English definitions behind the dotted terms |
 | `navLinks` | drives the navbar, the right rail, and the command palette |
@@ -137,6 +136,26 @@ and respects `prefers-color-scheme`. `ThemeToggle` persists the choice and is th
 single owner of that state; the command palette asks it to toggle rather than
 writing the DOM itself.
 
+### Depth
+
+The page had none: flat fills, 1px hairlines, one plane. Four pieces, all in
+`index.css`, none of them animated.
+
+| Class | What it does |
+| --- | --- |
+| `.glass-card` | **Three** shadows, not one — a tight contact shadow, a wide ambient one, and the inner highlight. A single soft shadow reads as a blur behind a box; three read as a surface above the page |
+| `.bloom` | Two large radial gradients at ~10% behind the hero, so the headline sits in front of something |
+| `.grain` | A fixed `feTurbulence` layer at 3.5%. A flat dark ground bands across 1440px; noise breaks the bands into material. One data URI, no request |
+| `.btn-accent` | A lit vertical gradient, a **coloured** ambient shadow so the accent glows into the ground rather than sitting on it, an inner top highlight, and a hover that lifts 1px instead of dimming |
+
+Radii: large surfaces 18–22px, small controls 12px. A 6px control beside a 22px
+card is what makes the control look like it came from another decade.
+
+**The trap.** `.bloom` first shipped as `inset: -20% -10% auto -10%`. The
+negative horizontal bled 39px past each edge and took the document to 430px wide
+on a 390px phone — a sideways scrollbar on every page. It is `inset-x: 0` now.
+**A decorative element positioned with a negative inset widens the document.**
+
 ### The accent has two roles, and they are different tokens
 
 - `--c-accent` is the lava red and is for **fills only**. As text it measures
@@ -168,15 +187,28 @@ the blur entirely.
 
 ### Type
 
-Barlow for display and UI, Newsreader for prose, JetBrains Mono for labels and
-data. Headings use fluid `clamp()`; everything below heading size uses a **named
-scale in `tailwind.config.js`**, not literals:
+Barlow for display and UI, Newsreader for prose, JetBrains Mono for **identifiers
+only**.
+
+That last word is a rule, and it replaced a much looser one. Mono used to carry
+labels and data, which in practice meant navigation, the wordmark, the status
+line, every eyebrow, every card label and the whole availability block. At that
+density the page read as a terminal rather than as a product, which is most of
+what made it look older than it is.
+
+**Mono is for things a reader might copy or type**: code, URLs, repo names, tool
+names, clocks, counts. Everything else is Barlow. The availability card is the
+clearest case — "AI Engineer" and "AdvanSoft International, Inc" are a job title
+and an employer, not data, and they are set in the sans.
+
+Headings use fluid `clamp()`; everything below heading size uses a **named scale
+in `tailwind.config.js`**, not literals:
 
 | Token | px | For |
 | --- | --- | --- |
 | `text-micro` | 11 | stamps sitting **on** artwork, and nothing else |
-| `text-label` | 12 | uppercase tracked eyebrows, field names |
-| `text-nav` | 13 | nav items, section eyebrows |
+| `text-label` | 12 | mono field names that are still identifiers |
+| `text-nav` | 13 | section meta lines (`4 roles · since 2020`) |
 | `text-chip` | 13 | technology chips |
 | `text-data` | 14 | mono facts: employers, dates, URLs, repo names |
 | `text-body` | 15 | prose inside a card, narrow measure |
@@ -221,9 +253,9 @@ the footer separator.
 | Section | Component | Notes |
 | --- | --- | --- |
 | Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed: it was the fifth route to `#contact` |
-| About | `About.jsx` | Portrait, lede, availability card, six capability cards |
+| About | `About.jsx` | Portrait, lede, availability card. The six capability cards were deleted: they restated Stack's six groups in adjectives instead of tools |
 | Experience | `Experience.jsx` | Roles then education on one timeline, dates right-aligned |
-| Stack | `Tech.jsx` | Six groups, each with a category dot. Two chip tiers. One block on a phone, cards from md |
+| Stack | `Tech.jsx` | Six groups, each with a category dot. Two tiers. Bare flowing terms on a phone, cards from md |
 | Work | `Works.jsx` | Six projects, generative canvas covers, plain chips |
 | Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
 | Collaborate | `Collaborate.jsx` | Closing band, desktop only. On a phone it lives in the menu |
@@ -281,29 +313,32 @@ desktop's content.
 | | Phone | md and up |
 | --- | --- | --- |
 | Navigation | Hamburger, full-screen menu | Inline links |
-| Stack | One block, six labelled rows | Six cards, each with its description |
+| Stack | Six labelled rows of bare terms, no boxes | Six cards, each with its description |
 | Stack intro copy | Hidden | Shown |
-| Role points, project copy, About cards | Behind a disclosure (Work, Experience) or inline (About) | All inline |
+| Role points, project copy | Behind a disclosure (Work, Experience) | All inline |
 | Role points alignment | Ragged right | Justified, auto-hyphenated |
 | Collaborate band | In the menu | Closing section after Contact |
 | Agent note | Two sentences plus `/llms.txt` | Six-point grid |
 | Contact rows | Label, then address, then Copy, stacked | One row |
 | Body weight | 500 | 400 |
-| Ambient motion | Token wave in its own strip; project covers | Neural field, token wave, career diagram, covers |
+| Ambient motion | The code-completion band in the hero's slack; project covers | Neural field, token wave, career diagram, covers |
 
 Three rules behind that table:
 
 1. **A disclosure has to save more than it costs.** Hiding something behind a
    44px summary row is only worth it if what is hidden is meaningfully taller.
    It is in Work (852px) and Experience (1,189px). It was not in About, where
-   six two-line descriptions bought 114px for six taps, so those are inline.
+   six two-line descriptions bought 114px for six taps — and those cards have
+   since been deleted outright, which is the cheaper answer to the same
+   question.
 2. **A disclosure is never drawn empty.** Education renders through the same
    component as a job but has no points and no stack, so the control is omitted
    rather than opening onto nothing.
-3. **Motion has to be honest about what it draws.** `TokenStream` moves to a
-   strip of its own on a phone because at 390px there is no empty band to
-   borrow, and running it behind the cards is the wallpaper problem it was
-   scoped to avoid. `NeuralField` does **not** move, and the reason is not
+3. **Motion has to be honest about what it draws.** `TokenStream` is desktop
+   only. It had a phone strip, and at 390px that band is too short for a wave
+   and too narrow for a sentence of tokens: it rendered as struck-through
+   fragments in empty space and read as a rendering fault, so the strip and the
+   variant behind it were deleted. `NeuralField` does **not** move, and the reason is not
    caution: every node in it is read from `getBoundingClientRect()` on the two
    edge docks, which exist only from 1024px. Below that there is nothing to
    read, and inventing coordinates would contradict the one claim that makes it
@@ -332,7 +367,7 @@ is scoped by *fading out as the hero leaves* and halting, not by re-parenting.
 Opacity is derived from the hero's `getBoundingClientRect().bottom`, so the fade
 is continuous rather than a step.
 
-### `TokenStream.jsx`, the Stack section only
+### `TokenStream.jsx`, the Stack section only, desktop only
 
 A wave that descends and wraps, with sub-word tokens riding the curve they were
 emitted onto. It lives in Stack and only in Stack, because that is where the
