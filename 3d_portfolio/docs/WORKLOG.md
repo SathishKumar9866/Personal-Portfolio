@@ -1,5 +1,84 @@
 # Worklog
 
+## 2026-09-12: six reading themes
+
+Two palettes became six. The architecture already supported it — CSS variables,
+one attribute on `<html>`, a pre-paint boot script — so most of the work was
+deciding what the palettes are for and proving they are legible.
+
+### A second axis, because "not dark" stops scaling
+
+The light-only rules (glass shadows, bloom, grain) read
+`:not([data-theme="dark"])`. That is a sentence that stops being true the moment
+a third palette lands. There is now `data-scheme`, light or dark, written
+alongside `data-theme`; a palette declares its scheme once in the `themes`
+registry and inherits every structural rule from it.
+
+| Theme | Scheme | For |
+| --- | --- | --- |
+| Slate | dark | The default |
+| Ink | dark | Near-black, cool, highest contrast of the six |
+| Paper | light | The default light |
+| Manuscript | light | Warm, low blue. Reading rather than scanning |
+| Clarity | light | Neutral, high contrast, accent pulled back |
+| Preprint | light | An arXiv or IEEE page |
+
+**Preprint's accent is `#B31B1B`, arXiv's own Cornell red** — which happens to
+sit in the same family as this site's lava red, so the theme reads as a paper
+without the page giving up its identity. That is the detail that made it work
+rather than fight.
+
+**The content is identical in all six**, and that is the line worth holding. The
+request was for themes "from the mindset of" a hiring manager, a recruiter, a
+professor. A portfolio that shows a recruiter different claims than it shows a
+professor is not a theme, it is a lie with a switch on it. What varies is the
+reading condition — ground, contrast, warmth — and the picker says who each
+suits rather than promising anyone their own version of the facts.
+
+### Measured, not derived
+
+Every palette was written, then read back out of the browser and run through the
+WCAG formula. Lowest values per theme, against a 4.5 text floor and a 3.0
+control-boundary floor:
+
+| Theme | text | secondary | faint/card | accent as text | control edge |
+| --- | --- | --- | --- | --- | --- |
+| Slate | 12.57 | 8.15 | 4.89 | 6.00 | 4.16 |
+| Ink | 16.42 | 9.10 | 5.53 | 7.92 | 3.77 |
+| Paper | 13.59 | 6.97 | 4.53 | 5.78 | 3.56 |
+| Manuscript | 13.72 | 7.39 | 4.54 | 6.80 | 3.24 |
+| Clarity | 18.02 | 8.70 | 5.01 | 6.87 | 3.23 |
+| Preprint | 18.86 | 11.32 | 5.72 | 8.39 | 3.93 |
+
+All six clear both floors. Manuscript and Clarity are the tightest at the
+control edge, and they sit where Paper already shipped.
+
+### The picker, and two traps in it
+
+A two-state sun/moon toggle does not scale to six: a control that cycles six
+things tells you neither where you are nor how many presses remain. It is a menu
+now, with a swatch, a name and a line about who each suits.
+
+Two bugs found building the swatches, both worth remembering:
+
+- **A nested element cannot opt into another palette.** The rules are
+  `:root[data-theme=...]`, so setting the attribute on a swatch matches nothing
+  — every swatch rendered in the *current* theme's colours. They paint from
+  `theme.bar` and `theme.accent` directly instead.
+- **A bare `<span>` is inline, and an inline box ignores width.** The swatches
+  came out 2px wide with their height coming from the line box. `block` fixed
+  it. Both were caught by measuring the rendered boxes, not by looking — at a
+  glance they read as an intentional thin rule.
+
+### Verified
+
+All six applied in turn at 390x844: correct scheme on each, ground colour
+correct, `scrollWidth` equal to the viewport in every one. The picker opens
+inside the viewport on a phone (272px wide at x=46..318 of 390), its rows are
+74px tall against a 44px minimum, and tapping one applies and persists it.
+Mobile battery unchanged: no band overlap, menu reachable, close pinned, nav
+visible after a jump.
+
 ## 2026-09-12: the premium pass
 
 ### Stack on a phone: the boxes came off

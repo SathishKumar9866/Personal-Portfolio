@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `redesign/premium-dark` merged and is gone.
+**Branch:** `main`. `feat/reading-themes` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -16,7 +16,30 @@ The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
 flight and nothing half-applied.
 
-`redesign/premium-dark` squash-merged and deleted. Feedback was "looks like a
+`feat/reading-themes` squash-merged and deleted: **six palettes, not two.**
+Slate and Ink (dark), Paper, Manuscript, Clarity and Preprint (light). Preprint
+is an arXiv/IEEE page and its accent is `#B31B1B`, arXiv's own Cornell red,
+which sits in the same family as this site's lava red.
+
+**`data-scheme` is the new second axis.** Every structural rule — glass shadows,
+bloom, grain — keys off it, so a palette declares light-or-dark once in the
+`themes` registry and inherits the rest. Those rules used to read
+`:not([data-theme="dark"])`, which stops being true at the third palette.
+
+**The content is identical in all six**, deliberately. The ask was for themes
+"from the mindset of" a recruiter, a professor, a hiring manager; what varies is
+the reading condition, never the claims. A portfolio that shows different people
+different facts is not a theme.
+
+Every palette measured for contrast rather than derived — all six clear AA for
+text and 3.0 for control boundaries; the table is in the WORKLOG.
+
+**Two traps this set:** a nested element cannot opt into another palette
+(`:root[data-theme=...]` only ever matches the document root, so themed swatches
+must paint from stored values), and **a bare `<span>` is inline, so it ignores
+width** — the swatches rendered 2px wide until they were given `block`.
+
+Before it, `redesign/premium-dark` squash-merged and deleted. Feedback was "looks like a
 website from 1990"; it did not, it looked like **2020 developer-brand**, which
 is a different and more fixable problem. Four causes, none of them the content:
 

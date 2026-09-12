@@ -136,6 +136,55 @@ and respects `prefers-color-scheme`. `ThemeToggle` persists the choice and is th
 single owner of that state; the command palette asks it to toggle rather than
 writing the DOM itself.
 
+### Six reading themes, two schemes
+
+`data-theme` is the palette; `data-scheme` is light-or-dark. Every structural
+rule keys off the scheme — the glass shadows, the bloom, the grain — so a new
+palette declares `scheme` once in `themes` (`constants/index.js`) and inherits
+all of it. Those rules used to read `:not([data-theme="dark"])`, which is a
+sentence that stops being true the moment a third palette lands.
+
+| Theme | Scheme | Character |
+| --- | --- | --- |
+| Slate | dark | The default. Deep navy |
+| Ink | dark | Near-black and cool, the highest contrast of the six |
+| Paper | light | Warm white. The default light |
+| Manuscript | light | Warm, low blue, gentle. For reading rather than scanning |
+| Clarity | light | Neutral, high contrast, accent pulled back |
+| Preprint | light | An arXiv or IEEE page: white, near-black, **Cornell red `#B31B1B`** |
+
+Preprint's accent is arXiv's own red, which happens to sit in the same family as
+this site's lava red — so it reads as a paper without the page giving up its
+identity.
+
+**The content is identical in all six.** A portfolio that shows a recruiter
+different claims than it shows a professor is not a theme, it is a lie with a
+switch on it. These are reading conditions: ground, contrast, warmth.
+
+Every palette was **measured, not derived**. Contrast on the six pairs that
+matter, lowest value per theme:
+
+| Theme | body text | secondary | faint on card | accent as text | control edge |
+| --- | --- | --- | --- | --- | --- |
+| Slate | 12.57 | 8.15 | 4.89 | 6.00 | 4.16 |
+| Ink | 16.42 | 9.10 | 5.53 | 7.92 | 3.77 |
+| Paper | 13.59 | 6.97 | 4.53 | 5.78 | 3.56 |
+| Manuscript | 13.72 | 7.39 | 4.54 | 6.80 | 3.24 |
+| Clarity | 18.02 | 8.70 | 5.01 | 6.87 | 3.23 |
+| Preprint | 18.86 | 11.32 | 5.72 | 8.39 | 3.93 |
+
+Text floor is 4.5 (AA), control-boundary floor is 3.0 (WCAG 1.4.11). All six
+clear both.
+
+**Two traps the picker hit**, both worth knowing:
+
+- **A nested element cannot opt into another palette.** The rules are
+  `:root[data-theme=...]`, so putting the attribute on a swatch matches nothing
+  and every swatch came out the colour of the current theme. The swatches paint
+  from `theme.bar` and `theme.accent` directly.
+- **A bare `<span>` is inline, and an inline box ignores width.** The swatches
+  rendered 2px wide with their height coming from the line box alone.
+
 ### Depth
 
 The page had none: flat fills, 1px hairlines, one plane. Four pieces, all in

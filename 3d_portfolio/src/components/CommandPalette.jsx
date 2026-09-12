@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { contact, navLinks } from "../constants";
+import { contact, navLinks, themes } from "../constants";
 import { readable, socialLinks } from "./icons";
 
 // An explicit `behavior: "smooth"` beats the CSS reduced-motion reset, and these
@@ -21,7 +21,11 @@ const open = (url) => () => window.open(url, "_blank", "noreferrer");
 // The palette does NOT own the theme. ThemeToggle does; writing data-theme here
 // too left its useState stale, so the button then needed two clicks and
 // announced the wrong mode to a screen reader in between.
-const toggleTheme = () => window.dispatchEvent(new Event("toggle-theme"));
+// The palette asks for a theme by id; ThemeToggle stays the only writer of the
+// attribute. Writing `data-theme` here directly left its useState stale, which
+// is how the button came to need two clicks and to announce the wrong mode.
+const setTheme = (id) => () =>
+  window.dispatchEvent(new CustomEvent("set-theme", { detail: id }));
 
 const copyEmail = async () => {
   try {
@@ -35,7 +39,10 @@ const copyEmail = async () => {
 // handle or a new profile cannot leave the palette pointing somewhere stale.
 const ACTIONS = [
   ...navLinks.map((n) => ({ label: `Go to ${n.title}`, hint: "section", run: go(n.id) })),
-  { label: "Toggle light / dark", hint: "theme", run: toggleTheme },
+  // One entry per theme rather than one toggle: with five palettes a toggle
+  // cannot say which one it is about to give you, and the palette is exactly
+  // where someone who knows what they want goes to ask for it by name.
+  ...themes.map((t) => ({ label: `Theme: ${t.label}`, hint: t.scheme, run: setTheme(t.id) })),
   { label: "Copy email", hint: contact.email, run: copyEmail },
   ...socialLinks()
     .filter((l) => l.k !== "email")
