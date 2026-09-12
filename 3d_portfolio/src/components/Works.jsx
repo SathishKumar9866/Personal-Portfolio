@@ -6,6 +6,7 @@ import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import TagTerm from "./TagTerm";
+import Reveal from "./Reveal";
 import { ICON_PATHS } from "./icons";
 import { TAU, roundRect, hash, mulberry } from "../utils/draw";
 
@@ -349,10 +350,13 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
   // real cascade change for no production benefit.
   const coverY = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [14, -14]);
   return (
-    <motion.div
+    <Reveal
       ref={cardRef}
-      variants={fadeIn("up", "spring", index * 0.12, 0.6)}
-      className={featured ? "sm:col-span-2" : ""}
+      // Column-based, so a row arrives together and the next row waits for the
+      // reader. Indexing by absolute position staggered all six off one event,
+      // which on a phone finished before the reader reached card three.
+      delay={(index % 3) * 0.07}
+      className={`h-full ${featured ? "sm:col-span-2" : ""}`}
     >
       <Tilt
         options={{ max: reduced ? 0 : 8, scale: 1, speed: 400 }}
@@ -391,7 +395,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           </div>
         </div>
 
-        <div className="mt-5 pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-data">
+        <div className="mt-auto pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-data">
           <a href={source_code_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 min-h-11 sm:min-h-0 text-secondary hover:text-accent transition-colors">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d={ICON_PATHS.github} />
@@ -405,7 +409,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           )}
         </div>
       </Tilt>
-    </motion.div>
+    </Reveal>
   );
 };
 
@@ -424,7 +428,10 @@ const Works = () => (
       search, and one app that is live and in use.
     </motion.p>
 
-    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+    {/* `items-stretch`, not `items-start`. Cards in a row now match height
+        regardless of how long a description runs, because a ragged row of
+        cards reads as an alignment error rather than as a design. */}
+    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
       {projects.map((p, i) => (
         <ProjectCard key={p.name} index={i} featured={i === 0} {...p} />
       ))}

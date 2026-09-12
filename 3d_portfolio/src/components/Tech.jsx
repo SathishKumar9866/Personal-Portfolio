@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { styles } from "../styles";
 import { stackGroups, TERM_HINT } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
+import Reveal from "./Reveal";
 import { SectionWrapper } from "../hoc";
 import TagTerm from "./TagTerm";
 import TokenStream from "./TokenStream";
@@ -49,14 +50,18 @@ const Tech = () => (
       {TERM_HINT}
     </motion.p>
 
-    {/* One column under md. Two 280px-wide cards on a phone was the old
-        behaviour and it wrapped every chip onto its own line. */}
-    <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+    {/* One column under md, two at md, three from lg. Six groups land as 3x2
+        rather than 2x3, which is a whole row less scrolling for the same
+        content. Two 280px-wide cards on a phone was the old behaviour and it
+        wrapped every chip onto its own line. */}
+    <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 items-stretch">
       {stackGroups.map((g, i) => (
-        <motion.div
+        <Reveal
           key={g.title}
-          variants={fadeIn("up", "spring", i * 0.08, 0.5)}
-          className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col hover:border-accent/50"
+          // Each card waits for its own viewport entry. The small delay is by
+          // column, so a row arrives as a row rather than all six at once.
+          delay={(i % 3) * 0.07}
+          className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col h-full hover:border-accent/50"
         >
           <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
             <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
@@ -73,7 +78,7 @@ const Tech = () => (
               <TagTerm key={it} name={it} primary={g.primary?.includes(it)} />
             ))}
           </div>
-        </motion.div>
+        </Reveal>
       ))}
     </div>
   </>

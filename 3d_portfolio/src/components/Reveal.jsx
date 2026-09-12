@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { motion } from "framer-motion";
 
 /**
@@ -15,17 +16,22 @@ import { motion } from "framer-motion";
  */
 const EASE = [0.22, 0.61, 0.36, 1];
 
-const Reveal = ({
+// forwardRef because callers measure the revealed element. Works.jsx drives the
+// cover parallax from `useScroll({ target })` on the card, and a plain function
+// component drops the ref silently: the target reads null and the parallax
+// stops working with nothing logged.
+const Reveal = forwardRef(({
   children,
   delay = 0,
   y = 18,
   as = "div",
   className = "",
   ...rest
-}) => {
+}, ref) => {
   const Tag = motion[as] ?? motion.div;
   return (
     <Tag
+      ref={ref}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: "some", margin: "0px 0px -12% 0px" }}
@@ -36,6 +42,8 @@ const Reveal = ({
       {children}
     </Tag>
   );
-};
+});
+
+Reveal.displayName = "Reveal";
 
 export default Reveal;

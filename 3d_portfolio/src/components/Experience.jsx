@@ -86,7 +86,7 @@ const Role = ({ role, index, trackIndex = null }) => (
     {role.points?.length > 0 && (
       <ul className="mt-3 list-none max-w-[34rem] space-y-2">
         {role.points.map((point) => (
-          <li key={point} className="relative pl-5 font-sans text-secondary text-prose leading-[1.6]">
+          <li key={point} className="relative pl-5 font-sans text-secondary text-prose leading-[1.6] text-justify hyphens-auto">
             {/* A rule, not a bullet glyph: the timeline already owns the round
                 marks in this section, and a second kind of dot competes. */}
             <span
