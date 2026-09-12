@@ -75,11 +75,38 @@ hides, its timer chain does not run either.
 
 `npm run lint` 0 errors (27 pre-existing warnings), `npm run build` exit 0.
 
+### It shrinks before it hides
+
+Follow-up, same day. The first version was all-or-nothing, and at 112% text it
+hid over **one pixel**: 221px of slack against 222px needed. Vanishing over a
+pixel is a worse answer than showing one line fewer, so the measurement now buys
+lines rather than a yes/no — `floor((room - chrome) / lineHeight)`, clamped to
+4..7, and it only hides when even four will not fit.
+
+| Condition | Slack | Before | After |
+| --- | --- | --- | --- |
+| 390x844 | 253px | 7 lines | 7 lines |
+| 390x844 at 112% | 221px | **hidden** | **5 lines** |
+| 390x844 at 125% | 103px | hidden | hidden |
+| 390x844 at 140% | 18px | hidden | hidden |
+| 430x932 | 406px | 7 lines | 7 lines |
+| 768x900 | 346px | 7 lines | 7 lines |
+| 360x640 | 49px | hidden | hidden |
+
+**It cannot oscillate, and that is the whole design of the division.** Both
+quantities it divides by are independent of how many lines are currently shown:
+the chrome around the code window (`band.offsetHeight - pre.offsetHeight`) and
+one line's height. So the ResizeObserver's second pass computes the same answer
+as the first and stops. Verified by sampling the line count 20 times over three
+seconds at 112%: one distinct value.
+
+The smaller window still works: at 5 lines, every settled result has the line
+that produced it on screen — `missing` shows 8..12 with `return -1` active,
+`empty` 0..4 with the guard's `return -1`, `found` 4..8 with `return mid`.
+
 ### Not done
 
-Real-device QA on iOS and Android, still. And a band that shrank to fit instead
-of hiding would survive the 112% case, which currently misses by one pixel —
-221px of slack against 222px needed.
+Real-device QA on iOS and Android, still.
 
 ## 2026-09-12: four layout faults on a phone, all found by measuring
 

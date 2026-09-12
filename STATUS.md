@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `feat/hero-code-completion-band` merged and is gone.
+**Branch:** `main`. `fix/code-band-shrink-to-fit` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -22,8 +22,12 @@ to "Overview" — now holds a Python binary search being completed and then run,
 cycling found / missing / empty so the guard clause is always seen earning its
 place. It **measures whether it fits** rather than trusting a breakpoint,
 because the reader's text-size control changes the slack without changing
-anything a media query can see: at 112% it hides itself. Drawn without that
-check at 360x640 it overlapped the lede by 156px.
+anything a media query can see. It spends what it measures on lines of the
+function, 4 to 7 of them, and hides only when even four will not fit: at 112%
+that is a 5-line window, where the first version hid itself over a single pixel.
+The division cannot oscillate because neither of its terms depends on the
+current line count — see the WORKLOG. Drawn with no check at all at 360x640 it
+overlapped the lede by 156px.
 
 Before it, `fix/mobile-layout-and-nav` squash-merged and deleted, four commits,
 all four phone-layout faults found by measuring the running page. Full reasoning in
