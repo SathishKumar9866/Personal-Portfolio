@@ -49,3 +49,21 @@ not the site were moved out, keeping their git history. Nothing was deleted.
   repos. Append with `printf` or an editor, never `>>` from Windows PowerShell.
 - Nested clones in this directory are ignored by name. Cloning something new here will not
   be ignored automatically.
+
+## License
+
+**Code: [MIT](LICENSE).** Take the components, the canvas drawings, the build
+setup, any of it.
+
+**Content: not licensed for reuse.** The MIT grant covers the software. It is
+not an invitation to republish the parts of this repository that are a person
+rather than a program: the work history and its dates, the project write-ups,
+the bio and headline copy, `3d_portfolio/public/llms.txt`, and the images in
+`3d_portfolio/public/` including the headshot and the social card.
+
+The distinction matters more here than on a normal repo, because on a portfolio
+the text *is* the product. Someone can fork this site and put their own career
+in it; they should not be able to fork it and keep Sathish's.
+
+If you want to reuse the design, the honest path is: keep the code, replace
+everything in `3d_portfolio/src/constants/index.js`.

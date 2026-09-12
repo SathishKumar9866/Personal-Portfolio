@@ -438,3 +438,9 @@ For anything visual, measure it in a browser:
 - A comment says *why*, not *what*. Several here record a decision that looks
   like an omission, so the next person does not undo it.
 - `docs/WORKLOG.md` records what shipped; `docs/BACKLOG.md` records what has not.
+
+## License
+
+Code is MIT, in [`../LICENSE`](../LICENSE). The written content and the images
+are not: see the License section of the repository root README for what that
+covers and why a portfolio needs the distinction.
