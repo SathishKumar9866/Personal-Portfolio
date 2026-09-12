@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `fix/code-band-flicker` merged and is gone.
+**Branch:** `main`. `redesign/premium-dark` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -16,7 +16,23 @@ The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
 flight and nothing half-applied.
 
-`fix/code-band-flicker` squash-merged and deleted — **the first fix in this
+`redesign/premium-dark` squash-merged and deleted. Feedback was "looks like a
+website from 1990"; it did not, it looked like **2020 developer-brand**, which
+is a different and more fixable problem. Four causes, none of them the content:
+
+| Was | Now |
+| --- | --- |
+| Mono on nav, wordmark, status, every label | **Mono is for identifiers only** — code, URLs, repo and tool names, clocks, counts. Everything else is the sans |
+| One soft shadow on cards, flat ground | Three-layer elevation, a radial bloom behind the hero, 3.5% feTurbulence grain |
+| Flat saturated CTA at 6px radius | `.btn-accent` — lit gradient, coloured ambient glow, 1px hover lift |
+| 33 boxed chips in Stack on a phone | Bare flowing terms; **1,364px → 1,131px, 17% shorter**, touch target kept |
+
+**The trap this pass set:** the hero bloom shipped with a `-10%` horizontal
+inset, which bled 39px past each edge and took the document to 430px wide on a
+390px phone — a sideways scrollbar on every page. The mobile battery caught it.
+**Any decorative element positioned with a negative inset widens the document.**
+
+Before it, `fix/code-band-flicker` squash-merged and deleted — **the first fix in this
 sequence that came from a real phone rather than an emulated viewport.** The
 hero's code band flickered while scrolling, because a mobile browser collapses
 its URL bar as you scroll and the hero is a viewport-height box: the slack the

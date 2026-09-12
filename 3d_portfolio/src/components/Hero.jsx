@@ -22,6 +22,10 @@ const Hero = () => {
   // where it was chosen rather than where the arithmetic landed.
   return (
     <section className="relative w-full min-h-screen min-h-[100svh] flex items-start pt-28 sm:pt-32" aria-label="Intro">
+      {/* Something behind the headline. See `.bloom` in index.css: the page had
+          nothing between the type and a flat ground, which is most of why it
+          read as older than it is. */}
+      <span aria-hidden="true" className="bloom" />
 
       <motion.div
         variants={container}
@@ -31,9 +35,11 @@ const Hero = () => {
       >
         <motion.div
           variants={rise}
-          className="flex items-center justify-between border-b border-line pb-4 mb-10 sm:mb-14 font-mono text-label uppercase tracking-label"
+          className="flex items-center justify-between border-b border-line pb-4 mb-10 sm:mb-14"
         >
-          <span className="text-secondary">Sathish Kumar</span>
+          <span className="font-sans text-[13px] font-medium uppercase tracking-[0.09em] text-secondary">
+            Sathish Kumar
+          </span>
           <LiveClock className="text-label hidden sm:inline" />
         </motion.div>
 
@@ -75,7 +81,7 @@ const Hero = () => {
               two produced. */}
           <a
             href="#experience"
-            className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 font-sans font-semibold text-[15px] text-black-100 hover:brightness-95 transition"
+            className="btn-accent inline-flex items-center gap-2 rounded-2xl px-7 py-3.5 font-sans font-semibold text-[15px] tracking-[-0.01em] text-black-100"
           >
             Start with my experience
           </a>

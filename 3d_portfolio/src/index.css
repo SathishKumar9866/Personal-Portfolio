@@ -245,9 +245,16 @@ main:focus:not(:focus-visible) {
     rgb(var(--c-tertiary) / 0.78)
   );
   border: 1px solid rgb(var(--c-line));
+  /* Three shadows, not one. A single soft shadow reads as a blur behind the
+     box; a tight contact shadow plus a wide ambient one plus the inner
+     highlight is what makes a surface look like it is ABOVE the page rather
+     than printed on it. The flat 1px-hairline-on-flat-fill this replaces is
+     the main reason the page read as older than it is. */
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.1),
-    0 12px 30px -20px rgb(var(--c-strong) / 0.35);
+    0 1px 2px rgb(var(--c-strong) / 0.4),
+    0 8px 16px -8px rgb(var(--c-strong) / 0.45),
+    0 24px 48px -24px rgb(var(--c-strong) / 0.55);
 }
 
 /* The specular top edge is what sells glass in dark mode and muddies it in
@@ -385,5 +392,101 @@ main:focus:not(:focus-visible) {
   .contact-row > .contact-addr {
     order: 0;
     flex: 0 1 auto;
+  }
+}
+
+
+/* ---- depth -------------------------------------------------------------
+   Three things the page had none of: something behind the type, something on
+   top of the whole surface, and a button that looks lit rather than filled.
+   All three are cheap, none of them animate, and each is a single element or
+   a single class. */
+
+/* A soft bloom behind the hero. One very large radial gradient at low alpha:
+   enough that the headline sits in front of something, not enough to read as a
+   gradient. `pointer-events: none` and no z-index of its own, so it never
+   competes with the field drawing on top of it. */
+.bloom {
+  position: absolute;
+  /* Horizontally flush, NOT negative. `-10%` either side bled 39px past each
+     edge on a 390px phone and took the document to 430px wide, which is a
+     sideways scrollbar on the whole page — measured, and the reason this reads
+     `inset-x: 0`. The gradient is soft enough that it needs no bleed; the
+     negative TOP is safe because nothing scrolls above the document origin. */
+  inset: -18% 0 auto 0;
+  height: 78%;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      42% 52% at 22% 28%,
+      rgb(var(--c-accent) / 0.11),
+      transparent 70%
+    ),
+    radial-gradient(
+      38% 46% at 78% 12%,
+      rgb(var(--c-live) / 0.09),
+      transparent 72%
+    );
+}
+:root:not([data-theme="dark"]) .bloom {
+  /* The same bloom on a near-white ground is a stain. Half the alpha, and the
+     warm lobe only. */
+  background: radial-gradient(
+    46% 54% at 24% 26%,
+    rgb(var(--c-accent) / 0.06),
+    transparent 72%
+  );
+}
+
+/* Grain. A flat dark ground banding across a 1440px gradient is the other
+   thing that dates a page; a little noise breaks the bands and reads as
+   material. feTurbulence rather than an image so it costs one data URI and no
+   request. Very low alpha: it should be felt, not seen. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root:not([data-theme="dark"]) .grain {
+  opacity: 0.02;
+}
+
+/* The accent button. Was a flat saturated rectangle at 6px radius, which is
+   the single most dated element on the page. Now: a slight vertical gradient
+   so it looks lit from above, a coloured ambient shadow so the accent glows
+   into the ground instead of sitting on it, and a hairline inner highlight on
+   the top edge. The hover lifts rather than dims. */
+.btn-accent {
+  background: linear-gradient(
+    180deg,
+    rgb(var(--c-accent) / 1),
+    rgb(var(--c-accent) / 0.88)
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 1px 2px rgb(var(--c-strong) / 0.35),
+    0 10px 24px -10px rgb(var(--c-accent) / 0.55),
+    0 2px 8px -2px rgb(var(--c-accent) / 0.35);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+.btn-accent:hover {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.34),
+    0 1px 2px rgb(var(--c-strong) / 0.35),
+    0 16px 34px -12px rgb(var(--c-accent) / 0.65),
+    0 3px 12px -2px rgb(var(--c-accent) / 0.45);
+  transform: translateY(-1px);
+}
+.btn-accent:active {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-accent,
+  .btn-accent:hover,
+  .btn-accent:active {
+    transform: none;
   }
 }

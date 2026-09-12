@@ -54,7 +54,7 @@ const Dot = () => (
 );
 
 export const AvailabilityCompact = () => (
-  <span className="inline-flex items-center gap-2 font-mono text-chip text-live">
+  <span className="inline-flex items-center gap-2 font-sans text-[15px] font-medium text-live">
     <Dot />
     Open to {status.openTo}
   </span>
@@ -87,7 +87,7 @@ const rule = {
  */
 const Fact = ({ label, lines }) => (
   <motion.div variants={row} className="min-w-0">
-    <dt className="font-mono text-label uppercase tracking-label text-faint">
+    <dt className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-faint">
       {label}
     </dt>
     <motion.span
@@ -99,8 +99,10 @@ const Fact = ({ label, lines }) => (
       {lines.map((line, i) => (
         <p
           key={line}
-          className={`font-mono break-words ${
-            i === 0 ? "text-data text-white-100" : "mt-0.5 text-chip text-secondary"
+          className={`font-sans break-words tracking-[-0.01em] ${
+            i === 0
+              ? "text-[17px] font-medium text-white-100"
+              : "mt-0.5 text-[15px] text-secondary"
           }`}
         >
           {line}
@@ -133,17 +135,17 @@ const Availability = () => {
       whileInView="show"
       viewport={{ once: true, amount: "some" }}
       variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09 } } }}
-      className="relative min-w-0 overflow-hidden rounded-xl glass-card p-4 sm:p-5"
+      className="relative min-w-0 overflow-hidden rounded-[18px] glass-card p-4 sm:p-5"
     >
       <span aria-hidden="true" className="glass-sweep" />
 
       <motion.p
         variants={row}
-        className="relative flex flex-wrap items-center gap-x-2 gap-y-1 font-mono font-bold text-label uppercase tracking-label text-live"
+        className="relative flex flex-wrap items-center gap-x-2 gap-y-1 font-sans font-semibold text-[13px] uppercase tracking-[0.1em] text-live"
       >
         <Dot />
         Open to work
-        <span className="font-normal text-faint normal-case tracking-normal">· available now</span>
+        <span className="font-normal text-[13px] text-faint normal-case tracking-normal">· available now</span>
       </motion.p>
 
       {/* The facts sit inside a rail: a hairline the full height of the list,
@@ -174,7 +176,7 @@ const Availability = () => {
       <motion.a
         variants={row}
         href="#contact"
-        className="group relative mt-5 inline-flex items-center gap-2 rounded-lg border border-live/60 px-3 min-h-11 sm:min-h-10 font-mono text-data text-live transition-colors hover:bg-live/10 hover:border-live"
+        className="group relative mt-5 inline-flex items-center gap-2 rounded-xl border border-live/60 px-4 min-h-11 sm:min-h-10 font-sans text-[15px] font-medium text-live transition-colors hover:bg-live/10 hover:border-live"
       >
         Reach out
         <span

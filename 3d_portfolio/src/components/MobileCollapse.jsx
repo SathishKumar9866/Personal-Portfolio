@@ -43,7 +43,7 @@ const MobileCollapse = ({ label = "Details", children }) => {
   return (
     <details className="group mt-3">
       <summary
-        className="flex items-center gap-2 min-h-11 cursor-pointer list-none font-mono text-label uppercase tracking-label text-accent-ink marker:hidden [&::-webkit-details-marker]:hidden"
+        className="flex items-center gap-2 min-h-11 cursor-pointer list-none font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink marker:hidden [&::-webkit-details-marker]:hidden"
       >
         <svg
           width="11"

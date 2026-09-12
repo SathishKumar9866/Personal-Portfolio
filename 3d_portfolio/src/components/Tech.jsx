@@ -62,25 +62,28 @@ const Tech = () => (
         description to earn its place. Each row and each card still reveals on
         its own viewport entry, so the section animates as the reader arrives at
         it rather than all at once. */}
-    <div className="mt-10 sm:mt-12">
-      {/* The token wave gets its own strip on a phone. The desktop instance
-          occupies the empty band beside the intro copy; at this width there is
-          no empty band, so rather than run it behind the cards, which is the
-          wallpaper problem the whole effect was scoped to avoid, it is given a
-          row of its own above them. */}
-      <TokenStream inline />
-
-      {/* phone: one card, six rows */}
-      <div className="md:hidden glass-card rounded-2xl p-4 divide-y divide-line">
+    <div className="mt-8 sm:mt-12">
+      {/* phone: six labelled rows of flowing terms, no card and no chips.
+          Boxed, this was thirty-three bordered rectangles about 50px tall — a
+          form, not a vocabulary, and most of a screen per group. Bare terms
+          carry the same two tiers in weight and colour, the dotted underline
+          still marks what is definable, and the count on the right is the one
+          number a reader might want. The wave that used to sit above this is
+          gone: at 390px it rendered as struck-through fragments in a band of
+          its own and read as a glitch rather than a stream. */}
+      <div className="md:hidden divide-y divide-line">
         {stackGroups.map((g, i) => (
-          <Reveal key={g.title} delay={i * 0.06} y={12} className="py-4 first:pt-0 last:pb-0">
-            <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
+          <Reveal key={g.title} delay={i * 0.06} y={12} className="py-5 first:pt-0 last:pb-0">
+            <h3 className="flex items-center gap-2 text-accent-ink font-sans text-[12px] font-medium uppercase tracking-[0.09em]">
               <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
               {g.title}
+              <span className="ml-auto font-mono text-micro text-faint normal-case tracking-normal">
+                {g.items.length}
+              </span>
             </h3>
-            <div className="mt-2.5 flex flex-wrap gap-2">
+            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0">
               {g.items.map((it) => (
-                <TagTerm key={it} name={it} primary={g.primary?.includes(it)} />
+                <TagTerm key={it} name={it} flow primary={g.primary?.includes(it)} />
               ))}
             </div>
           </Reveal>
@@ -97,7 +100,7 @@ const Tech = () => (
             delay={(i % 3) * 0.07}
             className="glass-card card-lift rounded-2xl p-4 sm:p-6 flex flex-col h-full hover:border-accent/50"
           >
-            <h3 className="flex items-center gap-2 text-accent-ink font-mono text-label uppercase tracking-label">
+            <h3 className="flex items-center gap-2 text-accent-ink font-sans text-[12px] font-medium uppercase tracking-[0.09em]">
               <span className={`h-2 w-2 shrink-0 rounded-full ${g.dot}`} aria-hidden="true" />
               {g.title}
             </h3>

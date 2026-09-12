@@ -375,7 +375,7 @@ const ProjectCover = ({ cover = "retrieval", name }) => {
   }, [cover, name, reduced, scrollYProgress]);
 
   return (
-    <div className="relative w-full rounded-xl overflow-hidden border border-line-strong bg-canvas" style={{ aspectRatio: "16 / 9" }}>
+    <div className="relative w-full rounded-[14px] overflow-hidden border border-line-strong bg-canvas" style={{ aspectRatio: "16 / 9" }}>
       <canvas ref={ref} className="absolute inset-0 w-full h-full" aria-hidden="true" />
       <span className="absolute top-2.5 left-3 font-mono text-micro tracking-label uppercase text-canvas-ink">
         {LABELS[cover] || "preview"}
@@ -418,7 +418,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
 
         <div className="mt-5 flex items-center gap-3">
           <span
-            className={`font-mono text-label uppercase tracking-label px-2 py-0.5 rounded ${
+            className={`font-sans text-[12px] font-medium uppercase tracking-[0.09em] px-2 py-0.5 rounded ${
               isLive ? "text-live border border-live/40" : "text-archive border border-archive/40"
             }`}
           >
@@ -438,7 +438,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
           </p>
 
           <div className="mt-4">
-            <span className="font-mono text-label uppercase tracking-label text-faint">
+            <span className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-faint">
               built with
             </span>
             <div className="mt-1.5 flex flex-wrap gap-2">

@@ -22,6 +22,10 @@ function App() {
           {/* Behind everything: reads the two docks as input and output layers.
               Sections sit later in the DOM at the same z, so they paint over it. */}
           <NeuralField />
+          {/* Over everything, under nothing that matters: a fixed noise layer at
+              3.5% so a flat dark ground stops banding and starts reading as a
+              material. See `.grain` in index.css. */}
+          <span aria-hidden="true" className="grain" />
           <ScrollProgress />
           {/* Targets #main, not #about, the old target skipped the whole hero, the h1, the pitch and both CTAs. The .hash-span ids are
               non-focusable spans, so tabIndex={-1} on <main> is what actually

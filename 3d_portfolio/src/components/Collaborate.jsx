@@ -30,7 +30,7 @@ const Collaborate = () => (
   >
     <div className="max-w-7xl mx-auto px-6 sm:px-16 py-12 sm:py-16">
       <Reveal>
-        <p className="font-mono text-label uppercase tracking-label text-faint">
+        <p className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-faint">
           Open to collaborators
         </p>
         <h2
@@ -43,7 +43,7 @@ const Collaborate = () => (
 
       <ul className="mt-8 grid gap-x-10 gap-y-6 list-none sm:grid-cols-2 lg:grid-cols-3">
         <Reveal as="li" delay={0.05} className="border-t border-line pt-4">
-          <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
+          <h3 className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">
             Open an issue or a PR
           </h3>
           <p className="mt-2 font-sans text-secondary text-body leading-[1.65]">
@@ -54,7 +54,7 @@ const Collaborate = () => (
         </Reveal>
 
         <Reveal as="li" delay={0.12} className="border-t border-line pt-4">
-          <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
+          <h3 className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">
             Written with an LLM is fine
           </h3>
           <p className="mt-2 font-sans text-secondary text-body leading-[1.65]">
@@ -66,7 +66,7 @@ const Collaborate = () => (
         </Reveal>
 
         <Reveal as="li" delay={0.19} className="border-t border-line pt-4">
-          <h3 className="font-mono text-label uppercase tracking-label text-accent-ink">
+          <h3 className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">
             Or just talk to me
           </h3>
           <p className="mt-2 font-sans text-secondary text-body leading-[1.65]">

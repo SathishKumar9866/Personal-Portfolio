@@ -1,5 +1,92 @@
 # Worklog
 
+## 2026-09-12: the premium pass
+
+### Stack on a phone: the boxes came off
+
+Thirty-three tools rendered as thirty-three bordered rectangles, each 44px tall
+in rows of two or three, inside one long card. That is a form, not a vocabulary,
+and it ran most of a screen per group. Above it sat the token wave in a strip of
+its own, which at 390px is too short for a wave and too narrow for a sentence of
+tokens: it rendered as struck-through fragments floating in empty space and read
+as a rendering fault rather than an effect.
+
+The terms are bare now — a `flow` variant of `TagTerm` with the box taken off.
+The dotted underline was already marking which terms are definable, which is the
+only thing the border was communicating, so removing the border loses nothing.
+The two tiers move from fill to weight and colour: a headline tool reads as the
+page's own text, the rest as prose beside it. Each group gains its count on the
+right, which is the one number a reader might want from a list of tools.
+
+**Measured, 390x844: the section went 1,364px to 1,131px, 233px shorter, 17%.**
+Four groups now fit in a screen where two and a half did. All 33 terms still
+clear the 44px touch target — it moved from the box to the line box — all 33
+definition panels still open inside the viewport, and `scrollWidth` stays at the
+viewport.
+
+The phone strip took the `inline` variant of `TokenStream` with it; it was the
+only caller, so the branch is gone rather than orphaned. The wave is desktop
+only now, where it has a real band to live in.
+
+
+Feedback: "looks like a website from 1990". It did not — it looked like **2020
+developer-brand**, which is a different and more fixable problem. Four things
+were doing it, and none of them was the content.
+
+### Mono was doing everything
+
+Navigation, the wordmark, the status line, every eyebrow, every card label, the
+whole availability block. Terminal texture peaked around 2021, and at this
+density it read as a terminal rather than a product.
+
+One rule now: **mono is for identifiers — code, URLs, repo names, tool names,
+clocks, counts. Everything else is the sans.** That converted eleven components
+and the entire availability card, whose facts are a job title and an employer,
+not data.
+
+### Nothing had depth
+
+Flat fills and 1px hairlines, on one plane, on a flat ground. Three additions:
+
+- **Elevation.** `.glass-card` had one soft shadow, which reads as a blur behind
+  a box. It has three now — a tight contact shadow, a wide ambient one, and the
+  inner highlight — which is what makes a surface look like it is above the page
+  rather than printed on it.
+- **A bloom** behind the hero: two large radial gradients at ~10% alpha, so the
+  headline sits in front of something.
+- **Grain**, a fixed feTurbulence layer at 3.5%. A flat dark ground bands across
+  1440px; noise breaks the bands and reads as material. One data URI, no request.
+
+### The button was the single most dated element
+
+A flat saturated rectangle at 6px radius. Now `.btn-accent`: a vertical gradient
+so it looks lit from above, a **coloured** ambient shadow so the accent glows
+into the ground instead of sitting on it, an inner top highlight, and a hover
+that lifts by 1px instead of dimming. 22px radius.
+
+### Radii
+
+Large surfaces 12px → 18-22px; small controls 6px → 12px. A 6px control beside a
+22px card is what makes the control look like a form element from another decade.
+
+### The regression this introduced, and how it was caught
+
+The bloom shipped as `inset: -20% -10% auto -10%`. The negative horizontal bled
+39px past each edge and **took the document to 430px wide on a 390px phone** —
+a sideways scrollbar on every page. Caught by re-running the mobile battery from
+earlier in this session, which is the whole reason that battery exists. It is
+`inset-x: 0` now; the gradient is soft enough that it needs no bleed, and the
+negative top is safe because nothing scrolls above the document origin.
+
+### Verified
+
+Full mobile battery at 390x844 after the change: band does not overlap the copy,
+menu's first link reachable, close button pinned, nav visible after a menu jump,
+33 glossary panels all on screen, no contact address wraps, and `scrollWidth`
+equal to the viewport at the top, with a panel open, and at contact. Light theme
+checked separately — the bloom has its own much fainter light variant, because
+the dark one on a near-white ground is a stain.
+
 ## 2026-09-12: the hero band flickered on a real phone
 
 First real-device report of the session, and it found something no emulated

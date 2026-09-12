@@ -30,6 +30,20 @@ const CHIP =
   "inline-flex items-center justify-center min-h-11 min-w-11 py-0 " +
   "sm:min-h-0 sm:min-w-0 sm:py-0.5 sm:inline";
 
+/**
+ * `flow`: the same term with the box taken off.
+ *
+ * Stack on a phone is thirty-three of these. As boxes that is thirty-three
+ * bordered rectangles about 50px tall, which turns a list into most of a
+ * screen per group and reads as a form rather than a vocabulary. Bare, the
+ * words sit in a paragraph-like flow and the dotted underline does all the work
+ * the border was doing — it already marks which terms are definable, which is
+ * the only thing the box was communicating.
+ *
+ * The 44px touch target stays: it moves from the box to the line box.
+ */
+const FLOW = "font-mono text-chip inline-flex items-center min-h-11 transition-colors";
+
 // Idle and active tone for each tier. Kept out of the component so the two
 // tiers can be compared side by side instead of read out of nested ternaries.
 const TONES = {
@@ -43,7 +57,15 @@ const TONES = {
   },
 };
 
-const TagTerm = ({ name, plain = false, primary = false }) => {
+// Without a box, the two tiers are carried by weight and colour instead of by
+// fill: a headline tool reads as the page's own text, the rest as prose beside
+// it. Same information, a fifth of the ink.
+const FLOW_TONES = {
+  solid: { idle: "text-white-100", active: "text-accent-ink" },
+  outline: { idle: "text-secondary", active: "text-accent-ink" },
+};
+
+const TagTerm = ({ name, plain = false, primary = false, flow = false }) => {
   const entry = glossary[name];
   const g = plain ? null : entry;
   const [open, setOpen] = useState(false);
@@ -123,7 +145,10 @@ const TagTerm = ({ name, plain = false, primary = false }) => {
     );
   }
 
-  const tone = primary ? TONES.solid : TONES.outline;
+  const tone = flow
+    ? (primary ? FLOW_TONES.solid : FLOW_TONES.outline)
+    : (primary ? TONES.solid : TONES.outline);
+  const shape = flow ? FLOW : CHIP;
 
   const show = () => {
     clearTimeout(closeTimer.current);
@@ -158,7 +183,7 @@ const TagTerm = ({ name, plain = false, primary = false }) => {
         onBlur={hide}
         aria-expanded={open}
         aria-label={`${name}: what is this?`}
-        className={`${CHIP} group ${tone[open ? "active" : "idle"]}`}
+        className={`${shape} group ${tone[open ? "active" : "idle"]}`}
       >
         <span
           className={`border-b border-current pb-px ${
