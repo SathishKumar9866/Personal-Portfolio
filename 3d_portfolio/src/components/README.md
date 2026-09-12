@@ -29,6 +29,7 @@ Thirty files. Read the table, not the directory.
 | Command palette actions | `CommandPalette.jsx` |
 | The hero network drawing | `NeuralField.jsx` |
 | The token wave in Stack | `TokenStream.jsx` |
+| The Python search band on a phone | `CodeCompletion.jsx` |
 | Brand glyph paths, and the list of off-site links | `icons.js` |
 | Scroll-reveal timing used across the page | `Reveal.jsx` |
 | The scroll hairline at the top | `ScrollProgress.jsx` |

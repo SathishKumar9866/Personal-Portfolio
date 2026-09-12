@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `fix/mobile-layout-and-nav` merged and is gone.
+**Branch:** `main`. `feat/hero-code-completion-band` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -16,8 +16,17 @@ The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
 flight and nothing half-applied.
 
-`fix/mobile-layout-and-nav` squash-merged and deleted, four commits, all four
-phone-layout faults found by measuring the running page. Full reasoning in
+`feat/hero-code-completion-band` squash-merged and deleted: the hero's lower
+slack on a phone — 253px of it at 390x844, and 331px from the last hero element
+to "Overview" — now holds a Python binary search being completed and then run,
+cycling found / missing / empty so the guard clause is always seen earning its
+place. It **measures whether it fits** rather than trusting a breakpoint,
+because the reader's text-size control changes the slack without changing
+anything a media query can see: at 112% it hides itself. Drawn without that
+check at 360x640 it overlapped the lede by 156px.
+
+Before it, `fix/mobile-layout-and-nav` squash-merged and deleted, four commits,
+all four phone-layout faults found by measuring the running page. Full reasoning in
 `3d_portfolio/docs/WORKLOG.md`, the 2026-09-12 entry headed "four layout faults
 on a phone":
 
