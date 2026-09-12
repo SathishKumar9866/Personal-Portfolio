@@ -7,6 +7,7 @@ import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import TagTerm from "./TagTerm";
 import Reveal from "./Reveal";
+import MobileCollapse from "./MobileCollapse";
 import { ICON_PATHS } from "./icons";
 import { TAU, roundRect, hash, mulberry } from "../utils/draw";
 
@@ -380,20 +381,24 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
         <h3 className="mt-3 font-display font-semibold text-[calc(clamp(1.15rem,1.6vw,1.5rem)*var(--type-scale,1))] leading-[1.2] tracking-[-0.01em] text-white-100">
           {outcome}
         </h3>
-        <p className="mt-2 font-sans text-secondary text-body leading-[1.6] max-w-[28rem]">
-          {description}
-        </p>
+        {/* On a phone the outcome above is the card; this is the detail
+            behind it. Collapsed there, inline everywhere else. */}
+        <MobileCollapse label="What it does">
+          <p className="mt-2 font-sans text-secondary text-body leading-[1.6] max-w-[28rem]">
+            {description}
+          </p>
 
-        <div className="mt-4">
-          <span className="font-mono text-label uppercase tracking-label text-faint">
-            built with
-          </span>
-          <div className="mt-1.5 flex flex-wrap gap-2">
-            {tags.map((t) => (
-              <TagTerm key={t} name={t} plain />
-            ))}
+          <div className="mt-4">
+            <span className="font-mono text-label uppercase tracking-label text-faint">
+              built with
+            </span>
+            <div className="mt-1.5 flex flex-wrap gap-2">
+              {tags.map((t) => (
+                <TagTerm key={t} name={t} plain />
+              ))}
+            </div>
           </div>
-        </div>
+        </MobileCollapse>
 
         <div className="mt-auto pt-4 border-t border-line flex flex-wrap gap-x-5 gap-y-1 font-mono text-data">
           <a href={source_code_link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 min-h-11 sm:min-h-0 text-secondary hover:text-accent transition-colors">

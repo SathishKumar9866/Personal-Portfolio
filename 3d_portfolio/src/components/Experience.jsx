@@ -6,6 +6,7 @@ import { SectionWrapper } from "../hoc";
 import Reveal from "./Reveal";
 import TagTerm from "./TagTerm";
 import CareerTrack from "./CareerTrack";
+import MobileCollapse from "./MobileCollapse";
 
 /** "2024-03" -> "Mar 2024". Returns null for null, so callers can omit cleanly. */
 const month = (iso) => {
@@ -83,6 +84,7 @@ const Role = ({ role, index, trackIndex = null }) => (
       </div>
     </div>
 
+    <MobileCollapse label="What I did">
     {role.points?.length > 0 && (
       <ul className="mt-3 list-none max-w-[34rem] space-y-2">
         {role.points.map((point) => (
@@ -112,6 +114,7 @@ const Role = ({ role, index, trackIndex = null }) => (
         ))}
       </div>
     )}
+    </MobileCollapse>
   </Reveal>
 );
 

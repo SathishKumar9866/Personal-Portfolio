@@ -5,6 +5,7 @@ import { services, profile } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import Availability from "./Availability";
+import MobileCollapse from "./MobileCollapse";
 
 const ServiceCard = ({ index, title, desc }) => (
   <Tilt className="w-full h-full" options={{ max: 8, scale: 1, speed: 450 }}>
@@ -19,7 +20,9 @@ const ServiceCard = ({ index, title, desc }) => (
         <h3 className="font-display text-white-100 text-[19px] leading-tight">
           {title}
         </h3>
-        <p className="font-sans text-secondary text-body leading-[1.5]">{desc}</p>
+        <MobileCollapse label="More">
+          <p className="font-sans text-secondary text-body leading-[1.5]">{desc}</p>
+        </MobileCollapse>
       </div>
     </motion.div>
   </Tilt>
