@@ -20,6 +20,8 @@ const SideRail = () => {
     e.preventDefault();
     const el = document.getElementById(id);
     if (!el) return;
+    // Tells Navbar this is a jump, not a reading gesture: see CommandPalette.
+    window.dispatchEvent(new Event("section-jump"));
     el.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "auto"

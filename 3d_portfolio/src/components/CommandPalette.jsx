@@ -7,8 +7,15 @@ import { socialLinks } from "./icons";
 // are the longest scrolls on the site.
 const smooth = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-const go = (id) => () =>
-  document.getElementById(id)?.scrollIntoView({ behavior: smooth() });
+// `section-jump` tells Navbar this scroll is a jump and not a reading gesture,
+// so the bar does not hide itself on the way down. An `<a href="#id">` says the
+// same thing by changing the hash; this does not, so it says it out loud.
+const go = (id) => () => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  window.dispatchEvent(new Event("section-jump"));
+  el.scrollIntoView({ behavior: smooth() });
+};
 const open = (url) => () => window.open(url, "_blank", "noreferrer");
 
 // The palette does NOT own the theme. ThemeToggle does; writing data-theme here

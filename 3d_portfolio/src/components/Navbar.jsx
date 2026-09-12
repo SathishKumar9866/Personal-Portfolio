@@ -27,13 +27,15 @@ const Navbar = () => {
 
   // Hide on the way down, return on the way up. The bar is 77px of a fixed
   // viewport: about 9% of a phone screen, held open the whole time someone is
-  // reading a very long page. Four guards, because a naive version of this is
+  // reading a very long page. Five guards, because a naive version of this is
   // worse than not doing it:
   //   1. a movement threshold, so a 2px jitter cannot toggle it
   //   2. never hidden near the top, where there is nothing to reclaim
   //   3. never hidden while the mobile menu is open, that IS the nav
   //   4. never hidden while focus is inside it, which would strand a keyboard
   //      user on a control they cannot see
+  //   5. never hidden during a jump the reader asked for, which is a scroll
+  //      they did not make with their thumb
   useEffect(() => {
     let last = window.scrollY;
     let raf = 0;
@@ -55,6 +57,32 @@ const Navbar = () => {
     // position is clamped before the delta is taken.
     const HIDE_AFTER = 12;
     const SHOW_AFTER = -2;
+
+    // Guard 5: a jump is not a reading gesture. Tapping Experience in the menu
+    // smooth-scrolls about 3,000px downward, which arrives as hundreds of
+    // positive deltas, so the bar hid itself on the way and the reader landed
+    // on the section with no hamburger and no way back into the menu short of
+    // scrolling to the top. Measured before this: every menu link left the bar
+    // at translateY(-100%), and the jump to Contact takes 1.5s of scrolling to
+    // do it, so a fixed timeout long enough for that would be a long time to
+    // freeze the bar for the short jumps too.
+    //
+    // So the jump owns the scroll until it stops owning it, and what ends it is
+    // the reader taking hold of the page. The timeout is only a backstop for a
+    // jump to the section you are already on, which scrolls nothing.
+    let jumping = false;
+    let settle = 0;
+    const endJump = () => {
+      jumping = false;
+      clearTimeout(settle);
+    };
+    const startJump = () => {
+      jumping = true;
+      setHidden(false);
+      clearTimeout(settle);
+      settle = setTimeout(endJump, 2500);
+    };
+
     const read = () => {
       raf = 0;
       // Clamped: iOS rubber-banding reports negative scrollY past the top and
@@ -66,9 +94,10 @@ const Navbar = () => {
       setScrolled(y > 24);
 
       const focusInside = navRef.current?.contains(document.activeElement);
-      if (focusInside || y <= 160) {
-        // Near the top there is nothing to reclaim, and a focused control
-        // inside the bar must never be scrolled out from under a keyboard user.
+      if (jumping || focusInside || y <= 160) {
+        // Near the top there is nothing to reclaim, a focused control inside
+        // the bar must never be scrolled out from under a keyboard user, and a
+        // jump the reader asked for must not cost them the bar they asked from.
         setHidden(false);
         last = y;
         return;
@@ -86,8 +115,22 @@ const Navbar = () => {
     };
     read();
     window.addEventListener("scroll", onScroll, { passive: true });
+    // Every in-page anchor on the site changes the hash, which covers the menu,
+    // the desktop links, the Hero CTA and Availability. The two that scroll
+    // without one, CommandPalette and SideRail, say so with `section-jump`.
+    window.addEventListener("hashchange", startJump);
+    window.addEventListener("section-jump", startJump);
+    window.addEventListener("touchstart", endJump, { passive: true });
+    window.addEventListener("wheel", endJump, { passive: true });
+    window.addEventListener("keydown", endJump);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("hashchange", startJump);
+      window.removeEventListener("section-jump", startJump);
+      window.removeEventListener("touchstart", endJump);
+      window.removeEventListener("wheel", endJump);
+      window.removeEventListener("keydown", endJump);
+      clearTimeout(settle);
       cancelAnimationFrame(raf);
     };
   }, []);
