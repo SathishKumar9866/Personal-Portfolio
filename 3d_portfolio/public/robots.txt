@@ -1,0 +1,78 @@
+# Everything here is open to everyone. `User-agent: *` below already says that,
+# so the named blocks are redundant by the letter of the standard and deliberate
+# anyway, for two reasons:
+#
+#  1. A named rule is where a future change goes. If one of these ever needs to
+#     be turned off, the line already exists and the decision is one word, not a
+#     research task about what the crawler is called this quarter.
+#  2. Several of these tokens are not crawlers at all. `Google-Extended` and
+#     `Applebot-Extended` control training use only and are read from robots.txt
+#     with no fetching agent behind them, so a wildcard is not a clear answer for
+#     them the way it is for a normal bot.
+#
+# The site wants to be read, indexed and summarised. See /llms.txt for the
+# machine-readable copy, which is shorter than this markup and maintained by
+# hand.
+
+User-agent: *
+Allow: /
+
+# OpenAI: training, user-triggered fetches, and the search index respectively.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Anthropic
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# Google and Apple training-use tokens. Not fetching agents: opting out here
+# would remove the content from Gemini and Apple Intelligence training while
+# leaving normal search indexing untouched.
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl, which a large share of open models are trained on downstream.
+User-agent: CCBot
+Allow: /
+
+# Meta, Amazon, ByteDance, Mistral, Cohere
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+# Sitemap: intentionally absent. This is a single page with in-page anchors, so
+# a sitemap would carry exactly one URL and tell a crawler nothing it does not
+# already have. Add one here if the site ever grows real routes.

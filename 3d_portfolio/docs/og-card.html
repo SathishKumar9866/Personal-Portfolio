@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>og:image source</title>
+<!--
+  SOURCE FOR public/og.png. Not served, not built, not linked from the app.
+
+  The old og.png had no source in the repo, so when the title changed from
+  "ML / AI Engineer" to "AI Engineer" every string on the site updated and the
+  social card kept the old one, silently, because a grep cannot read a PNG.
+  This file is the fix: the card is regenerable.
+
+  To regenerate:
+    1. open this file in a browser
+    2. capture the page at exactly 1200x630, no device-pixel-ratio scaling
+    3. save over 3d_portfolio/public/og.png
+    4. check index.html still says og:image:width 1200 / og:image:height 630
+
+  Colours are the dark-theme tokens from src/index.css, hard-coded because this
+  page is not part of the app and must render standalone with no build step.
+  Type is Barlow and JetBrains Mono, same as the site, from Google Fonts.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html, body {
+    width: 1200px;
+    height: 630px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  body {
+    /* --c-primary, dark theme */
+    background: #0f2228;
+    font-family: "Barlow", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .card {
+    width: 1200px;
+    height: 630px;
+    box-sizing: border-box;
+    padding: 88px 96px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  /* The accent bar. --c-accent at full strength: a fill, which is the only
+     role this token has. */
+  .bar {
+    position: absolute;
+    left: 68px;
+    top: 88px;
+    bottom: 88px;
+    width: 10px;
+    background: #ff4e3a;
+    border-radius: 1px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 104px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #e4e1da; /* --c-text */
+  }
+  .sub {
+    margin: 22px 0 0;
+    font-size: 38px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #a8babe; /* --c-secondary */
+  }
+  .terms {
+    margin: 54px 0 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 26px;
+    color: #ff6f5c; /* --c-accent-ink: the accent's legible-as-text role */
+  }
+  .terms .dot {
+    color: #8399a0; /* --c-faint */
+    padding: 0 14px;
+  }
+  .url {
+    margin: 46px 0 0;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 22px;
+    color: #8399a0; /* --c-faint */
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="bar"></div>
+    <h1>Sathish Kumar</h1>
+    <!-- Interpunct, not an em dash: the house style dropped long dashes and the
+         old card was the last place one survived. -->
+    <p class="sub">AI Engineer &middot; data to AI, end to end</p>
+    <p class="terms">
+      RAG<span class="dot">&middot;</span>Computer vision<span class="dot">&middot;</span>MLOps<span class="dot">&middot;</span>Shipped products
+    </p>
+    <p class="url">github.com/SathishKumarAI</p>
+  </div>
+</body>
+</html>
