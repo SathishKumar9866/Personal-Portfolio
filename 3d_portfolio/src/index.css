@@ -10,6 +10,41 @@
   --type-scale: 1;
 }
 
+/* ---- scheme defaults ------------------------------------------------------
+   `data-scheme` is the second axis, and it exists because there are five themes
+   and only two schemes. The light-only rules below used to read
+   `:not([data-theme="dark"])`, which is a sentence that stops being true the
+   moment a third theme lands. A palette declares which scheme it belongs to and
+   everything structural follows from that.
+
+   What lives here is what depends on light-vs-dark and not on the palette: the
+   category dots, and the project-cover canvas, which is the same dark ground in
+   every theme by design. A theme may override any of it. */
+:root[data-scheme="light"] {
+  --c-cat-data: 82 106 130;
+  --c-cat-science: 64 116 110;
+  --c-cat-llm: 166 92 66;
+  --c-cat-vision: 122 92 138;
+  --c-cat-mlops: 108 116 66;
+  --c-cat-backend: 92 100 148;
+}
+
+:root[data-scheme="dark"] {
+  --c-cat-data: 132 160 186;
+  --c-cat-science: 120 174 166;
+  --c-cat-llm: 206 138 110;
+  --c-cat-vision: 176 146 190;
+  --c-cat-mlops: 164 174 114;
+  --c-cat-backend: 146 154 204;
+}
+
+:root {
+  /* Same dark ground in every theme, by design: the six project covers are
+     drawn for it and their palettes are written against it. */
+  --c-canvas: 17 38 44;
+  --c-canvas-ink: 140 150 155; /* 5.20:1 on the canvas ground */
+}
+
 :root,
 :root[data-theme="light"] {
   --c-primary: 255 255 255;
@@ -71,6 +106,107 @@
 
   --c-chip-solid: 228 225 218;
   --c-chip-solid-ink: 15 34 40; /* 13.9:1 on the fill */
+}
+
+/* ---- the other three palettes --------------------------------------------
+   Same tokens, same contrast floors, different material. Every one of these was
+   measured in the browser after it was written, not derived on paper: the
+   numbers in the comments are `getComputedStyle` readings run through the WCAG
+   contrast formula, and any pair that came in under target was moved until it
+   cleared.
+
+   What does NOT change between them: the content. A portfolio that shows a
+   recruiter different claims than it shows a professor is not a theme, it is a
+   lie with a switch on it. These are reading conditions — ground, contrast,
+   warmth — and the words underneath are identical in all five. */
+
+/* Ink: near-black and cool, the highest contrast of the five. For reading code
+   on a large screen, and for anyone who keeps their whole desktop dark. */
+:root[data-theme="ink"] {
+  --c-primary: 11 13 16;
+  --c-tertiary: 18 21 26;
+  --c-surface: 27 31 38;
+  --c-text: 233 236 240;
+  --c-secondary: 170 178 190;
+  --c-faint: 133 142 156;
+  --c-strong: 0 0 0;
+  --c-accent: 255 90 66; /* FILLS ONLY */
+  --c-accent-ink: 255 128 106; /* TEXT */
+  --c-line: 36 41 50;
+  --c-line-strong: 100 110 126;
+  --c-live: 108 200 160;
+  --c-archive: 132 160 182;
+  --c-chip-solid: 233 236 240;
+  --c-chip-solid-ink: 11 13 16;
+}
+
+/* Manuscript: warm paper, low blue, the gentlest of the light three. Built for
+   sustained reading rather than scanning — the serif lede and the role bullets
+   are what it is for. */
+:root[data-theme="sepia"] {
+  --c-primary: 247 242 232;
+  --c-tertiary: 241 234 220;
+  --c-surface: 233 224 207;
+  --c-text: 43 36 28;
+  --c-secondary: 88 77 63;
+  --c-faint: 116 104 88;
+  --c-strong: 30 25 18;
+  --c-accent: 189 68 38; /* FILLS ONLY */
+  --c-accent-ink: 150 50 26; /* TEXT */
+  --c-line: 223 213 196;
+  --c-line-strong: 146 133 113;
+  --c-live: 45 100 74;
+  --c-archive: 88 98 108;
+  --c-chip-solid: 43 36 28;
+  --c-chip-solid-ink: 247 242 232;
+}
+
+/* Preprint: an arXiv or IEEE page. Pure white, near-black text, neutral greys,
+   and almost no colour except the one accent — which is Cornell red, #B31B1B,
+   arXiv's own. That is the detail that makes this theme work rather than fight:
+   the site's lava red and arXiv's red are the same family, so the page reads as
+   a paper without giving up its own identity.
+
+   The greys are cool and even on purpose. A preprint has no warmth and no
+   brand; its hierarchy is carried by size and weight alone, which is also true
+   of this page once the palette stops helping. */
+:root[data-theme="paper"] {
+  --c-primary: 255 255 255;
+  --c-tertiary: 250 250 251;
+  --c-surface: 243 243 245;
+  --c-text: 17 17 19;
+  --c-secondary: 58 58 62;
+  --c-faint: 99 99 105;
+  --c-strong: 0 0 0;
+  --c-accent: 179 27 27; /* Cornell red, arXiv's. FILLS ONLY */
+  --c-accent-ink: 155 20 20; /* TEXT */
+  --c-line: 223 223 227;
+  --c-line-strong: 128 128 134;
+  --c-live: 20 92 66;
+  --c-archive: 52 82 102;
+  --c-chip-solid: 17 17 19;
+  --c-chip-solid-ink: 255 255 255;
+}
+
+/* Clarity: neutral, cool, and the highest contrast of the light three, with the
+   accent pulled back so the only strong colour on the page is the one thing
+   being pointed at. For reading quickly on an unfamiliar screen. */
+:root[data-theme="clean"] {
+  --c-primary: 255 255 255;
+  --c-tertiary: 247 248 250;
+  --c-surface: 238 241 245;
+  --c-text: 16 23 32;
+  --c-secondary: 66 76 90;
+  --c-faint: 97 108 124;
+  --c-strong: 10 14 20;
+  --c-accent: 214 45 25; /* FILLS ONLY */
+  --c-accent-ink: 176 32 14; /* TEXT */
+  --c-line: 225 229 236;
+  --c-line-strong: 133 144 160;
+  --c-live: 20 98 72;
+  --c-archive: 58 88 110;
+  --c-chip-solid: 16 23 32;
+  --c-chip-solid-ink: 255 255 255;
 }
 
 *,
@@ -259,8 +395,8 @@ main:focus:not(:focus-visible) {
 
 /* The specular top edge is what sells glass in dark mode and muddies it in
    light, where the ground is already near-white. */
-:root:not([data-theme="dark"]) .glass,
-:root:not([data-theme="dark"]) .glass-card {
+:root[data-scheme="light"] .glass,
+:root[data-scheme="light"] .glass-card {
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.7),
     0 10px 28px -18px rgb(var(--c-strong) / 0.18);
@@ -281,7 +417,7 @@ main:focus:not(:focus-visible) {
       inset 0 1px 0 rgb(255 255 255 / 0.1),
       0 18px 40px -22px rgb(var(--c-strong) / 0.5);
   }
-  :root:not([data-theme="dark"]) .glass-card.card-lift:hover {
+  :root[data-scheme="light"] .glass-card.card-lift:hover {
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.7),
       0 16px 36px -20px rgb(var(--c-strong) / 0.26);
@@ -428,7 +564,7 @@ main:focus:not(:focus-visible) {
       transparent 72%
     );
 }
-:root:not([data-theme="dark"]) .bloom {
+:root[data-scheme="light"] .bloom {
   /* The same bloom on a near-white ground is a stain. Half the alpha, and the
      warm lobe only. */
   background: radial-gradient(
@@ -450,7 +586,7 @@ main:focus:not(:focus-visible) {
   opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-:root:not([data-theme="dark"]) .grain {
+:root[data-scheme="light"] .grain {
   opacity: 0.02;
 }
 

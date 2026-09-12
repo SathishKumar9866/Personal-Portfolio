@@ -10,9 +10,16 @@
     <script>
       (function () {
         try {
+          // Kept in step with `themes` in src/constants/index.js. Inlined
+          // rather than imported because this runs before any module loads,
+          // which is the whole point of it: the alternative is a flash of the
+          // wrong palette on every page load.
+          var SCHEME = { dark: "dark", ink: "dark", light: "light", sepia: "light", clean: "light", paper: "light" };
+          var BAR = { dark: "#0F2228", ink: "#0B0D10", light: "#FFFFFF", sepia: "#F7F2E8", clean: "#FFFFFF", paper: "#FFFFFF" };
           var t = localStorage.getItem("theme");
-          if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          if (!t || !SCHEME[t]) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           document.documentElement.setAttribute("data-theme", t);
+          document.documentElement.setAttribute("data-scheme", SCHEME[t]);
           // Restore the reader's text size in the same pre-paint pass as the
           // theme, or the page renders at 100% and jumps when FontSizeToggle
           // mounts.
@@ -20,9 +27,10 @@
           if (ts) document.documentElement.style.setProperty("--type-scale", ts);
           document
             .querySelector('meta[name="theme-color"]')
-            .setAttribute("content", t === "dark" ? "#0F2228" : "#FFFFFF");
+            .setAttribute("content", BAR[t]);
         } catch (e) {
           document.documentElement.setAttribute("data-theme", "light");
+          document.documentElement.setAttribute("data-scheme", "light");
         }
       })();
     </script>

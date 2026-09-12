@@ -50,9 +50,11 @@ A few boundaries worth knowing before editing:
   one edit, in `constants`, and it appears in four places.
 - **`useActiveSection` owns "which section am I in".** `Navbar` and `SideRail`
   both consume it. They used to run separate observers and could disagree.
-- **`ThemeToggle` owns the theme.** `CommandPalette` dispatches a `toggle-theme`
-  event rather than writing `data-theme` itself; when it did both, the toggle
-  desynced and needed two clicks.
+- **`ThemeToggle` owns the theme**, all six of them, and writes both
+  `data-theme` (the palette) and `data-scheme` (light or dark, which every
+  structural rule reads). `CommandPalette` dispatches `set-theme` with an id
+  rather than writing the attributes itself; when it wrote them directly the
+  toggle desynced and needed two clicks.
 - **`TagTerm` has two modes.** Default teaches (hover opens the definition);
   `plain` states (native tooltip only). Cards pass `plain`.
 
