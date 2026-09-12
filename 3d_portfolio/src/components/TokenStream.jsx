@@ -26,11 +26,19 @@ import { useEffect, useRef } from "react";
  *  - pointer-events: none, aria-hidden
  */
 
-// Real sub-word pieces, the way a tokenizer splits text.
-const PIECES = [
-  "re", "trie", "val", "▁aug", "ment", "ed", "▁cites", "▁the", "▁source",
-  "▁it", "▁used", ".", "▁offline", "▁first", "▁eval", "uated", ".",
+// Real sub-word pieces, the way a tokenizer splits text. Several sentences, not
+// one: a stream that emits the same seventeen pieces forever is a loop the
+// reader notices and then stops reading. These cycle, so the text is different
+// each time the band fills.
+const SENTENCES = [
+  ["re", "trie", "val", "▁aug", "ment", "ed", "▁gene", "ration", "."],
+  ["▁cites", "▁the", "▁source", "▁it", "▁used", ",", "▁every", "▁time", "."],
+  ["▁off", "line", "▁first", ",", "▁no", "▁key", ",", "▁no", "▁account", "."],
+  ["▁fed", "er", "ated", ":", "▁the", "▁data", "▁never", "▁moves", "."],
+  ["▁YOLO", "v", "8", "▁de", "tect", "s", ",", "▁then", "▁tracks", "."],
+  ["▁measure", "d", ",", "▁not", "▁est", "im", "ated", "."],
 ];
+const PIECES = SENTENCES.flat();
 
 const cssColor = (el, name, alpha) => {
   const v = getComputedStyle(el).getPropertyValue(name).trim();
@@ -66,10 +74,15 @@ const TokenStream = () => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      // The wave descends and wraps. Slow on purpose: drift, not a progress bar.
-      const bandH = h * 0.55;
-      const baseY = ((time * 11) % (h + bandH)) - bandH * 0.3;
-      const amp = Math.min(38, h * 0.05);
+      // The wave breathes inside the band. It used to translate downward and
+      // wrap, at 11px/s over a range of (h + 0.55h): a period of about fifty
+      // seconds, of which it spent only a few actually inside the canvas.
+      // Measured, the painted ink decayed 3.37% to 0.00% over five seconds and
+      // then stayed empty, which is why it read as playing once and stopping.
+      // Now the baseline oscillates gently around the middle, so the stream is
+      // always on screen and always moving.
+      const baseY = h * 0.5 + Math.sin(time * 0.22) * h * 0.16;
+      const amp = Math.min(38, h * 0.075);
       const yAt = (x) => baseY + Math.sin(x / 190 + time * 0.45) * amp;
 
       ctx.beginPath();
@@ -78,29 +91,39 @@ const TokenStream = () => {
         if (x === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
-      ctx.strokeStyle = accent.replace(",1)", ",0.14)");
-      ctx.lineWidth = 1.1;
+      ctx.strokeStyle = accent.replace(",1)", ",0.34)");
+      ctx.lineWidth = 1.4;
       ctx.stroke();
 
       // Tokens ride the curve they were emitted onto.
-      ctx.font = '500 11px "JetBrains Mono Variable", ui-monospace, monospace';
+      //
+      // A token keeps its own text for the whole crossing. The label used to be
+      // indexed by the current time, so every box changed its word twice a
+      // second while it travelled: the stream flickered instead of carrying
+      // anything. Indexing by emission order instead means each box holds one
+      // piece from end to end, and the sentence turns over once a lap.
+      ctx.font = '500 12px "JetBrains Mono Variable", ui-monospace, monospace';
       ctx.textBaseline = "middle";
-      for (let i = 0; i < 10; i++) {
-        const p = (time * 0.05 + i / 10) % 1;
+      const COUNT = 12;
+      for (let i = 0; i < COUNT; i++) {
+        const raw = time * 0.05 + i / COUNT;
+        const p = raw % 1;
+        const emission = Math.floor(raw) * COUNT + i; // monotonic, so the text advances
         const x = p * (w + 180) - 90;
         const y = yAt(x);
-        const label = PIECES[(Math.floor(time * 2) + i) % PIECES.length].replace("▁", " ");
-        const tw = ctx.measureText(label).width + 8;
+        const label = PIECES[((emission % PIECES.length) + PIECES.length) % PIECES.length].replace("▁", " ");
+        const tw = ctx.measureText(label).width + 10;
         const fade = Math.min(1, p * 8) * Math.min(1, (1 - p) * 8);
         if (fade <= 0.02) continue;
-        ctx.strokeStyle = ink.replace(",1)", `,${0.1 * fade})`);
+        // The leading token is the one being generated right now.
+        const lead = emission % PIECES.length === Math.floor(time * 0.6) % PIECES.length;
+        ctx.fillStyle = ink.replace(",1)", `,${0.06 * fade})`);
+        ctx.fillRect(x, y - 10, tw, 20);
+        ctx.strokeStyle = (lead ? accent : ink).replace(",1)", `,${(lead ? 0.55 : 0.26) * fade})`);
         ctx.lineWidth = 1;
-        ctx.strokeRect(x, y - 9, tw, 18);
-        ctx.fillStyle =
-          i === 0
-            ? accent.replace(",1)", `,${0.5 * fade})`)
-            : ink.replace(",1)", `,${0.28 * fade})`);
-        ctx.fillText(label, x + 4, y);
+        ctx.strokeRect(x, y - 10, tw, 20);
+        ctx.fillStyle = (lead ? accent : ink).replace(",1)", `,${(lead ? 0.95 : 0.62) * fade})`);
+        ctx.fillText(label, x + 5, y);
       }
     };
 
@@ -152,7 +175,7 @@ const TokenStream = () => {
       // cards: section-scoped wallpaper is still wallpaper. It now occupies only
       // the empty strip to the right of the intro text, above the grid, so it
       // crosses no content at all.
-      className="pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[20rem] w-[52%] opacity-[0.6]"
+      className="pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[22rem] w-[52%] opacity-[0.95]"
     />
   );
 };

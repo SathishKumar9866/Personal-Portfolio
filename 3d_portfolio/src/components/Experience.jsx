@@ -78,7 +78,23 @@ const Role = ({ role, index }) => (
       </div>
     </div>
 
-    {role.summary && (
+    {role.points?.length > 0 && (
+      <ul className="mt-3 list-none max-w-[34rem] space-y-2">
+        {role.points.map((point) => (
+          <li key={point} className="relative pl-5 font-sans text-secondary text-prose leading-[1.6]">
+            {/* A rule, not a bullet glyph: the timeline already owns the round
+                marks in this section, and a second kind of dot competes. */}
+            <span
+              aria-hidden="true"
+              className="absolute left-0 top-[0.7em] h-px w-2.5 bg-line-strong"
+            />
+            {point}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {!role.points?.length && role.summary && (
       <p className="mt-3 font-sans text-secondary text-prose leading-[1.6] max-w-[34rem]">
         {role.summary}
       </p>
@@ -111,6 +127,7 @@ const Study = ({ item, index }) => (
       end: item.end,
       current: item.current,
       summary: item.summary,
+      points: item.points,
       stack: item.focus ?? [],
     }}
   />
