@@ -9,6 +9,7 @@ import CommandPalette from "./components/CommandPalette";
 import SideRail from "./components/SideRail";
 import ContactRail from "./components/ContactRail";
 import AgentNote from "./components/AgentNote";
+import Collaborate from "./components/Collaborate";
 import NeuralField from "./components/NeuralField";
 
 function App() {
@@ -37,6 +38,11 @@ function App() {
             <Experience />
             <Tech />
             <Works />
+            {/* Between the work and the contact details, because it is about
+                the repositories the reader has just seen, not about hiring.
+                Inside <main>, not between two of them: a page gets one main
+                landmark, and splitting it gave screen readers two. */}
+            <Collaborate />
             <Contact />
           </main>
           <AgentNote />
