@@ -66,11 +66,17 @@ const Hero = () => {
             screen below, which carries context a bare button cannot. A secondary
             button beside a primary splits the click rather than adding a path. */}
         <motion.div variants={rise} className="mt-10 flex flex-wrap items-center gap-4">
+          {/* Lands on Experience, not Projects. It pointed at #work, which
+              jumped the reader over the entire career history to the project
+              grid: the one CTA on the page skipped the section a recruiter
+              opens a portfolio to read. From here the page reads in its
+              intended order, experience, then stack, then the projects those
+              two produced. */}
           <a
-            href="#work"
+            href="#experience"
             className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 font-sans font-semibold text-[15px] text-black-100 hover:brightness-95 transition"
           >
-            See my work
+            Start with my experience
           </a>
 
         </motion.div>

@@ -5,7 +5,6 @@ import { services, profile } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import Availability from "./Availability";
-import MobileCollapse from "./MobileCollapse";
 
 const ServiceCard = ({ index, title, desc }) => (
   <Tilt className="w-full h-full" options={{ max: 8, scale: 1, speed: 450 }}>
@@ -20,9 +19,12 @@ const ServiceCard = ({ index, title, desc }) => (
         <h3 className="font-display text-white-100 text-[19px] leading-tight">
           {title}
         </h3>
-        <MobileCollapse label="More">
-          <p className="font-sans text-secondary text-body leading-[1.5]">{desc}</p>
-        </MobileCollapse>
+        {/* No disclosure here, deliberately, unlike Work and Experience. These
+            descriptions run two or three lines, so hiding one costs a 44px
+            summary row to save about 60px of text: the whole six-card grid only
+            came down 114px, for six taps. A disclosure has to save more than it
+            costs, and here it does not. */}
+        <p className="font-sans text-secondary text-body leading-[1.5]">{desc}</p>
       </div>
     </motion.div>
   </Tilt>

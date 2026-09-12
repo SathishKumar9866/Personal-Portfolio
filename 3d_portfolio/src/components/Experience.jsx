@@ -34,7 +34,19 @@ const Range = ({ start, end, current }) => {
   );
 };
 
-const Role = ({ role, index, trackIndex = null }) => (
+/** Renders its children and nothing else. Not `Fragment`: that accepts only
+ *  `key` and `children`, so passing it the `label` below logs a React warning. */
+const Passthrough = ({ children }) => children;
+
+const Role = ({ role, index, trackIndex = null }) => {
+  // Is there anything behind the disclosure at all? Education entries have a
+  // degree, a school and a date and nothing else, so for them the answer is no
+  // and the control must not be drawn.
+  const hasDetail =
+    role.points?.length > 0 || Boolean(role.summary) || role.stack?.length > 0;
+  const Detail = hasDetail ? MobileCollapse : Passthrough;
+
+  return (
   <Reveal
     as="li"
     delay={index * 0.08}
@@ -84,7 +96,7 @@ const Role = ({ role, index, trackIndex = null }) => (
       </div>
     </div>
 
-    <MobileCollapse label="What I did">
+    <Detail label="What I did">
     {/* Justified from md up, ragged-right below it. Justification needs roughly
         sixty characters to distribute space without showing the seams; at the
         ~40 a phone gives it, the browser stretches word gaps until the lines
@@ -122,9 +134,10 @@ const Role = ({ role, index, trackIndex = null }) => (
         ))}
       </div>
     )}
-    </MobileCollapse>
+    </Detail>
   </Reveal>
-);
+  );
+};
 
 /**
  * Education uses the same timeline as roles, a degree is a dated entry with an
