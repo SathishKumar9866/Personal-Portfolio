@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `feat/availability-stacked-facts` merged and is gone.
+**Branch:** `main`. `refactor/less-template-more-evidence` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -16,7 +16,20 @@ The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
 flight and nothing half-applied.
 
-`feat/availability-stacked-facts` squash-merged and deleted: the "Open to work"
+`refactor/less-template-more-evidence` squash-merged and deleted, after the
+question "does this read as AI slop". The craft did not; the skeleton did.
+Three changes, and the first is the one that mattered:
+
+| Change | Why |
+| --- | --- |
+| **Deleted the six About capability cards** and the `services` constant | They restated Stack's six groups in adjectives instead of tools, and they were claims on a page whose hero promises evidence. About: 1,446px → 966px |
+| **Project covers build left to right as you scroll** | The diagrams are left-to-right pipelines, so they now draw in the direction they run. A `destination-out` wipe over the finished frame, NOT a build parameter through six 250-line drawers |
+| **Section eyebrows carry derived facts** | `4 roles · since 2020`, `6 areas · 33 tools`, `6 built · 1 live`, `4 routes · US Central`. All computed from the data, so none can go stale. Trailing full stops gone; `SectionHead.jsx` owns the shape |
+
+**Still the default section names** — Overview, Experience, Stack, Projects,
+Contact. Renaming those is writing his copy, and was left alone.
+
+Before it, `feat/availability-stacked-facts` squash-merged and deleted: the "Open to work"
 card is a stack of grouped facts instead of six evenly spaced rows, with the
 parts that were one sentence given a line each, plus a per-fact stagger, a rule
 that draws under each label, and a rail that fills as the card crosses the

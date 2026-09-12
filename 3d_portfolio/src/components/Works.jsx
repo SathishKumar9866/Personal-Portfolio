@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { Tilt } from "react-tilt";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { styles } from "../styles";
 import { projects } from "../constants";
-import { fadeIn, textVariant } from "../utils/motion";
+import { fadeIn } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
+import SectionHead from "./SectionHead";
 import { readable } from "./icons";
 import TagTerm from "./TagTerm";
 import Reveal from "./Reveal";
@@ -263,9 +263,34 @@ const LABELS = {
 };
 const ANIMATED = new Set(["retrieval", "federated", "tracking"]);
 
+// How wide the leading edge of the build is, in px. A hard edge reads as a
+// mask sliding across; 48px of feather reads as the drawing arriving.
+const FEATHER = 48;
+
+/**
+ * The cover draws itself as the card comes up the screen.
+ *
+ * Every one of these diagrams is a left-to-right pipeline — query, then the
+ * store, then the cited answer — so revealing it left to right is not a
+ * transition dropped on top of the picture, it is the picture's own order. The
+ * reader watches the system get built in the direction it runs.
+ *
+ * It is a composited wipe over the finished frame, not a build parameter
+ * threaded through six drawers. The drawers are ~250 lines of bespoke canvas
+ * each and they already take a `t` that means "where in the loop am I"; giving
+ * them a second axis meaning "how much of me exists" would mean rewriting all
+ * six and would put the same six-branch condition in each. `destination-out`
+ * with a gradient does it once, for every cover, including ones added later.
+ */
 const ProjectCover = ({ cover = "retrieval", name }) => {
   const ref = useRef(null);
   const reduced = useReducedMotion();
+  // Built by the time the card reaches the middle of the screen, so it is
+  // finished while the reader is still reading it rather than after they pass.
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "center center"],
+  });
   useEffect(() => {
     const c = ref.current;
     const drawer = DRAWERS[cover];
@@ -290,12 +315,23 @@ const ProjectCover = ({ cover = "retrieval", name }) => {
       c.height = h * dpr;
     };
 
-    const render = (t) => {
+    const render = (t, build = 1) => {
       if (!w || !h) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       ctx.textAlign = "left";
       drawer(ctx, w, h, t, mulberry(seed));
+      if (build >= 1) return;
+      // Erase what has not been drawn yet. The gradient runs transparent to
+      // opaque across FEATHER, so the edge fades rather than cutting.
+      const x = build * (w + FEATHER) - FEATHER;
+      const g = ctx.createLinearGradient(x, 0, x + FEATHER, 0);
+      g.addColorStop(0, "rgba(0,0,0,0)");
+      g.addColorStop(1, "rgba(0,0,0,1)");
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fillStyle = g;
+      ctx.fillRect(x, 0, w - x, h);
+      ctx.globalCompositeOperation = "source-over";
     };
 
     resize();
@@ -303,7 +339,7 @@ const ProjectCover = ({ cover = "retrieval", name }) => {
     // Static covers draw exactly once, so they were the ones that stayed wrong:
     // squashed after a resize, and stuck in the fallback typeface if the canvas
     // won the race against the webfonts.
-    if (reduced || !ANIMATED.has(cover)) {
+    if (reduced) {
       render(-1);
       const ro = new ResizeObserver(() => { resize(); render(-1); });
       ro.observe(c);
@@ -312,19 +348,31 @@ const ProjectCover = ({ cover = "retrieval", name }) => {
       return () => { alive = false; ro.disconnect(); };
     }
 
-    let raf, start = null, visible = true;
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.1 });
+    // Every cover gets a loop now, because even a static diagram needs frames
+    // while it is building. A static one that has finished building stops
+    // asking for them again: `settled` is what keeps three of the six covers
+    // from holding a rAF open for the life of the page.
+    const animated = ANIMATED.has(cover);
+    let raf, start = null, visible = true, settled = false;
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible) settled = false; // re-entering re-checks; resize may have changed w
+    }, { threshold: 0.1 });
     io.observe(c);
-    const ro = new ResizeObserver(resize);
+    const ro = new ResizeObserver(() => { resize(); settled = false; });
     ro.observe(c);
     const loop = (ts) => {
       if (start === null) start = ts;
-      if (visible) render(((ts - start) % 3200) / 3200);
+      if (visible && !settled) {
+        const build = Math.max(0, Math.min(1, scrollYProgress.get()));
+        render(animated ? ((ts - start) % 3200) / 3200 : -1, build);
+        if (!animated && build >= 1) settled = true;
+      }
       raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
     return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect(); };
-  }, [cover, name, reduced]);
+  }, [cover, name, reduced, scrollYProgress]);
 
   return (
     <div className="relative w-full rounded-xl overflow-hidden border border-line-strong bg-canvas" style={{ aspectRatio: "16 / 9" }}>
@@ -419,12 +467,14 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
   );
 };
 
+// "live" is the count with a deployed URL, which is the only claim here that a
+// reader can go and check for themselves.
+const LIVE = projects.filter((p) => p.live_link).length;
+const WORK_META = `${projects.length} built${LIVE ? ` · ${LIVE} live` : ""}`;
+
 const Works = () => (
   <>
-    <motion.div variants={textVariant()}>
-      <p className={styles.sectionSubText}>Selected work</p>
-      <h2 className={styles.sectionHeadText}>Projects.</h2>
-    </motion.div>
+    <SectionHead title="Projects" meta={WORK_META} />
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}

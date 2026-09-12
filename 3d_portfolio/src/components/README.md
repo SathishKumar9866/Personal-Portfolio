@@ -7,6 +7,7 @@ Thirty files. Read the table, not the directory.
 | You want to change | Open |
 | --- | --- |
 | The headline, the CTA, the status line | `Hero.jsx` |
+| How a section announces itself, and its fact line | `SectionHead.jsx` |
 | Portrait, lede, capability cards | `About.jsx` |
 | Roles and degrees, the timeline, date alignment | `Experience.jsx` |
 | The six tool groups, and the category dots | `Tech.jsx` |
