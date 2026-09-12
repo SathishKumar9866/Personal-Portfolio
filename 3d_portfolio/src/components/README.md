@@ -13,6 +13,7 @@ Thirty files. Read the table, not the directory.
 | Which tools get the filled chip, and each dot's colour | `stackGroups` in `../constants/index.js` |
 | Project cards, and the drawings on them | `Works.jsx` |
 | The contact card, and the URLs printed in it | `Contact.jsx` |
+| Whether a contact row is one line or two | `.contact-row` in `../index.css` |
 | The notice aimed at crawlers and LLMs | `AgentNote.jsx` |
 | "Open to work": copy, animation, the Reach out button | `Availability.jsx` |
 | Top bar: links, hide-on-scroll, mobile menu | `Navbar.jsx` |
