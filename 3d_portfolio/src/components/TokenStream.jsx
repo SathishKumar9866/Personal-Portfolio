@@ -45,7 +45,7 @@ const cssColor = (el, name, alpha) => {
   return v ? `rgba(${v.split(/\s+/).join(",")},${alpha})` : `rgba(128,128,128,${alpha})`;
 };
 
-const TokenStream = () => {
+const TokenStream = ({ inline = false }) => {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -54,7 +54,9 @@ const TokenStream = () => {
     const ctx = c.getContext("2d");
     const root = document.documentElement;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const wide = window.matchMedia("(min-width: 1024px)");
+    const gate = window.matchMedia(
+      inline ? "(max-width: 1023px)" : "(min-width: 1024px)"
+    );
 
     let dpr = 1, w = 0, h = 0, raf = 0, t0 = null, onScreen = false;
 
@@ -141,7 +143,7 @@ const TokenStream = () => {
     };
 
     const start = () => {
-      if (!wide.matches) return stop();
+      if (!gate.matches) return stop();
       resize();
       if (reduced) return draw(5); // one still frame; the picture still reads
       if (!raf) raf = requestAnimationFrame(frame);
@@ -157,15 +159,15 @@ const TokenStream = () => {
     ro.observe(c);
 
     start();
-    wide.addEventListener("change", start);
+    gate.addEventListener("change", start);
 
     return () => {
       stop();
       io.disconnect();
       ro.disconnect();
-      wide.removeEventListener("change", start);
+      gate.removeEventListener("change", start);
     };
-  }, []);
+  }, [inline]);
 
   return (
     <canvas
@@ -175,7 +177,13 @@ const TokenStream = () => {
       // cards: section-scoped wallpaper is still wallpaper. It now occupies only
       // the empty strip to the right of the intro text, above the grid, so it
       // crosses no content at all.
-      className="pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[22rem] w-[52%] opacity-[0.95]"
+      className={
+        inline
+          ? // Its own row on a phone, so it crosses no text: the band the
+            // desktop version borrows does not exist at 390px wide.
+            "pointer-events-none block rail:hidden w-full h-24 opacity-[0.95]"
+          : "pointer-events-none absolute top-0 right-0 -z-10 hidden rail:block h-[22rem] w-[52%] opacity-[0.95]"
+      }
     />
   );
 };

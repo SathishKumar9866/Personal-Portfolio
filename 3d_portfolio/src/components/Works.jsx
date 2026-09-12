@@ -405,7 +405,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d={ICON_PATHS.github} />
             </svg>
-            repo ↗
+            GitHub repo ↗
           </a>
           {live_link && (
             <a href={live_link} target="_blank" rel="noreferrer" className="inline-flex items-center min-h-11 sm:min-h-0 text-live hover:text-accent transition-colors">

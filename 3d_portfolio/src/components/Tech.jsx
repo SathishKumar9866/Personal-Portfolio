@@ -21,7 +21,9 @@ const Tech = () => (
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}
-      className="mt-4 font-sans text-secondary text-lede max-w-[34rem] leading-[1.7]"
+      // Desktop only. On a phone this section is a list of tools and the
+      // argument for them is three lines the reader scrolls past to reach it.
+      className="hidden md:block mt-4 font-sans text-secondary text-lede max-w-[34rem] leading-[1.7]"
     >
       Not a badge collection: this is what I actually reach for, grouped by where
       it sits on the path from raw data to a running product. I pick tools that
@@ -58,6 +60,13 @@ const Tech = () => (
         its own viewport entry, so the section animates as the reader arrives at
         it rather than all at once. */}
     <div className="mt-10 sm:mt-12">
+      {/* The token wave gets its own strip on a phone. The desktop instance
+          occupies the empty band beside the intro copy; at this width there is
+          no empty band, so rather than run it behind the cards, which is the
+          wallpaper problem the whole effect was scoped to avoid, it is given a
+          row of its own above them. */}
+      <TokenStream inline />
+
       {/* phone: one card, six rows */}
       <div className="md:hidden glass-card rounded-2xl p-4 divide-y divide-line">
         {stackGroups.map((g, i) => (

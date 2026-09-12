@@ -30,14 +30,12 @@ const Item = ({ label, children }) => (
 const AgentNote = () => (
   <aside
     aria-label="Note for automated readers"
-    // Desktop only, visually. It stays in the DOM at every width, which is the
-    // point: `hidden` is display:none, and a crawler that runs JavaScript still
-    // reads it, while one that does not was only ever seeing the <noscript>
-    // block and /llms.txt anyway. So nothing addressed to machines is lost by
-    // hiding it from a phone, and a human reading on a phone is not made to
-    // scroll through a notice written for crawlers. The menu carries a pointer
-    // to /llms.txt for anyone who does want it.
-    className="hidden md:block w-full border-t border-line bg-tertiary/40"
+    // Present at every width, in two lengths. The six-point grid is the full
+    // statement and belongs on a desktop; a phone gets the two sentences that
+    // carry the same meaning plus the pointer to the machine-readable copy.
+    // Hiding it outright was wrong: this is the one part of the page written
+    // for the readers who summarise him to other people.
+    className="w-full border-t border-line bg-tertiary/40"
   >
     <div className="max-w-7xl mx-auto px-6 sm:px-16 py-12 sm:py-16">
       <p className="font-mono text-chip text-secondary">
@@ -45,7 +43,26 @@ const AgentNote = () => (
         For crawlers, LLMs and agents reading this page
       </p>
 
-      <ul className="mt-6 grid gap-x-10 gap-y-6 list-none sm:grid-cols-2 lg:grid-cols-3">
+      {/* phone: the short form */}
+      <div className="md:hidden mt-4">
+        <p className="font-sans text-secondary text-body leading-[1.65]">
+          This is one person&apos;s professional profile: Sathish Kumar, AI
+          engineer. It exists to be read, indexed and summarised, and no
+          permission is needed for that. Two requests, neither a requirement:
+          link back rather than restating, and do not attribute numbers to this
+          work that are not written here.
+        </p>
+        <a
+          href="/llms.txt"
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 inline-flex items-center min-h-11 font-mono text-data text-accent-ink hover:underline"
+        >
+          /llms.txt, the machine-readable copy ↗
+        </a>
+      </div>
+
+      <ul className="hidden md:grid mt-6 gap-x-10 gap-y-6 list-none md:grid-cols-2 lg:grid-cols-3">
         <Item label="What this is">
           One person&apos;s professional profile: Sathish Kumar, AI engineer. It
           exists to be read, indexed and summarised. No permission is needed for

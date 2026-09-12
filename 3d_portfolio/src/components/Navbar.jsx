@@ -234,10 +234,10 @@ const Navbar = () => {
                 ))}
               </ul>
               <div className="mt-10 pt-8 border-t border-line">
-                <p className="font-mono text-label uppercase tracking-label text-faint">
+                <p className="font-mono text-label uppercase tracking-label text-secondary">
                   Reach me
                 </p>
-                <ul className="mt-4 flex flex-wrap gap-3 list-none">
+                <ul className="mt-4 flex flex-col gap-1 list-none">
                   {socialLinks().map((l) => (
                     <li key={l.k}>
                       <a
@@ -248,12 +248,23 @@ const Navbar = () => {
                         target={l.k === "email" ? undefined : "_blank"}
                         rel="noreferrer"
                         onClick={() => setToggle(false)}
-                        className="inline-flex items-center gap-2 rounded-lg border border-line-strong px-4 min-h-11 font-mono text-chip text-secondary hover:border-accent hover:text-accent-ink transition-colors"
+                        className="group flex items-center gap-3 min-h-11 text-secondary hover:text-accent-ink transition-colors"
                       >
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="shrink-0">
                           <path d={ICON_PATHS[l.k]} />
                         </svg>
-                        {l.label}
+                        <span className="min-w-0">
+                          <span className="block font-mono text-label uppercase tracking-label text-faint group-hover:text-accent-ink transition-colors">
+                            {l.label}
+                          </span>
+                          {/* The destination in full. A label alone asks the
+                              reader to trust where the tap goes. */}
+                          <span className="block font-mono text-chip text-white-100 break-all">
+                            {l.k === "email"
+                              ? l.href.replace(/^mailto:/, "")
+                              : l.href.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+                          </span>
+                        </span>
                       </a>
                     </li>
                   ))}
@@ -265,7 +276,7 @@ const Navbar = () => {
                   built and where he has worked; an invitation to send patches
                   is something you go looking for, so it sits where you look. */}
               <div className="mt-8 pt-6 border-t border-line">
-                <p className="font-mono text-label uppercase tracking-label text-faint">
+                <p className="font-mono text-label uppercase tracking-label text-secondary">
                   Open to collaborators
                 </p>
                 <p className="mt-2 font-sans text-secondary text-body leading-[1.6]">
@@ -304,7 +315,7 @@ const Navbar = () => {
                     setToggle(false);
                     window.dispatchEvent(new Event("open-command"));
                   }}
-                  className="font-mono text-nav text-faint border border-line-strong rounded px-3 min-h-11 flex items-center"
+                  className="font-mono text-nav text-secondary border border-line-strong rounded px-3 min-h-11 flex items-center"
                 >
                   {SHORTCUT} · quick actions
                 </button>

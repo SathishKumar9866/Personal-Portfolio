@@ -156,9 +156,11 @@ body {
 
 .hash-span {
   display: block;
-  /* Fixed nav is ~77px. 10.5rem puts the section's first line a comfortable
-     distance below it instead of tucked under its edge. */
-  scroll-margin-top: 10.5rem;
+  /* Clears the ~77px fixed nav plus a small gap, and no more. It was 10.5rem,
+     which parked the anchor 168px down the viewport: with the bar covering the
+     first 77px, that left most of the PREVIOUS section on screen, so jumping to
+     "Experience" showed the tail of Overview. */
+  scroll-margin-top: 5.5rem;
 }
 
 .accent-rail {
@@ -281,6 +283,18 @@ main:focus:not(:focus-visible) {
 @media (prefers-reduced-motion: reduce) {
   .card-lift:hover {
     transform: none;
+  }
+}
+
+/* Phones only. Barlow at 400 is airy by design and that airiness reads as thin
+   text on a small screen held at arm's length, particularly light-on-dark. The
+   named type tokens are the hook, so this lifts body copy without reaching into
+   every component and without touching headings, which are already 600/700. */
+@media (max-width: 767px) {
+  .text-body,
+  .text-prose,
+  .text-lede {
+    font-weight: 500;
   }
 }
 

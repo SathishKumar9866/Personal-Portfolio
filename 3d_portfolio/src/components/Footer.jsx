@@ -5,7 +5,11 @@
  */
 import LiveClock from "./LiveClock";
 
-const BUILD = "2026.09";
+// One date convention across the site: "Month YYYY", the same shape the
+// Experience timeline prints. The old "2026.09" was the only place using
+// YYYY.MM, which made it the odd one out on its own page.
+const STARTED = "August 2024";
+const THIS_VERSION = "September 2026";
 
 const Footer = () => (
   <footer className="relative z-10 border-t border-line bg-primary">
@@ -13,9 +17,12 @@ const Footer = () => (
       <span className="flex flex-wrap items-center gap-x-2">
         © {new Date().getFullYear()} Sathish Kumar <span className="text-faint">·</span> <LiveClock />
       </span>
-      <span>
-        Type: Barlow · Newsreader · JetBrains Mono ·{" "}
-        <span className="text-secondary">build {BUILD}</span>
+      <span className="flex flex-wrap items-center gap-x-2">
+        <span>Type: Barlow · Newsreader · JetBrains Mono</span>
+        <span aria-hidden="true">·</span>
+        <span className="text-secondary">
+          Started {STARTED}, this version {THIS_VERSION}
+        </span>
       </span>
     </div>
   </footer>
