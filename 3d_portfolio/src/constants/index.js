@@ -219,33 +219,10 @@ export const navLinks = [
   { id: "contact", title: "Contact" },
 ];
 
-// Focus areas across the data-to-AI stack
-export const services = [
-  {
-    title: "Data Engineering",
-    desc: "Pipelines that move and shape data reliably, Spark, SQL, and cloud storage the rest of the stack can trust.",
-  },
-  {
-    title: "Data Analytics",
-    desc: "Turning warehoused data into the dashboards and answers a business actually acts on, Synapse, Power BI, and SQL against a modelled source of truth.",
-  },
-  {
-    title: "Data Science",
-    desc: "Turning raw data into decisions: analysis, evaluation, and models grounded in what the data actually supports.",
-  },
-  {
-    title: "Machine Learning",
-    desc: "Training, tuning, and evaluating models: computer vision and beyond: built to generalize past the demo.",
-  },
-  {
-    title: "AI Engineering",
-    desc: "Shipping LLM and RAG systems to production: cited, offline-capable, and evaluated like software.",
-  },
-  {
-    title: "Software & Full-Stack",
-    desc: "The parts either side of the model: FastAPI and Next.js services, Terraform and Kubernetes underneath, CI/CD that ships them.",
-  },
-];
+// `services` lived here: six "focus areas" rendered as cards in About. Deleted
+// with the cards, not orphaned, because the six `stackGroups` below already
+// partition the same skills and do it with named tools instead of adjectives.
+// Two taxonomies of one person is one too many; the specific one won.
 
 // Grouped stack, six areas across the data-to-AI path.
 /**

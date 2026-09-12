@@ -1,11 +1,17 @@
 import { motion } from "framer-motion";
-import { styles } from "../styles";
 import { stackGroups, TERM_HINT } from "../constants";
-import { fadeIn, textVariant } from "../utils/motion";
+import { fadeIn } from "../utils/motion";
 import Reveal from "./Reveal";
 import { SectionWrapper } from "../hoc";
+import SectionHead from "./SectionHead";
 import TagTerm from "./TagTerm";
 import TokenStream from "./TokenStream";
+
+// A set, not a sum: several tools appear in more than one group, and counting
+// the arrays would claim more than he lists.
+const STACK_META = `${stackGroups.length} areas · ${
+  new Set(stackGroups.flatMap((g) => g.items)).size
+} tools`;
 
 const Tech = () => (
   <>
@@ -14,10 +20,7 @@ const Tech = () => (
         content instead of decorating the page. */}
     <TokenStream />
 
-    <motion.div variants={textVariant()}>
-      <p className={styles.sectionSubText}>What I use</p>
-      <h2 className={styles.sectionHeadText}>Stack.</h2>
-    </motion.div>
+    <SectionHead title="Stack" meta={STACK_META} />
 
     <motion.p
       variants={fadeIn("", "", 0.1, 1)}

@@ -14,10 +14,10 @@
  */
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { styles } from "../styles";
 import { contact } from "../constants";
-import { fadeIn, textVariant } from "../utils/motion";
+import { fadeIn } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
+import SectionHead from "./SectionHead";
 import { ICON_PATHS, readable, socialLinks } from "./icons";
 import Reveal from "./Reveal";
 
@@ -108,13 +108,14 @@ const Row = ({ k, label, href }) => {
   );
 };
 
+// The routes are the ones actually rendered below, so the number and the list
+// cannot disagree.
+const CONTACT_META = `${socialLinks().length} routes · ${contact.timezone}`;
+
 const Contact = () => (
   <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-14 lg:items-start">
     <div>
-      <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>Get in touch</p>
-        <h2 className={styles.sectionHeadText}>Contact.</h2>
-      </motion.div>
+      <SectionHead title="Contact" meta={CONTACT_META} />
 
       <motion.p
         variants={fadeIn("", "", 0.1, 1)}

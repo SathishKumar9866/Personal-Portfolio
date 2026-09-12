@@ -1,5 +1,84 @@
 # Worklog
 
+## 2026-09-12: taking the template out of it
+
+Asked whether the site reads as generated. Honest answer at the time: the craft
+does not — the project schematics, the glossary definitions and most of the
+project copy are specifically the opposite — but the **skeleton** did, and the
+biggest block on the page was the worst of it. Three changes, and the first is a
+deletion.
+
+### The capability grid restated Stack, and it went
+
+About carried six cards: `Data Engineering`, `Data Analytics`, `Data Science`,
+`Machine Learning`, `AI Engineering`, `Software & Full-Stack`. Stack carries six
+groups: `Data engineering`, `Data science`, `LLM / RAG`, `Computer vision`,
+`MLOps & infra`, `Backend & apps`. **The same skills, partitioned six ways,
+twice, about 2,000px apart.**
+
+Worse, they were claims on a page whose hero promises "the evidence it works".
+"Turning raw data into decisions" and "built to generalize past the demo" are
+true of every ML engineer who has ever written a portfolio, and the real
+evidence — shipped systems with diagrams of how they work — was 3,000px further
+down. The grid cost about 700px between the lede and Experience, which is the
+section a recruiter opens this page to read.
+
+Deleted, along with the `services` constant, which had no other consumer.
+**About went from 1,446px to 966px.** Breadth is still on the page: it is in
+Stack, where it is named in tools rather than adjectives, and in Work, where it
+is demonstrated.
+
+### The diagrams build as you scroll
+
+The six project covers are left-to-right pipelines — query, store, cited answer.
+They now draw themselves in that direction as the card comes up the screen,
+finishing by the time it reaches the middle, so the reader watches the system
+get built in the direction it runs.
+
+**It is a composited wipe over the finished frame, not a build parameter
+threaded through six drawers.** Each drawer is ~250 lines of bespoke canvas and
+already takes a `t` meaning "where in the loop am I"; a second axis meaning "how
+much of me exists" would have meant rewriting all six and repeating the same
+condition in each. `destination-out` with a 48px gradient does it once, for
+every cover, including any added later.
+
+Measured on a cover as it rises: 0 ink below the fold, then **276 ink all in the
+left half with the right at exactly 0**, then both halves filling, then settled
+at ~2,450. Static covers stop asking for frames once built (`settled`), so three
+of the six do not hold a rAF open for the life of the page. Reduced motion draws
+all six complete, verified by pixel count on each.
+
+### The sections stopped announcing themselves identically
+
+Five sections opened the same way: a mono eyebrow, the name, a full stop.
+"SELECTED WORK / Projects." tells a reader nothing the nav did not. Uniform
+openings are what make a page read as filled-in rather than written.
+
+The eyebrow carries a fact now, and every fact is **derived, never typed**:
+
+| Section | Was | Is |
+| --- | --- | --- |
+| About | INTRODUCTION / Overview. | Overview *(no meta: the first section sets no pattern)* |
+| Experience | WHERE I'VE WORKED / Experience. | 4 roles · since 2020 |
+| Stack | WHAT I USE / Stack. | 6 areas · 33 tools |
+| Work | SELECTED WORK / Projects. | 6 built · 1 live |
+| Contact | GET IN TOUCH / Contact. | 4 routes · US Central time |
+
+Four because `experience` has four entries; 2020 because that is the earliest
+`start` in it; 33 because that is the **set** size of the tools, not the sum of
+the arrays, which would claim more than he lists; one live because one project
+has a `live_link`. None of them can go stale, and they are the cheapest possible
+instance of the thing the hero promises.
+
+The full stop is gone. A one-word heading with a period after it is a house
+style borrowed from a hundred agency templates. `SectionHead.jsx` owns the shape
+now, so there is one place to change it.
+
+### Not done
+
+The section *names* are still the default set — Overview, Experience, Stack,
+Projects, Contact. Renaming them is writing his copy, not mine.
+
 ## 2026-09-12: the availability card, and a reduced-motion claim that was false
 
 ### The layout problem was spacing, not wrapping

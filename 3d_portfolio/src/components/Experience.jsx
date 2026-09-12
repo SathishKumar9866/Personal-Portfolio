@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { styles } from "../styles";
 import { experience, education } from "../constants";
-import { fadeIn, textVariant } from "../utils/motion";
+import { fadeIn } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
+import SectionHead from "./SectionHead";
 import Reveal from "./Reveal";
 import TagTerm from "./TagTerm";
 import CareerTrack from "./CareerTrack";
@@ -162,12 +162,19 @@ const Study = ({ item, index }) => (
   />
 );
 
+// Derived, never typed: four because `experience` has four entries, 2020
+// because that is the earliest `start` in it. A hand-written "4 roles" is a
+// number that goes wrong the next time a role is added.
+const ROLES = experience.filter((e) => e.title);
+const FIRST_YEAR = ROLES.map((e) => e.start)
+  .filter(Boolean)
+  .sort()[0]
+  ?.slice(0, 4);
+const EXPERIENCE_META = `${ROLES.length} roles${FIRST_YEAR ? ` · since ${FIRST_YEAR}` : ""}`;
+
 const Experience = () => (
   <>
-    <motion.div variants={textVariant()}>
-      <p className={styles.sectionSubText}>Where I&apos;ve worked</p>
-      <h2 className={styles.sectionHeadText}>Experience.</h2>
-    </motion.div>
+    <SectionHead title="Experience" meta={EXPERIENCE_META} />
 
     {/* A motion.div, not a div. Framer propagates variants down the motion
         tree, so a plain wrapper between the section's animated parent and this
