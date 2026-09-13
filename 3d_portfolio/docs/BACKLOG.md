@@ -47,10 +47,13 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   `public/robots.txt`: this is a single page with in-page anchors, so a sitemap
   would carry exactly one URL and tell a crawler nothing it does not already
   have. Reopen the day the site grows real routes.
-- [ ] **(P1, M) Cross-browser + real-device QA**, Safari, Firefox, real iOS /
-  Android. Only Chrome tested so far (emulated 390/408/700/767/1440). The
-  hide-on-scroll handler clamps scroll position for iOS rubber-banding but that
-  has not been confirmed on a real device.
+- [~] **(P1, M) Cross-browser + real-device QA.** Partly done 2026-09-12: the
+  owner checked a real phone and it immediately found what nine emulated
+  viewports could not — the hero code band flickered, because a mobile browser
+  collapses its URL bar as you scroll and the hero is a viewport-height box.
+  Fixed. **Safari and Firefox are still completely untested**, and the
+  hide-on-scroll handler's iOS rubber-band clamp has still never run on an
+  iPhone. This stays the biggest gap on the board.
 
 ## Content the owner must supply
 
@@ -83,8 +86,10 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 - [x] **(P1, S) ~~Light-mode contrast audit.~~** Done 2026-09-11: the accent's role was split rather than its colour changed. `--c-accent` fills, `--c-accent-ink` reads as text. 22 pairs measured from the built stylesheet, all AA in both themes. Small red text (`#FF3621`) on white
   is ~3.5:1: fine for large headings (AA large), below AA for small body/eyebrow
   text. Consider a darker red token for small text, or navy.
-- [ ] **(P2, S) Smooth theme-toggle transition** on panels/borders (currently only
-  `body` fades; other surfaces flip instantly).
+- [ ] **(P2, S) Smooth theme transition** on panels/borders (currently only
+  `body` fades; other surfaces flip instantly). Worth more now than when it was
+  filed: there are six palettes as of 2026-09-12, so readers will actually flip
+  between them rather than setting dark once and never touching it.
 - [x] **(P2, M) ~~OG / Twitter share image.~~** Done 2026-09-11: `public/og.png`
   at 1200x630 plus 180/192/512 icons. Regenerated later the same day when the
   title changed, and given a source: `docs/og-card.html`. It had none, so the
@@ -96,9 +101,11 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   `tailwind.config.js`. Two contrast failures fixed (logo monogram 3.62:1, footer
   separator 1.33:1) and three sub-44px touch targets. Full reasoning and
   measurements in `docs/TYPE-AUDIT.md`.
-- [ ] **(P1, M) Shorten the phone page further.** It went 14,494px to 10,520px,
-  but twelve screens is still twelve screens and the remainder is content rather
-  than padding. Anything more means cutting what is shown, not how it is shown.
+- [~] **(P1, M) Shorten the phone page further.** 14,494px -> 10,520px -> **8,967px
+  measured 2026-09-12**, about 10.6 screens at 390x844. Two cuts got it there and
+  both were deletions rather than compression: the six About capability cards
+  (-480px, they restated Stack) and the Stack chips losing their boxes (-233px).
+  What is left really is content. Anything further means cutting what is shown.
 - [ ] **(P2, S) A theme picker on first load** was proposed and advised against:
   the site already reads `prefers-color-scheme`, so a modal asks a question the
   OS has answered and puts a decision between a recruiter and the content. If it
@@ -106,15 +113,23 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 - [ ] **(P2, S) Delete `Quote.jsx`.** Dead since the interstitial quotations were
   removed; nothing imports it. Left in place during the type audit because
   deleting a component is a separate decision from resizing type.
-- [ ] **(P2, S) Section-header treatment**, the eyebrow+word pattern is fine but
-  could be made more distinctly editorial if desired.
+- [x] **(P2, S) ~~Section-header treatment.~~** Done 2026-09-12: the eyebrow now
+  carries a derived fact (`4 roles · since 2020`, `6 areas · 33 tools`,
+  `6 built · 1 live`, `4 routes · US Central`) instead of a label that repeated
+  the nav, and the trailing full stops are gone. `SectionHead.jsx` owns the
+  shape. Every number is computed from the data, so none can go stale.
 
 ## Engineering
 
 - [ ] **(P2, M) Reduce framer-motion footprint**, it's the largest runtime dep
   (~37KB gzip). Replace simple reveals/hovers with CSS where possible.
 - [ ] **(P2, S) Preload the primary font weights** (Barlow 400/700) to cut FOUT.
-- [ ] **(P2, S) CI:** GitHub Action for build + lint + a Lighthouse budget on PRs.
+- [x] **(P2, S) ~~CI: build + lint on PRs.~~** Done 2026-09-12,
+  `.github/workflows/ci.yml`. Runs the same install / lint / build / crawler-file
+  guard the deploy runs, on the same Node 22, so CI and deploy cannot disagree
+  about what green means. A Lighthouse budget was **not** included: it needs a
+  hosted URL per PR to be meaningful, and this repo has no preview deploys.
+  Reopen it if Vercel previews ever land.
 - [ ] **(P1, L) Prerender for AI crawlers.** The site is a client-rendered SPA,
   so ChatGPT-User, GPTBot and most AI crawlers see only the `<noscript>` block:
   they do not execute JavaScript. `public/llms.txt` is the deliberate answer and

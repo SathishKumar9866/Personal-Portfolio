@@ -1,0 +1,70 @@
+# Pull-request checks for the site in 3d_portfolio/.
+#
+# Why this exists: the deploy workflow lives in the OTHER repo
+# (SathishKumarAI.github.io) and only runs on demand, after a merge. So until
+# this file, nothing checked a branch before it landed on `main` — a PR could
+# merge with a broken build and the first sign of it would be a red deploy.
+#
+# It deliberately runs the SAME three steps as that deploy, in the same order,
+# on the same Node: install, lint, build, then the crawler-file guard. If CI and
+# deploy disagree about what "green" means, the one that runs later is the one
+# that finds out, and that is the expensive one.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  # Also on pushes to main, so a direct commit (or a merge that raced a stale
+  # branch) is still checked rather than assumed.
+  push:
+    branches: [main]
+
+# A second push to a PR makes the first run pointless. Cancel it.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  SOURCE_DIR: 3d_portfolio
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Matches the deploy workflow. Two Node versions is two sets of
+          # results and one of them is a lie.
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ${{ env.SOURCE_DIR }}/package-lock.json
+
+      - name: Install
+        run: npm ci
+        working-directory: ${{ env.SOURCE_DIR }}
+
+      - name: Lint
+        run: npm run lint
+        working-directory: ${{ env.SOURCE_DIR }}
+
+      - name: Build
+        run: npm run build
+        working-directory: ${{ env.SOURCE_DIR }}
+
+      # The same guard the deploy runs, moved earlier. This site shipped once
+      # with a crawler-facing file missing from the build output; catching that
+      # on the PR costs nothing and catching it at deploy costs a rollback.
+      - name: Check the crawler files survived the build
+        run: |
+          set -e
+          for f in robots.txt llms.txt og.png index.html; do
+            test -s "$SOURCE_DIR/dist/$f" || { echo "missing or empty: dist/$f"; exit 1; }
+          done
+          grep -q 'application/ld+json' "$SOURCE_DIR/dist/index.html" \
+            || { echo "JSON-LD missing from dist/index.html"; exit 1; }
+          echo "robots.txt, llms.txt, og.png and the JSON-LD are all present."
