@@ -23,7 +23,8 @@ Read this table instead of the code.
 | A project's cover drawing | the drawing functions at the top of `src/components/Works.jsx` |
 | What a tech chip explains | `glossary` in `src/constants/index.js` |
 | Which tools get the filled chip | `primary` per group in `stackGroups` |
-| A Stack category's dot colour | `dot` per group in `stackGroups`, token in `src/index.css` |
+| A Stack category's colour | `dot` AND `tint` per group in `stackGroups` — same colour, two forms — token in `src/index.css` |
+| The Stack pipeline rail, card glow, stage numerals | `src/components/Tech.jsx`, `.stack-card` / `.stack-seg` in `src/index.css` |
 | The og:image social card | `docs/og-card.html`, then re-render over `public/og.png` |
 | How big any text is | the named scale in `tailwind.config.js`, never a literal |
 | How much a section is padded | `styles.padding` in `src/styles.js`, one clamp |

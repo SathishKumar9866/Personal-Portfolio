@@ -429,6 +429,114 @@ main:focus:not(:focus-visible) {
   }
 }
 
+/* ---- stack cards --------------------------------------------------------
+   Six boxes side by side have to read as one system, not six boxes. Everything
+   here is driven by ONE inline custom property, `--cat`, set from `tint` on the
+   group, so a card, its dot and its segment of the pipeline rail above the grid
+   are provably the same colour rather than three colours that happen to match.
+
+   Two devices, both at rest and on hover:
+
+   - `::after` is a tinted top edge. At rest it is the only thing separating one
+     category from the next at a glance, which is what the 8px dot was being
+     asked to do alone.
+   - `::before` is a cursor spotlight in the category colour, at `--mx`/`--my`
+     set by a pointermove handler on the card. On a touch screen there is no
+     pointer and no hover, so it never turns on and costs nothing.
+
+   NO `overflow: hidden` on the card, deliberately. It would clip the glossary
+   panel that TagTerm opens below a chip, which is the whole point of this
+   section. The pseudo-elements inherit the radius instead, which clips the
+   gradient without clipping the content.
+
+   Both pseudo-elements sit at z-index -1: a negative-z child paints above its
+   parent's own background and below the parent's in-flow text, so the glow is
+   in the card's material rather than over its words. */
+.stack-card {
+  position: relative;
+  --cat: var(--c-line-strong);
+}
+
+.stack-card::before,
+.stack-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.stack-card::before {
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(
+    18rem 14rem at var(--mx, 50%) var(--my, 0%),
+    rgb(var(--cat) / 0.46),
+    rgb(var(--cat) / 0) 72%
+  );
+}
+
+/* The tint has to survive a light ground, where a 0.3 wash of a mid-tone
+   reads as grey. */
+:root[data-scheme="light"] .stack-card::before {
+  background: radial-gradient(
+    18rem 14rem at var(--mx, 50%) var(--my, 0%),
+    rgb(var(--cat) / 0.17),
+    rgb(var(--cat) / 0) 72%
+  );
+}
+
+.stack-card::after {
+  top: 0;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 1px;
+  border-radius: 0;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--cat) / 0),
+    rgb(var(--cat) / 0.8) 22%,
+    rgb(var(--cat) / 0)
+  );
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+@media (hover: hover) {
+  .stack-card:hover::before,
+  .stack-card:focus-within::before {
+    opacity: 1;
+  }
+  .stack-card:hover::after,
+  .stack-card:focus-within::after {
+    opacity: 1;
+  }
+  .stack-card:hover,
+  .stack-card:focus-within {
+    border-color: rgb(var(--cat) / 0.55);
+  }
+}
+
+/* The ghost stage numeral. Big enough to be a graphic element, faint enough
+   that it never competes with the heading beside it. */
+.stack-index {
+  font-variant-numeric: tabular-nums;
+  color: rgb(var(--cat));
+  opacity: 0.5;
+}
+:root[data-scheme="light"] .stack-index {
+  opacity: 0.7;
+}
+
+/* One segment of the pipeline rail. Inline `background` carries the tint; the
+   height change is what makes the hovered group's position on the path
+   obvious, and it is a transform so it costs no layout. */
+.stack-seg {
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
 /* Phones only. Barlow at 400 is airy by design and that airiness reads as thin
    text on a small screen held at arm's length, particularly light-on-dark. The
    named type tokens are the hook, so this lifts body copy without reaching into

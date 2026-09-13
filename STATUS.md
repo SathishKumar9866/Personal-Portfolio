@@ -4,13 +4,52 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `chore/dead-code-and-theme-fade` merged and is gone.
+**Branch:** `feat/stack-pipeline-redesign`, PR open. Before it,
+`chore/dead-code-and-theme-fade` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
 There is no 3D in it; the folder name survives from a version that had it.
 
 ## Where it stopped
+
+**Stack was redesigned.** It was a 3x2 grid of glass cards whose only heading
+was a 12px uppercase red label, and the intro paragraph's claim — that the six
+groups sit in order on a path from raw data to a running product — was stated in
+words and then thrown away by a grid that shows six equals.
+
+Three things now carry that claim:
+
+| | |
+| --- | --- |
+| **The pipeline rail** above the grid | six tinted segments between `raw data` and `running product`. The hovered group's segment brightens and doubles in height, so a card says where on the path it sits. `aria-hidden`: it is a picture of what the intro already says in words |
+| **A stage numeral** `01`–`06` on every card and every phone row | the same ordering, in the one place a reader looks after the title |
+| **A cursor spotlight** in the group's own colour | `--mx`/`--my` written imperatively to the card node on pointermove, read by `.stack-card::before` |
+
+The card heading moved from 12px uppercase accent-red to 17px display
+semibold, so the hierarchy inside a card finally runs heading > note > tools
+instead of three near-equal bands.
+
+**One colour, two forms.** Each group now carries `dot` (a literal Tailwind
+class, because Tailwind scans for literal strings) *and* `tint` (the raw
+`--c-cat-*` variable name, because `rgb(var(...) / 0.46)` cannot be recovered
+from a class). They are declared adjacent so they cannot drift apart unnoticed.
+
+**The trap here: do not put `overflow: hidden` on the card.** Clipping the
+spotlight that way also clips the glossary panel TagTerm opens below a chip,
+which is the entire point of the section. The pseudo-elements take
+`border-radius: inherit` instead, which clips the gradient and not the content.
+The second half of that: both pseudo-elements sit at `z-index: -1`, where a
+negative-z child paints *above* its parent's own background and *below* the
+parent's in-flow text — so the glow is in the card's material rather than over
+its words.
+
+Measured in Chrome at 1440px and 390px, both themes: `--cat` resolves per card
+(`132 160 186` on Data engineering), the spotlight follows to
+`radial-gradient(288px 224px at 30% 40%, rgba(132,160,186,0.46) …)`, the border
+tints to `rgba(132,160,186,0.55)`, the rail reads `["1","0.16","0.16","0.16",
+"0.16","0.16"]` with card 1 active, the glossary panel renders fully outside the
+card, and `scrollWidth === clientWidth` on the phone.
 
 The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
