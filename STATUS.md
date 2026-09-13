@@ -4,14 +4,30 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `feat/stack-pipeline-redesign`, PR open. Before it,
-`chore/dead-code-and-theme-fade` merged and is gone.
+**Branch:** `main`. `feat/stack-pipeline-redesign` squash-merged as #17 and is
+gone; `fix/navbar-return-hysteresis` merged after it.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
 There is no 3D in it; the folder name survives from a version that had it.
 
 ## Where it stopped
+
+**The nav bar no longer returns on a twitch.** It hides on a deliberate
+downward push (12px in one frame) and used to come back on 2px of upward
+movement, which meant any nudge while reading slid 77px of bar in and out at the
+top of the eyeline. The return is now hysteretic: upward movement has to
+accumulate 200px — two mouse-wheel notches, or a thumb swipe — before the bar
+comes back, and **any downward movement zeroes that total**, so jitter in both
+directions never sums to a return.
+
+Measured on the built bundle at 1280x720: scrolled down to y=1600 the bar is
+`-translate-y-full`; 50, 100 and 150px of upward movement leave it hidden; at
+210px it shows. Eight rounds of (up 50 / down 20) — 400px of upward movement
+in total — leave it hidden, and a single 250px upward swipe shows it. The other
+four guards are unchanged and re-verified: y<=160 always shows, a jump the
+reader asked for never hides, focus inside the bar shows it, the mobile menu
+shows it.
 
 **Stack was redesigned.** It was a 3x2 grid of glass cards whose only heading
 was a 12px uppercase red label, and the intro paragraph's claim — that the six
