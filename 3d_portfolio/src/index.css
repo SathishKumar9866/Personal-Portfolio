@@ -626,3 +626,47 @@ main:focus:not(:focus-visible) {
     transform: none;
   }
 }
+
+
+/* ---- the theme change itself -------------------------------------------
+   `body` has faded its own background and colour since the first two themes,
+   and nothing else did: every panel, border, chip and glyph flipped instantly
+   while the ground eased under them. With two themes that was a blink. With
+   six it is the thing a reader does repeatedly, so it is worth being a
+   transition rather than a cut.
+
+   Scoped to the moment of the change, not left on. A permanent global
+   transition on colour would also animate every hover, every active nav link
+   and every reveal, which is how a page ends up feeling laggy: the class is
+   added when the theme changes and removed when the fade is done, so for the
+   other 99% of the session nothing here applies.
+
+   `!important` because it has to beat the per-component transitions for those
+   220ms — a button that keeps its own 200ms colour transition mid-theme-change
+   is the one element that lands late. */
+:root.theme-switching,
+:root.theme-switching *,
+:root.theme-switching *::before,
+:root.theme-switching *::after {
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease,
+    fill 220ms ease,
+    stroke 220ms ease,
+    box-shadow 220ms ease !important;
+  transition-delay: 0s !important;
+}
+
+/* This block must come AFTER the one above: the reduced-motion reset near the
+   top of this file is `!important` too, and between two equally important and
+   equally specific rules the later one wins. Without this, adding the fade
+   would have quietly re-enabled motion for readers who asked for none. */
+@media (prefers-reduced-motion: reduce) {
+  :root.theme-switching,
+  :root.theme-switching *,
+  :root.theme-switching *::before,
+  :root.theme-switching *::after {
+    transition: none !important;
+  }
+}

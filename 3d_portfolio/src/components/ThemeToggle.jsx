@@ -77,9 +77,24 @@ const ThemeToggle = () => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
+  // Skips the first run: on mount the attributes already match what the boot
+  // script wrote, so there is nothing to fade between, and fading on load would
+  // mean every reader watches the page assemble its own colours.
+  const mounted = useRef(false);
+
   useEffect(() => {
     const t = themeById(theme);
     const root = document.documentElement;
+
+    let done;
+    if (mounted.current) {
+      // See `.theme-switching` in index.css: the transition is switched on for
+      // the length of the change and off again straight after.
+      root.classList.add("theme-switching");
+      done = setTimeout(() => root.classList.remove("theme-switching"), 260);
+    }
+    mounted.current = true;
+
     root.setAttribute("data-theme", t.id);
     // The scheme is what every structural rule reads. Setting it here rather
     // than in the CSS means a palette declares it once, in one place.
@@ -92,6 +107,7 @@ const ThemeToggle = () => {
     } catch {
       /* ignore */
     }
+    return () => clearTimeout(done);
   }, [theme]);
 
   useEffect(() => {

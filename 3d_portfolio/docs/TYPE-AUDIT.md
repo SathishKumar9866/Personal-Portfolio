@@ -167,7 +167,9 @@ Measured on the running page, both themes, not read off the diff:
 - **The typefaces.** Barlow, Newsreader and JetBrains Mono are the brand. Mono at
   13px is legible; mono at 11px was not. The face was never the issue, the size
   was.
-- **`Quote.jsx`** is dead code: nothing imports it since the interstitial
-  quotations were removed. It was converted to the scale for consistency rather
-  than deleted, because deleting it is a separate decision from a type audit.
-  Filed in `BACKLOG.md`.
+- **`Quote.jsx`** was dead code, converted to the scale here for consistency
+  rather than deleted, because deleting it is a separate decision from a type
+  audit. That decision was taken on 2026-09-12 and **the file is gone**: no
+  reference anywhere in `src/`, and the built bundle already contained zero
+  occurrences of its `figcaption`, so Rollup had tree-shaken it and the deletion
+  changed the shipped output not at all.
