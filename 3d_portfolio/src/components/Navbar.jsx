@@ -47,16 +47,25 @@ const Navbar = () => {
     // The old rule was one `Math.abs(delta) > 6` gate for both directions,
     // which meant a small upward flick did nothing and the bar stayed gone:
     // measured, about 120px of deliberate upward scroll plus the 300ms
-    // transition before it returned. Now it takes a deliberate push to hide
-    // (12px) and almost nothing to bring back (2px), so the bar gets out of the
-    // way while reading and is there the instant you reach for it.
+    // transition before it returned. The fix for that overshot: a single 2px
+    // upward gate brought the bar back on any twitch, so a reader who nudges
+    // the page while reading gets a 77px bar sliding in and out at the top of
+    // their eyeline. That flicker is worse than either extreme.
+    //
+    // So the return is hysteretic rather than instant: upward movement has to
+    // ACCUMULATE past SHOW_AFTER before the bar comes back, and any downward
+    // movement zeroes that total. One mouse-wheel notch is about 100px in
+    // Chrome, so 200px is a deliberate two-notch reach or a thumb swipe, and
+    // jitter of a few px in both directions never sums to it.
     //
     // iOS and Android both fire momentum scroll events after the finger lifts,
     // and iOS additionally rubber-bands past the top and bottom. A negative
     // scrollY during a rubber-band would read as "scrolling up" forever, so the
     // position is clamped before the delta is taken.
     const HIDE_AFTER = 12;
-    const SHOW_AFTER = -2;
+    const SHOW_AFTER = 200;
+    // Upward pixels banked since the last downward movement.
+    let up = 0;
 
     // Guard 5: a jump is not a reading gesture. Tapping Experience in the menu
     // smooth-scrolls about 3,000px downward, which arrives as hundreds of
@@ -99,15 +108,25 @@ const Navbar = () => {
         // the bar must never be scrolled out from under a keyboard user, and a
         // jump the reader asked for must not cost them the bar they asked from.
         setHidden(false);
+        up = 0;
         last = y;
         return;
       }
-      if (delta > HIDE_AFTER) {
-        setHidden(true);
+      if (delta > 0) {
+        // Any downward movement spends the bank, so a slow read punctuated by
+        // small upward nudges never adds up to a return.
+        up = 0;
+        if (delta > HIDE_AFTER) {
+          setHidden(true);
+          last = y;
+        }
+      } else if (delta < 0) {
+        up -= delta;
         last = y;
-      } else if (delta < SHOW_AFTER) {
-        setHidden(false);
-        last = y;
+        if (up >= SHOW_AFTER) {
+          setHidden(false);
+          up = 0;
+        }
       }
     };
     const onScroll = () => {
