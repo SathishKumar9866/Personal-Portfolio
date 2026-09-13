@@ -86,10 +86,16 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 - [x] **(P1, S) ~~Light-mode contrast audit.~~** Done 2026-09-11: the accent's role was split rather than its colour changed. `--c-accent` fills, `--c-accent-ink` reads as text. 22 pairs measured from the built stylesheet, all AA in both themes. Small red text (`#FF3621`) on white
   is ~3.5:1: fine for large headings (AA large), below AA for small body/eyebrow
   text. Consider a darker red token for small text, or navy.
-- [ ] **(P2, S) Smooth theme transition** on panels/borders (currently only
-  `body` fades; other surfaces flip instantly). Worth more now than when it was
-  filed: there are six palettes as of 2026-09-12, so readers will actually flip
-  between them rather than setting dark once and never touching it.
+- [x] **(P2, S) ~~Smooth theme transition.~~** Done 2026-09-12. Scoped to the
+  moment of the change rather than left on: `.theme-switching` is added to
+  `<html>` when the theme changes and removed 260ms later, so the other 99% of
+  the session carries no global colour transition — one left on permanently
+  would also animate every hover, every active nav link and every reveal. Two
+  details that matter: the effect skips its first run, or every reader would
+  watch the page assemble its own colours on load; and the reduced-motion
+  override is placed AFTER the fade, because the global reset near the top of
+  index.css is `!important` too and between two equally important, equally
+  specific rules the later one wins.
 - [x] **(P2, M) ~~OG / Twitter share image.~~** Done 2026-09-11: `public/og.png`
   at 1200x630 plus 180/192/512 icons. Regenerated later the same day when the
   title changed, and given a source: `docs/og-card.html`. It had none, so the
@@ -110,9 +116,11 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
   the site already reads `prefers-color-scheme`, so a modal asks a question the
   OS has answered and puts a decision between a recruiter and the content. If it
   is still wanted, build it as an inline strip in the hero, not a dialog.
-- [ ] **(P2, S) Delete `Quote.jsx`.** Dead since the interstitial quotations were
-  removed; nothing imports it. Left in place during the type audit because
-  deleting a component is a separate decision from resizing type.
+- [x] **(P2, S) ~~Delete `Quote.jsx`.~~** Done 2026-09-12. Dead since the
+  interstitial quotations were removed. Confirmed before deleting: no reference
+  anywhere in `src/`, and the built bundle contained zero occurrences of its
+  `figcaption` — Rollup had already tree-shaken it, so the deletion changes the
+  shipped output not at all and is purely about the reader of the source.
 - [x] **(P2, S) ~~Section-header treatment.~~** Done 2026-09-12: the eyebrow now
   carries a derived fact (`4 roles · since 2020`, `6 areas · 33 tools`,
   `6 built · 1 live`, `4 routes · US Central`) instead of a label that repeated
