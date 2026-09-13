@@ -4,7 +4,7 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-12
-**Branch:** `main`. `feat/reading-themes` merged and is gone.
+**Branch:** `main`. `chore/dead-code-and-theme-fade` merged and is gone.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
@@ -16,7 +16,34 @@ The site is live, merged to `main`, and verified at seven viewport widths in
 both themes and at both ends of the text-size control. There is no work in
 flight and nothing half-applied.
 
-`feat/reading-themes` squash-merged and deleted: **six palettes, not two.**
+**There is CI now, and that is the biggest change of the three.**
+`.github/workflows/ci.yml` runs install, lint, build and the crawler-file guard
+on every PR to `main` and every push to `main` — the same four steps, same order,
+same Node 22 as the deploy in the other repo, so the two cannot disagree about
+what green means. Before it, **this repository had no workflow at all**: nine PRs
+merged in one day with nothing checking them but a human reading the diff.
+
+The guard was proven to fail, not just to pass: against a copy of `dist`, a
+deleted `llms.txt`, a zero-byte `og.png` and a stripped JSON-LD each exit 1,
+and an intact tree exits 0. A check that has only ever passed is not yet a check.
+
+Two small ones with it: **`Quote.jsx` deleted** (dead, and the bundle already had
+zero occurrences of its `figcaption`, so Rollup had tree-shaken it and the
+deletion changed the shipped output not at all), and **the theme change fades**
+rather than cutting — `.theme-switching` on `<html>` for 260ms, scoped to the
+moment of the change because a permanent global colour transition would animate
+every hover too.
+
+**The trap in that last one is worth carrying:** the reduced-motion override has
+to be placed AFTER the fade rule. The global reduced-motion reset near the top of
+`index.css` is `!important` too, and between two equally important, equally
+specific rules the later one wins — without the ordering, adding a fade quietly
+re-enables motion for readers who asked for none.
+
+The docs were also brought back in line with the code (`README`, the components
+README, `TYPE-AUDIT`), which had drifted through a day of redesigns.
+
+Before those, `feat/reading-themes` squash-merged and deleted: **six palettes, not two.**
 Slate and Ink (dark), Paper, Manuscript, Clarity and Preprint (light). Preprint
 is an arXiv/IEEE page and its accent is `#B31B1B`, arXiv's own Cornell red,
 which sits in the same family as this site's lava red.
@@ -139,13 +166,32 @@ branch deleted, then six commits on `main`, all shipped and deployed:
 
 Nothing is blocking. The highest-value things left, in order:
 
-1. **Real-device QA on iOS and Android.** Everything so far is Chrome with
-   emulated viewports. The hide-on-scroll handler clamps scroll position
-   specifically for iOS rubber-banding and that has never run on a real iPhone.
-2. **Decide about the 23 unprotected private repos** — GitHub Pro, or accept it.
+1. **Safari and Firefox, and a real iPhone.** Chrome is the only browser this
+   site has ever been opened in, by anyone, on purpose or otherwise. A real
+   Android phone was checked on 2026-09-12 and found a flicker that nine
+   emulated viewports had missed, which is the whole argument for doing the
+   other two. The hide-on-scroll handler still clamps scroll position for iOS
+   rubber-banding and that code has never executed on an iPhone.
+2. **Per-project detail pages** (P1/L): problem, approach, result, and the line
+   about what made it hard. The deepest-value thing left for a recruiter who
+   clicks in.
+3. **Prerendering** (P1/L), if AI-crawler visibility matters more than it does
+   today. GPTBot and friends see only the `<noscript>` block; `llms.txt` is the
+   deliberate answer and covers the content, but the HTML is empty to them.
+4. **Decide about the 23 unprotected private repos** — GitHub Pro, or accept it.
    See `docs/REPO-SECURITY.md`.
-3. **Prerendering**, if AI-crawler visibility matters more than it does today.
-   Filed P1/L in `3d_portfolio/docs/BACKLOG.md`.
+
+Blocked on the owner rather than on work: project screenshots, real metric
+numbers for the covers (do not invent them), testimonials, and the Vercel deploy
+(`vercel login` is interactive).
+
+### One piece of housekeeping
+
+`redesign/de-slop-portfolio` still exists locally. It is **behind** `main`, not
+ahead: its 26 commits are pre-squash-merge history whose content shipped long
+ago, and the branch is missing `ci.yml`, `og.png`, `llms.txt` and 40 other files
+that `main` has. Safe to delete; left alone because deleting someone's branch is
+their call. `archive/pre-consolidation-2026-09-11` is deliberate and stays.
 
 ## How the deploy works
 
