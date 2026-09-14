@@ -9,7 +9,7 @@ Thirty files. Read the table, not the directory.
 | The headline, the three claim lines, the CTA | `Hero.jsx` |
 | The four-number spec band under the hero | `SpecBand.jsx` |
 | How a section announces itself, and its fact line | `SectionHead.jsx` |
-| Portrait, lede, availability card | `About.jsx` |
+| Portrait, lede, the three proven claims, availability card | `About.jsx` |
 | Roles and degrees, the card deck, date alignment | `Experience.jsx` |
 | The six tool groups, and the category dots | `Tech.jsx` |
 | Which tools get the filled chip, and each dot's colour | `stackGroups` in `../constants/index.js` |
