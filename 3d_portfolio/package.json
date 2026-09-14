@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "test": "node src/utils/answer.test.mjs && node src/utils/localzone.test.mjs",
+    "test": "node src/utils/answer.test.mjs && node src/utils/localzone.test.mjs && node src/utils/llms-mirror.test.mjs",
     "icons": "node scripts/gen-tool-icons.mjs",
     "preview": "vite preview"
   },
