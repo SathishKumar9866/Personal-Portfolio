@@ -452,6 +452,78 @@ main:focus:not(:focus-visible) {
    Both pseudo-elements sit at z-index -1: a negative-z child paints above its
    parent's own background and below the parent's in-flow text, so the glow is
    in the card's material rather than over its words. */
+/* Experience roles as a stacked deck.
+   -------------------------------------------------------------------------
+   The four roles used to be a flat timeline: all four on screen at once, each
+   one competing with the next for the reader's eye, and the diagram in the
+   margin describing whichever happened to be nearest the middle.
+
+   They now stick. Each card holds the top of the viewport until the next one
+   slides over it, so a reader looks at exactly one role at a time and the
+   margin diagram beside it is unambiguously about THAT role.
+
+   Two things this needs and one it must not have:
+
+   - **The fill is opaque.** `.glass-card` fades to 0.78 alpha at its bottom
+     edge, and a stack of translucent cards shows every card underneath through
+     the top one. Opaque is not a style choice here, it is what makes a stack
+     legible.
+   - **Each card sits 10px lower than the one before** (the inline `top`), so
+     the edges of the cards already read stay visible as a deck rather than
+     vanishing exactly behind the current one.
+   - **No `overflow` anywhere up this tree.** An overflow container is also a
+     scroll container, and `position: sticky` resolves against the nearest one:
+     one `overflow-x: hidden` added to stop a sideways scrollbar would silently
+     turn this whole section back into a flat list. */
+/* Not sticky on a phone, and this was measured rather than assumed. A pinned
+   card needs scroll distance to travel through, and on a 390px screen the four
+   cards collapse to ~215px each behind their disclosures: the stack pinned
+   after 900px of scrolling and then left ~450px of empty page below it while
+   the reader waited for Education. The narrow viewport already gives one card
+   at a time, which is the whole point of the deck, so the phone gets a plain
+   list and none of the cost. */
+.role-sticky {
+  position: static;
+}
+
+@media (min-width: 640px) {
+  .role-sticky {
+    position: sticky;
+    /* Clears the navbar (77px) with air. The bar hides on a downward push, so
+       this only has to be right for the moment the card arrives. */
+    --role-top: 6rem;
+  }
+}
+
+.role-card {
+  position: relative;
+  background: rgb(var(--c-tertiary));
+  border: 1px solid rgb(var(--c-line));
+  /* The same three-layer elevation the other cards use: a tight contact
+     shadow, a wide ambient one, and the inner highlight that makes a surface
+     read as above the page rather than printed on it. */
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 2px 6px -2px rgb(var(--c-strong) / 0.35),
+    0 24px 48px -28px rgb(var(--c-strong) / 0.65);
+}
+
+/* The role being read now. One accent hairline along the top edge, drawn on
+   the card rather than beside it, because in a stack the top edge is the part
+   that stays visible when the next card covers the rest. */
+.role-card[data-current="true"]::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--c-accent)),
+    rgb(var(--c-accent) / 0)
+  );
+}
+
 .stack-card {
   position: relative;
   --cat: var(--c-line-strong);

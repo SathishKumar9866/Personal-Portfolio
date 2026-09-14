@@ -342,17 +342,20 @@ const CareerTrack = ({ glyphs }) => {
     // Which role is the reader looking at? A layout read, so it runs on a timer
     // rather than inside the frame loop: getBoundingClientRect per frame on
     // every role is exactly the cost the other canvases were written to avoid.
+    //
+    // The rule changed with the sticky deck. "Nearest the middle of the screen"
+    // was right for a flat timeline; in a stack every card that has arrived is
+    // pinned within 40px of the same top, so that measure flickered between two
+    // roles on a single scroll notch. The card being read is simply the LAST
+    // one that has arrived — the one painted over all the others.
     const pickActive = () => {
       const items = document.querySelectorAll("[data-role-index]");
       if (!items.length) return;
-      const centre = window.innerHeight * 0.45;
-      let best = 0, bestD = Infinity;
+      const anchor = window.innerHeight * 0.45;
+      let best = 0;
       items.forEach((el) => {
-        const r = el.getBoundingClientRect();
-        const d = Math.abs(r.top + r.height / 2 - centre);
-        if (d < bestD) {
-          bestD = d;
-          best = Number(el.dataset.roleIndex);
+        if (el.getBoundingClientRect().top <= anchor) {
+          best = Math.max(best, Number(el.dataset.roleIndex));
         }
       });
       if (best !== active) {

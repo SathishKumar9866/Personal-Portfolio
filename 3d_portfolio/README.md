@@ -32,6 +32,7 @@ Read this table instead of the code.
 | The diagram beside each Experience role | `CareerTrack.jsx`, keyed by `glyph` in `stackGroups`' sibling `experience` |
 | What a typed question can find, and how it is ranked | `src/utils/answer.js` |
 | What the ask box looks like, and its commands | `src/components/CommandPalette.jsx` |
+| How far a role card pins, and the deck offsets | `.role-sticky` / `.role-card` in `src/index.css`, `top`/`z-index` in `Experience.jsx` |
 | What AI crawlers are answered by name | `public/robots.txt` |
 | The machine-readable copy of the site | `public/llms.txt` |
 
