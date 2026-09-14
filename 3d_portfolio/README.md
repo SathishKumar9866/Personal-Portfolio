@@ -14,6 +14,7 @@ Read this table instead of the code.
 | You want to change | Open |
 | --- | --- |
 | Any copy: roles, projects, glossary, status | `src/constants/index.js` |
+| The four big numbers under the hero | `src/components/SpecBand.jsx` — all derived, none typed |
 | Colour, spacing, type tokens | `src/index.css`, then `tailwind.config.js` |
 | A whole section's layout | `src/components/<Section>.jsx` |
 | The order of sections | `src/App.tsx` |

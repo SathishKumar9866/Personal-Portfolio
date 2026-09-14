@@ -482,6 +482,15 @@ main:focus:not(:focus-visible) {
    the reader waited for Education. The narrow viewport already gives one card
    at a time, which is the whole point of the deck, so the phone gets a plain
    list and none of the cost. */
+/* The spec band's ground. One step off the page colour rather than a new
+   colour: a band that announces itself with a different hue reads as an advert
+   embedded in the page, which is the exact failure mode of this whole
+   direction. In light palettes the same rule lands slightly lighter, which is
+   why it is a mix rather than a fixed value. */
+.spec-band {
+  background: color-mix(in srgb, rgb(var(--c-tertiary)) 55%, rgb(var(--c-primary)));
+}
+
 .role-sticky {
   position: static;
 }
