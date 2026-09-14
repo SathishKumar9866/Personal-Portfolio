@@ -1,5 +1,48 @@
 # Worklog
 
+## 2026-09-14: Experience becomes Roles, and the crawler copy gets the jobs it never had
+
+"Experience" survived the naming pass this morning because it is the
+conventional label and a recruiter scans for it. It is also a word that means
+everything and therefore nothing, over a section holding four jobs with dates.
+The section is now **Roles**, which is what they are — and what the spec band
+has been counting all along (`04 ROLES`). The band now points at a section with
+the same word on it.
+
+### The eyebrow had to change with it
+
+`4 roles · since 2020` over a heading reading **Roles** is a section saying its
+own name twice and telling the reader nothing new. It counts **employers** now:
+`4 employers · since 2020`. A different fact, still derived — four jobs at four
+places rather than four titles at two — and `new Set(ROLES.map(r => r.company))`
+keeps it honest if two roles ever share an employer.
+
+### The hero CTA names its destination again
+
+"Start with my experience" pointed at a section no longer called that. It reads
+**"Start with the roles"** and still lands on `#roles`.
+
+### And llms.txt had no employment history at all
+
+Checked while renaming: the machine-readable copy listed Stack, Education,
+Projects and Contact — **and not one job**. For a profile whose whole purpose is
+being read by someone deciding whether to hire him, that is the largest thing
+that could be missing, and it had been missing the whole time.
+
+`## Roles` is now in it: four entries, newest first, each with company, country,
+dates and what the role did — compressed from `experience` in `constants`, the
+same hand-mirroring the rest of that file already does, with the same "change
+one, change the other" note the Stack section carries.
+
+### Measured
+
+    nav:      About · Roles · Stack · Projects · Contact
+    headings: About · Roles · Stack · Projects · Contact
+
+Eyebrow reads `4 employers · since 2020`, the CTA reads "Start with the roles"
+and resolves to `#roles`, and there are **zero dangling `#` anchors**. `llms.txt`
+now has seven headings and ships in `dist`. Lint 0, tests 13/13, build 0.
+
 ## 2026-09-14: one name per thing
 
 The question was whether Work and Experience are the same thing. They are not,

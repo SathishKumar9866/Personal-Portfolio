@@ -18,7 +18,7 @@ const SOURCE = [
 
 const test_a_role_question_cites_the_role = () => {
   const r = top("what did he build on Azure");
-  assert.equal(r.section, "experience");
+  assert.equal(r.section, "roles");
   assert.equal(r.label, "AdvanSoft International, Inc");
   assert.match(r.passage, /Azure/);
 };

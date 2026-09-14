@@ -108,10 +108,10 @@ const Hero = () => {
               intended order, experience, then stack, then the projects those
               two produced. */}
           <a
-            href="#experience"
+            href="#roles"
             className="btn-accent inline-flex items-center gap-2 rounded-2xl px-7 py-3.5 font-sans font-semibold text-[15px] tracking-[-0.01em] text-black-100"
           >
-            Start with my experience
+            Start with the roles
           </a>
 
         </motion.div>
