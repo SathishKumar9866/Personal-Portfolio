@@ -9,7 +9,7 @@ Thirty files. Read the table, not the directory.
 | The headline, the CTA, the status line | `Hero.jsx` |
 | How a section announces itself, and its fact line | `SectionHead.jsx` |
 | Portrait, lede, availability card | `About.jsx` |
-| Roles and degrees, the timeline, date alignment | `Experience.jsx` |
+| Roles and degrees, the card deck, date alignment | `Experience.jsx` |
 | The six tool groups, and the category dots | `Tech.jsx` |
 | Which tools get the filled chip, and each dot's colour | `stackGroups` in `../constants/index.js` |
 | Project cards, and the drawings on them | `Works.jsx` |
@@ -78,6 +78,15 @@ A few boundaries worth knowing before editing:
   `intersectionRatio` is capped at `viewportHeight / elementHeight`. A section
   taller than about four viewports can never satisfy `0.25`. Use `"some"`.
   This once made the whole Work section invisible on every phone.
+- **The Experience roles are a sticky deck, and `position: sticky` dies inside
+  any scroll container.** Adding `overflow-x: hidden` or `overflow: auto` to any
+  ancestor — the section, the grid, the `<ol>` — silently turns the deck back
+  into a flat list with no error anywhere. The site already has a standing rule
+  against reaching for `overflow-x: hidden`; this is now a second reason.
+- **`CareerTrack` picks the active role as the LAST card that has arrived**, not
+  the one nearest the middle of the screen. In a stack every pinned card sits
+  within 40px of the same top, and "nearest the middle" flickered between two
+  roles on one scroll notch.
 - **Canvases must re-read their size.** A canvas sized once inside an effect
   stays at its old backing-store dimensions after a resize, and static ones never
   repaint at all.

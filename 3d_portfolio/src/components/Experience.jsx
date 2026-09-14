@@ -38,7 +38,7 @@ const Range = ({ start, end, current }) => {
  *  `key` and `children`, so passing it the `label` below logs a React warning. */
 const Passthrough = ({ children }) => children;
 
-const Role = ({ role, index, trackIndex = null }) => {
+const Role = ({ role, index, trackIndex = null, stage = null, className = "", style }) => {
   // Is there anything behind the disclosure at all? Education entries have a
   // degree, a school and a date and nothing else, so for them the answer is no
   // and the control must not be drawn.
@@ -54,27 +54,27 @@ const Role = ({ role, index, trackIndex = null }) => {
     // renders through this same component: sharing the numbering pointed the
     // diagram at the wrong entry.
     {...(trackIndex === null ? {} : { "data-role-index": trackIndex })}
-    className="relative pl-8 sm:pl-10 pb-10 last:pb-0"
+    className={className}
+    style={style}
   >
-    {/* the rail, and this role's marker on it */}
-    <span
-      aria-hidden="true"
-      className="absolute left-[5px] top-2 bottom-0 w-px bg-line"
-    />
-    <span
-      aria-hidden="true"
-      className={`absolute left-0 top-1.5 h-[11px] w-[11px] rounded-full border-2 ${
-        role.current
-          ? "border-accent bg-accent"
-          : "border-line-strong bg-primary"
-      }`}
-    />
-
+    {/* An <article>, and the card, so the sticky <li> stays a bare positioning
+        box. Putting the padding and the fill on the sticky element itself makes
+        its own height the thing that sticks, and a card taller than the
+        viewport then never releases. */}
+    <article className="role-card rounded-2xl p-5 sm:p-7" data-current={role.current ? "true" : "false"}>
     {/* Title and employer read as one block on the left; the dates sit right,
         right-aligned, so a reader scanning "when" never has to pick the dates
         out of the middle of a sentence. */}
     <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-x-8">
       <div className="min-w-0">
+        {/* The stage numeral, the same device Stack uses for its six groups.
+            It is what carries order now that the timeline rail is gone: a deck
+            of cards has no visible sequence of its own. */}
+        {stage !== null && (
+          <span aria-hidden="true" className="block font-mono text-label text-faint mb-1.5">
+            {String(stage).padStart(2, "0")}
+          </span>
+        )}
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <h3 className="font-display font-semibold text-[calc(clamp(1.05rem,1.4vw,1.25rem)*var(--type-scale,1))] leading-tight text-white-100">
             {role.title}
@@ -135,6 +135,7 @@ const Role = ({ role, index, trackIndex = null }) => {
       </div>
     )}
     </Detail>
+    </article>
   </Reveal>
   );
 };
@@ -184,10 +185,27 @@ const Experience = () => (
       variants={fadeIn("", "", 0.1, 1)}
       className="mt-10 rail:grid rail:grid-cols-[minmax(0,42rem)_minmax(0,1fr)] rail:gap-10 rail:items-start"
     >
+      {/* The deck. `z-index` ascends so a later card covers an earlier one, and
+          `top` descends 10px per card so the ones already read keep an edge on
+          screen. Both are inline because both are per-index: a Tailwind class
+          per position would be four classes that must stay in sync with an
+          array length. */}
       <ol className="list-none max-w-2xl">
         {experience.map((role, i) => (
-          <Role key={`${role.company}-${role.title}`} role={role} index={i} trackIndex={i} />
+          <Role
+            key={`${role.company}-${role.title}`}
+            role={role}
+            index={i}
+            trackIndex={i}
+            stage={i + 1}
+            className="role-sticky pb-5 last:pb-0"
+            style={{ top: `calc(var(--role-top) + ${i * 10}px)`, zIndex: 10 + i }}
+          />
         ))}
+        {/* The stack needs somewhere to end. Without trailing room the last
+            card unsticks the instant the list box ends, which lands the reader
+            in Education while the last role is still mid-sentence. */}
+        <li aria-hidden="true" className="hidden sm:block h-[18vh]" />
       </ol>
 
       {/* The margin. Sticky, so the diagram stays level with the role being
@@ -204,7 +222,10 @@ const Experience = () => (
             Education
           </h3>
         </Reveal>
-        <ol className="mt-6 list-none max-w-2xl">
+        {/* Education is the same card and deliberately not sticky. Two dated
+            entries with no detail behind them do not need the reader pinned to
+            them one at a time; they need to be legible and then done. */}
+        <ol className="mt-6 list-none max-w-2xl space-y-4">
           {education.map((item, i) => (
             <Study key={`${item.school}-${item.degree}`} item={item} index={i} />
           ))}

@@ -1,5 +1,59 @@
 # Worklog
 
+## 2026-09-14: the four roles become a deck that holds still
+
+The Experience timeline showed all four roles at once: a rail, four dots, four
+blocks of text competing for the same eye, and a diagram in the margin
+describing whichever role happened to be nearest the middle of the screen. The
+ask was for one role at a time, with its own picture beside it, and the reader's
+full attention on it.
+
+**They stick.** Each role is now a card that pins to the top of the viewport
+until the next one slides over it. Four cards, `z-index` ascending so a later
+card covers an earlier one, and `top` descending 10px per card so the ones
+already read keep a visible edge — a deck rather than a stack of one.
+
+**No JavaScript in the effect at all.** `position: sticky`, four inline `top`
+values and four `z-index` values. The scroll-driven alternative — a pinned stage
+with roles swapped by scroll progress — would have meant JS scroll listeners,
+scroll jacking, a separate mobile path and an accessibility argument about
+whether the content is still in the document. All four roles are still plain
+`<li>` elements in a plain `<ol>`, in order, and a crawler sees exactly what it
+saw before.
+
+### Three things that had to change with it
+
+| | |
+| --- | --- |
+| **The fill had to go opaque** | `.glass-card` fades to 0.78 alpha at its lower edge, which in a stack means every card underneath shows through the top one. `.role-card` paints solid `--c-tertiary`. Opacity is not a style choice in a deck, it is what makes it legible |
+| **The active-role rule was wrong for a stack** | `CareerTrack` picked the role nearest 45% of the viewport. Once cards pin, every arrived card sits within 40px of the same top, and that measure flickered between two roles on one scroll notch. It now picks the LAST card that has arrived — the one painted over the others |
+| **The stack needed somewhere to end** | Without trailing room the last card unpins the instant the `<ol>` box ends, which drops the reader into Education mid-sentence. An 18vh spacer, desktop only |
+
+### The phone gets none of it, and that was measured
+
+Pinned first, checked after: at 390×844 the four cards collapse to ~215px each
+behind their `What I did` disclosures, so the deck finished pinning after about
+900px of scrolling and then left **~450px of empty page** below itself while the
+reader waited for Education. A sticky card needs scroll distance to travel
+through, and a phone does not have it to spare. `.role-sticky` is
+`position: static` below 640px: the narrow viewport already gives one card at a
+time, which is the entire point of the deck, so the phone gets the result
+without the cost.
+
+### Measured
+
+| Check | Result |
+| --- | --- |
+| 1440×900, deck pinned | card tops 96 / 106 / 116 / 126, `z-index` 10–13, all four `position: sticky` |
+| Active diagram through the scroll | role 1 → 2 → 3 → 4 in order, one swap per card, no flicker between two |
+| 1024×800, Paper theme | card `rgb(247,245,242)` on a `rgb(255,255,255)` page, border `rgb(226,223,216)`, diagram column still drawn |
+| 390×844 DPR 3 | `position: static`, plain card list, `scrollWidth === clientWidth`, no gap before Education |
+
+`npm run lint` exit 0, `npm run build` exit 0. **The trap this leaves behind:**
+one `overflow-x: hidden` on any ancestor turns the whole deck back into a flat
+list, silently — an overflow container is also a scroll container, and sticky
+resolves against the nearest one. The repo already had a standing rule against
+that property; this is the second reason for it.
 ## 2026-09-14: the headline names the arc instead of the proof
 
 `I ship the model. And the evidence it works.` → `From model development to
