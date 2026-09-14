@@ -3,8 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0F2228" media="(prefers-color-scheme: dark)" />
+    <!-- One theme-color, not a pair keyed to the system scheme. The page opens
+         in Paper for everyone now, so a dark-scheme phone that kept the second
+         tag would paint a navy browser bar above a white page: a seam across
+         the top on exactly the devices the pair was meant to help. The boot
+         script below rewrites this to match whichever palette the reader has
+         chosen. -->
+    <meta name="theme-color" content="#FFFFFF" />
 
     <!-- set theme before first paint to avoid a flash -->
     <script>
@@ -17,7 +22,15 @@
           var SCHEME = { dark: "dark", ink: "dark", light: "light", sepia: "light", clean: "light", paper: "light" };
           var BAR = { dark: "#0F2228", ink: "#0B0D10", light: "#FFFFFF", sepia: "#F7F2E8", clean: "#FFFFFF", paper: "#FFFFFF" };
           var t = localStorage.getItem("theme");
-          if (!t || !SCHEME[t]) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          // Paper for a first-time reader, whatever the device prefers.
+          //
+          // This used to follow `prefers-color-scheme`, which is the more
+          // considerate default and was deliberately overruled: the page is a
+          // professional profile whose first-time reader is usually a recruiter
+          // or a hiring manager on a work laptop in daylight, and it should
+          // arrive as a document rather than as a terminal. A reader who wants
+          // dark picks one and the choice is remembered from then on.
+          if (!t || !SCHEME[t]) t = "light";
           document.documentElement.setAttribute("data-theme", t);
           document.documentElement.setAttribute("data-scheme", SCHEME[t]);
           // Restore the reader's text size in the same pre-paint pass as the
