@@ -29,7 +29,7 @@ Read this table instead of the code.
 | Which tools show a logo, and which slug each uses | `MAP` in `scripts/gen-tool-icons.mjs`, then `npm run icons` |
 | The mark for a term that is an idea, not a product | `src/components/conceptIcons.js` — hand-drawn, never generated |
 | Which tools get the filled chip | `primary` per group in `stackGroups` |
-| A Stack category's colour | `dot` AND `tint` per group in `stackGroups` — same colour, two forms — token in `src/index.css` |
+| A Stack category's colour | `dot` AND `tint` per group in `stackGroups` — same colour, two forms — token in `src/index.css`. **The six are a cool-to-warm ramp along the pipeline; reorder the groups and you must reorder these** |
 | The Stack pipeline rail, card glow, stage numerals | `src/components/Tech.jsx`, `.stack-card` / `.stack-seg` in `src/index.css` |
 | The og:image social card | `docs/og-card.html`, then re-render over `public/og.png` |
 | How big any text is | the named scale in `tailwind.config.js`, never a literal |
