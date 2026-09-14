@@ -14,8 +14,9 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
  * that space on a desktop is the scroll cue, and the scroll cue is
  * `hidden sm:flex`, so the space was never designed — it was left over.
  *
- * Why this and not an ornament. The page claims "the evidence it works" and
- * "measured, not estimated". A band that completes a function and then RUNS it
+ * Why this and not an ornament. The lede claims "results reported as measured,
+ * including the ones that came back negative" — the promise the headline used
+ * to carry, and still the page's standard. A band that completes a function and then RUNS it
  * on real input is that claim in miniature: the reader watches the guard clause
  * earn its place. The three cases cycle in a fixed order, and two of the three
  * are the ones that break naive implementations:

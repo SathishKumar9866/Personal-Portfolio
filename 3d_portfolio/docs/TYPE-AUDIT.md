@@ -66,7 +66,8 @@ fixed them, and that work holds. Two things escaped it.
    token meant to be read.
 
 A third thing is not a WCAG failure but was wrong anyway: the emphasised half of
-the hero headline, *"evidence it works"*, used `text-accent`. `index.css` states
+the hero headline — *"evidence it works"* at the time, *"real-world impact"*
+since 2026-09-14 — used `text-accent`. `index.css` states
 the rule in the token's own comment: **`--c-accent` is FILLS ONLY, 3.62:1 as
 text**. At 84px that passes AA-large, so no tool complained, but it meant the
 punchline of the headline was the faintest text on the page. It now uses

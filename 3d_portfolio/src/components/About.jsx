@@ -39,8 +39,10 @@ const Portrait = () => (
  *  - **They restated Stack.** Six cards partitioning his skills six ways, above
  *    six stack groups partitioning the same skills six ways. The reader met the
  *    same taxonomy twice, in different words, 2,000px apart.
- *  - **They were claims on a page that promises evidence.** The hero says "And
- *    the evidence it works"; the cards said "Turning raw data into decisions"
+ *  - **They were claims on a page that promises evidence.** The lede promises
+ *    "results reported as measured, including the ones that came back
+ *    negative" (it was the headline's own second sentence until 2026-09-14);
+ *    the cards said "Turning raw data into decisions"
  *    and "built to generalize past the demo", which is true of every ML
  *    engineer who has ever written a portfolio. The actual evidence — shipped
  *    systems, with diagrams of how they work — was 3,000px further down.
