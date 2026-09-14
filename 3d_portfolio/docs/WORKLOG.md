@@ -1,5 +1,52 @@
 # Worklog
 
+## 2026-09-14: a mark for the ideas too, not only the products
+
+The logos landed for the 25 tools that have one. On a project card that left
+rows like `RAG · MLOps · Kubernetes` showing one glyph and two bare words, which
+reads as a failed image rather than as a distinction — **11 of the 18 project
+tags are concepts**, so the branded minority looked like the exception.
+
+`conceptIcons.js` draws the other 16 terms: RAG, LLM, MLOps, Vision, Federated,
+Multimodal, Applied ML, Product, Live, Embeddings, Evaluation, SQL, ETL
+pipelines, Detection & tracking, Exploratory analysis, Federated learning. Every
+"built with" row on the page now carries a mark on every tag.
+
+### Why drawing these is not the thing the generator refuses to do
+
+The generator exists because a brand mark recalled from memory is a claim about
+someone else's identity, and it is either right or wrong. These are category
+marks in the site's own line language — the same vocabulary as the project
+covers and the career diagrams: a bounding box for detection, a hub and three
+spokes for federated training, a cylinder for SQL, brackets around numbers for
+embeddings. They claim nothing about anyone.
+
+Three products still show nothing, and that stands: **DynamoDB, S3 and
+Pinecone.** Giving those a generic storage glyph would be inventing a mark for a
+named product, which is exactly the line the generator draws.
+
+### Two shapes of data, one renderer
+
+Brand marks are filled silhouettes and carry `p`; the drawn marks are strokes
+and carry `d` with `s: 1`. `ToolGlyph` switches on that flag — a stroke path
+rendered as a fill becomes a blob, and a silhouette rendered as a stroke becomes
+an outline of itself.
+
+`glyphs.js` re-exports both files and is what `TagTerm` imports lazily, so the
+generator can never overwrite the hand-drawn set.
+
+### Measured
+
+**Nine loose dots for "Embeddings" disappeared at 14px** — 1.8px of ink nine
+times over is less ink than one stroke — and were replaced with brackets around
+three points. The check was the rendered path's bounding box, per chip: every
+glyph now measures at least 90 square units of ink in a 24-unit box, and the
+only chips without one are the three products above.
+
+33 Stack chips, 30 with a mark, uniform 25px tall on a desktop. 18 project tags,
+**18 with a mark**. Entry bundle unchanged at 36.0kB gzipped; the marks share
+one lazy chunk, now 17.4kB. Checked in Slate and Manuscript, at 1440 and 390.
+
 ## 2026-09-14: the tools carry their own marks
 
 Every named tool that has a logo now shows it, inline before the word: 25 marks

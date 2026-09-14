@@ -43,9 +43,9 @@ const waiting = new Set();
 const loadIcons = () => {
   if (started) return;
   started = true;
-  import("./toolIcons")
+  import("./glyphs")
     .then((m) => {
-      ICONS = m.TOOL_ICONS;
+      ICONS = { ...m.CONCEPT_ICONS, ...m.TOOL_ICONS };
       waiting.forEach((fn) => fn());
       waiting.clear();
     })
@@ -86,6 +86,10 @@ const ToolGlyph = ({ name }) => {
   const icons = useToolIcons();
   const icon = icons?.[name];
   if (!icon) return null;
+  // Brand marks are filled silhouettes and carry `p`; the hand-drawn category
+  // marks are strokes and carry `d` with `s: 1`. One renderer, two shapes of
+  // data, because a chip does not care which kind of thing its term is.
+  const stroke = icon.s === 1;
   return (
     <svg
       viewBox="0 0 24 24"
@@ -97,9 +101,13 @@ const ToolGlyph = ({ name }) => {
          dropped every glyph onto its own line above the word. A margin and a
          baseline offset behave the same in both. */
       className="inline-block align-[-0.16em] mr-1.5 h-[1.05em] w-[1.05em] opacity-90"
-      fill="currentColor"
+      fill={stroke ? "none" : "currentColor"}
+      stroke={stroke ? "currentColor" : undefined}
+      strokeWidth={stroke ? 1.8 : undefined}
+      strokeLinecap={stroke ? "round" : undefined}
+      strokeLinejoin={stroke ? "round" : undefined}
     >
-      <path d={icon.p} />
+      <path d={stroke ? icon.d : icon.p} />
     </svg>
   );
 };

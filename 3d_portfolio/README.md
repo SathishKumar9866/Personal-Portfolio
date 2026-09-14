@@ -24,6 +24,7 @@ Read this table instead of the code.
 | A project's cover drawing | the drawing functions at the top of `src/components/Works.jsx` |
 | What a tech chip explains | `glossary` in `src/constants/index.js` |
 | Which tools show a logo, and which slug each uses | `MAP` in `scripts/gen-tool-icons.mjs`, then `npm run icons` |
+| The mark for a term that is an idea, not a product | `src/components/conceptIcons.js` — hand-drawn, never generated |
 | Which tools get the filled chip | `primary` per group in `stackGroups` |
 | A Stack category's colour | `dot` AND `tint` per group in `stackGroups` — same colour, two forms — token in `src/index.css` |
 | The Stack pipeline rail, card glow, stage numerals | `src/components/Tech.jsx`, `.stack-card` / `.stack-seg` in `src/index.css` |
