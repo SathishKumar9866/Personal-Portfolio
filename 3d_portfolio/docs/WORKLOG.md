@@ -1,5 +1,68 @@
 # Worklog
 
+## 2026-09-14: the opening act, staged like a campaign
+
+The ask was for the page to read like a product campaign — BMW rather than
+Sprite or Google — with copy cut to campaign length. This is the first act: the
+hero and the band under it.
+
+### The lede became a spec list
+
+One 38-word paragraph became three lines, each against its own accent rule:
+
+    — Retrieval that cites its source
+    — Vision that trains where the data already lives
+    — Results reported as measured, negative ones included
+
+**Nothing was added and no new claim is made.** "Retrieval that cites the
+passage it used" is "Retrieval that cites its source"; the negative-results
+clause, which is the most distinctive sentence on the page, is kept whole as its
+own line instead of trailing a paragraph.
+
+The point is not fewer words, it is staging. Three claims stacked against rules
+are read in about a second each; the same words in prose ask the reader to
+decide to start reading, which most people who land on a portfolio do not do.
+
+### The numbers moved from 12px to 112px
+
+Every figure in the new band was already on the page, set in a section eyebrow:
+"4 roles · since 2020", "6 built · 1 live", "6 areas · 33 tools". They are the
+most compressed true things this site can say, and they were its smallest type.
+
+| | | |
+| --- | --- | --- |
+| **04** roles | since 2020 | |
+| **06** systems built | 1 live | |
+| **33** tools | 6 areas | |
+| **CDT** US Central time | replies within a day | |
+
+**All four are derived, none typed.** Add a project and the band counts it in
+the same edit. `tabular-nums` so 04 and 33 occupy the same width, or a spec row
+reads as four separate measurements rather than one sheet.
+
+**No count-up animation, deliberately.** Numbers ticking up from zero is the
+convention on pages where the numbers ARE the marketing. Here they are evidence,
+and evidence does not need a drumroll.
+
+The band's ground is `color-mix(in srgb, tertiary 55%, primary)` rather than a
+fixed colour: one step off the page in every palette, light or dark. A band that
+announces itself with a new hue reads as an advert embedded in the page, which
+is the exact failure mode of this whole direction.
+
+### Measured
+
+112px numerals at 1440 in a 315px band, 52px in a 2x2 grid at 390. Ground
+differs from the page ground in Slate, Ink, Paper and Manuscript, and the
+numerals keep the palette's own text colour in each. `scrollWidth ===
+clientWidth` at both widths. Lint 0, tests 12/12, build 0.
+
+### What this act does not do yet
+
+Sections are still a continuous document rather than full-viewport scenes, the
+projects are still cards rather than product pages, and there are still no
+screenshots — which is the one thing a campaign page for software normally
+leads with, and the one thing this repo cannot supply without the owner.
+
 ## 2026-09-14: a mark for the ideas too, not only the products
 
 The logos landed for the 25 tools that have one. On a project card that left

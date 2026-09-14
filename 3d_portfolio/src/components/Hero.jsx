@@ -67,15 +67,35 @@ const Hero = () => {
           </span>
         </motion.h1>
 
-        <motion.p
-          variants={rise}
-          className="mt-7 font-sans text-secondary text-[calc(clamp(1rem,1.6vw,1.3rem)*var(--type-scale,1))] leading-[1.55] max-w-xl"
-        >
-          AI engineer across the data-to-AI stack. Retrieval that cites the
-          passage it used, vision that trains where the data already lives, and
-          results reported as measured, including the ones that came back
-          negative.
-        </motion.p>
+        {/* The lede was one 38-word paragraph. It is now the same three claims
+            as three lines, each on its own rule.
+
+            Nothing was added and nothing new is asserted: "retrieval that cites
+            the passage it used" became "Retrieval that cites its source", and
+            the negative-results clause — the most distinctive sentence on the
+            page — is kept whole as its own line rather than trailing a
+            paragraph.
+
+            Why lines and not simply a shorter paragraph: a spec list is what
+            makes a page read as a campaign. Three claims stacked against rules
+            scan in about a second each; the same words in prose ask for a
+            decision to start reading, which most people who land here do not
+            make. */}
+        <motion.ul variants={rise} className="mt-8 max-w-xl list-none space-y-3">
+          {[
+            "Retrieval that cites its source",
+            "Vision that trains where the data already lives",
+            "Results reported as measured, negative ones included",
+          ].map((claim) => (
+            <li
+              key={claim}
+              className="flex items-baseline gap-3 font-sans text-secondary text-[calc(clamp(0.95rem,1.35vw,1.15rem)*var(--type-scale,1))] leading-[1.45]"
+            >
+              <span aria-hidden="true" className="relative top-[-0.3em] h-px w-5 shrink-0 bg-accent/70" />
+              {claim}
+            </li>
+          ))}
+        </motion.ul>
 
         {/* One CTA, not two. "Get in touch" was the fifth route to #contact, navbar, right rail, palette, and "Reach out →" in the status card a
             screen below, which carries context a bare button cannot. A secondary
