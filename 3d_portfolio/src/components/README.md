@@ -27,9 +27,15 @@ Thirty files. Read the table, not the directory.
 | The "open to collaborators" closing band | `Collaborate.jsx` |
 | The one scroll-reveal used by every card | `Reveal.jsx` |
 | Shared canvas geometry and the seeded RNG | `../utils/draw.js` |
+<<<<<<< HEAD
 | The ask box: answers, commands, keyboard | `CommandPalette.jsx` |
 | Which passage a question retrieves, and its ranking | `../utils/answer.js` |
 | The hero network drawing | `NeuralField.jsx` |
+=======
+| Command palette actions | `CommandPalette.jsx` |
+| The hero field in 3D: layers, depth, parallax | `NeuralField3D.js` |
+| Which field runs, and the 2D fallback drawing | `NeuralField.jsx` |
+>>>>>>> b41aa04 (feat(hero): render the field in real 3D, in a chunk nobody else fetches)
 | The token wave in Stack, desktop only | `TokenStream.jsx` |
 | The Python search band on a phone | `CodeCompletion.jsx` |
 | Brand glyph paths, and the list of off-site links | `icons.js` |
@@ -78,6 +84,7 @@ A few boundaries worth knowing before editing:
   `intersectionRatio` is capped at `viewportHeight / elementHeight`. A section
   taller than about four viewports can never satisfy `0.25`. Use `"some"`.
   This once made the whole Work section invisible on every phone.
+<<<<<<< HEAD
 - **The Experience roles are a sticky deck, and `position: sticky` dies inside
   any scroll container.** Adding `overflow-x: hidden` or `overflow: auto` to any
   ancestor — the section, the grid, the `<ol>` — silently turns the deck back
@@ -87,6 +94,22 @@ A few boundaries worth knowing before editing:
   the one nearest the middle of the screen. In a stack every pinned card sits
   within 40px of the same top, and "nearest the middle" flickered between two
   roles on one scroll notch.
+=======
+- **A canvas keeps its first context for life.** `NeuralField` must not call
+  `getContext("2d")` until it knows it is the one drawing, and `NeuralField3D`
+  creates its own element rather than borrowing that one — `forceContextLoss()`
+  on teardown poisons a canvas for the next renderer, which React's development
+  double-mount triggers immediately. The symptom is a blank field and
+  `THREE.WebGLRenderer: Cannot read properties of null (reading 'precision')`.
+- **three.js must stay out of the `vendor` chunk.** `vite.config.ts` returns
+  `undefined` for it on purpose. Naming it in `manualChunks` puts 130kB gzipped
+  into the entry graph for every reader, including the phones the dynamic
+  import exists to spare.
+- **Import three by name, never as a namespace.** `await import("three")` inside
+  a function defeats tree-shaking, because a namespace object must carry every
+  export: measured, that was 191.81kB gzipped against 130.73kB for the ten
+  named classes this scene uses.
+>>>>>>> b41aa04 (feat(hero): render the field in real 3D, in a chunk nobody else fetches)
 - **Canvases must re-read their size.** A canvas sized once inside an effect
   stays at its old backing-store dimensions after a resize, and static ones never
   repaint at all.

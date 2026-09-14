@@ -18,7 +18,8 @@ Read this table instead of the code.
 | A whole section's layout | `src/components/<Section>.jsx` |
 | The order of sections | `src/App.tsx` |
 | Which items appear in the nav and the right rail | `navLinks` in `src/constants/index.js` |
-| The hero backdrop network | `src/components/NeuralField.jsx` |
+| The hero backdrop network, in 3D | `src/components/NeuralField3D.js` |
+| The 2D fallback field, and who gets which | `src/components/NeuralField.jsx` |
 | The token wave in Stack | `src/components/TokenStream.jsx` |
 | A project's cover drawing | the drawing functions at the top of `src/components/Works.jsx` |
 | What a tech chip explains | `glossary` in `src/constants/index.js` |
@@ -62,7 +63,7 @@ the machine you are building on.
 | Build | Vite 5 with `@vitejs/plugin-react-swc` |
 | UI | React 18 |
 | Styling | Tailwind, with CSS-variable design tokens |
-| Motion | Framer Motion, plus two hand-written canvases |
+| Motion | Framer Motion, two hand-written canvases, and three.js for the hero field only |
 | Type | Barlow (display and UI), Newsreader (prose), JetBrains Mono (labels), self-hosted via `@fontsource` |
 | Contact | A copyable address and `mailto:`. No form, no service |
 
