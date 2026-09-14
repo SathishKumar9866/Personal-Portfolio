@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "test": "node src/utils/answer.test.mjs",
+    "test": "node src/utils/answer.test.mjs && node src/utils/localzone.test.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
