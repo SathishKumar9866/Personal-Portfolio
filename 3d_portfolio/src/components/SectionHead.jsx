@@ -38,9 +38,17 @@ import { textVariant } from "../utils/motion";
  * put over an introduction.
  */
 const SectionHead = ({ title, meta }) => (
-  <motion.div variants={textVariant()}>
-    {meta && <p className={styles.sectionSubText}>{meta}</p>}
-    <h2 className={styles.sectionHeadText}>{title}</h2>
+  <motion.div variants={textVariant()} className="mb-[clamp(1.5rem,3vw,2.75rem)]">
+    {/* The rule before the meta is the spec-sheet tell: it turns a line of
+        derived facts into a label for the scene rather than a caption under
+        nothing. Same device as the hero's three claims, same 20px rule. */}
+    {meta && (
+      <p className={`flex items-center gap-3 ${styles.sectionSubText}`}>
+        <span aria-hidden="true" className="h-px w-5 shrink-0 bg-accent/70" />
+        {meta}
+      </p>
+    )}
+    <h2 className={`mt-3 ${styles.sectionHeadText}`}>{title}</h2>
   </motion.div>
 );
 

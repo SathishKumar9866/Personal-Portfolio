@@ -482,14 +482,33 @@ main:focus:not(:focus-visible) {
    the reader waited for Education. The narrow viewport already gives one card
    at a time, which is the whole point of the deck, so the phone gets a plain
    list and none of the cost. */
-/* The spec band's ground. One step off the page colour rather than a new
-   colour: a band that announces itself with a different hue reads as an advert
-   embedded in the page, which is the exact failure mode of this whole
-   direction. In light palettes the same rule lands slightly lighter, which is
-   why it is a mix rather than a fixed value. */
-.spec-band {
+/* Scenes.
+   -------------------------------------------------------------------------
+   Every other section paints a ground, so the page reads as a sequence of
+   scenes rather than one continuous document. The rhythm falls out of the
+   order: spec band, Experience and Projects are tinted; Overview, Stack and
+   Contact sit on the page ground.
+
+   `nth-of-type`, not a prop. Alternation is a property of the SEQUENCE — a
+   component told its own index is wrong the moment a section moves, and this
+   page has already reordered its sections twice.
+
+   The tint is `color-mix` against the page colour rather than a fixed value,
+   so it is one step off the ground in all six palettes instead of one step off
+   in Slate and wrong in Paper. A scene that announces itself with a new hue
+   reads as an advert embedded in a page, which is the failure this whole
+   direction has to avoid.
+
+   The hairlines matter as much as the fill: at these low contrasts the edge is
+   what tells a reader a scene changed, and without it the tint reads as a
+   rendering artefact. */
+main > section:nth-of-type(odd) {
   background: color-mix(in srgb, rgb(var(--c-tertiary)) 55%, rgb(var(--c-primary)));
+  border-block: 1px solid rgb(var(--c-line));
 }
+
+/* The band is the first of those scenes and needs no rule of its own. Its class
+   stays because SpecBand's own styles hang off it. */
 
 .role-sticky {
   position: static;

@@ -1,5 +1,58 @@
 # Worklog
 
+## 2026-09-14: sections become scenes
+
+Act two of the campaign direction. The page was one continuous document with
+five headings in it; it is now a sequence of scenes, each with its own ground,
+its own edges, and a head big enough to open it.
+
+### The ground is full-bleed, the measure is not
+
+`max-w-7xl mx-auto` used to sit on the `<section>` itself, which meant a section
+could never paint a background wider than its own text column. The section is
+now the stage and a `div` inside it is the page: colour runs edge to edge, the
+measure stays exactly where it was.
+
+### Alternation is a property of the sequence, not of a component
+
+`main > section:nth-of-type(odd)` tints the spec band, Experience and Projects;
+Overview, Stack and Contact keep the page ground. **No component is told its own
+index** — a component that knows where it sits in a list is wrong the moment the
+list is reordered, and this page has already reordered its sections twice.
+
+The tint is `color-mix(in srgb, tertiary 55%, primary)`, so it is one step off
+the ground in all six palettes rather than correct in Slate and wrong in Paper.
+The hairline above and below each scene matters as much as the fill: at these
+low contrasts the edge is what says a scene changed, and without it the tint
+reads as a rendering artefact.
+
+### The heads now open something
+
+`sectionHeadText` went from `clamp(2rem, 5vw, 3.5rem)` to
+`clamp(2.5rem, 6.5vw, 4.75rem)` — 56px to 76px at 1440, 40px on a phone. At the
+old size a head read as a paragraph heading inside a document, which is exactly
+what the page was.
+
+The derived eyebrow — `4 ROLES · SINCE 2020` — now sits behind a 20px accent
+rule, the same device as the hero's three claims. That turns a line of facts
+into a label for the scene rather than a caption floating over nothing.
+
+### Measured
+
+Six scenes at 1440: spec band 315px, Overview 1033, Experience 2572, Stack 1128,
+Projects 2615, Contact 610. Every one 1425px wide — full-bleed — with 128px of
+top padding, and the tinted three carrying a 0.8px hairline top and bottom.
+Phone: 390px wide scenes, 64px padding, heads at 40px, `scrollWidth ===
+clientWidth`.
+
+The page grew from 8,966px to 10,158px, about 13%. That is the cost of scene
+padding and the spec band, and it is the right trade for this direction: a
+campaign page is long on purpose, and nothing was added to the content.
+
+Checked in Slate and Paper. In light palettes the tint is subtle by design — the
+hairline does most of the work — and the white cards still sit clearly above the
+tinted ground.
+
 ## 2026-09-14: the opening act, staged like a campaign
 
 The ask was for the page to read like a product campaign — BMW rather than
