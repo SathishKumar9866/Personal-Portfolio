@@ -51,7 +51,7 @@ const DOCS = [
     text: `${g.note} Tools: ${g.items.join(", ")}. Leans on ${g.primary.join(" and ")}.`,
   })),
   ...projects.map((p) => ({
-    section: "work",
+    section: "projects",
     label: p.name,
     title: p.name,
     text: `${p.outcome} ${p.description} Stages: ${p.stages.join(

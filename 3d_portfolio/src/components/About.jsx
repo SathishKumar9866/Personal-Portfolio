@@ -73,7 +73,7 @@ const About = () => (
     {/* No meta line, deliberately: the first section sets no pattern for the
         rest to repeat, and there is no honest number to put over an
         introduction. See SectionHead. */}
-    <SectionHead title="Overview" />
+    <SectionHead title="About" />
 
     {/* Portrait in its own column; the bio and the status block share the
         second, so the status no longer drops below the portrait and leaves a
@@ -132,7 +132,7 @@ const About = () => (
                 {project.outcome}
               </p>
               <a
-                href="#work"
+                href="#projects"
                 className="mt-1 ml-8 inline-block font-mono text-label text-faint hover:text-accent transition-colors"
               >
                 {project.name} ↓

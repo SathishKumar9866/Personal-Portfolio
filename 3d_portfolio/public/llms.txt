@@ -45,7 +45,7 @@ one, change the other.
 - M.S. Computer Science, Southern Illinois University, Carbondale IL, 2024.
 - B.Tech Computer Science, Anurag Group of Institutions, Hyderabad, India, 2021.
 
-## Selected work
+## Projects
 
 - [rag-pipeline-langchain](https://github.com/SathishKumarAI/rag-pipeline-langchain): production RAG on AWS with an MLflow-tracked evaluation loop and a GitOps deploy path on Kubernetes and Helm.
 - [federated-yolov8-object-detection](https://github.com/SathishKumarAI/federated-yolov8-object-detection): YOLOv8 trained across distributed clients with Flower federated learning, so raw data never leaves the client that owns it.

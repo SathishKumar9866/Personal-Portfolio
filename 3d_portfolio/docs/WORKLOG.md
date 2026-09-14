@@ -1,5 +1,63 @@
 # Worklog
 
+## 2026-09-14: one name per thing
+
+The question was whether Work and Experience are the same thing. They are not,
+but the page could not have told you that: the nav offered both words, and
+neither of them was the name of a section.
+
+### Two sections had two names each
+
+| Nav said | The section said | Now |
+| --- | --- | --- |
+| About | **Overview** | About |
+| Work | **Projects** | Projects |
+
+A nav is an index. When an index uses a different word from the thing it points
+at, a reader arriving at "Projects" after clicking "Work" has to stop and check
+whether they landed in the right place.
+
+**"Work" was the worse of the two**, because it also collided with
+"Experience" — a job is work, so the nav offered two words for one idea and then
+used neither as a heading. "Projects" is the specific word, and it is what the
+section has always called itself. Experience keeps its name: with "Work" gone
+there is nothing left for it to collide with, and it is the word a recruiter
+scans for.
+
+### "Work" had four senses on one page
+
+The nav item, the section heading it did not match, the spec band's **"systems
+built"** for the same six things, and the availability card's "Open to work".
+Three of the four are gone: the nav says Projects, the band says `06 PROJECTS`,
+and `llms.txt` lists them under `## Projects` rather than `## Selected work`.
+
+"Open to work" stays. It is the phrase a recruiter recognises, it means
+employment rather than output, and with the nav item gone it collides with
+nothing.
+
+### The anchor moved too
+
+`#work` became `#projects` — five internal references, no external ones, so the
+URL now says what the section is. `utils/answer.js` cites sections by these ids,
+so the ask box's citations moved with it: an answer from a project now reads
+`… · projects`, which is the word in the nav.
+
+**And that is now a test.** `test_every_cited_section_is_a_real_one` asserts
+every section an answer cites exists in `navLinks`. The rename touched three
+files that all had to agree; the fourth time someone renames a section, a
+citation pointing at a section nobody can find will fail the build instead of
+shipping.
+
+### Measured
+
+Nav labels and section headings, read off the rendered page:
+
+    nav:      About · Experience · Stack · Projects · Contact
+    headings: About · Experience · Stack · Projects · Contact
+
+Every nav target resolves, and **zero dangling `#` anchors** anywhere on the
+page. `npm test` 13/13, lint 0, build 0.
+
 ## 2026-09-14: the six category colours become one ramp
 
 The Stack colours were six unrelated hues — steel blue, teal, terracotta,

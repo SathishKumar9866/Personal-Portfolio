@@ -105,7 +105,7 @@ A few boundaries worth knowing before editing:
 - **`viewport={{ amount: n }}` is a raw IntersectionObserver threshold**, and
   `intersectionRatio` is capped at `viewportHeight / elementHeight`. A section
   taller than about four viewports can never satisfy `0.25`. Use `"some"`.
-  This once made the whole Work section invisible on every phone.
+  This once made the whole Projects section invisible on every phone.
 <<<<<<< HEAD
 - **The Experience roles are a sticky deck, and `position: sticky` dies inside
   any scroll container.** Adding `overflow-x: hidden` or `overflow: auto` to a

@@ -251,11 +251,24 @@ export const glossary = {
 // chip, which put 33 question marks on one screen.
 export const TERM_HINT = "Dotted terms have a plain-English definition, tap one.";
 
+/**
+ * The nav is an index, so every entry says exactly what the section it points
+ * at says. Two of them did not.
+ *
+ * "About" pointed at a section headed "Overview", and "Work" pointed at one
+ * headed "Projects" — one section with two names each, which makes a reader
+ * check whether they landed in the right place.
+ *
+ * "Work" was the worse of the two, because it also collided with "Experience":
+ * a job is work, so the nav offered two words for the same idea and then used
+ * neither of them as the heading. "Projects" is the specific word, and it is
+ * what the section has always called itself.
+ */
 export const navLinks = [
   { id: "about", title: "About" },
   { id: "experience", title: "Experience" },
   { id: "stack", title: "Stack" },
-  { id: "work", title: "Work" },
+  { id: "projects", title: "Projects" },
   { id: "contact", title: "Contact" },
 ];
 

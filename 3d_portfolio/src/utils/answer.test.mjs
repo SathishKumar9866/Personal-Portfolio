@@ -5,7 +5,7 @@
 // verbatim quote is the one thing this feature promises never to do.
 import assert from "node:assert/strict";
 import { ask } from "./answer.js";
-import { experience, projects, stackGroups } from "../constants/index.js";
+import { experience, navLinks, projects, stackGroups } from "../constants/index.js";
 
 const top = (q) => ask(q)[0];
 
@@ -72,6 +72,23 @@ const test_every_passage_is_quoted_not_written = () => {
   }
 };
 
+// The citation under an answer names a section, and the reader then looks for
+// that name in the nav. When "work" was renamed to "projects" this file was the
+// third place that had to move; this test is what makes the fourth rename a
+// failing check rather than a citation pointing at a section nobody can find.
+const test_every_cited_section_is_a_real_one = () => {
+  const ids = new Set(navLinks.map((n) => n.id));
+  const cited = new Set(
+    ["Azure", "PySpark", "RAG citations", "open to roles", "federated"].flatMap((q) =>
+      ask(q, 5).map((h) => h.section)
+    )
+  );
+  for (const section of cited) {
+    assert.ok(ids.has(section), `answers cite "${section}", which is not a nav id: ${[...ids].join(", ")}`);
+  }
+  assert.ok(cited.size > 1, "expected answers from more than one section");
+};
+
 const tests = [
   test_a_role_question_cites_the_role,
   test_a_project_question_cites_the_project,
@@ -80,6 +97,7 @@ const tests = [
   test_recruiter_words_reach_availability,
   test_nonsense_answers_nothing,
   test_every_passage_is_quoted_not_written,
+  test_every_cited_section_is_a_real_one,
 ];
 
 let failed = 0;
