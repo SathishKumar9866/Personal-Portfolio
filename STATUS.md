@@ -4,10 +4,11 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-14
-**Branch:** `feat/visitor-local-time`, PR open, work item `COD-187`. Four
+**Branch:** `fix/deck-fits-short-windows`, PR open, work item `COD-188`. Five
 squash-merged to `main` before it, in this order: `#20` the ask box (`COD-183`),
 `#21` the headline (`COD-184`), `#22` the Experience deck (`COD-185`), `#23` the
-WebGL field (`COD-186`). All four branches deleted.
+WebGL field (`COD-186`), `#24` the reader's own clock (`COD-187`). All five
+branches deleted.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions.
 **Not yet deployed.** Five changes are on `main` and the site is still serving
 the build from before them. `gh workflow run deploy.yml -R SathishKumarAI/SathishKumarAI.github.io`
@@ -19,8 +20,8 @@ only, in a chunk nobody else fetches. The folder name stopped being a joke on
 
 ## Where it stopped
 
-Five changes in one session, four of them already on `main`. In the order a
-reader meets them on the page:
+Five changes in one session, then a UI sweep that found two faults in them and
+fixed both. In the order a reader meets them on the page:
 
 | | What it does now | Where |
 | --- | --- | --- |
@@ -30,12 +31,27 @@ reader meets them on the page:
 | **`Ctrl K`** | an ask box. Retrieves passages from the page's own `constants` and cites the section they live in | `CommandPalette.jsx`, `utils/answer.js` |
 | **Experience** | four roles as a sticky deck; each card holds the screen until the next slides over it | `Experience.jsx`, `.role-sticky` in `index.css` |
 
+**The sweep's two findings, both introduced the same day:**
+
+- **A pinned role card taller than the screen hid its own bottom.** At 1280x620
+  with the text control at 140%, 192px of a card's bullets were unreachable:
+  sticky holds the card at the top while the reader scrolls past it.
+  `useDeckFits` now measures and drops to a plain list when a card will not fit.
+- **Half the `Ask` chip lit on hover** — `hover:text-accent` did not reach the
+  span holding the shortcut, so "Ask" went red and "Ctrl K" stayed grey.
+
+Everything else checked clean: 113 interactive elements, six palettes (no
+contrast failures), hover and focus states, reveal animations after a scrollbar
+jump, the palette's hostile inputs, the mobile menu, the copy buttons, both ends
+of the text-size control, and the console.
+
 **The traps these set, all five worth carrying:**
 
-1. **One `overflow-x: hidden` anywhere above the roles turns the deck back into
-   a flat list**, silently. An overflow container is also a scroll container and
-   `sticky` resolves against the nearest one. Second standing reason not to
-   reach for that property.
+1. **One `overflow-x: hidden` on a wrapper above the roles turns the deck back
+   into a flat list**, silently. An overflow container is also a scroll
+   container and `sticky` resolves against the nearest one. `html`/`body` are
+   the exception — their overflow propagates to the viewport, which is why the
+   deck works over the `body { overflow-x: hidden }` already in `index.css`.
 2. **three.js must stay unnamed in `manualChunks`.** Naming it puts 131kB
    gzipped into the entry graph — the phones the dynamic import exists to spare.
 3. **Import three by name, never as a namespace.** `await import("three")`
@@ -298,7 +314,7 @@ branch deleted, then six commits on `main`, all shipped and deployed:
 
 ## The next action
 
-Merge `feat/visitor-local-time` (`COD-187`), then **deploy** — `main` is five
+Merge `fix/deck-fits-short-windows` (`COD-188`), then **deploy** — `main` is six
 changes ahead of what the live site serves. Then, in order:
 
 0. **Say the ask box exists somewhere other than the nav chip.** A reader who

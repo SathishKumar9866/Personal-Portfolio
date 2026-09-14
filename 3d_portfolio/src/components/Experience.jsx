@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { experience, education } from "../constants";
 import { fadeIn } from "../utils/motion";
@@ -105,8 +106,14 @@ const Role = ({ role, index, trackIndex = null, stage = null, className = "", st
         edge, which reads as text running into the edge rather than as a tidy
         column. The academic audience this was asked for reads on a desktop,
         which is where it still applies. */}
+    {/* No measure cap on the list. `max-w-[34rem]` was written when a role was
+        a timeline row in a 672px column with no padding of its own; inside a
+        padded card it stopped the bullets 71px short of where the date line and
+        the tool chips end, so one card had three different right edges and the
+        chips read as overhanging the paragraph. The card's own width is the
+        measure now, and every row in it shares it. */}
     {role.points?.length > 0 && (
-      <ul className="mt-3 list-none max-w-[34rem] space-y-2">
+      <ul className="mt-3 list-none space-y-2">
         {role.points.map((point) => (
           <li key={point} className="relative pl-5 font-sans text-secondary text-prose leading-[1.6] md:text-justify md:hyphens-auto">
             {/* A rule, not a bullet glyph: the timeline already owns the round
@@ -122,7 +129,7 @@ const Role = ({ role, index, trackIndex = null, stage = null, className = "", st
     )}
 
     {!role.points?.length && role.summary && (
-      <p className="mt-3 font-sans text-secondary text-prose leading-[1.6] max-w-[34rem]">
+      <p className="mt-3 font-sans text-secondary text-prose leading-[1.6]">
         {role.summary}
       </p>
     )}
@@ -173,7 +180,63 @@ const FIRST_YEAR = ROLES.map((e) => e.start)
   ?.slice(0, 4);
 const EXPERIENCE_META = `${ROLES.length} roles${FIRST_YEAR ? ` · since ${FIRST_YEAR}` : ""}`;
 
-const Experience = () => (
+/**
+ * Does the deck fit?
+ *
+ * A pinned card taller than the room under the navbar hides its own bottom: it
+ * holds the top of the screen while the reader scrolls past, so the cut-off
+ * part never comes into view at all. Measured at 1280x620 with the reader's
+ * text control at 140%, the tallest role card is 686px against 524px of room
+ * and 192px of its bullets were unreachable.
+ *
+ * Measured, not guessed, and for the stated house reason: the text-size control
+ * changes a card's height without changing anything a media query can see. Same
+ * rule the hero's code band follows.
+ */
+const useDeckFits = (listRef) => {
+  const [fits, setFits] = useState(true);
+  const offset = useRef(96); // last known sticky offset, in px
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return undefined;
+
+    const measure = () => {
+      const cards = [...list.querySelectorAll("[data-role-index]")];
+      if (!cards.length) return;
+      // While pinned, the resolved `top` IS the offset, so it cannot drift from
+      // `--role-top` in the stylesheet. When unpinned there is nothing to read,
+      // and the last value stands.
+      const top = parseFloat(getComputedStyle(cards[0]).top);
+      if (Number.isFinite(top)) offset.current = top;
+      const tallest = Math.max(...cards.map((c) => c.getBoundingClientRect().height));
+      const room = window.innerHeight - offset.current - 24;
+      // 32px of hysteresis, or a card sitting exactly on the threshold toggles
+      // the whole section's layout on every resize tick.
+      setFits((was) => (was ? tallest <= room : tallest <= room - 32));
+    };
+
+    measure();
+    // A ResizeObserver on the list catches the text-size control, a font
+    // swapping in, and a wrap changing a card's height — none of which fire a
+    // resize event.
+    const ro = new ResizeObserver(measure);
+    ro.observe(list);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [listRef]);
+
+  return fits;
+};
+
+const Experience = () => {
+  const listRef = useRef(null);
+  const fits = useDeckFits(listRef);
+
+  return (
   <>
     <SectionHead title="Experience" meta={EXPERIENCE_META} />
 
@@ -190,7 +253,7 @@ const Experience = () => (
           screen. Both are inline because both are per-index: a Tailwind class
           per position would be four classes that must stay in sync with an
           array length. */}
-      <ol className="list-none max-w-2xl">
+      <ol ref={listRef} className="list-none max-w-2xl">
         {experience.map((role, i) => (
           <Role
             key={`${role.company}-${role.title}`}
@@ -198,14 +261,16 @@ const Experience = () => (
             index={i}
             trackIndex={i}
             stage={i + 1}
-            className="role-sticky pb-5 last:pb-0"
+            className={`${fits ? "role-sticky" : ""} pb-5 last:pb-0`}
             style={{ top: `calc(var(--role-top) + ${i * 10}px)`, zIndex: 10 + i }}
           />
         ))}
         {/* The stack needs somewhere to end. Without trailing room the last
             card unsticks the instant the list box ends, which lands the reader
             in Education while the last role is still mid-sentence. */}
-        <li aria-hidden="true" className="hidden sm:block h-[18vh]" />
+        {/* Run-out room for the stack, and only when there is a stack: without
+            the deck it is 18vh of empty page before Education. */}
+        {fits && <li aria-hidden="true" className="hidden sm:block h-[18vh]" />}
       </ol>
 
       {/* The margin. Sticky, so the diagram stays level with the role being
@@ -233,6 +298,7 @@ const Experience = () => (
       </>
     )}
   </>
-);
+  );
+};
 
 export default SectionWrapper(Experience, "experience");

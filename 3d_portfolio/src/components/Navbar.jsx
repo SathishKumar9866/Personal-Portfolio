@@ -228,13 +228,17 @@ const Navbar = () => {
           </ul>
           <button
             onClick={() => window.dispatchEvent(new Event("open-command"))}
-            className="font-mono text-label text-faint border border-line-strong rounded-lg px-2.5 py-1 hover:border-accent hover:text-accent transition-colors"
+            className="group font-mono text-label text-faint border border-line-strong rounded-lg px-2.5 py-1 hover:border-accent hover:text-accent transition-colors"
             aria-label={`${SHORTCUT}: ask about the work, or run a command`}
           >
             {/* It says "Ask" because that is the part nobody would guess. A bare
                 shortcut chip reads as a command palette, and a reader who never
                 opens it never learns the page can answer a question. */}
-            Ask <span className="text-faint">{SHORTCUT}</span>
+            {/* The shortcut lights with the word. Without `group-hover` the
+                span keeps its own `text-faint` and half the chip changes
+                colour on hover, which reads as a rendering fault rather than a
+                hierarchy. */}
+            Ask <span className="text-faint group-hover:text-accent/70 transition-colors">{SHORTCUT}</span>
           </button>
           <FontSizeToggle />
           <ThemeToggle />

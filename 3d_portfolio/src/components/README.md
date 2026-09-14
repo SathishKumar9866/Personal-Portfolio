@@ -87,10 +87,19 @@ A few boundaries worth knowing before editing:
   This once made the whole Work section invisible on every phone.
 <<<<<<< HEAD
 - **The Experience roles are a sticky deck, and `position: sticky` dies inside
-  any scroll container.** Adding `overflow-x: hidden` or `overflow: auto` to any
-  ancestor — the section, the grid, the `<ol>` — silently turns the deck back
-  into a flat list with no error anywhere. The site already has a standing rule
-  against reaching for `overflow-x: hidden`; this is now a second reason.
+  any scroll container.** Adding `overflow-x: hidden` or `overflow: auto` to a
+  wrapper — the section, the grid, the `<ol>` — silently turns the deck back
+  into a flat list with no error anywhere. The exception is `html`/`body`, whose
+  overflow propagates to the viewport instead of making a scroll container:
+  `body { overflow-x: hidden }` is in `index.css` today and the deck works over
+  it. Any element below those two is the hazard.
+- **The deck turns itself off when a card does not fit.** `useDeckFits` in
+  `Experience.jsx` measures the tallest card against the room under the navbar,
+  because a pinned card taller than the viewport hides its own bottom — the
+  reader scrolls and the cut-off part never arrives. Measured at 1280x620 with
+  the text control at 140%: a 686px card in 524px of room, 192px unreachable.
+  It is a measurement and not a media query for the stated house reason: the
+  text-size control changes the height without changing anything a query sees.
 - **`CareerTrack` picks the active role as the LAST card that has arrived**, not
   the one nearest the middle of the screen. In a stack every pinned card sits
   within 40px of the same top, and "nearest the middle" flickered between two

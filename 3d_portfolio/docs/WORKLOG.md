@@ -1,5 +1,95 @@
 # Worklog
 
+## 2026-09-14: a UI sweep, and the two things it found
+
+Every interactive surface checked against the running build: 113 interactive
+elements, six palettes, three viewports, both ends of the text-size control,
+hover and focus states, the palette's edge cases, the mobile menu, the copy
+buttons, and the console. **Two real faults, both introduced earlier today.**
+
+### 1. A pinned role card taller than the screen hid its own bottom
+
+The worst of the two, because it loses content rather than polish. A sticky card
+holds the top of the viewport while the reader scrolls past it — so anything
+below the fold when it pins never arrives. Measured at **1280x620 with the text
+control at 140%: the tallest card is 686px against 524px of room, and 192px of
+its bullets were unreachable.** A 1366x768 laptop window is exactly this shape.
+
+`useDeckFits` now measures the tallest card against the room under the navbar
+and drops the deck to a plain list when it will not fit. Three details worth
+keeping:
+
+- **It reads the sticky offset out of the resolved `top`** of a pinned card
+  rather than repeating `6rem` in JavaScript, so it cannot drift from
+  `--role-top` in the stylesheet.
+- **A `ResizeObserver` on the list**, not a resize listener alone: the text-size
+  control, a font swapping in and a wrap change all alter card heights without
+  firing `resize`.
+- **32px of hysteresis**, or a card sitting exactly on the threshold toggles the
+  whole section's layout on every resize tick.
+
+Verified after: at 1280x620 the deck is `sticky` at 100% and `static` at 140%;
+at 1440x900 it stays `sticky` at both, because 690px fits in 780px of room; and
+it comes back when the text size drops again.
+
+### 2. One role card had three different right edges
+
+Reported by eye, then measured: inside a card 616px wide, the bullet list
+stopped at 544px — an old `max-w-[34rem]` — while the tool chips and the date
+line ran the full width. So the paragraph ended 71px short of everything around
+it and the chips read as overhanging the text.
+
+The cap was correct when it was written: a role was then a row on a timeline, in
+a 672px column with no padding of its own, and 34rem was the measure. Inside a
+padded card the card IS the measure, and it is now the only one: bullets, chips
+and dates all end at the same place, 1px inside the padding, at 1440, 768 and
+390, at 100% and 140%.
+
+The wider measure also took the hyphenation with it. Justification at 544px was
+breaking "analytics" into "analyt-ics" and "extract" into "ex-tract"; at 614px
+the same lines fit whole.
+
+### 3. The current-role hairline read as a stray line laid on the card
+
+The accent edge that marks the role being read was `inset: 0 0 auto 0` with
+`border-radius: inherit` — which on a 16px-radius card draws a straight 2px bar
+through both rounded corners and out to the square edge of the box. It looked
+like a line dropped on top of the card rather than part of its edge.
+
+Inset by the corner radius now, so it starts and ends where the straight part of
+the top edge does. Same cue, and it looks drawn rather than dropped.
+
+### 4. Half the `Ask ⌘K` chip lit up on hover
+
+`hover:text-accent` on the button did not reach the `<span>` holding the
+shortcut, which kept its own `text-faint`. So hovering turned "Ask" red and left
+"Ctrl K" grey — which reads as a rendering fault, not a hierarchy. `group` on
+the button, `group-hover:text-accent/70` on the span.
+
+### What the sweep checked and found correct
+
+| Checked | Result |
+| --- | --- |
+| Reveal animations after a scrollbar jump to the bottom, the middle and 80% | nothing stuck at opacity 0 on screen |
+| Contrast, 9 elements x 6 palettes | no failures. The one apparent fail was the CTA, whose gradient the checker could not read: black-100 on the accent stop measures **5.70:1** |
+| Hover: nav link, ask chip, CTA, project card, repo link, glossary chip | all change something. Nav secondary→white-100, CTA lifts 1px with a deepened shadow, card tilts (react-tilt) and tints its border, chip goes accent |
+| `react-tilt` under reduced motion | already guarded: `max: reduced ? 0 : 8` |
+| Glossary panel | opens on hover and on click, escapes the card without being clipped, stays inside the viewport, closes on Escape |
+| Command palette: empty, 1 char, 400 chars, `<<>>&&""%%`, emoji, `'; DROP TABLE--` | no crash; the long and hostile ones fall to the empty state |
+| Text-size control | clamps 100–140%, both buttons disable at their bound, no overflow at either end |
+| Touch targets at 390px | every boxed control ≥44px. The bare Stack terms are narrower (S3 is 16px wide) and stay that way: WCAG 2.5.8 exempts targets inline in a block of text, and boxing them again costs the 17% length win the flow layout bought |
+| Mobile menu | 44x44 trigger, close button reachable, body scroll locked while open and restored after, Escape closes |
+| Copy buttons | live region announces "GitHub copied to clipboard" and clears after |
+| Console, across the whole visit | no errors, no warnings |
+| Document width at 390 / 1280 / 1440, at 100% and 140% | `scrollWidth === clientWidth` everywhere |
+
+**One documentation correction.** The trap written this morning said any
+ancestor with `overflow-x: hidden` kills the deck. `html` and `body` are the
+exception — their overflow propagates to the viewport rather than making a
+scroll container, which is why the deck works over the `body { overflow-x:
+hidden }` that has been in `index.css` all along. The rule holds for every
+element below those two.
+
 ## 2026-09-14: the clock adds the reader's own row, from their device
 
 The hero rule read `CDT · EDT · IST` — his zone and two courtesies. It now also
