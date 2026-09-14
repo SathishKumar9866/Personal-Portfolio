@@ -1,11 +1,14 @@
 # Sathish Kumar: portfolio
 
-A fast, type-led personal site for an AI engineer. Light and dark themes, one
-lava-red accent, no 3D engine. React 18 on Vite 5, Tailwind for styling, Framer
-Motion for movement, and two 2D canvases for the ambient field.
+A fast, type-led personal site for an AI engineer, staged as a campaign page:
+six palettes, one lava-red accent, full-bleed scenes and a spec band. React 18
+on Vite 5, Tailwind for styling, Framer Motion for movement, two 2D canvases for
+the margin diagrams, and three.js for the hero field.
 
-Despite the folder name there is no 3D in it. `3d_portfolio` is left over from
-the template this was forked from; that stack was removed long ago.
+**The folder name stopped being a joke on 2026-09-14.** `3d_portfolio` was left
+over from a forked template whose 3D stack had been removed; there is now a real
+WebGL scene behind the hero — desktop only, in a lazy chunk a phone never
+fetches. See `NeuralField3D.js`.
 
 ## Where to change what
 
@@ -35,7 +38,7 @@ Read this table instead of the code.
 | How big any text is | the named scale in `tailwind.config.js`, never a literal |
 | How much a section is padded | `styles.padding` in `src/styles.js`, one clamp |
 | What a phone hides that a desktop shows | `MobileCollapse.jsx`, plus `md:` classes at the call site |
-| The diagram beside each Experience role | `CareerTrack.jsx`, keyed by `glyph` in `stackGroups`' sibling `experience` |
+| The diagram beside each role | `CareerTrack.jsx`, keyed by `glyph` in `stackGroups`' sibling `experience` |
 | What a typed question can find, and how it is ranked | `src/utils/answer.js` |
 | What the ask box looks like, and its commands | `src/components/CommandPalette.jsx` |
 | How far a role card pins, and the deck offsets | `.role-sticky` / `.role-card` in `src/index.css`, `top`/`z-index` in `Experience.jsx` |
@@ -317,7 +320,7 @@ the footer separator.
 | --- | --- | --- |
 | Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed: it was the fifth route to `#contact` |
 | About | `About.jsx` | Portrait, lede, availability card. The six capability cards were deleted: they restated Stack's six groups in adjectives instead of tools |
-| Experience | `Experience.jsx` | Roles then education on one timeline, dates right-aligned |
+| Roles | `Experience.jsx` | A sticky deck of role cards, then education, dates right-aligned. The component keeps its old name; the section is called Roles |
 | Stack | `Tech.jsx` | Six groups, each with a category dot. Two tiers. Bare flowing terms on a phone, cards from md |
 | Work | `Works.jsx` | Six projects, generative canvas covers, plain chips |
 | Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
@@ -378,7 +381,7 @@ desktop's content.
 | Navigation | Hamburger, full-screen menu | Inline links |
 | Stack | Six labelled rows of bare terms, no boxes | Six cards, each with its description |
 | Stack intro copy | Hidden | Shown |
-| Role points, project copy | Behind a disclosure (Projects, Experience) | All inline |
+| Role points, project copy | Behind a disclosure (Projects, Roles) | All inline |
 | Role points alignment | Ragged right | Justified, auto-hyphenated |
 | Collaborate band | In the menu | Closing section after Contact |
 | Agent note | Two sentences plus `/llms.txt` | Six-point grid |
