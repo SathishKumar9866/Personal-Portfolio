@@ -55,7 +55,10 @@ const SpecBand = () => {
       initial={reduced ? false : "hidden"}
       whileInView="show"
       viewport={{ once: true, amount: "some" }}
-      className="spec-band w-full border-y border-line px-[clamp(1.25rem,4.5vw,4rem)] py-[clamp(2.5rem,6vw,5rem)]"
+      /* No ground or border here: this is the first scene, and
+         `main > section:nth-of-type(odd)` in index.css paints every tinted one.
+         Two places setting the same background is how they drift apart. */
+      className="spec-band w-full px-[clamp(1.25rem,4.5vw,4rem)] py-[clamp(2.5rem,6vw,5rem)]"
     >
       <div className="max-w-7xl mx-auto grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-10">
         {SPECS.map((s) => (

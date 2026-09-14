@@ -9,8 +9,11 @@ const styles = {
   heroSubText:
     "font-sans text-secondary text-[calc(clamp(1rem,1.6vw,1.3rem)*var(--type-scale,1))] leading-[1.55]",
 
+  // Up from clamp(2rem,5vw,3.5rem). A section head that opens a scene has to
+  // hold the top of a screen on its own; at the old size it read as a paragraph
+  // heading inside a document, which is what the page was before the scenes.
   sectionHeadText:
-    "font-display font-bold text-white-100 tracking-[-0.02em] leading-[1.02] text-[calc(clamp(2rem,5vw,3.5rem)*var(--type-scale,1))]",
+    "font-display font-bold text-white-100 tracking-[-0.025em] leading-[0.98] text-[calc(clamp(2.5rem,6.5vw,4.75rem)*var(--type-scale,1))]",
   // The section meta is DATA — "4 roles · since 2020" — so it keeps the mono.
   // Tracking is down from `tracking-label`: wide-tracked uppercase mono is the
   // texture that made the page read as a terminal, and at this size the

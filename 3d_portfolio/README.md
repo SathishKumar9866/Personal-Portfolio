@@ -17,6 +17,8 @@ Read this table instead of the code.
 | The four big numbers under the hero | `src/components/SpecBand.jsx` — all derived, none typed |
 | Colour, spacing, type tokens | `src/index.css`, then `tailwind.config.js` |
 | A whole section's layout | `src/components/<Section>.jsx` |
+| Which scenes are tinted, and the scene rhythm | `main > section:nth-of-type(odd)` in `src/index.css` |
+| The stage every section sits on | `src/hoc/SectionWrapper.jsx` |
 | The order of sections | `src/App.tsx` |
 | Which items appear in the nav and the right rail | `navLinks` in `src/constants/index.js` |
 | The hero backdrop network, in 3D | `src/components/NeuralField3D.js` |
