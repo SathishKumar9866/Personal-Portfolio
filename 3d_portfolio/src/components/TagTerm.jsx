@@ -24,6 +24,86 @@ import { glossary } from "../constants";
  * which is the one accent pairing that clears AA (4.68:1); accent-ink text on
  * the fill would not.
  */
+/**
+ * The marks arrive in their own chunk, fetched once on first mount.
+ *
+ * 25 brand paths are 32kB of path data — +17kB gzipped on an entry bundle of
+ * 33kB, which is a 50% tax on first paint for decoration. Loaded this way the
+ * entry bundle does not move at all and the glyphs appear a frame or two after
+ * the chips they sit in, below the fold, where nobody is looking yet.
+ *
+ * One module-level cache and one subscriber set, not a context: every chip on
+ * the page wants the same object, and a provider around them would re-render
+ * all 33 of them to deliver it.
+ */
+let ICONS = null;
+let started = false;
+const waiting = new Set();
+
+const loadIcons = () => {
+  if (started) return;
+  started = true;
+  import("./toolIcons")
+    .then((m) => {
+      ICONS = m.TOOL_ICONS;
+      waiting.forEach((fn) => fn());
+      waiting.clear();
+    })
+    // A failed chunk means no glyphs, which is exactly how a term with no mark
+    // already renders. Nothing else on the page depends on it.
+    .catch(() => {});
+};
+
+const useToolIcons = () => {
+  const [, bump] = useState(0);
+  useEffect(() => {
+    if (ICONS) return undefined;
+    const fn = () => bump((n) => n + 1);
+    waiting.add(fn);
+    loadIcons();
+    return () => waiting.delete(fn);
+  }, []);
+  return ICONS;
+};
+
+/**
+ * The tool's own mark, when one exists.
+ *
+ * `aria-hidden`, always: the name is right beside it in text, so announcing the
+ * logo as well would read the same thing twice. It is scaled in `em` so it
+ * tracks the chip's font size, including the reader's own text-size control,
+ * and painted in `currentColor` rather than the brand hex — thirty coloured
+ * logos in one section is the badge wall this section's first sentence argues
+ * against ("Not a badge collection"). At 0.85 opacity the glyph sits under the
+ * word rather than competing with it.
+ *
+ * A term with no mark renders nothing here. Concepts (RAG, MLOps, Evaluation)
+ * have no logo, and two of the products named — Azure, DynamoDB, S3, Pinecone —
+ * are simply absent from simple-icons. A stand-in glyph would be decoration
+ * pretending to be information.
+ */
+const ToolGlyph = ({ name }) => {
+  const icons = useToolIcons();
+  const icon = icons?.[name];
+  if (!icon) return null;
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+      /* `inline-block` with a baseline nudge, NOT a flex child. The chip is
+         `inline-flex` on a phone and plain `inline` from 640px up, so a `gap`
+         works at one size and silently does nothing at the other — which
+         dropped every glyph onto its own line above the word. A margin and a
+         baseline offset behave the same in both. */
+      className="inline-block align-[-0.16em] mr-1.5 h-[1.05em] w-[1.05em] opacity-90"
+      fill="currentColor"
+    >
+      <path d={icon.p} />
+    </svg>
+  );
+};
+
 const CHIP =
   "font-mono text-chip px-2 rounded border transition-colors " +
   // Touch first: 44x44 minimum on phones, back to the dense rhythm from sm up.
@@ -140,6 +220,7 @@ const TagTerm = ({ name, plain = false, primary = false, flow = false }) => {
     const hint = entry?.full ?? entry?.def ?? undefined;
     return (
       <span className={`${CHIP} border-line text-secondary`} title={hint}>
+        <ToolGlyph name={name} />
         {name}
       </span>
     );
@@ -185,6 +266,10 @@ const TagTerm = ({ name, plain = false, primary = false, flow = false }) => {
         aria-label={`${name}: what is this?`}
         className={`${shape} group ${tone[open ? "active" : "idle"]}`}
       >
+        {/* Outside the underlined span on purpose: the dotted rule marks the
+            WORD as definable, and carrying it under the logo too would say the
+            mark is part of the term. */}
+        <ToolGlyph name={name} />
         <span
           className={`border-b border-current pb-px ${
             open ? "border-solid" : "border-dotted group-hover:border-solid group-focus-visible:border-solid"
