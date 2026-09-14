@@ -523,8 +523,43 @@ main > section:nth-of-type(odd) {
   }
 }
 
+/* A card that has been covered by the next one steps back.
+   -------------------------------------------------------------------------
+   The transition is what this is for. A sticky deck always slices the card
+   underneath — the incoming card's top edge travels up through the outgoing
+   card's text — and no geometry avoids it. Dimming the covered card turns that
+   half-line from broken text into a card behind, which is what it actually is.
+
+   `opacity` and `transform`, both compositor properties, so four cards changing
+   state during a scroll cost no layout and no paint. */
+li[data-covered="true"] > .role-card {
+  transform: scale(0.988);
+}
+
+/* The CONTENT recedes, the card does not.
+   Fading the whole card was the first attempt and it was worse than the
+   problem: the ground went translucent with everything else, so two covered
+   cards showed each other's text through their own backgrounds and the stack
+   read as a printing fault. Only the card's own children are dimmed, which
+   leaves the fill opaque and the pile legible. */
+li[data-covered="true"] > .role-card > * {
+  opacity: 0.38;
+}
+
+.role-card > * {
+  transition: opacity 0.4s ease;
+}
+
+li[data-covered="true"] > .role-card[data-current="true"]::before {
+  /* The travelling light belongs to the card being read. Left running under a
+     covered card it is the brightest thing in a stack of dimmed ones. */
+  opacity: 0;
+}
+
 .role-card {
   position: relative;
+  transform-origin: 50% 0;
+  transition: transform 0.4s ease;
   background: rgb(var(--c-tertiary));
   border: 1px solid rgb(var(--c-line));
   /* The same three-layer elevation the other cards use: a tight contact

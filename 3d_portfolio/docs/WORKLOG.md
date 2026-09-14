@@ -1,5 +1,60 @@
 # Worklog
 
+## 2026-09-14: the deck transition stops looking like broken text
+
+Two complaints about Experience, both fair: the transition looked wrong, and
+the section felt crowded. They turned out to be the same fault seen twice.
+
+### What was actually happening
+
+A sticky deck always slices the card underneath. The incoming card's top edge
+travels up across the outgoing card's text, so for most of a transition the
+reader sees **half a sentence cut by a horizontal line** — at 1440 the screenshot
+showed "entities from customer-support feedback, automating request triage"
+chopped through the middle. No geometry avoids that; it is what a deck does.
+
+And with three near-identical cards on screen — same ground, same border, same
+weight — nothing said which one was being read. That is the crowding.
+
+### The fix is one idea: only one card is lit
+
+A covered card now dims its content to 0.38 and scales to 0.988. The sliced
+half-line stops reading as broken text and starts reading as a card behind,
+which is what it is. Spacing changed with it: the step between pinned tops went
+**10px → 16px** so the stack shows four edges rather than one thick border, and
+the gap between cards went **20px → 36px** so each has room to be read before
+the next arrives.
+
+### Two things got worse before they got better
+
+**Fading the whole card was wrong.** With `opacity` on `.role-card` the GROUND
+went translucent too, so two covered cards showed each other's text through
+their own backgrounds — "AI Engineer" printed over "Machine Learning Engineer".
+It looked like a rendering fault, which is worse than the problem being solved.
+Only the card's own children are dimmed now; the fill stays opaque.
+
+**The scroll handler thrashed layout.** It wrote `dataset.covered` on one card
+and then measured the next, which invalidates style and forces a synchronous
+layout on every iteration. Measured: 29.8fps, every frame over 20ms, **50ms
+worst case** while scrolling the deck. Reading all four tops and heights first
+and writing afterwards took the worst case to **33.6ms**.
+
+### The measurement that mattered, and the one that did not
+
+| | fps | worst frame |
+| --- | --- | --- |
+| Live site, no covered logic (baseline) | 29.8 | 49.1ms |
+| This branch, interleaved reads and writes | 29.8 | 50.0ms |
+| This branch, batched | 30.0 | **33.6ms** |
+
+**The 30fps is the browser session, not the page** — the baseline hits the same
+ceiling with none of this code in it. The only honest comparison here is the
+worst frame, and it is better than the site currently serves.
+
+State through a scroll, at 1440: `0:dim 1:LIT` → `0:dim 1:dim 2:LIT` →
+`0:dim 1:dim 2:dim 3:LIT`. On a phone the deck is static, no card is ever marked
+covered, and nothing dims.
+
 ## 2026-09-14: Overview stops asserting and starts proving
 
 Overview was the weakest scene on a page whose whole argument is evidence: a
