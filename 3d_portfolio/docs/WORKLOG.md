@@ -1,5 +1,57 @@
 # Worklog
 
+## 2026-09-14: the clock adds the reader's own row, from their device
+
+The hero rule read `CDT · EDT · IST` — his zone and two courtesies. It now also
+reads the visitor's: `CDT 14:58 · EDT 15:58 · IST 01:28 · YOU 21:58 +7h`.
+
+**The useful half is the `+7h`, not the clock.** A reader in Berlin knows what
+time it is in Berlin. What decides whether they send the email now or in the
+morning is that the person they are writing to is seven hours behind them, and
+that is the number the row exists to print.
+
+**Nothing leaves the machine.** `Intl.DateTimeFormat().resolvedOptions().timeZone`
+is a setting the browser already hands every page: no geolocation prompt, no IP
+lookup, no request, nothing recorded. The zone id ("Europe/Berlin") is a region
+rather than an address, and it is the only place name involved.
+
+### Three cases, all of them real
+
+| Case | What renders |
+| --- | --- |
+| Reader in another zone | a fourth entry, `YOU 21:58 +7h`, with the zone id and the difference in its `title` |
+| Reader already in one of his three | no fourth entry. That row is marked `· yours` instead, which is the more interesting fact |
+| Browser will not say, or reports a zone `Intl` then rejects | nothing at all. A clock labelled with a guessed zone is worse than no clock |
+
+### The offset is computed, not looked up
+
+There is no API that hands you the UTC offset of an arbitrary IANA zone. The one
+here formats the same instant twice — once in the zone, once in UTC — and
+subtracts, using `Date.UTC` on the parts rather than parsing a localised string.
+That makes it correct across a daylight-saving boundary by construction, which a
+table of offsets is not: India to US Central is **+11:30h in January and +10:30h
+in July**, and both are pinned by a test.
+
+`npm test` now runs two files and 12 tests. The new five are named for what they
+catch: an offset that is right in July and wrong in January, a zone that should
+never move, the delta a reader actually reads, the formatting (`−6h` with a real
+minus sign, `−5:45h` because the Chatham Islands exist), and the fact that the
+place shown is a zone rather than an address.
+
+### Measured on the built bundle
+
+Simulated by overriding `resolvedOptions` at document start, which is the only
+honest way to see another reader's page:
+
+| Reader | Line |
+| --- | --- |
+| Europe/Berlin | `CDT 14:58 · EDT 15:58 · IST 01:28 · YOU 21:58 +7h`, 382px in the hero rule |
+| Australia/Adelaide | `… · YOU 05:28 +14:30h` — a half-hour zone, and the arithmetic holds |
+| America/Chicago (this machine) | `CDT 14:57 · yours · EDT 15:57 · IST 01:27`, no fourth entry |
+
+At 390px the footer copy wraps to two lines and `scrollWidth === clientWidth`;
+the hero copy is `hidden sm:inline` and unaffected.
+
 ## 2026-09-14: the hero field becomes actual 3D, and pays for itself in a chunk nobody else fetches
 
 `NeuralField`'s header used to carry the argument against this, in the file

@@ -4,15 +4,54 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-14
-**Branch:** `feat/ask-this-page`, PR open, work item `COD-183`. Before it,
-`main`: `feat/stack-pipeline-redesign` squash-merged as #17, then
-`fix/navbar-return-hysteresis`, then the repo audit as #19.
-**Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
+**Branch:** `feat/visitor-local-time`, PR open, work item `COD-187`. Four
+squash-merged to `main` before it, in this order: `#20` the ask box (`COD-183`),
+`#21` the headline (`COD-184`), `#22` the Experience deck (`COD-185`), `#23` the
+WebGL field (`COD-186`). All four branches deleted.
+**Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions.
+**Not yet deployed.** Five changes are on `main` and the site is still serving
+the build from before them. `gh workflow run deploy.yml -R SathishKumarAI/SathishKumarAI.github.io`
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
-There is no 3D in it; the folder name survives from a version that had it.
+**There IS 3D in it now** — `NeuralField3D.js`, three.js, hero only, desktop
+only, in a chunk nobody else fetches. The folder name stopped being a joke on
+2026-09-14.
 
 ## Where it stopped
+
+Five changes in one session, four of them already on `main`. In the order a
+reader meets them on the page:
+
+| | What it does now | Where |
+| --- | --- | --- |
+| **Headline** | `From model development to real-world impact.` The evidence promise moved down into the lede, which still carries it | `Hero.jsx` |
+| **Hero field** | real 3D. Input layer on the contact dock, output on the section rail, hidden layers 170px toward the reader and 190px away; the pointer moves the camera | `NeuralField3D.js` |
+| **Clock** | his three zones plus the reader's own, and the hour difference between them, read from the device | `LiveClock.jsx`, `utils/localzone.js` |
+| **`Ctrl K`** | an ask box. Retrieves passages from the page's own `constants` and cites the section they live in | `CommandPalette.jsx`, `utils/answer.js` |
+| **Experience** | four roles as a sticky deck; each card holds the screen until the next slides over it | `Experience.jsx`, `.role-sticky` in `index.css` |
+
+**The traps these set, all five worth carrying:**
+
+1. **One `overflow-x: hidden` anywhere above the roles turns the deck back into
+   a flat list**, silently. An overflow container is also a scroll container and
+   `sticky` resolves against the nearest one. Second standing reason not to
+   reach for that property.
+2. **three.js must stay unnamed in `manualChunks`.** Naming it puts 131kB
+   gzipped into the entry graph — the phones the dynamic import exists to spare.
+3. **Import three by name, never as a namespace.** `await import("three")`
+   defeats tree-shaking: 191.81kB against 131.13kB for ten named classes.
+4. **A canvas keeps its first context for life.** `NeuralField` must not take a
+   2D context until it knows it is drawing, and the 3D module makes its own
+   element, because `forceContextLoss()` poisons one for the next renderer.
+5. **A comment that quotes copy goes stale when the copy does.** Changing the
+   headline invalidated two component headers that justified themselves by
+   quoting it.
+
+**`npm test` exists now** and CI runs it between lint and build: 12 tests in two
+files, `utils/answer.test.mjs` and `utils/localzone.test.mjs`. Before this
+session there were none.
+
+### The five, in detail
 
 **The page answers questions now, and quotes itself doing it.** `Ctrl K` was a
 list of twelve commands; it is an ask box with commands under it. Type three
@@ -259,12 +298,12 @@ branch deleted, then six commits on `main`, all shipped and deployed:
 
 ## The next action
 
-`feat/ask-this-page` is in review; squash-merge it, delete the branch, move
-`COD-183` to Done. Then, in order:
+Merge `feat/visitor-local-time` (`COD-187`), then **deploy** — `main` is five
+changes ahead of what the live site serves. Then, in order:
 
 0. **Say the ask box exists somewhere other than the nav chip.** A reader who
    never looks at the top right never finds it. The hero is the obvious place
-   and was deliberately left alone in this increment.
+   and was deliberately left alone.
 
 1. **Safari and Firefox, and a real iPhone.** Chrome is the only browser this
    site has ever been opened in, by anyone, on purpose or otherwise. A real

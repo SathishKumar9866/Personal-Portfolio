@@ -42,6 +42,7 @@ Thirty files. Read the table, not the directory.
 | Scroll-reveal timing used across the page | `Reveal.jsx` |
 | The scroll hairline at the top | `ScrollProgress.jsx` |
 | Clock zones and their labels | `LiveClock.jsx` |
+| The reader's own zone, and the hour difference | `../utils/localzone.js` |
 | The colophon line | `Footer.jsx` |
 
 ## What owns what
