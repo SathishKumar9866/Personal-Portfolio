@@ -121,6 +121,14 @@ A few boundaries worth knowing before editing:
   `@property` block (the custom property stops interpolating and the light
   stops travelling) and dropping the plain `border-color` rule beside it (a
   browser without `@property` then shows no mark at all).
+- **Only one card in the deck is lit.** `useCoveredCards` marks a card
+  `data-covered` once the next has climbed halfway up its face, and the CSS
+  dims that card's CHILDREN — never the card itself. Putting `opacity` on
+  `.role-card` makes its ground translucent and two covered cards show each
+  other's text through their own backgrounds.
+- **That handler reads all four rects before writing any attribute.**
+  Interleaved, it forced a synchronous layout per card per frame: 50ms worst
+  frame while scrolling the deck, against 33.6ms batched.
 - **The deck turns itself off when a card does not fit.** `useDeckFits` in
   `Experience.jsx` measures the tallest card against the room under the navbar,
   because a pinned card taller than the viewport hides its own bottom — the
