@@ -3,15 +3,55 @@
 Written when work stopped. Read this first on return, then `3d_portfolio/README.md`
 for the change-to-file table.
 
-**Last touched:** 2026-09-12
-**Branch:** `main`. `feat/stack-pipeline-redesign` squash-merged as #17 and is
-gone; `fix/navbar-return-hysteresis` merged after it.
+**Last touched:** 2026-09-14
+**Branch:** `feat/ask-this-page`, PR open, work item `COD-183`. Before it,
+`main`: `feat/stack-pipeline-redesign` squash-merged as #17, then
+`fix/navbar-return-hysteresis`, then the repo audit as #19.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions
 **Working tree:** clean
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
 There is no 3D in it; the folder name survives from a version that had it.
 
 ## Where it stopped
+
+**The page answers questions now, and quotes itself doing it.** `Ctrl K` was a
+list of twelve commands; it is an ask box with commands under it. Type three
+characters or more and `src/utils/answer.js` searches the same `constants` the
+sections render — 19 documents, one per role, degree, stack group, project, plus
+the availability card — and returns the passages that match, each with the
+section it lives in. `↵` jumps there.
+
+**Nothing is generated. No key, no backend, no model call.** Every answer is a
+verbatim string from `constants`, and a test asserts it by checking each
+returned passage against the joined source. The reason is the page's own
+argument: every number here is measured or absent, and a generated sentence
+about the work is the one sentence nobody measured. It is also why this works on
+Pages with the network off.
+
+**Two ranking faults, both found by asking it a real question.** "What did he
+ship on Azure" first answered with a project that does not mention Azure: long
+documents win on volume, fixed with BM25's length normalisation. It was *still*
+wrong, because the page says "Shipped" and a reader types "ship" — fixed with a
+four-line stemmer (`-ing`, `-ed`, `-s`, then one doubled consonant, so `shipp`
+→ `ship`). `test_ship_matches_shipped` exists because the first fix alone did
+not hold.
+
+**The trap here: an alias table is not optional.** `hire`, `job`, `available`
+appear nowhere on this site, so "are you available for hire" retrieved *nothing*
+until six aliases were added. The words a reader arrives with are not the words
+the page uses, and a headline feature that returns nothing on the first natural
+question is worse than no feature.
+
+Measured on the running page: Azure question returns the AdvanSoft role first;
+`↵` scrolls 0 → 1669 with the section top at 88px and restores `body.overflow`;
+arrow keys cross from answers into commands in one key set; two characters show
+commands only; nonsense returns one row offering the email; 390×844 DPR 3 fits
+the panel at 358×490 with no sideways scroll; Preprint renders the passage at
+`rgb(17,17,19)` on white. Bundle 100.22 → 103.84 kB raw, 32.77 → 34.18 kB
+gzipped, both builds made in the same tree. `npm test` is 7/7 and CI runs it
+between lint and build.
+
+**Before this branch, on `main`:**
 
 **The nav bar no longer returns on a twitch.** It hides on a deliberate
 downward push (12px in one frame) and used to come back on 2px of upward
@@ -219,7 +259,12 @@ branch deleted, then six commits on `main`, all shipped and deployed:
 
 ## The next action
 
-Nothing is blocking. The highest-value things left, in order:
+`feat/ask-this-page` is in review; squash-merge it, delete the branch, move
+`COD-183` to Done. Then, in order:
+
+0. **Say the ask box exists somewhere other than the nav chip.** A reader who
+   never looks at the top right never finds it. The hero is the obvious place
+   and was deliberately left alone in this increment.
 
 1. **Safari and Firefox, and a real iPhone.** Chrome is the only browser this
    site has ever been opened in, by anyone, on purpose or otherwise. A real
