@@ -1,5 +1,66 @@
 # Worklog
 
+## 2026-09-14: the current role's edge becomes a light that runs around it
+
+The mark on the role being read was a static hairline across the top. It marked
+the card but said nothing about it, and on a deck where the top edge is often
+the only part showing, a fixed bar reads as a divider between cards rather than
+as a property of one.
+
+It now travels the whole perimeter. The vocabulary is already on the page: the
+hero field sends activations along its edges, the availability dot pulses, the
+deploy diagram runs a signal through its pipeline. One more thing that moves the
+way the rest moves.
+
+### How it is drawn
+
+`::before` covers the card and paints a conic gradient — transparent for most of
+the turn, accent for about 25 degrees of it with a short fade behind. A
+two-layer mask subtracts the padding box from the border box, leaving a 1.5px
+ring: the gradient shows at the edge and nowhere else. `@property --role-edge`
+declares the angle as an `<angle>` so it interpolates instead of being treated
+as an unknown string, and animating that angle is what makes the lit part move.
+
+**The fallback is a separate declaration on purpose.** A browser without
+`@property` treats `var(--role-edge)` as invalid, throws the whole
+conic-gradient away, and paints no ring at all — so the tinted border lives on
+the element itself, where that browser still sees which role is current.
+
+### Two passes, because the first was wrong
+
+| Was | Why it failed | Now |
+| --- | --- | --- |
+| Base border `accent / 0.45` | The whole card read as selected, or as an error state, and the travelling segment had nothing to be brighter than | `accent / 0.18`: the base says "marked", the light says where you are looking |
+| An even 88° of gradient over 6s | Looked like a pattern rotating rather than a light travelling; in a still it looked static | A ~25° lit core with a long fade behind it |
+| 4.5s a turn | Quick enough to pull the eye off the sentence beside it, which is the opposite of what a state marker is for | **9s a turn.** Findable, not attention-seeking: a reader notices it once and reads on |
+
+### Only the current role, and only on a desktop
+
+Four cards each running a light is a decoration; one card running it is a state.
+
+The animation stops below 640px — not from a measurement but from the house
+rule every other ambient effect here already follows (the hero field, the career
+diagrams, the token stream all stop on a phone), because a loop that runs
+forever is battery spent on decoration. On a phone the lit core parks near the
+top-left corner, which is where the old static hairline began.
+
+### Measured
+
+Desktop 1440x900, with the WebGL field also running: **60fps, zero frames over
+20ms, worst 16.9ms**. At 9s a turn the angle advances **10 degrees per 250ms,
+evenly** (9.33 / 10.66 / 10.67 / 9.33 / …, against 10.0 expected), which is the
+measurement that matters: it is smooth, not stuttering.
+
+**A note on measuring this, because the first numbers were wrong.** An rAF
+sampler reports ~30fps for the ring when nothing else on screen animates — and
+1fps when nothing animates at all. That is the browser declining to produce
+frames it does not need, not jank. The hero's WebGL field stops when the hero
+scrolls away, so by the time the Experience section is on screen there is
+nothing else driving the clock. Even angle deltas are the honest check. Phone at 390x844: `animation-name: none`, the angle does not move
+between two reads 1.2s apart. Checked in Slate and in Paper; on white the quiet
+base nearly disappears and the travelling light does the marking, which is the
+right way round for a light theme.
+
 ## 2026-09-14: a UI sweep, and the two things it found
 
 Every interactive surface checked against the running build: 113 interactive

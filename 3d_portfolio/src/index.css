@@ -508,26 +508,109 @@ main:focus:not(:focus-visible) {
     0 24px 48px -28px rgb(var(--c-strong) / 0.65);
 }
 
-/* The role being read now. One accent hairline along the top edge, drawn on the
-   card rather than beside it, because in a stack the top edge is the part that
-   stays visible once the next card covers the rest.
+/* The role being read now: a light that runs around the card's edge.
+   -------------------------------------------------------------------------
+   It was a static hairline across the top. That marked the card but said
+   nothing about it, and on a stack where the top edge is often the only part
+   showing, a fixed bar is easy to read as a divider between cards rather than
+   as a property of one.
 
-   Inset by the corner radius, and that is the whole point of the rule. A bar at
-   `inset: 0 0 auto 0` runs straight through both rounded corners and out to the
-   square edge of the box, so it reads as a stray line laid ON the card instead
-   of part of its edge. Starting and ending where the straight part of the edge
-   does is what makes it look drawn rather than dropped. */
+   A travelling segment says "this one is live" the way the rest of the page
+   already says it: the hero field sends activations along its edges, the
+   availability dot pulses, and the deploy diagram runs a signal through the
+   pipeline. One vocabulary.
+
+   HOW IT IS DRAWN, because it is not obvious. `::before` covers the whole card
+   and paints a conic gradient — transparent for most of the turn, accent for
+   about 70 degrees of it. A two-layer mask then subtracts the padding box from
+   the border box, leaving only a 1.5px ring: the gradient is visible at the
+   edge and nowhere else. Animating the gradient's own `from` angle, declared
+   with `@property` so it interpolates as an angle rather than as an unknown
+   string, is what makes the lit part travel.
+
+   Only the CURRENT role gets it. Four cards each running a light would be a
+   decoration; one card running it is a state. */
+@property --role-edge {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* The fallback, and the reason it is a separate declaration: a browser without
+   `@property` treats `var(--role-edge)` as invalid, throws the whole
+   conic-gradient away and paints no ring at all. This tinted border is on the
+   element itself, so that browser still sees which role is current. */
+.role-card[data-current="true"] {
+  /* 0.18, not 0.45. At the louder value the whole card read as selected — or
+     worse, as an error state — and the travelling segment had nothing to be
+     brighter than. The base says "this one is marked"; the light says which
+     part of the edge you are looking at. */
+  border-color: rgb(var(--c-accent) / 0.18);
+}
+
 .role-card[data-current="true"]::before {
   content: "";
   position: absolute;
-  inset: 0 1rem auto 1rem;
-  height: 2px;
-  border-radius: 0 0 2px 2px;
-  background: linear-gradient(
-    90deg,
-    rgb(var(--c-accent)),
-    rgb(var(--c-accent) / 0)
+  /* -1px: the ring sits ON the 1px border rather than inside it, or the card
+     reads as having two edges a pixel apart. */
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  /* A short head and a long tail, which is what makes it read as travelling
+     rather than as a pattern rotating: 88 degrees of even gradient looked
+     static in a still and nearly static in motion. The lit core is ~24deg. */
+  background: conic-gradient(
+    from var(--role-edge),
+    rgb(var(--c-accent) / 0) 0deg,
+    rgb(var(--c-accent) / 0) 262deg,
+    rgb(var(--c-accent) / 0.35) 300deg,
+    rgb(var(--c-accent)) 336deg,
+    rgb(var(--c-accent)) 348deg,
+    rgb(var(--c-accent) / 0) 356deg,
+    rgb(var(--c-accent) / 0) 360deg
   );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Desktop only, and by the house rule rather than by a measurement: every
+   ambient animation in this repo stops below 1024px or 640px — the hero field,
+   the career diagrams, the token stream — because a loop that runs forever is
+   battery spent on decoration, and a phone is where that matters. On a phone
+   the lit segment simply parks at its start angle, which puts the lit core just
+   anticlockwise of the top-left corner — a mark in the same place the old static
+   hairline began. */
+@media (min-width: 640px) {
+  .role-card[data-current="true"]::before {
+    /* 9s a turn. At 4.5s the light was quick enough to pull the eye away from
+       the sentence beside it, which is the opposite of what a state marker is
+       for: it should be findable, not attention-seeking. At 9s a reader
+       notices it once, understands it, and reads on. */
+    animation: role-edge 9s linear infinite;
+  }
+}
+
+@keyframes role-edge {
+  to {
+    --role-edge: 360deg;
+  }
+}
+
+/* Reduced motion keeps the ring and stops the travelling. Belt and braces: the
+   global reduced-motion reset near the top of this file already forces
+   `animation-duration: 0.001ms !important` on everything, which lands the angle
+   on its end value; this rule states the intent where the effect is defined. */
+@media (prefers-reduced-motion: reduce) {
+  .role-card[data-current="true"]::before {
+    animation: none;
+  }
 }
 
 .stack-card {
