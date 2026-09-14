@@ -4,11 +4,11 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-14
-**Branch:** `fix/deck-fits-short-windows`, PR open, work item `COD-188`. Five
-squash-merged to `main` before it, in this order: `#20` the ask box (`COD-183`),
-`#21` the headline (`COD-184`), `#22` the Experience deck (`COD-185`), `#23` the
-WebGL field (`COD-186`), `#24` the reader's own clock (`COD-187`). All five
-branches deleted.
+**Branch:** `feat/paper-default`, PR open. Ten squash-merged to `main` this
+session, in order: `#20` ask box, `#21` headline, `#22` Experience deck, `#23`
+WebGL field, `#24` reader's clock, `#25` UI-sweep fixes, `#26` role-edge light,
+`#27` tool logos, `#28` concept marks, `#29` campaign opening, `#30` scenes.
+All branches deleted.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions.
 **Not yet deployed.** Five changes are on `main` and the site is still serving
 the build from before them. `gh workflow run deploy.yml -R SathishKumarAI/SathishKumarAI.github.io`
@@ -20,12 +20,22 @@ only, in a chunk nobody else fetches. The folder name stopped being a joke on
 
 ## Where it stopped
 
-Five changes in one session, then a UI sweep that found two faults in them and
-fixed both. In the order a reader meets them on the page:
+Eleven changes in one session. The last four are a deliberate direction: the
+page is being staged as a **campaign** — BMW rather than Sprite or Google —
+after the owner asked for it, with copy cut to campaign length. Two acts of that
+are on `main`; three are not built yet (see "The next action").
+
+**Paper is now the default palette for a first-time reader**, whatever the
+device prefers. That overrules `prefers-color-scheme` on purpose: the reader who
+lands here cold is usually a recruiter on a work laptop in daylight.
+
+In the order a reader meets them on the page:
 
 | | What it does now | Where |
 | --- | --- | --- |
-| **Headline** | `From model development to real-world impact.` The evidence promise moved down into the lede, which still carries it | `Hero.jsx` |
+| **Headline** | `From model development to real-world impact.`, and the lede is now three claims against accent rules rather than a 38-word paragraph | `Hero.jsx` |
+| **Spec band** | four derived numbers at 112px under the hero: 04 roles, 06 systems, 33 tools, CDT | `SpecBand.jsx` |
+| **Scenes** | every other section paints a full-bleed ground with hairline edges; section heads went 56px → 76px | `SectionWrapper.jsx`, `main > section:nth-of-type(odd)` in `index.css` |
 | **Hero field** | real 3D. Input layer on the contact dock, output on the section rail, hidden layers 170px toward the reader and 190px away; the pointer moves the camera | `NeuralField3D.js` |
 | **Clock** | his three zones plus the reader's own, and the hour difference between them, read from the device | `LiveClock.jsx`, `utils/localzone.js` |
 | **`Ctrl K`** | an ask box. Retrieves passages from the page's own `constants` and cites the section they live in | `CommandPalette.jsx`, `utils/answer.js` |
@@ -314,27 +324,21 @@ branch deleted, then six commits on `main`, all shipped and deployed:
 
 ## The next action
 
-Merge `fix/deck-fits-short-windows` (`COD-188`), then **deploy** — `main` is six
-changes ahead of what the live site serves. Then, in order:
+The site is deployed and `main` is what it serves. What is left, in order:
 
-0. **Say the ask box exists somewhere other than the nav chip.** A reader who
-   never looks at the top right never finds it. The hero is the obvious place
-   and was deliberately left alone.
-
-1. **Safari and Firefox, and a real iPhone.** Chrome is the only browser this
-   site has ever been opened in, by anyone, on purpose or otherwise. A real
-   Android phone was checked on 2026-09-12 and found a flicker that nine
-   emulated viewports had missed, which is the whole argument for doing the
-   other two. The hide-on-scroll handler still clamps scroll position for iOS
-   rubber-banding and that code has never executed on an iPhone.
-2. **Per-project detail pages** (P1/L): problem, approach, result, and the line
-   about what made it hard. The deepest-value thing left for a recruiter who
-   clicks in.
-3. **Prerendering** (P1/L), if AI-crawler visibility matters more than it does
-   today. GPTBot and friends see only the `<noscript>` block; `llms.txt` is the
-   deliberate answer and covers the content, but the HTML is empty to them.
-4. **Decide about the 23 unprotected private repos** — GitHub Pro, or accept it.
-   See `docs/REPO-SECURITY.md`.
+1. **Act 3 of the campaign: projects as product pages.** Full-bleed cover art,
+   a spec row under it, the diagram as hero rather than thumbnail. **Capped by
+   the missing screenshots** — a campaign page for software normally leads with
+   the product, and this repo has never had one.
+2. **Act 4: scroll choreography.** Pinned scenes and type that arrives as you
+   enter one. The Experience deck is the pattern; generalising it is the work.
+3. **Act 5: a persistent CTA.** One "open to roles" bar that follows the reader
+   instead of a single button in the hero.
+4. **Safari, Firefox, and a real iPhone.** Still true, and now more so: the
+   scenes use `color-mix`, the role edge uses `@property`, and neither has ever
+   been opened outside Chrome.
+5. **Per-project detail pages** (P1/L), and **prerendering** (P1/L) if AI-crawler
+   visibility starts mattering more than it does today.
 
 Blocked on the owner rather than on work: project screenshots, real metric
 numbers for the covers (do not invent them), testimonials, and the Vercel deploy

@@ -50,11 +50,11 @@ export const profile = {
  */
 export const themes = [
   { id: "dark", label: "Slate", scheme: "dark", bar: "#0F2228", accent: "#FF4E3A",
-    note: "The default. Deep navy, easy on a long scroll." },
+    note: "Deep navy, easy on a long scroll." },
   { id: "ink", label: "Ink", scheme: "dark", bar: "#0B0D10", accent: "#FF5A42",
     note: "Near-black and cool, the highest contrast here. For a dark desktop." },
   { id: "light", label: "Paper", scheme: "light", bar: "#FFFFFF", accent: "#FF3621",
-    note: "Warm white. The default light." },
+    note: "The default. Warm white, and what a first-time reader gets." },
   { id: "sepia", label: "Manuscript", scheme: "light", bar: "#F7F2E8", accent: "#BD4426",
     note: "Warm, low blue, gentle. Built for reading rather than scanning." },
   { id: "clean", label: "Clarity", scheme: "light", bar: "#FFFFFF", accent: "#D62D19",

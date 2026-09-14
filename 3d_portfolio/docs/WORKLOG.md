@@ -1,5 +1,33 @@
 # Worklog
 
+## 2026-09-14: Paper is the default, for everyone
+
+The boot script used to follow `prefers-color-scheme` — dark devices got Slate,
+light devices got Paper. A first-time reader now gets **Paper whatever their
+device prefers**. A reader who chooses another palette keeps it, as before.
+
+**This is the more considerate default being deliberately overruled, and the
+reason is who lands here.** The first-time reader of this page is usually a
+recruiter or a hiring manager on a work laptop in daylight, and the page should
+arrive as a document rather than as a terminal. Dark is one click away and the
+choice is remembered from then on.
+
+**One theme-color tag, not a pair.** The head carried two, keyed to
+`prefers-color-scheme`, and the boot script only ever rewrote the first. With
+Paper as the default that left a dark-scheme phone painting a navy browser bar
+above a white page — a seam across the top of exactly the devices the pair was
+meant to help. There is now a single tag, which the boot script rewrites to
+whichever palette is actually in use.
+
+The `themes` registry notes moved with it: Slate is "Deep navy, easy on a long
+scroll" and Paper is "The default. Warm white, and what a first-time reader
+gets." A registry that still called Slate the default would be a comment
+disagreeing with the code.
+
+Verified with `localStorage.theme` cleared: `data-theme="light"`,
+`data-scheme="light"`, body `rgb(255,255,255)`, one `theme-color` tag at
+`#FFFFFF` with no media attribute.
+
 ## 2026-09-14: sections become scenes
 
 Act two of the campaign direction. The page was one continuous document with
