@@ -1,5 +1,47 @@
 # Worklog
 
+## 2026-09-14: the six category colours become one ramp
+
+The Stack colours were six unrelated hues — steel blue, teal, terracotta,
+mauve, olive, periwinkle — in no order, on a page that otherwise holds to a
+single lava accent. Six hues with no relationship between them is what made the
+section look unconsidered beside the rest of the page.
+
+They are now **one sweep from cool to warm**, ending a step away from
+`--c-accent`.
+
+### It is not decoration, it is the claim the section already makes
+
+The rail above the cards runs from `RAW DATA` to `RUNNING PRODUCT`, and the
+intro says the six groups sit in order along that path. The colour now moves
+along it too: blue at the raw end, warming through gold and amber, landing on
+the brand red at **Backend & apps — the group that ships**. The rail finally
+looks like the sentence above it.
+
+| | Dark | Light |
+| --- | --- | --- |
+| Data engineering | `122 152 186` | `46 96 140` |
+| Data science | `126 172 166` | `34 112 108` |
+| LLM / RAG | `198 176 118` | `132 108 40` |
+| Computer vision | `214 150 104` | `158 98 44` |
+| MLOps & infra | `220 118 92` | `168 74 50` |
+| Backend & apps | `228 96 76` | `176 42 30` |
+
+### The trap this sets, and it is a real one
+
+**Order now matters more than the individual values.** Reordering `stackGroups`
+without reordering these leaves a ramp that climbs and then jumps back — which
+is worse than six arbitrary hues, because it looks like a bug rather than a
+choice. The comment in `index.css` says so where someone would be editing.
+
+### Measured
+
+The stage numerals take these colours, so they had to clear AA as text. On the
+light ground: **6.63, 5.83, 5.05, 4.96, 5.69, 6.57** — the weakest is Computer
+vision at 4.96, above the 4.5 line, and they are 26px anyway. Dots, numerals,
+rail segments and the card's cursor glow all read the same token, so the ramp
+is one edit rather than four.
+
 ## 2026-09-14: the deck transition stops looking like broken text
 
 Two complaints about Experience, both fair: the transition looked wrong, and

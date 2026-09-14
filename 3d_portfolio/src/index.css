@@ -21,21 +21,41 @@
    category dots, and the project-cover canvas, which is the same dark ground in
    every theme by design. A theme may override any of it. */
 :root[data-scheme="light"] {
-  --c-cat-data: 82 106 130;
-  --c-cat-science: 64 116 110;
-  --c-cat-llm: 166 92 66;
-  --c-cat-vision: 122 92 138;
-  --c-cat-mlops: 108 116 66;
-  --c-cat-backend: 92 100 148;
+  /* The six categories are a RAMP, not a set. See the note above the dark
+     values for why; these are the same sweep at the contrast a white ground
+     needs. */
+  --c-cat-data: 46 96 140;
+  --c-cat-science: 34 112 108;
+  --c-cat-llm: 132 108 40;
+  --c-cat-vision: 158 98 44;
+  --c-cat-mlops: 168 74 50;
+  --c-cat-backend: 176 42 30;
 }
 
 :root[data-scheme="dark"] {
-  --c-cat-data: 132 160 186;
-  --c-cat-science: 120 174 166;
-  --c-cat-llm: 206 138 110;
-  --c-cat-vision: 176 146 190;
-  --c-cat-mlops: 164 174 114;
-  --c-cat-backend: 146 154 204;
+  /* THE SIX CATEGORY COLOURS ARE ONE RAMP, COOL TO WARM.
+     -----------------------------------------------------------------------
+     They were six unrelated hues — steel blue, teal, terracotta, mauve, olive,
+     periwinkle — in no order, on a page that otherwise holds to a single lava
+     accent. Six hues with no relationship is what made the section look
+     unconsidered next to the rest.
+
+     They now run one sweep from cool to warm, ending a step away from
+     `--c-accent`. That is not decoration: the rail above the cards is a PATH
+     from raw data to a running product, and the colour now moves along it. The
+     last group, Backend & apps — the one that ships — lands on the brand
+     colour.
+
+     Order matters more than the individual values here. Reordering
+     `stackGroups` without reordering these would leave a ramp that climbs and
+     then jumps back, which is worse than six arbitrary hues because it looks
+     like a mistake rather than a choice. */
+  --c-cat-data: 122 152 186;
+  --c-cat-science: 126 172 166;
+  --c-cat-llm: 198 176 118;
+  --c-cat-vision: 214 150 104;
+  --c-cat-mlops: 220 118 92;
+  --c-cat-backend: 228 96 76;
 }
 
 :root {
@@ -66,12 +86,13 @@
   /* Stack category scan-aid dots. Desaturated on purpose: six hues at full
      chroma is a rainbow, and the dot is there to let the eye find a category
      again, not to rank it. Decorative only, they carry no text, so no AA floor. */
-  --c-cat-data: 82 106 130;
-  --c-cat-science: 64 116 110;
-  --c-cat-llm: 166 92 66;
-  --c-cat-vision: 122 92 138;
-  --c-cat-mlops: 108 116 66;
-  --c-cat-backend: 92 100 148;
+  /* Same ramp as `[data-scheme="light"]`; see the note on the dark values. */
+  --c-cat-data: 46 96 140;
+  --c-cat-science: 34 112 108;
+  --c-cat-llm: 132 108 40;
+  --c-cat-vision: 158 98 44;
+  --c-cat-mlops: 168 74 50;
+  --c-cat-backend: 176 42 30;
 
   /* Primary tool chip: filled, inverted against the outline chips. Inverted
      rather than literally dark-on-light in both themes, because a dark fill on
@@ -97,12 +118,13 @@
   --c-canvas: 17 38 44; /* project covers: same in both themes, by design */
   --c-canvas-ink: 140 150 155; /* 5.20:1 on the canvas ground */
 
-  --c-cat-data: 132 160 186;
-  --c-cat-science: 120 174 166;
-  --c-cat-llm: 206 138 110;
-  --c-cat-vision: 176 146 190;
-  --c-cat-mlops: 164 174 114;
-  --c-cat-backend: 146 154 204;
+  /* Same ramp as `[data-scheme="dark"]`; see the note there. */
+  --c-cat-data: 122 152 186;
+  --c-cat-science: 126 172 166;
+  --c-cat-llm: 198 176 118;
+  --c-cat-vision: 214 150 104;
+  --c-cat-mlops: 220 118 92;
+  --c-cat-backend: 228 96 76;
 
   --c-chip-solid: 228 225 218;
   --c-chip-solid-ink: 15 34 40; /* 13.9:1 on the fill */
