@@ -93,6 +93,13 @@ A few boundaries worth knowing before editing:
   overflow propagates to the viewport instead of making a scroll container:
   `body { overflow-x: hidden }` is in `index.css` today and the deck works over
   it. Any element below those two is the hazard.
+- **The current role's edge is a masked conic gradient, not a border.**
+  `.role-card[data-current="true"]::before` in `index.css` paints a ring by
+  subtracting the padding box from the border box with a two-layer mask, and
+  animates `@property --role-edge`. Two things break it silently: removing the
+  `@property` block (the custom property stops interpolating and the light
+  stops travelling) and dropping the plain `border-color` rule beside it (a
+  browser without `@property` then shows no mark at all).
 - **The deck turns itself off when a card does not fit.** `useDeckFits` in
   `Experience.jsx` measures the tallest card against the room under the navbar,
   because a pinned card taller than the viewport hides its own bottom — the
