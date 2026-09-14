@@ -32,7 +32,24 @@ Verified after: at 1280x620 the deck is `sticky` at 100% and `static` at 140%;
 at 1440x900 it stays `sticky` at both, because 690px fits in 780px of room; and
 it comes back when the text size drops again.
 
-### 2. Half the `Ask ⌘K` chip lit up on hover
+### 2. One role card had three different right edges
+
+Reported by eye, then measured: inside a card 616px wide, the bullet list
+stopped at 544px — an old `max-w-[34rem]` — while the tool chips and the date
+line ran the full width. So the paragraph ended 71px short of everything around
+it and the chips read as overhanging the text.
+
+The cap was correct when it was written: a role was then a row on a timeline, in
+a 672px column with no padding of its own, and 34rem was the measure. Inside a
+padded card the card IS the measure, and it is now the only one: bullets, chips
+and dates all end at the same place, 1px inside the padding, at 1440, 768 and
+390, at 100% and 140%.
+
+The wider measure also took the hyphenation with it. Justification at 544px was
+breaking "analytics" into "analyt-ics" and "extract" into "ex-tract"; at 614px
+the same lines fit whole.
+
+### 3. Half the `Ask ⌘K` chip lit up on hover
 
 `hover:text-accent` on the button did not reach the `<span>` holding the
 shortcut, which kept its own `text-faint`. So hovering turned "Ask" red and left

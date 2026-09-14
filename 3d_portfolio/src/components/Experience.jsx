@@ -106,8 +106,14 @@ const Role = ({ role, index, trackIndex = null, stage = null, className = "", st
         edge, which reads as text running into the edge rather than as a tidy
         column. The academic audience this was asked for reads on a desktop,
         which is where it still applies. */}
+    {/* No measure cap on the list. `max-w-[34rem]` was written when a role was
+        a timeline row in a 672px column with no padding of its own; inside a
+        padded card it stopped the bullets 71px short of where the date line and
+        the tool chips end, so one card had three different right edges and the
+        chips read as overhanging the paragraph. The card's own width is the
+        measure now, and every row in it shares it. */}
     {role.points?.length > 0 && (
-      <ul className="mt-3 list-none max-w-[34rem] space-y-2">
+      <ul className="mt-3 list-none space-y-2">
         {role.points.map((point) => (
           <li key={point} className="relative pl-5 font-sans text-secondary text-prose leading-[1.6] md:text-justify md:hyphens-auto">
             {/* A rule, not a bullet glyph: the timeline already owns the round
@@ -123,7 +129,7 @@ const Role = ({ role, index, trackIndex = null, stage = null, className = "", st
     )}
 
     {!role.points?.length && role.summary && (
-      <p className="mt-3 font-sans text-secondary text-prose leading-[1.6] max-w-[34rem]">
+      <p className="mt-3 font-sans text-secondary text-prose leading-[1.6]">
         {role.summary}
       </p>
     )}
