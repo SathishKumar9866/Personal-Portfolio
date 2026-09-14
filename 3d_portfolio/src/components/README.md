@@ -23,6 +23,7 @@ Thirty files. Read the table, not the directory.
 | What a tech chip does on hover or click, and its two tiers | `TagTerm.jsx` |
 | Whether a tool shows its logo, and how big | `ToolGlyph` in `TagTerm.jsx` |
 | Which logos exist at all | `scripts/gen-tool-icons.mjs` -> `toolIcons.js` (generated) |
+| The mark for RAG, MLOps, Vision and the other ideas | `conceptIcons.js` (hand-drawn) |
 | The reader's own text-size control (A- / A+) | `FontSizeToggle.jsx` |
 | What collapses behind a disclosure on a phone | `MobileCollapse.jsx` |
 | The diagram in the margin beside each role | `CareerTrack.jsx` |
@@ -65,6 +66,13 @@ A few boundaries worth knowing before editing:
   structural rule reads). `CommandPalette` dispatches `set-theme` with an id
   rather than writing the attributes itself; when it wrote them directly the
   toggle desynced and needed two clicks.
+- **Two icon files, maintained in opposite ways.** `toolIcons.js` is generated
+  and must never be hand-edited; `conceptIcons.js` is hand-drawn and has no
+  generator. `glyphs.js` re-exports both, and that is the module `TagTerm`
+  imports lazily, so `npm run icons` can never overwrite the drawn set.
+- **Concept marks are strokes, brand marks are fills.** `ToolGlyph` switches on
+  `s: 1`. A stroke path rendered as a fill turns into a blob, and a silhouette
+  rendered as a stroke turns into an outline of itself.
 - **The tool logos are a generated file, not a dependency.** `simple-icons` is a
   devDependency; `npm run icons` writes the 25 marks this site names into
   `toolIcons.js`, and that module is what ships — in its own lazy chunk, because
