@@ -49,7 +49,17 @@ The wider measure also took the hyphenation with it. Justification at 544px was
 breaking "analytics" into "analyt-ics" and "extract" into "ex-tract"; at 614px
 the same lines fit whole.
 
-### 3. Half the `Ask ⌘K` chip lit up on hover
+### 3. The current-role hairline read as a stray line laid on the card
+
+The accent edge that marks the role being read was `inset: 0 0 auto 0` with
+`border-radius: inherit` — which on a 16px-radius card draws a straight 2px bar
+through both rounded corners and out to the square edge of the box. It looked
+like a line dropped on top of the card rather than part of its edge.
+
+Inset by the corner radius now, so it starts and ends where the straight part of
+the top edge does. Same cue, and it looks drawn rather than dropped.
+
+### 4. Half the `Ask ⌘K` chip lit up on hover
 
 `hover:text-accent` on the button did not reach the `<span>` holding the
 shortcut, which kept its own `text-faint`. So hovering turned "Ask" red and left
