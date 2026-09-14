@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { profile } from "../constants";
+import { profile, projects } from "../constants";
 import { fadeIn } from "../utils/motion";
 import { SectionWrapper } from "../hoc";
 import SectionHead from "./SectionHead";
@@ -52,6 +52,22 @@ const Portrait = () => (
  * Breadth is still on the page. It is in Stack, where it is specific, and in
  * Work, where it is demonstrated.
  */
+/**
+ * What the work does, and the project that proves each one.
+ *
+ * The claim is editorial; the PROOF is the project's own `outcome` string,
+ * resolved by name at module load. Nothing here is typed twice: rename a
+ * project in `constants` and the row disappears rather than printing a proof
+ * that no longer exists, which is the house rule — absent beats invented.
+ */
+const PRINCIPLES = [
+  { claim: "It runs where the data already is", name: "federated-yolov8-object-detection" },
+  { claim: "It shows the source it used", name: "ai-due-diligence-copilot" },
+  { claim: "You can try it in a minute, with no account", name: "pb-card-deck" },
+]
+  .map((p) => ({ ...p, project: projects.find((x) => x.name === p.name) }))
+  .filter((p) => p.project);
+
 const About = () => (
   <>
     {/* No meta line, deliberately: the first section sets no pattern for the
@@ -65,8 +81,16 @@ const About = () => (
     {/* max-w-5xl is the section's one measure. It used to be justified by the
         capability grid below it; the grid is gone and the measure stays,
         because it is what keeps the status card from overshooting the lede. */}
-    <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 sm:gap-10 md:grid-cols-[minmax(0,220px)_minmax(0,1fr)] md:items-start max-w-5xl">
-      <motion.div variants={fadeIn("right", "spring", 0.1, 0.7)} className="max-w-[220px]">
+    {/* Three columns from `lg`, two below it, one on a phone.
+        
+        The scene is 1425px wide and this block used to be capped at `max-w-5xl`
+        — so the section that opens the page left roughly 40% of its own stage
+        empty, which reads as an unfinished layout rather than as air. The
+        availability card moves to its own column at the width where there is
+        room for it, and the measure of the prose is unchanged: it is the
+        COLUMN that got narrower, not the line length. */}
+    <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 sm:gap-10 md:grid-cols-[minmax(0,240px)_minmax(0,1fr)] lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)_minmax(0,23rem)] md:items-start">
+      <motion.div variants={fadeIn("right", "spring", 0.1, 0.7)} className="max-w-[260px]">
         <Portrait />
       </motion.div>
 
@@ -82,14 +106,48 @@ const About = () => (
           className="font-serif text-secondary text-[calc(clamp(1.1rem,1.5vw,1.35rem)*var(--type-scale,1))] max-w-[40rem] leading-[1.65]"
         >
           I work across the full data-to-AI stack and care about the problem more
-          than the title. The work tends to run offline, ground its answers in real
-          sources, and be easy to try in a minute, because that is what makes it
-          worth building. Calm, disciplined, focused on what I can control.
+          than the title.
         </motion.p>
 
-        <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)}>
-          <Availability />
-        </motion.div>
+        {/* Three things the work does, each with the thing that proves it.
+            
+            This replaces two sentences. "The work tends to run offline, ground
+            its answers in real sources, and be easy to try in a minute" said
+            exactly what these three rows say — but said it as a promise, in a
+            section whose neighbours are all evidence. Every proof below is a
+            project's own `outcome` string, quoted, and the reader can go and
+            look at it.
+            
+            The other sentence was "Calm, disciplined, focused on what I can
+            control." It is the one line on the page that nothing can check, and
+            it is on about half the portfolios on the internet. */}
+        <motion.ul variants={fadeIn("", "", 0.15, 1)} className="list-none space-y-6 max-w-[40rem]">
+          {PRINCIPLES.map(({ claim, project }) => (
+            <li key={claim}>
+              <p className="flex items-baseline gap-3 font-sans font-medium text-white-100 text-[calc(clamp(1.02rem,1.3vw,1.18rem)*var(--type-scale,1))] leading-snug">
+                <span aria-hidden="true" className="relative top-[-0.3em] h-px w-5 shrink-0 bg-accent/70" />
+                {claim}
+              </p>
+              <p className="mt-1.5 pl-8 font-sans text-secondary text-body leading-[1.55]">
+                {project.outcome}
+              </p>
+              <a
+                href="#work"
+                className="mt-1 ml-8 inline-block font-mono text-label text-faint hover:text-accent transition-colors"
+              >
+                {project.name} ↓
+              </a>
+            </li>
+          ))}
+        </motion.ul>
+
+      </motion.div>
+
+      {/* Its own column from `lg`, still stacked under the prose below that.
+          The card is the one thing in this section a recruiter is looking for,
+          and in the stacked layout it sat 900px down the page. */}
+      <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="md:col-span-2 lg:col-span-1">
+        <Availability />
       </motion.div>
     </div>
   </>

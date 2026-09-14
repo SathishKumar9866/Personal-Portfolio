@@ -1,5 +1,53 @@
 # Worklog
 
+## 2026-09-14: Overview stops asserting and starts proving
+
+Overview was the weakest scene on a page whose whole argument is evidence: a
+portrait, three sentences of prose, and a status card 900px below the fold. Two
+of those sentences were claims with nothing behind them.
+
+### Two sentences became three claims with their proof attached
+
+| Was | Now |
+| --- | --- |
+| "The work tends to run offline, ground its answers in real sources, and be easy to try in a minute, because that is what makes it worth building." | Three rows: **It runs where the data already is** · **It shows the source it used** · **You can try it in a minute, with no account** — each followed by the `outcome` of the project that proves it, and a jump to it |
+| "Calm, disciplined, focused on what I can control." | Cut. It is the one line on the page nothing can check, and a version of it is on about half the portfolios on the internet |
+
+The proofs are not retyped. `PRINCIPLES` maps a claim to a project NAME and
+resolves it against `projects` at module load, so the row prints that project's
+own words:
+
+- *YOLOv8 detection trained federated: raw data never leaves the client.*
+- *Document Q&A that cites the exact source passage behind every answer.*
+- *Live mobile-first scorekeeper: no login, works offline after first load.*
+
+**A renamed project drops its row rather than printing a stale proof.** The
+`.filter((p) => p.project)` is the house rule in one line: absent beats
+invented.
+
+### The scene stopped leaving 40% of itself empty
+
+The block was capped at `max-w-5xl` inside a 1425px scene, so the section that
+opens the page used three fifths of its own stage. It is now three columns from
+`lg` — portrait, prose, availability card — two from `md`, one on a phone.
+
+**The measure of the prose did not change.** The COLUMN got narrower, not the
+line length, which is the distinction that keeps this from being a readability
+regression.
+
+| | Before | After |
+| --- | --- | --- |
+| Section height at 1440 | 1244px | **827px** (−33%) |
+| Availability card | ~900px down the page | beside the prose, visible on arrival |
+| Grid at 1440 | `240px + 1fr`, capped at 5xl | `260px + 572px + 368px` |
+
+### Measured
+
+1440: three columns as above, card 368px wide and intact at that width. 820:
+two columns, card spanning both at 731px. 390: one column, portrait 260px,
+claim rows 350px, `scrollWidth === clientWidth`. Checked in Paper and Slate.
+Lint 0, tests 12/12, build 0.
+
 ## 2026-09-14: Paper is the default, for everyone
 
 The boot script used to follow `prefers-color-scheme` — dark devices got Slate,
