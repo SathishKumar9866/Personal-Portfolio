@@ -4,80 +4,101 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-14
-**Branch:** `feat/paper-default`, PR open. Ten squash-merged to `main` this
-session, in order: `#20` ask box, `#21` headline, `#22` Experience deck, `#23`
-WebGL field, `#24` reader's clock, `#25` UI-sweep fixes, `#26` role-edge light,
-`#27` tool logos, `#28` concept marks, `#29` campaign opening, `#30` scenes.
-All branches deleted.
-**Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main` by Actions.
-**Not yet deployed.** Five changes are on `main` and the site is still serving
-the build from before them. `gh workflow run deploy.yml -R SathishKumarAI/SathishKumarAI.github.io`
-**Working tree:** clean
+**Branch:** `main`. Eighteen PRs squash-merged this session, every branch
+deleted, no PR open.
+**Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main`
+by Actions in the OTHER repo. **Deployed and verified**: the bundle hash the
+live site serves matches the one `main` builds.
+**Working tree:** clean.
 **The site is `3d_portfolio/`.** Everything else here is supporting material.
 **There IS 3D in it now** — `NeuralField3D.js`, three.js, hero only, desktop
-only, in a chunk nobody else fetches. The folder name stopped being a joke on
-2026-09-14.
+only, in a lazy chunk a phone never fetches. The folder name stopped being a
+joke on 2026-09-14.
 
 ## Where it stopped
 
-Eleven changes in one session. The last four are a deliberate direction: the
-page is being staged as a **campaign** — BMW rather than Sprite or Google —
-after the owner asked for it, with copy cut to campaign length. Two acts of that
-are on `main`; three are not built yet (see "The next action").
+Eighteen merges in one session. The through-line, after the owner asked for it:
+**the page is staged as a campaign — BMW rather than Sprite or Google** — with
+copy cut to campaign length. Two acts of that are built; three are not.
 
-**Paper is now the default palette for a first-time reader**, whatever the
-device prefers. That overrules `prefers-color-scheme` on purpose: the reader who
-lands here cold is usually a recruiter on a work laptop in daylight.
+### What a reader meets now, in order
 
-In the order a reader meets them on the page:
-
-| | What it does now | Where |
+| | What it does | Where |
 | --- | --- | --- |
-| **Headline** | `From model development to real-world impact.`, and the lede is now three claims against accent rules rather than a 38-word paragraph | `Hero.jsx` |
-| **Spec band** | four derived numbers at 112px under the hero: 04 roles, 06 systems, 33 tools, CDT | `SpecBand.jsx` |
-| **Scenes** | every other section paints a full-bleed ground with hairline edges; section heads went 56px → 76px | `SectionWrapper.jsx`, `main > section:nth-of-type(odd)` in `index.css` |
-| **Hero field** | real 3D. Input layer on the contact dock, output on the section rail, hidden layers 170px toward the reader and 190px away; the pointer moves the camera | `NeuralField3D.js` |
-| **Clock** | his three zones plus the reader's own, and the hour difference between them, read from the device | `LiveClock.jsx`, `utils/localzone.js` |
+| **Hero** | `From model development to real-world impact.` and three claims on accent rules, not a 38-word paragraph | `Hero.jsx` |
+| **Hero field** | real 3D: input layer on the contact dock, output on the section rail, hidden layers pushed forward and back. The pointer moves the camera | `NeuralField3D.js` |
+| **Spec band** | four derived numbers at 112px: `04 roles · 06 projects · 33 tools · CDT` | `SpecBand.jsx` |
+| **Clock** | his three zones plus the reader's own, and the hours between them, read from the device | `LiveClock.jsx`, `utils/localzone.js` |
 | **`Ctrl K`** | an ask box. Retrieves passages from the page's own `constants` and cites the section they live in | `CommandPalette.jsx`, `utils/answer.js` |
-| **Experience** | four roles as a sticky deck; each card holds the screen until the next slides over it | `Experience.jsx`, `.role-sticky` in `index.css` |
+| **Scenes** | every other section paints a full-bleed ground with hairline edges; heads at 76px | `SectionWrapper.jsx`, `main > section:nth-of-type(odd)` in `index.css` |
+| **About** | three claims, each with the project `outcome` that proves it and a jump to it | `About.jsx` |
+| **Roles** | a sticky deck; only the card being read is lit, the covered ones dim | `Experience.jsx` |
+| **Stack** | 25 brand logos and 16 drawn category marks; the six category colours are one cool-to-warm ramp along the pipeline | `TagTerm.jsx`, `toolIcons.js`, `conceptIcons.js` |
 
-**The sweep's two findings, both introduced the same day:**
+### Names, because two sections had two each
 
-- **A pinned role card taller than the screen hid its own bottom.** At 1280x620
-  with the text control at 140%, 192px of a card's bullets were unreachable:
-  sticky holds the card at the top while the reader scrolls past it.
-  `useDeckFits` now measures and drops to a plain list when a card will not fit.
-- **Half the `Ask` chip lit on hover** — `hover:text-accent` did not reach the
-  span holding the shortcut, so "Ask" went red and "Ctrl K" stayed grey.
+The nav said **About** over a section headed *Overview*, and **Work** over one
+headed *Projects* — and "Work" also collided with "Experience". Every nav label
+now equals its section heading:
 
-Everything else checked clean: 113 interactive elements, six palettes (no
-contrast failures), hover and focus states, reveal animations after a scrollbar
-jump, the palette's hostile inputs, the mobile menu, the copy buttons, both ends
-of the text-size control, and the console.
+    About · Roles · Stack · Projects · Contact
 
-**The traps these set, all five worth carrying:**
+`Experience` became **Roles** (what they are, and what the spec band counts);
+`#work` became `#projects`. Zero dangling anchors on the page.
 
-1. **One `overflow-x: hidden` on a wrapper above the roles turns the deck back
-   into a flat list**, silently. An overflow container is also a scroll
-   container and `sticky` resolves against the nearest one. `html`/`body` are
-   the exception — their overflow propagates to the viewport, which is why the
-   deck works over the `body { overflow-x: hidden }` already in `index.css`.
-2. **three.js must stay unnamed in `manualChunks`.** Naming it puts 131kB
-   gzipped into the entry graph — the phones the dynamic import exists to spare.
-3. **Import three by name, never as a namespace.** `await import("three")`
-   defeats tree-shaking: 191.81kB against 131.13kB for ten named classes.
-4. **A canvas keeps its first context for life.** `NeuralField` must not take a
+### Paper is the default palette
+
+For a first-time reader, whatever the device prefers. That overrules
+`prefers-color-scheme` deliberately: the reader who lands cold is usually a
+recruiter on a work laptop in daylight. Dark is one click and is remembered.
+
+### The traps this session set, all worth carrying
+
+1. **One `overflow-x: hidden` on a wrapper above the roles** turns the deck back
+   into a flat list, silently. `html`/`body` are the exception — their overflow
+   propagates to the viewport, which is why the deck works over the `body` rule
+   already in `index.css`.
+2. **three.js must stay unnamed in `manualChunks`**, or 131kB gzipped lands in
+   the entry graph. And **import it by name, never as a namespace**: the
+   namespace form defeats tree-shaking, 191.81kB against 131.13kB.
+3. **A canvas keeps its first context for life.** `NeuralField` must not take a
    2D context until it knows it is drawing, and the 3D module makes its own
    element, because `forceContextLoss()` poisons one for the next renderer.
-5. **A comment that quotes copy goes stale when the copy does.** Changing the
+4. **Never parse SVG path data with a regex.** Rounding coordinates destroyed
+   every mark using compact arc syntax — `01.5` is two arc flags and a number,
+   and Docker, MLflow and Kubernetes rendered blank while the build stayed green.
+5. **Dim a card's children, never the card.** `opacity` on `.role-card` makes
+   its ground translucent and two covered cards show each other's text.
+6. **Read every rect before writing any attribute.** The covered-card handler
+   interleaved them and forced a synchronous layout per card per frame: 50ms
+   worst frame against 33.6ms batched.
+7. **The Stack colours are a ramp now, so order matters more than the values.**
+   Reorder `stackGroups` without reordering them and it climbs then jumps back.
+8. **A comment that quotes copy goes stale when the copy does** — changing the
    headline invalidated two component headers that justified themselves by
    quoting it.
 
-**`npm test` exists now** and CI runs it between lint and build: 12 tests in two
-files, `utils/answer.test.mjs` and `utils/localzone.test.mjs`. Before this
-session there were none.
+### Checks that did not exist this morning
 
-### The five, in detail
+`npm test` is **20 checks across three files**, and CI runs it between lint and
+build:
+
+- `utils/answer.test.mjs` — the retrieval behind the ask box, including that
+  every passage is quoted rather than written, and that every cited section is a
+  real nav id.
+- `utils/localzone.test.mjs` — the timezone maths, including that India to US
+  Central is +11:30h in January and +10:30h in July.
+- `utils/llms-mirror.test.mjs` — **every employer, role, project, school, stack
+  group, primary tool and the email in `constants` must appear in `llms.txt`.**
+  Proved to fail against a copy with the Roles section deleted, which is the
+  regression that shipped: the crawler copy had listed no jobs at all, ever.
+
+### The earlier history, kept because the reasoning still applies
+
+Everything below this line predates today's session. The decisions it records —
+why the capability cards went, why the hero band measures its own slack, why the
+mobile menu is built the way it is — are still the reasons those things are the
+way they are.
 
 **The page answers questions now, and quotes itself doing it.** `Ctrl K` was a
 list of twelve commands; it is an ask box with commands under it. Type three
@@ -324,23 +345,24 @@ branch deleted, then six commits on `main`, all shipped and deployed:
 
 ## The next action
 
-The site is deployed and `main` is what it serves. What is left, in order:
+Nothing is blocking and nothing is half-applied. In order of value:
 
-1. **Act 3 of the campaign: projects as product pages.** Full-bleed cover art,
-   a spec row under it, the diagram as hero rather than thumbnail. **Capped by
-   the missing screenshots** — a campaign page for software normally leads with
-   the product, and this repo has never had one.
-2. **Act 4: scroll choreography.** Pinned scenes and type that arrives as you
-   enter one. The Experience deck is the pattern; generalising it is the work.
-3. **Act 5: a persistent CTA.** One "open to roles" bar that follows the reader
-   instead of a single button in the hero.
-4. **Safari, Firefox, and a real iPhone.** Still true, and now more so: the
-   scenes use `color-mix`, the role edge uses `@property`, and neither has ever
-   been opened outside Chrome.
-5. **Per-project detail pages** (P1/L), and **prerendering** (P1/L) if AI-crawler
-   visibility starts mattering more than it does today.
+1. **Safari, Firefox and a real iPhone.** This is now the highest-value thing
+   left and it has moved from "prudent" to "overdue": the live site leans on
+   `color-mix` for every scene, `@property` for the role-edge light, WebGL for
+   the hero and `position: sticky` for the deck, and **none of it has ever been
+   opened outside Chrome**.
+2. **Act 3 of the campaign: projects as product pages.** Full-bleed cover art, a
+   spec row, the diagram as hero rather than thumbnail. **Capped by the missing
+   screenshots** — a software campaign normally leads with the product.
+3. **Act 4: scroll choreography.** Pinned scenes, type that arrives as you enter
+   one. The Roles deck is the pattern; generalising it is the work.
+4. **Act 5: a persistent CTA** — one "open to roles" bar that follows the reader
+   rather than a single button in the hero.
+5. **Per-project detail pages** (P1/L), and **prerendering** (P1/L) if
+   AI-crawler visibility starts to matter more than it does today.
 
-Blocked on the owner rather than on work: project screenshots, real metric
+Blocked on the owner rather than on work: **project screenshots**, real metric
 numbers for the covers (do not invent them), testimonials, and the Vercel deploy
 (`vercel login` is interactive).
 
