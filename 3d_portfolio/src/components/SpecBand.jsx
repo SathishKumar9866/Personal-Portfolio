@@ -34,7 +34,10 @@ const pad = (n) => String(n).padStart(2, "0");
 
 const SPECS = [
   { value: pad(ROLES.length), label: "roles", note: FIRST_YEAR ? `since ${FIRST_YEAR}` : null },
-  { value: pad(projects.length), label: "systems built", note: `${LIVE} live` },
+  // "projects", not "systems built": the section is called Projects and the nav
+  // is called Projects, and a third name for the same six things is a third
+  // thing for a reader to reconcile.
+  { value: pad(projects.length), label: "projects", note: `${LIVE} live` },
   { value: pad(TOOLS), label: "tools", note: `${stackGroups.length} areas` },
   // Not a count, and that is the point of the fourth cell: the three numbers
   // say what exists, and this says how to reach the person who made it.

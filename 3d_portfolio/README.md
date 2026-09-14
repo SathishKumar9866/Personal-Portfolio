@@ -85,7 +85,7 @@ hard-coded in a component is a bug.**
 | `status` | current role, employer, what he is open to, where |
 | `experience` | roles, newest first |
 | `education` | degrees, newest first |
-| `projects` | the Work section |
+| `projects` | the Projects section |
 | `stackGroups` | the six Stack groups, each with its dot colour and its primary tools |
 | `glossary` | plain-English definitions behind the dotted terms |
 | `navLinks` | drives the navbar, the right rail, and the command palette |
@@ -378,7 +378,7 @@ desktop's content.
 | Navigation | Hamburger, full-screen menu | Inline links |
 | Stack | Six labelled rows of bare terms, no boxes | Six cards, each with its description |
 | Stack intro copy | Hidden | Shown |
-| Role points, project copy | Behind a disclosure (Work, Experience) | All inline |
+| Role points, project copy | Behind a disclosure (Projects, Experience) | All inline |
 | Role points alignment | Ragged right | Justified, auto-hyphenated |
 | Collaborate band | In the menu | Closing section after Contact |
 | Agent note | Two sentences plus `/llms.txt` | Six-point grid |
@@ -390,7 +390,7 @@ Three rules behind that table:
 
 1. **A disclosure has to save more than it costs.** Hiding something behind a
    44px summary row is only worth it if what is hidden is meaningfully taller.
-   It is in Work (852px) and Experience (1,189px). It was not in About, where
+   It is in Projects (852px) and Experience (1,189px). It was not in About, where
    six two-line descriptions bought 114px for six taps — and those cards have
    since been deleted outright, which is the cheaper answer to the same
    question.
@@ -522,7 +522,7 @@ Each of these cost real time to find. They are written down so they cost it once
   threshold**, and `intersectionRatio` is capped at
   `viewportHeight / elementHeight`. A section taller than ~4x the viewport can
   never satisfy `amount: 0.25`, so it stays at the `hidden` variant forever. The
-  Work section is ~3800px and was invisible on every phone. Use `amount: "some"`.
+  Projects section is ~3800px and was invisible on every phone. Use `amount: "some"`.
 - **A Tailwind config change needs a dev-server restart.** New color tokens
   produce no utilities until then, so the dev server can serve an older palette
   while every production build is correct. If a `text-*` class computes to the
