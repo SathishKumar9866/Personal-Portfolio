@@ -1,5 +1,66 @@
 # Worklog
 
+## 2026-09-14: the hero field becomes actual 3D, and pays for itself in a chunk nobody else fetches
+
+`NeuralField`'s header used to carry the argument against this, in the file
+itself: *"Deliberately NOT a 3D engine. three.js plus a renderer is ~150kB gzip
+against a ~115kB bundle."* The number was right. The decision was reversed
+deliberately, by the owner, after being shown it — so the work was to make the
+reversal cost what it should and no more.
+
+**What it draws is the same claim, with the thing 2D could not give it.** The
+input layer still sits on the real contact dock and the output layer on the real
+section rail, coordinates from `getBoundingClientRect()` rather than invented,
+and both planes are at z = 0. The two hidden layers are pushed 170px toward the
+reader and 190px away, so the network is a volume between two fixed columns of
+the interface instead of a lattice behind it. The pointer moves the camera, not
+the scene — moving the scene would slide the input layer off the dock it is
+anchored to, which is the one thing the drawing promises.
+
+### Who pays, and the proof they do not
+
+| Reader | What is fetched |
+| --- | --- |
+| Desktop, motion allowed, WebGL available | `NeuralField3D` chunk: **522.79 kB raw, 131.13 kB gzipped** |
+| Phone, or any viewport under 1024px | nothing — verified in the network panel |
+| `prefers-reduced-motion: reduce` | nothing — verified with `matchMedia` forced at document start |
+| No WebGL context available | nothing: the probe creates a real context and throws it away, because a browser can expose the constructor and still refuse |
+
+The entry bundle moved **100.22 → 101.62 kB raw, 32.77 → 33.42 kB gzipped**.
+Everyone pays 0.65 kB gzipped for the decision; only the readers who get the
+scene pay for the scene.
+
+### Three things that had to be got right, each found by getting them wrong
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `vendor` chunk jumped to 193.49 kB gzipped and shipped to phones | `manualChunks` swept every `node_modules` id into `vendor`, including three, and `vendor` is in the entry graph | `vite.config.ts` returns `undefined` for three, leaving it in the chunk Rollup builds for the dynamic import |
+| The lazy chunk was still 191.81 kB gzipped | `await import("three")` yields a namespace object, and a namespace has to carry every export — no tree-shaking | Ten named imports at module top. 191.81 → 131.13 kB gzipped; loaders, the animation system, audio and XR all dropped |
+| Blank field, `THREE.WebGLRenderer: Cannot read properties of null (reading 'precision')` | The 3D module borrowed the canvas React renders, and `forceContextLoss()` on teardown poisons a canvas for the next renderer — React's development double-mount hits this on first load | The 3D module creates its own canvas. `NeuralField` also stopped calling `getContext("2d")` at mount, because that is permanent and would have denied WebGL a context before it loaded |
+
+### Two judgement calls
+
+**Fully connected was the first version and it was wrong.** An MLP is fully
+connected, so the first build drew 110 edges — and at any opacity where one edge
+is visible, 110 of them read as a mesh laid over the headline. The repo's
+standing rule is that ambient work must not cross text. Each node now reaches
+the two nodes opposite it in the next layer: 36 edges, still unmistakably a
+network, and the type is left alone.
+
+**The layer labels are DOM text, not geometry.** Text in WebGL means a canvas
+texture per string or a font atlas, which is more machinery than four words
+justify. As DOM they also scale with the reader's own text-size control. The 2D
+field's rule stands unchanged: an unlabelled lattice is just lines moving.
+
+### Measured
+
+60 fps flat over 90 frames at 1440×900 (16.67ms average, 17ms worst). Theme
+changes repaint the materials through a `MutationObserver` on `data-theme` —
+checked in Manuscript, where the nodes and edges take the light palette's
+`--c-line-strong` and the activations the Cornell-ish accent. The loop stops when
+the hero scrolls away and when the tab is hidden; the field fades with the same
+scroll rule the 2D one used, because a backdrop that follows the reader into
+Experience is wallpaper competing with text.
 ## 2026-09-14: the four roles become a deck that holds still
 
 The Experience timeline showed all four roles at once: a rail, four dots, four

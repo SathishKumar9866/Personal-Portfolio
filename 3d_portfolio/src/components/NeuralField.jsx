@@ -15,8 +15,13 @@ import { useEffect, useRef } from "react";
  * lives separately, in the one section where tokens mean something
  * (TokenStream.jsx): a backdrop that follows the reader everywhere is wallpaper.
  *
- * Deliberately NOT a 3D engine. three.js plus a renderer is ~150kB gzip against
- * a ~115kB bundle; this is one 2D canvas and a few hundred lines.
+ * This file is now the FALLBACK, and the `NeuralField3D` module is the field a
+ * desktop reader actually sees. The line that used to sit here — "deliberately
+ * NOT a 3D engine, three.js plus a renderer is ~150kB gzip against a ~115kB
+ * bundle" — was true, is still true as a number, and was overruled on purpose
+ * by the owner after being shown it. What did not change is who pays: this 2D
+ * canvas is what runs for reduced motion and for a browser with no WebGL, and
+ * below 1024px neither one runs at all.
  *
  * Cheap by construction:
  *  - one rAF loop for the whole page, not one per effect
@@ -67,7 +72,14 @@ const NeuralField = () => {
   useEffect(() => {
     const c = ref.current;
     if (!c) return;
-    const ctx = c.getContext("2d");
+    /**
+     * Deliberately NOT fetched here. `getContext("2d")` is permanent: once a
+     * canvas has a 2D context it can never hand out a WebGL one, so asking for
+     * it at mount would break the 3D field for everyone before it had a chance
+     * to load. It is taken in `start()`, which only runs when this file is the
+     * one drawing.
+     */
+    let ctx = null;
     const root = document.documentElement;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -136,6 +148,9 @@ const NeuralField = () => {
     };
 
     const draw = () => {
+      // A frame can still be in flight when the 3D module takes over, and this
+      // canvas then has no 2D context at all.
+      if (!ctx) return;
       const ink = token(root, "--c-line-strong", 1);
       const accent = token(root, "--c-accent", 1);
 
@@ -251,12 +266,18 @@ const NeuralField = () => {
       raf = 0;
       poll = 0;
       signals = [];
+      if (!ctx) return; // never drew: the 3D field has the canvas
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, c.width, c.height);
     };
 
     const start = () => {
+      // Handed off? The 3D module owns the canvas from that point on. This
+      // returns BEFORE `resize()`, which would otherwise reset the WebGL
+      // drawing buffer out from under the renderer on every window resize.
+      if (handed) return;
       if (!wide.matches) return stop();
+      ctx ??= c.getContext("2d");
       resize();
       layers = readLayers();
       if (reduced) {
@@ -270,6 +291,51 @@ const NeuralField = () => {
       if (!poll) poll = setInterval(() => { layers = readLayers(); }, 500);
     };
 
+    /**
+     * Who draws this canvas. WebGL gets it when there is a pointer-driven
+     * desktop to spend it on and the reader has not asked for less motion;
+     * everything else keeps the 2D loop below, which is why this file did not
+     * shrink when the 3D one arrived.
+     *
+     * The support probe is a real context, created and thrown away: a browser
+     * can advertise the `WebGL2RenderingContext` constructor and still refuse
+     * to hand out a context (blocklisted driver, software rendering disabled,
+     * too many live contexts on the page).
+     */
+    const canUseWebGL = () => {
+      try {
+        const probe = document.createElement("canvas").getContext("webgl2");
+        probe?.getExtension("WEBGL_lose_context")?.loseContext();
+        return Boolean(probe);
+      } catch {
+        return false;
+      }
+    };
+
+    let handed = false;
+    let dispose3d = null;
+    let cancelled = false;
+
+    if (wide.matches && !reduced && canUseWebGL()) {
+      handed = true;
+      c.style.display = "none"; // the 3D module brings its own canvas
+      // A separate chunk: a phone, a reduced-motion reader and a browser with
+      // no WebGL never fetch it. If it fails to load — offline, a blocked CDN,
+      // a GL context lost at creation — the 2D field takes the canvas back
+      // rather than the hero losing its backdrop.
+      import("./NeuralField3D")
+        .then((m) => (cancelled ? null : m.start()))
+        .then((d) => {
+          if (cancelled) { d?.(); return; }
+          dispose3d = d;
+        })
+        .catch(() => {
+          handed = false;
+          c.style.display = "";
+          if (!cancelled) start();
+        });
+    }
+
     start();
 
     const onResize = () => start();
@@ -277,6 +343,8 @@ const NeuralField = () => {
     wide.addEventListener("change", start);
 
     return () => {
+      cancelled = true;
+      dispose3d?.();
       stop();
       window.removeEventListener("resize", onResize);
       wide.removeEventListener("change", start);
