@@ -23,6 +23,7 @@ Read this table instead of the code.
 | The token wave in Stack | `src/components/TokenStream.jsx` |
 | A project's cover drawing | the drawing functions at the top of `src/components/Works.jsx` |
 | What a tech chip explains | `glossary` in `src/constants/index.js` |
+| Which tools show a logo, and which slug each uses | `MAP` in `scripts/gen-tool-icons.mjs`, then `npm run icons` |
 | Which tools get the filled chip | `primary` per group in `stackGroups` |
 | A Stack category's colour | `dot` AND `tint` per group in `stackGroups` — same colour, two forms — token in `src/index.css` |
 | The Stack pipeline rail, card glow, stage numerals | `src/components/Tech.jsx`, `.stack-card` / `.stack-seg` in `src/index.css` |
@@ -46,7 +47,8 @@ npm install
 npm run dev        # http://localhost:5173
 npm run build
 npm run lint
-npm test           # retrieval behind the ask box; plain node, no framework
+npm test           # retrieval and timezone logic; plain node, no framework
+npm run icons      # regenerate src/components/toolIcons.js from simple-icons
 ```
 
 **A `node_modules` installed under Linux will not work on Windows.** It has no

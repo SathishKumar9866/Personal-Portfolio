@@ -1,5 +1,70 @@
 # Worklog
 
+## 2026-09-14: the tools carry their own marks
+
+Every named tool that has a logo now shows it, inline before the word: 25 marks
+across Stack, the Experience cards and the project tags. 20 of the names get
+nothing, and that is the correct answer for most of them.
+
+### Where the paths come from, and why not by hand
+
+`simple-icons` is a **devDependency**, not a runtime one. `scripts/gen-tool-icons.mjs`
+reads it once, writes the marks this site actually names into
+`src/components/toolIcons.js`, and that generated module is what ships. 3,460
+marks in the dependency graph for 25 glyphs would be the wrong trade; so would
+hand-writing them, which is 25 chances to ship a logo that is subtly wrong from
+memory. The repo hand-writes four brand glyphs already, but those were checked
+by eye against the real marks.
+
+**The name-to-slug map is explicit.** A guess ("PySpark" → `pyspark`) matches
+the wrong project as often as the right one, and labelling PySpark with someone
+else's mark is worse than showing no mark.
+
+### 20 terms get no icon, three different reasons
+
+| Reason | Terms |
+| --- | --- |
+| It is a concept, not a product | RAG, MLOps, LLM, Vision, Evaluation, Embeddings, ETL pipelines, Exploratory analysis, Detection & tracking, Federated learning, Applied ML, Multimodal, Product, Live, SQL |
+| The mark is not in simple-icons | Pinecone |
+| The project removed the mark upstream over trademark policy | Azure, S3, DynamoDB — every Amazon and Microsoft logo is gone from the package |
+
+A stand-in glyph for any of these would be decoration pretending to be
+information, so they render as bare words. The rows are mixed and that is fine:
+chips already vary in width.
+
+### Lazy, because 25 logos are 17kB gzipped
+
+Loading them with the entry bundle took it from 33.4kB to 50.7kB gzipped — a
+52% tax on first paint for decoration. They now arrive in their own chunk,
+fetched once on the first chip's mount, with one module-level cache and a
+subscriber set rather than a context (a provider around 33 chips re-renders all
+33 to deliver one object). **Entry bundle: 33.4 → 35.9kB gzipped**, and measured
+layout shift from the glyphs arriving is **CLS 0.0001**.
+
+### Two faults on the way, both found by looking at the page
+
+**A regex "optimisation" corrupted six marks.** Rounding coordinates to two
+decimals with `/\d*\.\d+/g` cut 44kB of path data to 31.6kB — and silently
+destroyed every path using compact arc syntax. In `a5.5 5.5 0 01.5.5` the two
+arc FLAGS and the following coordinate are written `01.5`; a regex that sees a
+number there turns three tokens into one. Docker, MLflow and Kubernetes rendered
+blank or as a single dot. The generated file still parsed, the build still
+passed, lint said nothing. **Do not parse SVG path data with a regex.** The
+rounding is gone; in a lazy chunk the bytes cost first paint nothing anyway.
+
+**The glyphs first rendered above the words, not beside them.** The chip is
+`inline-flex` on a phone and plain `inline` from 640px up — so the `gap-1.5`
+that positioned the mark worked at one size and did nothing at the other, and
+every chip became two lines tall. An `inline-block` glyph with `mr-1.5` and a
+`-0.16em` baseline nudge behaves the same in both.
+
+### Measured
+
+33 Stack chips, 23 with a mark, every chip a uniform 25px tall on a desktop and
+44px on a phone; bounding boxes on the rendered paths run 15–24px of ink in a
+24px box, which is the check that a mark is really drawn rather than parsed.
+Slate and Paper, 1440 and 390. `npm run lint` 0, `npm test` 12/12, `npm run
+build` 0.
 ## 2026-09-14: the current role's edge becomes a light that runs around it
 
 The mark on the role being read was a static hairline across the top. It marked

@@ -21,6 +21,8 @@ Thirty files. Read the table, not the directory.
 | Right edge: section markers | `SideRail.jsx` |
 | Left edge: contact icons | `ContactRail.jsx` |
 | What a tech chip does on hover or click, and its two tiers | `TagTerm.jsx` |
+| Whether a tool shows its logo, and how big | `ToolGlyph` in `TagTerm.jsx` |
+| Which logos exist at all | `scripts/gen-tool-icons.mjs` -> `toolIcons.js` (generated) |
 | The reader's own text-size control (A- / A+) | `FontSizeToggle.jsx` |
 | What collapses behind a disclosure on a phone | `MobileCollapse.jsx` |
 | The diagram in the margin beside each role | `CareerTrack.jsx` |
@@ -63,6 +65,16 @@ A few boundaries worth knowing before editing:
   structural rule reads). `CommandPalette` dispatches `set-theme` with an id
   rather than writing the attributes itself; when it wrote them directly the
   toggle desynced and needed two clicks.
+- **The tool logos are a generated file, not a dependency.** `simple-icons` is a
+  devDependency; `npm run icons` writes the 25 marks this site names into
+  `toolIcons.js`, and that module is what ships — in its own lazy chunk, because
+  25 brand paths are 17kB gzipped against an entry bundle of 33kB.
+- **Never "optimise" an SVG path with a regex.** Rounding coordinates with
+  `/\d*\.\d+/g` corrupted every mark using compact arc syntax: in
+  `a5.5 5.5 0 01.5.5` the two arc FLAGS and the next number are written `01.5`,
+  and rounding turns three tokens into one. Docker, MLflow and Kubernetes
+  rendered blank or as a dot. The file parsed, the build passed, and only
+  looking at the page found it.
 - **`TagTerm` has two modes.** Default teaches (hover opens the definition);
   `plain` states (native tooltip only). Cards pass `plain`.
 - **`CommandPalette` shows two lists in one listbox.** Answers retrieved from
