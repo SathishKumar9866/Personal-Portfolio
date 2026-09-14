@@ -1,5 +1,39 @@
 # Worklog
 
+## 2026-09-14: the headline names the arc instead of the proof
+
+`I ship the model. And the evidence it works.` → `From model development to
+**real-world impact**.` The owner's call, and the reasoning against it is
+recorded here rather than argued twice: the new line is a category rather than a
+claim, it contains no verb he personally did, and it is close to a phrase that
+appears on a great many profiles. What it buys is order — a reader now learns
+what the work *is* before being told there is proof of it, and the old line led
+with the proof of a thing it had not yet named.
+
+**The promise did not leave the page, it moved one element down.** The lede still
+reads "results reported as measured, including the ones that came back
+negative", which is the same commitment in more specific words. Two component
+comments justified their existence by quoting the old headline — `About.jsx` on
+why six capability cards were deleted, `CodeCompletion.jsx` on why the hero band
+runs real code — and both now cite the lede, with the date the headline changed.
+A comment that quotes copy is a comment that goes stale when the copy does.
+
+**`real-world` is held together with `whitespace-nowrap`.** Without it the line
+broke at the hyphen and left `real-` hanging at the end of a line, which reads
+as a broken word rather than a compound one. The hero's existing comment warns
+that `nowrap` on a whole sentence overflowed the viewport at 140% text; ten
+characters cannot, and that was measured rather than assumed.
+
+| Viewport | Scale | h1 | Document |
+| --- | --- | --- | --- |
+| 1440×900 | 100% | 862×257, 3 lines | 1425 = client width |
+| 1440×900 | 140% | 1152×360, 3 lines | 1425 = client width |
+| 390×844 DPR 3 | 100% | 350×122 | 390 = client width |
+| 390×844 DPR 3 | 140% | 350×228 | 390 = client width |
+
+Three lines where there were two, and the phone still fits the code-completion
+band underneath: it measures its own slack rather than trusting a breakpoint,
+which is exactly the case it was built for.
 ## 2026-09-14: the page answers questions, out of its own words
 
 The hero has claimed "retrieval that cites the passage it used" since the

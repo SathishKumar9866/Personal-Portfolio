@@ -47,7 +47,7 @@ const Hero = () => {
           variants={rise}
           className={`${styles.heroHeadText} max-w-[18ch]`}
         >
-          I ship the model.{" "}
+          From model development{" "}
           {/* No `whitespace-nowrap` here. It kept the second sentence on one
               line, which held at 100% and overflowed the viewport by 11px once
               the reader's text-size control reached 140%: the span measured
@@ -55,7 +55,15 @@ const Hero = () => {
               that overflowed. `max-w-[18ch]` on the h1 already governs where
               this breaks. */}
           <span>
-            And the <span className="text-accent-ink">evidence it works</span>.
+            to{" "}
+            <span className="text-accent-ink">
+              {/* `real-world` is held together: a line break at the hyphen left
+                  "real-" hanging at the end of a line, which reads as a broken
+                  word rather than a compound one. One 10-character token, so it
+                  cannot be what overflows — measured at 390px and 140%. */}
+              <span className="whitespace-nowrap">real-world</span> impact
+            </span>
+            .
           </span>
         </motion.h1>
 
