@@ -253,7 +253,7 @@ export const TERM_HINT = "Dotted terms have a plain-English definition, tap one.
 
 /**
  * The nav is an index, so every entry says exactly what the section it points
- * at says. Two of them did not.
+ * at says. Three of them did not.
  *
  * "About" pointed at a section headed "Overview", and "Work" pointed at one
  * headed "Projects" — one section with two names each, which makes a reader
@@ -263,10 +263,17 @@ export const TERM_HINT = "Dotted terms have a plain-English definition, tap one.
  * a job is work, so the nav offered two words for the same idea and then used
  * neither of them as the heading. "Projects" is the specific word, and it is
  * what the section has always called itself.
+ *
+ * "Experience" went the same way afterwards. It is the conventional label and a
+ * recruiter scans for it, which is why it survived the first pass — but it is
+ * also a word that means everything and therefore nothing, and the section
+ * holds four jobs with dates. "Roles" is what they are, it is what the spec
+ * band already counts (`04 ROLES`), and the band now points at a section with
+ * the same name on it.
  */
 export const navLinks = [
   { id: "about", title: "About" },
-  { id: "experience", title: "Experience" },
+  { id: "roles", title: "Roles" },
   { id: "stack", title: "Stack" },
   { id: "projects", title: "Projects" },
   { id: "contact", title: "Contact" },

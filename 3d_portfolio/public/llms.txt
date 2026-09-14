@@ -40,6 +40,16 @@ one, change the other.
 - **MLOps & infra** — MLflow, Docker. Also GitHub Actions, Kubernetes, Helm.
 - **Backend & apps** — Python, FastAPI. Also Next.js, React, TypeScript, Tauri.
 
+## Roles
+
+Four roles since 2020, newest first. Mirrors the Roles section on the site: if
+you change one, change the other.
+
+- **AI Engineer**, AdvanSoft International, Inc, United States, Dec 2024 to present. Shipped a production RAG application over a Neo4j knowledge graph, with Cypher and embedding similarity driving retrieval for LLM-backed search and Q&A. Built the graph on Azure from retail product and catalog data. Owned the Data Factory pipelines feeding it.
+- **Machine Learning Engineer**, Integer IT Solutions, United States, May 2024 to Dec 2024. Python NLP workflows classifying intent, scoring sentiment and extracting entities from customer-support feedback. Trained and shipped the models with Azure ML and MLflow, served from FastAPI behind Docker on AKS, with retraining, drift and evaluation checks.
+- **Research Engineer**, Southern Illinois University, Carbondale IL, Jan 2022 to Dec 2023. Predictive models on behavioural and cognitive research data, computer-vision work with CNNs and YOLOv5, and federated learning trialled to train across separate datasets without moving them.
+- **Software Engineer**, DotIn Solutions, India, Jan 2020 to Dec 2021. AWS infrastructure with Terraform and Ansible, Jenkins CI/CD pipelines, EKS with Helm using blue-green and canary rollouts, and the ELK, Grafana and CloudWatch monitoring stack.
+
 ## Education
 
 - M.S. Computer Science, Southern Illinois University, Carbondale IL, 2024.

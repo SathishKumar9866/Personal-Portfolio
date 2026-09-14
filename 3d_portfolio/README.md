@@ -300,7 +300,7 @@ from one file. It exists because it once could not be: the page had twenty
 distinct sizes and 137 text elements at 10-11px, including every fact a recruiter
 came for. See `docs/TYPE-AUDIT.md` for the measurements and the judgement calls.
 
-Prose measure lands between 39 and 70 characters; the Experience bullets, the
+Prose measure lands between 39 and 70 characters; the Roles bullets, the
 most-read block on the page, sit at 70.
 
 **Every text pair passes WCAG AA in both themes**, measured on the running page
@@ -390,7 +390,7 @@ Three rules behind that table:
 
 1. **A disclosure has to save more than it costs.** Hiding something behind a
    44px summary row is only worth it if what is hidden is meaningfully taller.
-   It is in Projects (852px) and Experience (1,189px). It was not in About, where
+   It is in Projects (852px) and Roles (1,189px). It was not in About, where
    six two-line descriptions bought 114px for six taps — and those cards have
    since been deleted outright, which is the cheaper answer to the same
    question.

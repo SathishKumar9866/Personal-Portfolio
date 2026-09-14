@@ -109,7 +109,7 @@ an element still wins, because Tailwind emits `fontSize` before `lineHeight`.
 
 **Card prose is 15px, not 16px.** Raising prose to 16px inside a three-up card
 grid shortens the measure to about 37 characters, which reads choppy. 15px holds
-39-45 characters there. Only the Experience bullets, which have a full-width
+39-45 characters there. Only the Roles bullets, which have a full-width
 measure, get the full 16px: they land at 70 characters, the comfortable middle of
 the 45-75 range.
 

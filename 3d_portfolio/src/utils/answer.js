@@ -31,7 +31,7 @@ const DOCS = [
     text: `Open to ${status.openTo}. ${status.country}: ${status.arrangement}. Based in ${contact.timezone}. Reach him at ${contact.email}.`,
   },
   ...experience.map((r) => ({
-    section: "experience",
+    section: "roles",
     label: r.company,
     title: `${r.title}, ${r.company}`,
     text: `${r.points.join(" ")} Worked in ${r.location}, ${year(r.start)} to ${
@@ -39,7 +39,7 @@ const DOCS = [
     }. Tools: ${r.stack.join(", ")}.`,
   })),
   ...education.map((e) => ({
-    section: "experience",
+    section: "roles",
     label: e.school,
     title: e.degree,
     text: `${e.degree} at ${e.school}, ${e.location}, ${year(e.end)}.`,

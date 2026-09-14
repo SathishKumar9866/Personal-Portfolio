@@ -171,14 +171,20 @@ const Study = ({ item, index }) => (
 );
 
 // Derived, never typed: four because `experience` has four entries, 2020
-// because that is the earliest `start` in it. A hand-written "4 roles" is a
+// because that is the earliest `start` in it. A hand-written "4 employers" is a
 // number that goes wrong the next time a role is added.
+//
+// The eyebrow counts EMPLOYERS, not roles, since the heading became "Roles":
+// "4 roles · since 2020" over a heading reading Roles is the section saying its
+// own name twice and telling the reader nothing new. Employers is a different
+// fact — four jobs at four places rather than four titles at two.
 const ROLES = experience.filter((e) => e.title);
 const FIRST_YEAR = ROLES.map((e) => e.start)
   .filter(Boolean)
   .sort()[0]
   ?.slice(0, 4);
-const EXPERIENCE_META = `${ROLES.length} roles${FIRST_YEAR ? ` · since ${FIRST_YEAR}` : ""}`;
+const EMPLOYERS = new Set(ROLES.map((r) => r.company)).size;
+const ROLES_META = `${EMPLOYERS} employers${FIRST_YEAR ? ` · since ${FIRST_YEAR}` : ""}`;
 
 /**
  * Does the deck fit?
@@ -300,7 +306,7 @@ const Experience = () => {
 
   return (
   <>
-    <SectionHead title="Experience" meta={EXPERIENCE_META} />
+    <SectionHead title="Roles" meta={ROLES_META} />
 
     {/* A motion.div, not a div. Framer propagates variants down the motion
         tree, so a plain wrapper between the section's animated parent and this
@@ -366,4 +372,4 @@ const Experience = () => {
   );
 };
 
-export default SectionWrapper(Experience, "experience");
+export default SectionWrapper(Experience, "roles");
