@@ -589,7 +589,11 @@ main:focus:not(:focus-visible) {
    hairline began. */
 @media (min-width: 640px) {
   .role-card[data-current="true"]::before {
-    animation: role-edge 4.5s linear infinite;
+    /* 9s a turn. At 4.5s the light was quick enough to pull the eye away from
+       the sentence beside it, which is the opposite of what a state marker is
+       for: it should be findable, not attention-seeking. At 9s a reader
+       notices it once, understands it, and reads on. */
+    animation: role-edge 9s linear infinite;
   }
 }
 

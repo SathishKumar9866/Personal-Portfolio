@@ -31,7 +31,8 @@ the element itself, where that browser still sees which role is current.
 | Was | Why it failed | Now |
 | --- | --- | --- |
 | Base border `accent / 0.45` | The whole card read as selected, or as an error state, and the travelling segment had nothing to be brighter than | `accent / 0.18`: the base says "marked", the light says where you are looking |
-| An even 88° of gradient over 6s | Looked like a pattern rotating rather than a light travelling; in a still it looked static | A ~25° lit core with a long fade behind it, 4.5s a turn |
+| An even 88° of gradient over 6s | Looked like a pattern rotating rather than a light travelling; in a still it looked static | A ~25° lit core with a long fade behind it |
+| 4.5s a turn | Quick enough to pull the eye off the sentence beside it, which is the opposite of what a state marker is for | **9s a turn.** Findable, not attention-seeking: a reader notices it once and reads on |
 
 ### Only the current role, and only on a desktop
 
@@ -46,8 +47,16 @@ top-left corner, which is where the old static hairline began.
 ### Measured
 
 Desktop 1440x900, with the WebGL field also running: **60fps, zero frames over
-20ms, worst 16.9ms**, and the angle advances 97° in 1.2s — one turn in 4.5s, as
-written. Phone at 390x844: `animation-name: none`, the angle does not move
+20ms, worst 16.9ms**. At 9s a turn the angle advances **10 degrees per 250ms,
+evenly** (9.33 / 10.66 / 10.67 / 9.33 / …, against 10.0 expected), which is the
+measurement that matters: it is smooth, not stuttering.
+
+**A note on measuring this, because the first numbers were wrong.** An rAF
+sampler reports ~30fps for the ring when nothing else on screen animates — and
+1fps when nothing animates at all. That is the browser declining to produce
+frames it does not need, not jank. The hero's WebGL field stops when the hero
+scrolls away, so by the time the Experience section is on screen there is
+nothing else driving the clock. Even angle deltas are the honest check. Phone at 390x844: `animation-name: none`, the angle does not move
 between two reads 1.2s apart. Checked in Slate and in Paper; on white the quiet
 base nearly disappears and the travelling light does the marking, which is the
 right way round for a light theme.
