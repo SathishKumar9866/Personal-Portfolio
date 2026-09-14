@@ -42,7 +42,7 @@ Read this table instead of the code.
 | When the deck gives up and becomes a list | `useDeckFits` in `src/components/Experience.jsx` |
 | Clock zones, and the reader's own row | `src/components/LiveClock.jsx`, `src/utils/localzone.js` |
 | What AI crawlers are answered by name | `public/robots.txt` |
-| The machine-readable copy of the site | `public/llms.txt` |
+| The machine-readable copy of the site | `public/llms.txt` — guarded by `src/utils/llms-mirror.test.mjs`, which fails if a fact in `constants` is missing from it |
 
 ## Run
 
@@ -51,7 +51,7 @@ npm install
 npm run dev        # http://localhost:5173
 npm run build
 npm run lint
-npm test           # retrieval and timezone logic; plain node, no framework
+npm test           # retrieval, timezone logic, and the llms.txt mirror guard
 npm run icons      # regenerate src/components/toolIcons.js from simple-icons
 ```
 

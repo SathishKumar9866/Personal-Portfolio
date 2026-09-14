@@ -1,5 +1,58 @@
 # Worklog
 
+## 2026-09-14: the crawler copy is now checked, not trusted
+
+`public/llms.txt` is a hand-written mirror of facts in `constants/index.js`.
+Hand-written was and is the right call — it is prose for a reader, not a dump —
+but hand-written also means it can quietly stop being true, and until today
+nothing checked that it had not.
+
+It had. The file listed Stack, Education, Projects and Contact and **not one
+job**, for as long as it has existed. Every AI crawler that read this profile
+saw no employment history at all. CI checked that the file *exists* in `dist`;
+nothing checked what was in it.
+
+### What the guard asserts
+
+Seven checks, one direction: everything in `constants` must appear in
+`llms.txt`.
+
+| Check | Covers |
+| --- | --- |
+| employers, role titles | the four roles |
+| projects | all six by name |
+| schools | both degrees |
+| stack groups, primary tools | the six areas and the twelve tools the file names |
+| contact | the email address |
+
+The reverse is deliberately allowed: the file's "Also" section lists repos the
+site does not show.
+
+**Every missing item is reported at once**, not one per run — a drifted file
+that fails on its first omission takes five runs to catch up.
+
+### Proved to fail, not only to pass
+
+Against a copy with the `## Roles` section deleted — the exact regression that
+shipped — it fails with the exact contents of the hole:
+
+    FAIL test_every_employer_is_listed
+         employers missing from llms.txt (3): AdvanSoft International, Inc | Integer IT Solutions | DotIn Solutions
+    FAIL test_every_role_title_is_listed
+         role titles missing from llms.txt (4): AI Engineer | Machine Learning Engineer | Research Engineer | Software Engineer
+
+Against a copy with one primary tool removed it fails naming that tool, and
+against the real file it exits 0. The test takes an optional path argument
+purely so that failure can be demonstrated without doctoring the real file.
+
+**One limit, stated rather than engineered around:** the match is a substring,
+so a name that survives inside a longer one still passes — renaming
+`pb-card-deck` to `pb-card-deck-OLD` in the FILE goes undetected. Renaming it in
+`constants` does not, and that is the direction that actually drifts.
+
+`npm test` is now 20 checks across three files, and CI runs it between lint and
+build.
+
 ## 2026-09-14: Experience becomes Roles, and the crawler copy gets the jobs it never had
 
 "Experience" survived the naming pass this morning because it is the
