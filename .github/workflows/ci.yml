@@ -5,8 +5,8 @@
 # this file, nothing checked a branch before it landed on `main` — a PR could
 # merge with a broken build and the first sign of it would be a red deploy.
 #
-# It deliberately runs the SAME three steps as that deploy, in the same order,
-# on the same Node: install, lint, build, then the crawler-file guard. If CI and
+# It deliberately runs the same steps as that deploy, in the same order, on the
+# same Node: install, lint, test, build, then the crawler-file guard. If CI and
 # deploy disagree about what "green" means, the one that runs later is the one
 # that finds out, and that is the expensive one.
 name: CI
@@ -50,6 +50,12 @@ jobs:
 
       - name: Lint
         run: npm run lint
+        working-directory: ${{ env.SOURCE_DIR }}
+
+      # The retrieval behind the ask box is the only logic here a build cannot
+      # check: it compiles whatever it ranks. Plain node, no framework.
+      - name: Test
+        run: npm test
         working-directory: ${{ env.SOURCE_DIR }}
 
       - name: Build

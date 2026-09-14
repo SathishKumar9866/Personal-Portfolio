@@ -27,7 +27,8 @@ Thirty files. Read the table, not the directory.
 | The "open to collaborators" closing band | `Collaborate.jsx` |
 | The one scroll-reveal used by every card | `Reveal.jsx` |
 | Shared canvas geometry and the seeded RNG | `../utils/draw.js` |
-| Command palette actions | `CommandPalette.jsx` |
+| The ask box: answers, commands, keyboard | `CommandPalette.jsx` |
+| Which passage a question retrieves, and its ranking | `../utils/answer.js` |
 | The hero network drawing | `NeuralField.jsx` |
 | The token wave in Stack, desktop only | `TokenStream.jsx` |
 | The Python search band on a phone | `CodeCompletion.jsx` |
@@ -57,6 +58,13 @@ A few boundaries worth knowing before editing:
   toggle desynced and needed two clicks.
 - **`TagTerm` has two modes.** Default teaches (hover opens the definition);
   `plain` states (native tooltip only). Cards pass `plain`.
+- **`CommandPalette` shows two lists in one listbox.** Answers retrieved from
+  `utils/answer.js` first, then commands. Both are plain entries with a `run`,
+  so one set of arrow keys drives both; the `kind` field only changes how a row
+  draws and which header sits above it.
+- **`utils/answer.js` never writes a sentence.** It returns passages that are
+  already in `constants`. If a change there starts producing text the page does
+  not otherwise say, the feature has lost the thing that justified it.
 
 ## Traps in this directory
 

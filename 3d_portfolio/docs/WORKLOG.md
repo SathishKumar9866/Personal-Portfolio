@@ -1,5 +1,89 @@
 # Worklog
 
+## 2026-09-14: the page answers questions, out of its own words
+
+The hero has claimed "retrieval that cites the passage it used" since the
+rewrite. The page could not do it. `Ctrl K` opened a list of twelve commands —
+five jumps, six themes, a copy-email — and a reader with an actual question
+(*has he shipped anything on Azure? does he know Kubernetes? is he available?*)
+had to scroll 8,659px and find out by reading.
+
+The palette now retrieves. Type three characters or more and it searches the
+same `constants` the sections render, and shows the passages that match with the
+section they live in.
+
+### The decision that shaped everything else: it quotes, it does not write
+
+No API key, no backend, no model call. Not because one would be hard — because
+this page's whole argument is that every number on it was measured, and a
+generated sentence about the work is the one thing on the page nobody measured.
+So `utils/answer.js` returns **verbatim strings from `constants`**, and the
+footer says so: *answers are quoted, never generated*. A test asserts it, by
+checking every returned passage against the joined source text.
+
+It is also the cheapest version. Nothing to deploy, nothing to rotate, nothing
+that breaks when a key expires, and it works on GitHub Pages exactly as it works
+on a laptop with the network off.
+
+### How it ranks, and the two things that had to be fixed to make it work
+
+19 documents: one per role, per degree, per stack group, per project, plus the
+availability card. Term overlap weighted by inverse document frequency, title
+hits worth double. Then two corrections, each of which was found by asking it a
+question and disliking the answer:
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| "what did he ship on Azure" answered with `rag-pipeline-langchain`, which does not mention Azure | Long documents match more terms, so they win on volume | BM25's length normalisation, `0.4 + 0.6 · len/avg` |
+| Still wrong after that: the project says "releases **ship**", the role says "**Shipped** a production RAG application" | `ship` and `shipped` were different keys, so the role matched only one of the two query words | A four-line stemmer: `-ing`, `-ed`, `-s`, then one doubled consonant (`shipp` → `ship`) |
+
+Both are pinned by tests named for the failure — `test_ship_matches_shipped` is
+the second one, and it exists because the first fix alone did not hold.
+
+The stemmer is not linguistics and does not try to be. `running` folds to `run`,
+`analytics` to `analytic`; neither is a word. It only has to be applied to the
+question and to the page identically, which it is, because one function does
+both.
+
+**Six aliases, for words this site never uses.** `hire`, `hiring`, `job`,
+`jobs`, `available`, `availability` — a recruiter's vocabulary, none of which
+appears anywhere in the content. Without them, "are you available for hire"
+retrieved nothing at all, which is the worst possible first impression for the
+one feature the nav now advertises by name.
+
+**Nonsense returns nothing, deliberately.** `ask("qwertyuiop")` is `[]`, and the
+empty state gives the email address instead of a bad guess. A citation exists to
+be checked; a wrong one costs more than none.
+
+### Measured, on the running page
+
+Chrome, dev server, both schemes:
+
+| Check | Result |
+| --- | --- |
+| "what did he ship on Azure?" | AdvanSoft role first, Integer IT second, MLOps group third — all three contain Azure or shipping |
+| `↵` on the top answer | closed the dialog, scrolled to `#experience` (0 → 1669, section top at 88px), `body.overflow` restored |
+| Arrow keys across both groups | `cmdk-opt-1` (answer) → `cmdk-opt-2` (command) — one key set, two lists |
+| Two characters typed | commands only; no answers flickering under the typist |
+| `qwertyuiop zzz` | one row: *Nothing on this page says that* + the email |
+| 390×844, DPR 3 | panel 358×490 inside a 844 viewport, `scrollWidth === clientWidth` |
+| Preprint (light) | passage `rgb(17,17,19)` on a white panel, selected row `rgba(179,27,27,0.15)` |
+
+Bundle: **100.22 kB → 103.84 kB raw, 32.77 → 34.18 kB gzipped** (+1.41 kB
+gzipped), which is the index and the ranking code together. Measured by building
+`main` and this branch in the same tree.
+
+### Smaller things in the same change
+
+- **The nav chip says `Ask ⌘K`, not `⌘K`.** A bare shortcut reads as a command
+  palette, and a reader who never opens it never learns the page can answer a
+  question. The mobile row changed from "quick actions" to "ask or act".
+- **No "↵ to jump" on an answer row.** It shipped in the first draft and was cut
+  after the phone screenshot: a touch device has no Enter key to offer, and the
+  footer already says what Enter does.
+- **CI runs `npm test` now**, between lint and build. The ranking is the only
+  logic in this repo that a build cannot check — it compiles whatever it ranks.
+
 ## 2026-09-12: six reading themes
 
 Two palettes became six. The architecture already supported it — CSS variables,

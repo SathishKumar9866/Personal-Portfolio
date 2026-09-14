@@ -229,9 +229,12 @@ const Navbar = () => {
           <button
             onClick={() => window.dispatchEvent(new Event("open-command"))}
             className="font-mono text-label text-faint border border-line-strong rounded-lg px-2.5 py-1 hover:border-accent hover:text-accent transition-colors"
-            aria-label={`${SHORTCUT}: open command palette`}
+            aria-label={`${SHORTCUT}: ask about the work, or run a command`}
           >
-            {SHORTCUT}
+            {/* It says "Ask" because that is the part nobody would guess. A bare
+                shortcut chip reads as a command palette, and a reader who never
+                opens it never learns the page can answer a question. */}
+            Ask <span className="text-faint">{SHORTCUT}</span>
           </button>
           <FontSizeToggle />
           <ThemeToggle />
@@ -398,7 +401,7 @@ const Navbar = () => {
                   }}
                   className="font-mono text-nav text-secondary border border-line-strong rounded px-3 min-h-11 flex items-center"
                 >
-                  {SHORTCUT} · quick actions
+                  {SHORTCUT} · ask or act
                 </button>
               </div>
               </motion.div>

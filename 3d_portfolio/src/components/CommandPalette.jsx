@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { contact, navLinks, themes } from "../constants";
+import { ask } from "../utils/answer";
 import { readable, socialLinks } from "./icons";
 
 // An explicit `behavior: "smooth"` beats the CSS reduced-motion reset, and these
@@ -49,6 +50,11 @@ const ACTIONS = [
     .map((l) => ({ label: `Open ${l.label}`, hint: readable(l.href), run: open(l.href) })),
 ];
 
+// Typed text is a question if it is long enough to be one. Below three
+// characters almost every passage matches, and the answers would reshuffle
+// under the typist on every keystroke.
+const ASK_MIN = 3;
+
 const CommandPalette = () => {
   const [openState, setOpen] = useState(false);
   const [q, setQ] = useState("");
@@ -56,10 +62,28 @@ const CommandPalette = () => {
   const inputRef = useRef(null);
   const panelRef = useRef(null);
 
+  // Answers first, commands under them: someone who types a whole question
+  // wants the answer, and someone who types "theme" gets a command at the top
+  // anyway because a two-word query retrieves nothing.
   const results = useMemo(() => {
     const t = q.trim().toLowerCase();
-    return t ? ACTIONS.filter((a) => (a.label + a.hint).toLowerCase().includes(t)) : ACTIONS;
+    const commands = (t ? ACTIONS.filter((a) => (a.label + a.hint).toLowerCase().includes(t)) : ACTIONS)
+      .map((a) => ({ ...a, kind: "command" }));
+    const answers =
+      t.length >= ASK_MIN
+        ? ask(q).map((a) => ({
+            kind: "answer",
+            label: a.title,
+            hint: a.section,
+            passage: a.passage,
+            run: go(a.section),
+          }))
+        : [];
+    return [...answers, ...commands];
   }, [q]);
+
+  const firstCommand = results.findIndex((r) => r.kind === "command");
+  const hasAnswers = results[0]?.kind === "answer";
 
   useEffect(() => {
     const onKey = (e) => {
@@ -155,20 +179,32 @@ const CommandPalette = () => {
               aria-controls="cmdk-list"
               aria-activedescendant={results[i] ? `cmdk-opt-${i}` : undefined}
               aria-label="Search commands"
-              placeholder="Type a command…"
+              placeholder="Ask about the work, or type a command…"
               className="w-full bg-transparent border-b border-line-strong px-4 py-3.5 font-mono text-data text-white-100 placeholder:text-faint focus:outline-none"
             />
-            <ul id="cmdk-list" role="listbox" aria-label="Commands" className="max-h-72 overflow-y-auto py-2">
+            <ul id="cmdk-list" role="listbox" aria-label="Commands" className="max-h-[min(60vh,26rem)] overflow-y-auto py-2">
               {results.length === 0 && (
-                <li role="option" aria-selected="false" className="px-4 py-3 font-mono text-chip text-faint">No matches</li>
+                <li role="option" aria-selected="false" className="px-4 py-3 font-mono text-chip text-faint">
+                  Nothing on this page says that. {contact.email} is the way to ask a person.
+                </li>
               )}
               {results.map((a, idx) => (
-                <li key={a.label} role="option" id={`cmdk-opt-${idx}`} aria-selected={i === idx}>
+                <Fragment key={a.kind + a.label}>
+                  {/* Two lists in one, and the reader has to know which is which:
+                      the first block is quoted from the page, the second acts on it. */}
+                  {hasAnswers && (idx === 0 || idx === firstCommand) && (
+                    <li role="presentation" className="px-4 pt-3 pb-1.5 font-mono text-label text-faint">
+                      {idx === 0 ? "From this page, quoted" : "Commands"}
+                    </li>
+                  )}
+                <li role="option" id={`cmdk-opt-${idx}`} aria-selected={i === idx}>
                   <button
                     tabIndex={-1}
                     onMouseEnter={() => setI(idx)}
                     onClick={() => run(idx)}
-                    className={`w-full flex items-center justify-between gap-3 px-4 py-2.5 text-left font-mono text-data border-l-2 ${
+                    className={`w-full text-left px-4 py-2.5 border-l-2 ${
+                      a.kind === "answer" ? "" : "flex items-center justify-between gap-3 font-mono text-data"
+                    } ${
                       i === idx
                         ? "border-accent bg-accent/15 text-white-100"
                         : "border-transparent text-white-100"
@@ -176,14 +212,31 @@ const CommandPalette = () => {
                   >
                     {/* Selection is carried by the left rule as well as the tint:
                         a 15%-alpha wash is not a sufficient cue on its own. */}
-                    <span>{a.label}</span>
-                    <span className="text-label text-faint">{a.hint}</span>
+                    {a.kind === "answer" ? (
+                      <>
+                        {/* The passage is the answer; the line under it is the
+                            citation, and it is what makes the passage checkable. */}
+                        <span className="block text-body text-white-100">{a.passage}</span>
+                        <span className="mt-1 block font-mono text-label text-faint">
+                          {/* No "↵ to jump" here: the footer already says what
+                              Enter does, and a phone has no Enter to offer. */}
+                          {a.label} · {a.hint}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span>{a.label}</span>
+                        <span className="text-label text-faint">{a.hint}</span>
+                      </>
+                    )}
                   </button>
                 </li>
+                </Fragment>
               ))}
             </ul>
             <div className="border-t border-line px-4 py-2 font-mono text-label text-faint flex gap-4">
               <span>↑↓ move</span><span>↵ select</span><span>esc close</span>
+              <span className="ml-auto hidden sm:inline">answers are quoted, never generated</span>
             </div>
           </motion.div>
         </motion.div>

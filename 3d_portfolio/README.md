@@ -30,6 +30,8 @@ Read this table instead of the code.
 | How much a section is padded | `styles.padding` in `src/styles.js`, one clamp |
 | What a phone hides that a desktop shows | `MobileCollapse.jsx`, plus `md:` classes at the call site |
 | The diagram beside each Experience role | `CareerTrack.jsx`, keyed by `glyph` in `stackGroups`' sibling `experience` |
+| What a typed question can find, and how it is ranked | `src/utils/answer.js` |
+| What the ask box looks like, and its commands | `src/components/CommandPalette.jsx` |
 | What AI crawlers are answered by name | `public/robots.txt` |
 | The machine-readable copy of the site | `public/llms.txt` |
 
@@ -40,6 +42,7 @@ npm install
 npm run dev        # http://localhost:5173
 npm run build
 npm run lint
+npm test           # retrieval behind the ask box; plain node, no framework
 ```
 
 **A `node_modules` installed under Linux will not work on Windows.** It has no
