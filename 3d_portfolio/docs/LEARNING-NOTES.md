@@ -22,13 +22,21 @@ index and the "6 built · 1 live" line all change by themselves.
 seventh project, and shipping a page that lies about itself. That is the single
 most common bug in personal sites, and it is invisible — nothing errors.
 
-**Where it lives.** `src/constants/index.js` holds the facts.
-`src/components/SpecBand.jsx` shows the pattern in ten lines:
+**Where it lives.** `src/constants/index.js` holds the facts. Every section's
+eyebrow is one line of arithmetic over them — `src/components/Tech.jsx` and
+`src/components/Works.jsx` open with theirs:
 
 ```js
-const LIVE = projects.filter((p) => p.live_link).length;   // counted, never typed
-const TOOLS = new Set(stackGroups.flatMap((g) => g.items)).size;
+const STACK_META = `${stackGroups.length} areas · ${
+  new Set(stackGroups.flatMap((g) => g.items)).size      // counted, never typed
+} tools`;
+
+const WORK_META = `${projects.length} built${LIVE ? ` · ${LIVE} live` : ""}`;
 ```
+
+That `LIVE &&` is the honesty clause: ship nothing live and the line says
+`6 built` rather than `6 built · 0 live`. A number that can be zero needs to know
+how to disappear.
 
 **Try next.** Add a fake seventh project to `constants` and watch four places
 update. Then delete it. That loop — change data, watch the UI follow — is the
@@ -307,8 +315,9 @@ In rough order of how much you learn per hour:
    watch it fail. That habit is worth more than any framework.
 3. **Add a glossary term** to `constants.glossary` and hover the chip. One data
    edit, three behaviours: tooltip, panel, "learn more" link.
-4. **Make the spec band count something else** — unique employers, years active.
-   Ten lines, and you will have to decide what is honestly derivable.
+4. **Make a section eyebrow count something else** — `STACK_META` in
+   `Tech.jsx` says `6 areas · 33 tools`; make it name the largest area instead.
+   Three lines, and you will have to decide what is honestly derivable.
 5. **Try act 4 of the campaign** (see [BACKLOG.md](BACKLOG.md)): make a section's
    heading arrive as you scroll into its scene. Everything needed is already here —
    `Reveal.jsx` and the scene structure.

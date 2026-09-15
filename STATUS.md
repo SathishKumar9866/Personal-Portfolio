@@ -42,7 +42,7 @@ now equals its section heading:
 
     About · Roles · Stack · Projects · Contact
 
-`Experience` became **Roles** (what they are, and what the spec band counts);
+`Experience` became **Roles** (what they are, and what the eyebrow counts);
 `#work` became `#projects`. Zero dangling anchors on the page.
 
 ### Paper is the default palette
@@ -79,7 +79,7 @@ recruiter on a work laptop in daylight. Dark is one click and is remembered.
 
 ### Checks that did not exist this morning
 
-`npm test` is **20 checks across three files**, and CI runs it between lint and
+`npm test` is **27 checks across four files**, and CI runs it between lint and
 build:
 
 - `utils/answer.test.mjs` — the retrieval behind the ask box, including that

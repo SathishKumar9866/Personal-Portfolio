@@ -153,7 +153,12 @@ const Tech = () => {
                 <span className="font-display text-[15px] font-semibold text-white-100 tracking-[-0.01em]">
                   {g.title}
                 </span>
+                {/* Inside the <h3>, unlike the desktop variant below, so
+                    without this the group's accessible name is "Data
+                    engineering01". Same reason the Roles stage numeral is
+                    hidden: it is a position marker, not part of the name. */}
                 <span
+                  aria-hidden="true"
                   className="stack-index ml-auto font-mono text-micro"
                   style={{ "--cat": `var(${g.tint})` }}
                 >

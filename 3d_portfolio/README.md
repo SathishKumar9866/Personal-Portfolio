@@ -1,7 +1,7 @@
 # Sathish Kumar: portfolio
 
 A fast, type-led personal site for an AI engineer, staged as a campaign page:
-six palettes, one lava-red accent, full-bleed scenes and a spec band. React 18
+six palettes, one lava-red accent and full-bleed scenes. React 18
 on Vite 5, Tailwind for styling, Framer Motion for movement, two 2D canvases for
 the margin diagrams, and three.js for the hero field.
 

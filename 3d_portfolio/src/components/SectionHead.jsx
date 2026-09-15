@@ -48,7 +48,14 @@ const SectionHead = ({ title, meta }) => (
         {meta}
       </p>
     )}
-    <h2 className={`mt-3 ${styles.sectionHeadText}`}>{title}</h2>
+    {/* The id is what `SectionWrapper` points `aria-labelledby` at, so a
+        screen reader announces "About, region" instead of five unnamed ones.
+        Derived from the title rather than passed in, because the section id,
+        the nav label and this heading are already required to be the same word
+        — `test_every_cited_section_is_a_real_one` enforces it. */}
+    <h2 id={`${title.toLowerCase()}-title`} className={`mt-3 ${styles.sectionHeadText}`}>
+      {title}
+    </h2>
   </motion.div>
 );
 
