@@ -89,7 +89,7 @@ const About = () => (
         availability card moves to its own column at the width where there is
         room for it, and the measure of the prose is unchanged: it is the
         COLUMN that got narrower, not the line length. */}
-    <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 sm:gap-10 md:grid-cols-[minmax(0,240px)_minmax(0,1fr)] lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)_minmax(0,23rem)] md:items-start">
+    <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 sm:gap-10 md:grid-cols-[minmax(0,240px)_minmax(0,1fr)] xl:grid-cols-[minmax(0,260px)_minmax(0,1fr)_minmax(0,23rem)] md:items-start">
       <motion.div variants={fadeIn("right", "spring", 0.1, 0.7)} className="max-w-[260px]">
         <Portrait />
       </motion.div>
@@ -143,10 +143,18 @@ const About = () => (
 
       </motion.div>
 
-      {/* Its own column from `lg`, still stacked under the prose below that.
+      {/* Its own column from `xl`, still stacked under the prose below that.
           The card is the one thing in this section a recruiter is looking for,
-          and in the stacked layout it sat 900px down the page. */}
-      <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="md:col-span-2 lg:col-span-1">
+          and in the stacked layout it sat 900px down the page.
+
+          `xl`, not `lg`, and this was measured after getting it wrong. At `lg`
+          the three columns start at 1024px, where the scene's 144px of padding
+          and 80px of gaps leave the prose column **172px wide** — four words a
+          line, with `federated-yolov8-object-detection` broken across three.
+          At 1280 the same layout gives the prose 428px. A three-column grid
+          needs the width for three columns; the breakpoint has to be where that
+          width exists, not where the columns first fit at all. */}
+      <motion.div variants={fadeIn("up", "spring", 0.2, 0.7)} className="md:col-span-2 xl:col-span-1">
         <Availability />
       </motion.div>
     </div>

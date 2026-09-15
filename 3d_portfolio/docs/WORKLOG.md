@@ -1,5 +1,47 @@
 # Worklog
 
+## 2026-09-15: the page stops running under its own docks
+
+Reported: text overlapping the left sidebar. Reproduced at 1024px, where
+**Stack's intro paragraph starts at x=46 and the contact dock ends at x=48** —
+two pixels under the icons.
+
+### The cause was the padding, not the section
+
+From 1024px up, two docks are pinned to the viewport: `ContactRail` on the left
+(8px + 40px wide, 16px + 44px from `xl`) and `SideRail` on the right. Neither is
+in the flow, so neither pushes anything — **the page has to leave room for them
+itself**, and `px-[clamp(1.25rem,4.5vw,4rem)]` does not: at exactly 1024px,
+`4.5vw` computes to 46px against a dock that ends at 48.
+
+The fix is one token, in `styles.paddingX`, so every scene and the hero inherit
+it: `rail:px-[4.5rem]` from the same breakpoint the docks appear at. 72px clears
+the widest dock (60px at `xl`) with 12px to spare, and at wider viewports
+`max-w-7xl` centring makes the number moot.
+
+Measured after, at 1024 and 1440, on all five sections: **zero overlaps with
+either dock, worst clearance 12px.** What still crosses the rails is the ambient
+canvas work — `aria-hidden`, `pointer-events-none`, `-z-10` — which is what a
+backdrop is for.
+
+### Fixing it exposed a worse one, three days younger
+
+With the dock clear, About at 1024 was plainly wrong: the prose column was
+**172px wide**, four words to a line, with
+`federated-yolov8-object-detection` broken across three of them.
+
+The three-column About introduced on 2026-09-14 starts at `lg`, and it was only
+ever looked at on a 1440px screen. At 1024 the scene's 144px of padding and 80px
+of gaps leave 800px for three columns that want 260 + 368 of it. At 1280 the
+same layout gives the prose 428px.
+
+It starts at `xl` now. At 1024 the section is two columns — portrait and prose at
+585px, 44 characters a line — with the availability card spanning underneath.
+
+**The lesson is the one this repo keeps relearning:** a breakpoint belongs where
+the layout has the width it needs, not where its columns first technically fit.
+A grid tested at one width is a grid tested nowhere.
+
 ## 2026-09-15: the spec band comes out
 
 Owner's call, and a fair one. The band restated numbers the page already carried:
