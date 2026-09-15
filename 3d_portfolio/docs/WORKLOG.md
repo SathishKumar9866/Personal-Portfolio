@@ -1,5 +1,78 @@
 # Worklog
 
+## 2026-09-15: three names a screen reader could not read, and a doc set describing a deleted component
+
+Lighthouse on the live page scores **100 / 100 / 100 / 100** on mobile — 56 audits,
+0 failed. Everything in this entry is a defect that score cannot see.
+
+### What the accessibility tree said
+
+| | Before | After |
+| --- | --- | --- |
+| The five scenes | five `region`s with **no name** | `region "About"` … `region "Contact"` |
+| Stack groups (mobile) | `heading "Data engineering01"` | `heading "Data engineering"` |
+| Degrees | `level="3"`, beside their own *Education* heading | `level="4"`, under it |
+
+**The `01` was inside the `<h3>`.** The desktop variant of the Stack card puts its
+stage numeral *after* the heading; the mobile variant puts it inside, so the
+group's accessible name carried a stray number in all six groups. Roles already
+had the right answer for the same device — its stage numeral has been
+`aria-hidden` since it was written — so the fix is the one the codebase already
+made once.
+
+**Naming the regions without letting the name drift:** `SectionHead` puts
+`id="{title}-title"` on the `<h2>` it already renders, and `SectionWrapper`
+points `aria-labelledby` at it. The name *is* the heading, so it cannot disagree
+with it, and `test_every_cited_section_is_a_real_one` already forces the section
+id, the nav label and that heading to be one word.
+
+**Degrees render through the same `Role` component as jobs**, which is why they
+were `h3`: right for a job under *Roles*, wrong for a degree under *Education*.
+`Role` now takes `as`, and `Study` passes `h4`.
+
+Verified from the CDP accessibility tree, not from the markup — the tree is what
+a screen reader consumes, and `textContent` still reads `Data engineering01`
+whether or not the subtree is hidden from it.
+
+### The docs described a component deleted the day before
+
+Removing the spec band broke this repo's own rule that a change fixes the docs it
+invalidates **in the same commit**. Five places still described it as shipping:
+
+| File | Said |
+| --- | --- |
+| `README.md` | sold the site as having "a spec band" — first sentence of the repo |
+| `docs/LEARNING-NOTES.md` §1 | told a learner to read `src/components/SpecBand.jsx`, **deleted** |
+| `docs/LEARNING-NOTES.md` §13 | offered an exercise on the deleted band |
+| `docs/BACKLOG.md` | "a spec band", and "`npm test` is 20 checks" |
+| `STATUS.md` | "what the spec band counts", "20 checks across three files" |
+
+The learning notes were the worst of it: the first concept the page teaches —
+every figure derived, never typed — pointed at a file that would `cat` as *No such
+file*. It now quotes `STACK_META` and `WORK_META`, which are live, and gains the
+detail the old example did not have: `LIVE && ` is an honesty clause, so a site
+with nothing deployed says `6 built` rather than `6 built · 0 live`.
+
+Real count: **27 checks across four files**. `ARCHITECTURE.md` also claimed a new
+project updates "four places"; with the band gone it is three.
+
+`docs/ARCHITECTURE.md` line 140 still names the band on purpose — it explains why
+scene tinting keys off `nth-of-type(even)` rather than `odd`, which is a fact
+about the band's *removal*.
+
+### Measured, and left on the board
+
+Two findings from the same pass that are not fixed here:
+
+- **The phone page grew back.** 9,790px at 412×823 — **11.9 screens**. The
+  shortening work left it at 8,967px on 2026-09-12 at *390* wide, and a narrower
+  viewport makes a page taller, so the growth is understated. Projects is 3,220px
+  of it, a third of the page. Campaign copy re-lengthened what two deletions cut.
+- **`CodeCompletion.jsx` is 515 lines**, past the 500-line ceiling; `Works.jsx` is
+  498, at it.
+
+`npm run lint` 0 errors · `npm test` 27/27 · `npm run build` 0.
+
 ## 2026-09-15: the hero field stops competing with the headline
 
 Asked for plainly: the network behind the hero pulls focus, slow it down so the

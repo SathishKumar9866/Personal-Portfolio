@@ -32,6 +32,11 @@ const SectionWrapper = (Component, idName) =>
         // on a 844px phone the ratio maxes at 0.22 and a 0.25 threshold NEVER
         // fires, the whole section stayed at opacity 0. "some" is threshold 0.
         viewport={{ once: true, amount: "some" }}
+        // A bare <section> is a region with no name, and five of them are five
+        // identical entries in a screen reader's landmark list. `SectionHead`
+        // puts this id on its own <h2>, so the name IS the heading and cannot
+        // drift from it.
+        aria-labelledby={`${idName}-title`}
         /**
          * The GROUND is full-bleed, the CONTENT is not.
          *

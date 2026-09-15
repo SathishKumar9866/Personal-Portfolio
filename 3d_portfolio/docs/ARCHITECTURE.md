@@ -39,9 +39,9 @@ flowchart LR
 
 **A fact hard-coded in a component is a bug.** `4 roles · since 2020` is
 `ROLES.length` and the earliest `start`; `06 projects` is `projects.length`;
-`33 tools` is a `Set` over every `items` array. Add a project and four places
-update in the same edit — the spec band, the Projects eyebrow, the ask-box corpus
-and the availability card.
+`33 tools` is a `Set` over every `items` array. Add a project and three places
+update in the same edit — the Projects eyebrow, the ask-box corpus and the
+availability card.
 
 The two hand-written mirrors are the exception, and they exist because prose for a
 crawler reads better than a dump. They are the only files that can silently

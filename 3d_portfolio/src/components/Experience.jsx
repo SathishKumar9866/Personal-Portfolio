@@ -61,7 +61,10 @@ const Range = ({ start, end, current }) => {
  *  `key` and `children`, so passing it the `label` below logs a React warning. */
 const Passthrough = ({ children }) => children;
 
-const Role = ({ role, index, trackIndex = null, stage = null, className = "", style }) => {
+// `as` exists only for Education: those entries render through this same
+// component, under an "Education" <h3> of their own, so leaving them at h3 put
+// a degree BESIDE its own group heading in the outline rather than under it.
+const Role = ({ role, index, trackIndex = null, stage = null, className = "", style, as: Heading = "h3" }) => {
   // Is there anything behind the disclosure at all? Education entries have a
   // degree, a school and a date and nothing else, so for them the answer is no
   // and the control must not be drawn.
@@ -99,9 +102,9 @@ const Role = ({ role, index, trackIndex = null, stage = null, className = "", st
           </span>
         )}
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h3 className="font-display font-semibold text-[calc(clamp(1.05rem,1.4vw,1.25rem)*var(--type-scale,1))] leading-tight text-white-100">
+          <Heading className="font-display font-semibold text-[calc(clamp(1.05rem,1.4vw,1.25rem)*var(--type-scale,1))] leading-tight text-white-100">
             {role.title}
-          </h3>
+          </Heading>
           {role.current && (
             <span className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-live border border-live/50 rounded px-1.5 py-0.5">
               current
@@ -177,6 +180,7 @@ const Role = ({ role, index, trackIndex = null, stage = null, className = "", st
  */
 const Study = ({ item, index }) => (
   <Role
+    as="h4"
     index={index}
     role={{
       title: item.degree,

@@ -6,10 +6,11 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 
 > Current state (2026-09-15): live at <https://sathishkumarai.github.io/>, built
 > from `main`, deployed and verified by bundle hash. Six palettes with **Paper as
-> the default**, reader-controlled text size, full-bleed scenes, a spec band, a
-> sticky Roles deck, a WebGL hero field on desktop, tool logos on every named
-> technology, and an ask box that retrieves from the page's own copy.
-> Nineteen PRs squash-merged 2026-09-14; `npm test` is 20 checks in CI.
+> the default**, reader-controlled text size, full-bleed scenes, a sticky Roles
+> deck, a WebGL hero field on desktop, tool logos on every named technology, and
+> an ask box that retrieves from the page's own copy.
+> Twenty-one PRs squash-merged 2026-09-14 and 2026-09-15; `npm test` is 27 checks
+> in CI.
 > See [ARCHITECTURE.md](ARCHITECTURE.md) and [DECISIONS.md](DECISIONS.md).
 
 ---
@@ -52,6 +53,33 @@ one.
 - [x] **~~Trim the font subsets.~~** 20 woff2 files to 12, vendor CSS 12 kB to
   6.56. Reader transfer is unchanged — the claim that this was worth ~90 kB was
   wrong, and the measurements are in the WORKLOG.
+
+### Found 2026-09-15, measured on the live page
+
+Lighthouse mobile is 100 across accessibility, best practices, SEO and agentic
+browsing, so these are what that score cannot see.
+
+- [ ] **(P1, M) The phone page grew back.** 9,790px at 412x823, **11.9 screens**.
+  The shortening work left it at 8,967px on 2026-09-12 at *390* wide, and a
+  narrower viewport makes a page taller, so the growth is understated. Projects
+  alone is 3,220px, a third of the page, six cards deep. Campaign copy
+  re-lengthened what two deletions cut. Same conclusion as last time applies:
+  the cut has to be content, not compression.
+- [ ] **(P2, S) `CodeCompletion.jsx` is 515 lines**, past the workspace 500-line
+  ceiling; `Works.jsx` is 498, at it. Split by concern, not by line count.
+
+### Done 2026-09-15 (second pass)
+
+- [x] **~~Name the five scene regions.~~** They were five unnamed `region`s in the
+  landmark list. `SectionHead` ids its own `<h2>`; `SectionWrapper` points
+  `aria-labelledby` at it, so the name is the heading.
+- [x] **~~Strip the stage numeral from the Stack group names.~~** The mobile
+  variant had the index *inside* the `<h3>`: `heading "Data engineering01"`.
+- [x] **~~Nest the degrees under Education.~~** They render through `Role`, so they
+  were `h3` beside their own `h3` group heading. `Role` takes `as` now.
+- [x] **~~Fix the docs that described the deleted spec band.~~** Five places,
+  including the repo README's first sentence and a learning-notes example
+  pointing at a file that no longer exists.
 
 ### Smaller things worth doing, none of them blocking
 
