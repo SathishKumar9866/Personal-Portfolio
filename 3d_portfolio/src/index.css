@@ -849,6 +849,20 @@ li[data-covered="true"] > .role-card[data-current="true"]::before {
    Below it a row is two lines — label and Copy on the first, the address given
    the whole of the second — not the three the viewport version stacked on a
    phone. */
+/* PROJECTS, ON A PHONE ONLY.
+   639px, not the 767px `MobileCollapse` uses, because this rule has to switch
+   at the width the grid stops being one column — `sm:grid-cols-2` — not at the
+   width the role cards do. A card hidden in a two-column grid would leave a
+   hole in the row.
+   `display: none` rather than `visibility` or height: a hidden card must cost
+   no layout at all, which is the entire point. It stays in the DOM, so it is
+   still read by anything that reads the DOM rather than the rendering. */
+@media (max-width: 639px) {
+  .projects-grid[data-collapsed="true"] > *:nth-child(n + 4) {
+    display: none;
+  }
+}
+
 .contact-rows {
   container-type: inline-size;
   /* The threshold below is in `em`, and a container query resolves font-relative

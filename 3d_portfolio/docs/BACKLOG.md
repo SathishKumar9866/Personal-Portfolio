@@ -59,12 +59,11 @@ one.
 Lighthouse mobile is 100 across accessibility, best practices, SEO and agentic
 browsing, so these are what that score cannot see.
 
-- [ ] **(P1, M) The phone page grew back.** 9,790px at 412x823, **11.9 screens**.
-  The shortening work left it at 8,967px on 2026-09-12 at *390* wide, and a
-  narrower viewport makes a page taller, so the growth is understated. Projects
-  alone is 3,220px, a third of the page, six cards deep. Campaign copy
-  re-lengthened what two deletions cut. Same conclusion as last time applies:
-  the cut has to be content, not compression.
+- [x] **~~(P1, M) The phone page grew back.~~** Fixed the same day: 9,825px ->
+  **8,249px at 390x844, 9.8 screens**, the shortest it has ever been. The
+  previous conclusion — "anything further means cutting what is shown" — turned
+  out to be a false choice: a disclosure shows less without cutting anything.
+  See the WORKLOG entry for 2026-09-15.
 - [ ] **(P2, S) `CodeCompletion.jsx` is 515 lines**, past the workspace 500-line
   ceiling; `Works.jsx` is 498, at it. Split by concern, not by line count.
 
@@ -198,11 +197,13 @@ browsing, so these are what that score cannot see.
   `tailwind.config.js`. Two contrast failures fixed (logo monogram 3.62:1, footer
   separator 1.33:1) and three sub-44px touch targets. Full reasoning and
   measurements in `docs/TYPE-AUDIT.md`.
-- [~] **(P1, M) Shorten the phone page further.** 14,494px -> 10,520px -> **8,967px
-  measured 2026-09-12**, about 10.6 screens at 390x844. Two cuts got it there and
-  both were deletions rather than compression: the six About capability cards
-  (-480px, they restated Stack) and the Stack chips losing their boxes (-233px).
-  What is left really is content. Anything further means cutting what is shown.
+- [x] **~~(P1, M) Shorten the phone page further.~~** 14,494px -> 10,520px ->
+  8,967px (2026-09-12) -> 9,825px as campaign copy landed -> **8,249px on
+  2026-09-15**, 9.8 screens at 390x844. The first two rounds were deletions: the
+  six About capability cards (-480px, they restated Stack) and the Stack chips
+  losing their boxes (-233px). The third was not — nothing was deleted. See the
+  WORKLOG for why the "anything further means cutting what is shown" conclusion
+  recorded here was wrong.
 - [ ] **(P2, S) A theme picker on first load** was proposed and advised against:
   the site already reads `prefers-color-scheme`, so a modal asks a question the
   OS has answered and puts a decision between a recruiter and the content. If it

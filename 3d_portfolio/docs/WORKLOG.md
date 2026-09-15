@@ -1,5 +1,82 @@
 # Worklog
 
+## 2026-09-15: the phone page, 9,825px to 8,249px, with nothing removed
+
+The entry above filed this as "the cut has to be content, not compression",
+repeating a conclusion `BACKLOG.md` had been carrying since 2026-09-12: *anything
+further means cutting what is shown*. That was a false choice. There is a third
+option, and it is the obvious one — **show less without cutting anything.**
+
+### Where 9,825px actually went
+
+Measured at 390x844, every block on the page:
+
+| Block | px | Share |
+| --- | ---: | ---: |
+| **Projects grid** (6 cards) | **2,818** | **29%** |
+| About grid | 1,235 | 13% |
+| Roles deck | 968 | 10% |
+| Hero | 844 | 9% |
+| Stack grid | 831 | 8% |
+| **Section padding** (5 x 128px) | **640** | **7%** |
+| Contact card | 537 | 5% |
+| Roles education | 289 | 3% |
+
+One block is 29% of the page and it is six copies of the same thing. A phone
+reader crosses all 2,818px of it to reach Contact.
+
+### Three cards, and the other three one tap away
+
+| | Before | After |
+| --- | ---: | ---: |
+| Projects section | 3,220px | **1,796px** |
+| Whole page | 9,825px | **8,249px** |
+| Screens at 390x844 | 11.6 | **9.8** |
+
+Shortest the page has ever been — the previous best was 8,967px, and that was
+before the campaign copy landed.
+
+**Nothing was deleted.** All six cards are still in the DOM, still in `llms.txt`,
+still in the `<noscript>` block. Tapping restores 9,617px, so the reader who
+wants all six pays what they always paid, and the reader heading for Contact
+does not.
+
+**The limit is CSS, not a `slice`.** A `slice` needs JS to know the viewport
+width, which means a media query in JS, a listener, and a first render that
+guesses wrong before it corrects. `.projects-grid[data-collapsed] > *:nth-child(n
++ 4) { display: none }` inside a `max-width: 639px` block is the browser doing
+it, with the right answer on the first paint.
+
+**639px, not the 767px `MobileCollapse` uses.** This rule has to switch at the
+width the grid stops being one column (`sm:grid-cols-2`), not at the width the
+role cards do. A hidden card in a two-column grid leaves a hole in the row.
+Checked at 640: two columns, six cards, no button.
+
+### Two smaller things, both pure whitespace
+
+- **Section padding floor `4rem` -> `3rem`.** The clamp is `clamp(_, 9vw, 8rem)`,
+  and 9vw is 35px at 390px wide — so the middle term never wins on a phone and
+  every section paid the floor twice. **-160px**, and desktop is untouched:
+  verified 128px at 1440 before and after.
+- **The gap before Education `mt-16` -> `mt-10 sm:mt-16`.** -24px.
+
+### Two things caught while building it
+
+- **`bg-canvas` is the dark INK token, not the page ground.** The reveal button
+  first shipped as a near-black bar with `accent-ink` text on it, about **2:1** —
+  it also read as a second CTA competing with the hero's. Transparent instead,
+  letting the scene ground through: **5.51:1 measured**, and it reads as the
+  quiet control it is.
+- **A button that removes itself takes the keyboard's place with it.** Once
+  tapped there is nothing left to show, so the trigger goes — and the next Tab
+  would restart from the top of the document. Focus moves to the first card that
+  just appeared, which is where the eye goes anyway. Verified: `activeElement` is
+  inside `children[3]` after the reveal.
+
+Lighthouse mobile still **100 / 100 / 100 / 100**, 56 audits, 0 failed. Button is
+350x44, at the touch-target floor. `npm run lint` 0 errors, `npm test` 27/27,
+`npm run build` 0.
+
 ## 2026-09-15: three names a screen reader could not read, and a doc set describing a deleted component
 
 Lighthouse on the live page scores **100 / 100 / 100 / 100** on mobile — 56 audits,

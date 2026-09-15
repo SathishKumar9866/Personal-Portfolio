@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Tilt } from "react-tilt";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { projects } from "../constants";
@@ -472,7 +472,41 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
 const LIVE = projects.filter((p) => p.live_link).length;
 const WORK_META = `${projects.length} built${LIVE ? ` · ${LIVE} live` : ""}`;
 
-const Works = () => (
+/**
+ * How many project cards a phone gets before it has to ask for the rest.
+ *
+ * Measured at 390x844: the six cards are 2,818px of a 9,825px page — 29% of
+ * everything, and the reader crosses all of it to reach Contact. Three is the
+ * number because the grid is one column below `sm` and three cards is about two
+ * screens, which is as much as one section can ask for before it has to earn
+ * more.
+ *
+ * Nothing is deleted. The cut is a disclosure, not a shorter list: every card
+ * is still in the DOM, still in `llms.txt`, still in the `<noscript>` block, and
+ * one tap away. Above `sm` the grid is two or three columns and the whole thing
+ * turns itself off.
+ */
+const PHONE_CARDS = 3;
+
+const Works = () => {
+  const [showAll, setShowAll] = useState(false);
+  const gridRef = useRef(null);
+  const hiddenCount = projects.length - PHONE_CARDS;
+
+  /** The button removes itself once used, and a removed element takes the
+   *  keyboard's place in the document with it: the next Tab would start again
+   *  from the top of the page. So focus moves to the first card that just
+   *  appeared, which is also where a reader's eye goes. */
+  const revealAll = () => {
+    setShowAll(true);
+    requestAnimationFrame(() => {
+      gridRef.current
+        ?.children[PHONE_CARDS]?.querySelector("a, button")
+        ?.focus({ preventScroll: true });
+    });
+  };
+
+  return (
   <>
     <SectionHead title="Projects" meta={WORK_META} />
 
@@ -487,12 +521,39 @@ const Works = () => (
     {/* `items-stretch`, not `items-start`. Cards in a row now match height
         regardless of how long a description runs, because a ragged row of
         cards reads as an alignment error rather than as a design. */}
-    <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+    {/* The limit is CSS, not a `slice`, and the reason is worth keeping: a
+        `slice` would need JS to know the viewport width, which means a media
+        query in JS, a listener, and a first render that guesses wrong. A
+        `nth-child` rule inside a `max-width` block is the browser doing it. */}
+    <div
+      ref={gridRef}
+      data-collapsed={showAll ? undefined : "true"}
+      className="projects-grid mt-10 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
+    >
       {projects.map((p, i) => (
         <ProjectCard key={p.name} index={i} featured={i === 0} {...p} />
       ))}
     </div>
+
+    {/* `sm:hidden` alone, for the same reason: above `sm` the rule above does
+        not apply, so a button offering to reveal what is already visible would
+        be a lie. It removes itself from the tree once used. */}
+    {!showAll && (
+      <button
+        type="button"
+        onClick={revealAll}
+        // Transparent, not `bg-canvas`: that token is the dark INK, not the page
+        // ground, and it painted a near-black bar with 196,38,15 text on it at
+        // about 2:1. The scene ground showing through puts `accent-ink` on
+        // paper at 5.54:1 instead, and keeps this reading as a quiet control
+        // rather than a second CTA competing with the hero's.
+        className="sm:hidden mt-6 w-full min-h-11 rounded-xl border border-line-strong bg-transparent px-4 font-sans text-[13px] font-medium text-accent-ink"
+      >
+        Show {hiddenCount} more {hiddenCount === 1 ? "project" : "projects"}
+      </button>
+    )}
   </>
-);
+  );
+};
 
 export default SectionWrapper(Works, "projects");

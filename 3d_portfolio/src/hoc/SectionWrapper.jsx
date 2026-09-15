@@ -51,7 +51,13 @@ const SectionWrapper = (Component, idName) =>
          * property of the sequence, and a component that had to be told its own
          * index would be wrong the moment a section moved.
          */
-        className={`scene ${styles.paddingX} py-[clamp(4rem,9vw,8rem)] relative z-0 isolate`}
+        // The clamp FLOOR is what a phone gets: 9vw is 35px at 390px wide, so the
+        // middle term never wins there and every section paid 64px top and
+        // bottom. 3rem keeps the scenes visibly separated — the grounds
+        // alternate, so the gap is doing real work — and gives 160px back
+        // across the five of them. Desktop is untouched: 9vw passes 4rem at
+        // 712px wide, well below any screen that reads the clamp differently.
+        className={`scene ${styles.paddingX} py-[clamp(3rem,9vw,8rem)] relative z-0 isolate`}
       >
         <span className="hash-span" id={idName}>
           &nbsp;
