@@ -4,8 +4,8 @@ Written when work stopped. Read this first on return, then `3d_portfolio/README.
 for the change-to-file table.
 
 **Last touched:** 2026-09-15
-**Branch:** `main`. Twenty-seven PRs squash-merged across two sessions, every
-branch deleted, no PR open.
+**Branch:** `main`. **46 PRs squash-merged** in total, nine of them on
+2026-09-15, every branch deleted, no PR open.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main`
 by Actions in the OTHER repo. **Deployed and verified**: the bundle hash the
 live site serves matches the one `main` builds.
@@ -17,14 +17,19 @@ joke on 2026-09-14.
 
 ## The 2026-09-15 session, newest first
 
-Nine merges. Read `docs/WORKLOG.md` for the measurements behind each.
+Nine merges, #39 to #47. Read `docs/WORKLOG.md` for the measurements behind each.
 
 | PR | What changed | The number that mattered |
 | --- | --- | --- |
+| #47 | Every document brought up to date; the availability card stopped repeating the hero pill | 15/15 links open in a new tab; two dead style tokens deleted |
 | #46 | About stopped reprinting each project's description; per-project anchors; one glossary entry for two federated chips | three sentences were on the page twice |
 | #45 | A phone draws three project cards and offers the rest | 9,825px → 8,091px, **9.6 screens** |
 | #44 | Five `<section>`s got accessible names; Stack headings lost a stray `01`; degrees nest under Education | Lighthouse was already 100 — none of it was visible there |
 | #43 | The hero field slowed so it stops competing with the headline | ~9.6 lit dots → ~4.9 |
+| #42 | Every scene given clearance from the fixed docks | text no longer ran under the left rail |
+| #41 | The spec band removed, on the owner's call | it restated figures the eyebrows already carry |
+| #40 | Stale social card regenerated; the JSON-LD and `<noscript>` mirrors guarded; fonts trimmed | 20 woff2 files → 12 |
+| #39 | The documentation set, and plain-English comments on the hard files | `ARCHITECTURE`, `DECISIONS`, `LEARNING-NOTES`, `manifest` |
 
 **Two things to know before editing.**
 
