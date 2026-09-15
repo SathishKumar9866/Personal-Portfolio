@@ -27,7 +27,6 @@ copy cut to campaign length. Two acts of that are built; three are not.
 | --- | --- | --- |
 | **Hero** | `From model development to real-world impact.` and three claims on accent rules, not a 38-word paragraph | `Hero.jsx` |
 | **Hero field** | real 3D: input layer on the contact dock, output on the section rail, hidden layers pushed forward and back. The pointer moves the camera | `NeuralField3D.js` |
-| **Spec band** | four derived numbers at 112px: `04 roles · 06 projects · 33 tools · CDT` | `SpecBand.jsx` |
 | **Clock** | his three zones plus the reader's own, and the hours between them, read from the device | `LiveClock.jsx`, `utils/localzone.js` |
 | **`Ctrl K`** | an ask box. Retrieves passages from the page's own `constants` and cites the section they live in | `CommandPalette.jsx`, `utils/answer.js` |
 | **Scenes** | every other section paints a full-bleed ground with hairline edges; heads at 76px | `SectionWrapper.jsx`, `main > section:nth-of-type(odd)` in `index.css` |

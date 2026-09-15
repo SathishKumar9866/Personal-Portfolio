@@ -132,9 +132,15 @@ used to be one element:
 
 Before, `max-w-7xl mx-auto` sat on the `<section>`, so a section could never paint
 a background wider than its own text column. Alternating grounds
-(`main > section:nth-of-type(odd)`) then fall out of the sequence, not out of a
+(`main > section:nth-of-type(even)`) then fall out of the sequence, not out of a
 prop — a component told its own index is wrong the moment the order changes, and
-this page has reordered twice.
+this page has reordered three times.
+
+**A rule that counts siblings moves when a sibling is deleted.** It was `odd`
+while the spec band was the first section in `main`; removing that band on
+2026-09-15 renumbered everything after it, and `odd` silently tinted the other
+three sections. Roles and Projects carry the ground because they are the dense,
+card-heavy ones, so the selector moved to `even` in the same commit.
 
 ## Motion budget
 
