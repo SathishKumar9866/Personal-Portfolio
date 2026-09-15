@@ -1,5 +1,58 @@
 # Worklog
 
+## 2026-09-15: the hero field stops competing with the headline
+
+Asked for plainly: the network behind the hero pulls focus, slow it down so the
+page reads. It was a diagram sitting behind the most important words on the site,
+and it was winning.
+
+### Halving the speed is not halving the motion
+
+The obvious change — halve the travel speed — barely helps on its own, because
+**a slower activation lives on screen longer**, and the number of lit dots is
+rate times lifetime:
+
+| | Spawn rate | Lifetime | Lit at once |
+| --- | --- | --- | --- |
+| Before | 3.2/s | ~3.0s | **≈ 9.6** |
+| Speed halved only | 3.2/s | ~6.1s | ≈ 19 — *worse* |
+| Speed halved, rate 1.1/s | 1.1/s | ~6.1s | ≈ 6.7 |
+| **Shipped** | **0.8/s** | ~6.1s | **≈ 4.9** |
+
+So the cut had to go further than it first looked: half the old field on screen
+at any moment, each crossing taking about eight seconds instead of three.
+
+### Four changes, all about attention rather than cost
+
+| | Before | After |
+| --- | --- | --- |
+| Activation speed | 0.26–0.46 | **0.12–0.21** |
+| Spawn rate | 3.2/s | **0.8/s** |
+| Concurrent cap | 14 | **8** |
+| Activation size / alpha | 8px / 0.95 | **6.5px / 0.72** |
+| Pointer parallax range | 46 × 30px | **30 × 20px** |
+| Parallax easing | 0.045 | **0.028** — drifts rather than tracks |
+
+The parallax stays because it is the thing that proves the scene has depth, but a
+reader moving the pointer toward a link should not shift the whole backdrop
+behind the text they are reading.
+
+**The 2D fallback moved with it.** That file is what a reduced-motion reader and
+a browser without WebGL actually see — leaving it busy would have given the quiet
+version to nobody.
+
+### What is measured here and what is not
+
+The concurrency figures above are arithmetic (rate × lifetime), not a count: a
+WebGL canvas without `preserveDrawingBuffer` returns an empty image to both
+`readPixels` and `drawImage`, so the dots cannot be counted from outside the
+scene. Setting that flag to count them would cost every reader a retained buffer
+for the life of the page, which is a bad trade for a number. The check that was
+run is the one that matters to a reader: the rendered page at 1440, where the
+field is now a handful of faint dots behind the headline rather than traffic.
+
+Frame rate is unchanged — this was never a performance problem.
+
 ## 2026-09-15: the page stops running under its own docks
 
 Reported: text overlapping the left sidebar. Reproduced at 1024px, where
