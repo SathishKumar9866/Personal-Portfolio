@@ -1,5 +1,39 @@
 # Worklog
 
+## 2026-09-15: the spec band comes out
+
+Owner's call, and a fair one. The band restated numbers the page already carried:
+`4 employers · since 2020` sits above Roles, `6 built · 1 live` above Projects,
+`6 areas · 33 tools` above Stack. Set at 112px between the hero and the first
+section a reader actually wants, it was a wall of numerals repeating what those
+sections say for themselves.
+
+Removed: the component, its ground rule, its row in both READMEs.
+
+### The deletion moved something it had no business moving
+
+`main > section:nth-of-type(odd)` tinted alternate scenes. The spec band was the
+first `<section>` in `main`, which made **Roles and Projects even-numbered** — so
+with the band gone, `odd` quietly tinted About, Stack and Contact instead, and
+the two card-heavy sections lost their ground.
+
+It is `even` now, and the reason is written where the rule lives: **a rule that
+counts siblings is a rule that moves when a sibling is deleted.** The property
+that makes `nth-of-type` robust to reordering is exactly what makes it fragile to
+deletion.
+
+### Measured after
+
+    scene 1  about      not tinted
+    scene 2  roles      tinted
+    scene 3  stack      not tinted
+    scene 4  projects   tinted
+    scene 5  contact    not tinted
+
+Page height 10,158px to **9,685px**. `US Central time · usually replies within a
+day` still appears exactly once, in Contact, where it is earned — the band was
+the duplicate, not the source. Lint 0, tests 27/27, build 0.
+
 ## 2026-09-15: the social card, the unguarded mirrors, and a font finding that went the other way
 
 Three things off the findings list. Two were real; the third taught more by being

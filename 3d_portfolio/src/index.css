@@ -507,9 +507,15 @@ main:focus:not(:focus-visible) {
 /* Scenes.
    -------------------------------------------------------------------------
    Every other section paints a ground, so the page reads as a sequence of
-   scenes rather than one continuous document. The rhythm falls out of the
-   order: spec band, Experience and Projects are tinted; Overview, Stack and
-   Contact sit on the page ground.
+   scenes rather than one continuous document. Roles and Projects are tinted —
+   the two dense, card-heavy sections — while About, Stack and Contact sit on
+   the page ground.
+
+   `even`, not `odd`, and the reason is worth keeping: the spec band used to be
+   the first section in `main`, which made Roles and Projects even-numbered.
+   Removing the band renumbered every section after it, and `odd` silently
+   tinted the other three. A rule that counts siblings is a rule that moves when
+   a sibling is deleted.
 
    `nth-of-type`, not a prop. Alternation is a property of the SEQUENCE — a
    component told its own index is wrong the moment a section moves, and this
@@ -524,13 +530,12 @@ main:focus:not(:focus-visible) {
    The hairlines matter as much as the fill: at these low contrasts the edge is
    what tells a reader a scene changed, and without it the tint reads as a
    rendering artefact. */
-main > section:nth-of-type(odd) {
+main > section:nth-of-type(even) {
   background: color-mix(in srgb, rgb(var(--c-tertiary)) 55%, rgb(var(--c-primary)));
   border-block: 1px solid rgb(var(--c-line));
 }
 
-/* The band is the first of those scenes and needs no rule of its own. Its class
-   stays because SpecBand's own styles hang off it. */
+
 
 .role-sticky {
   position: static;

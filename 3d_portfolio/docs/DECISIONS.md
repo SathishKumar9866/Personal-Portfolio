@@ -69,7 +69,8 @@ length.
 - **Rejected:** Sprite (needs a product to be loud about), Google (needs an
   illustration system that does not exist), Meta (reads as a company, not a
   person).
-- **Built:** the hero as a claim list, the spec band, sections as scenes.
+- **Built:** the hero as a claim list, sections as scenes.
+- **Built, then removed:** the spec band — see the reversals below.
 - **Not built:** projects as product pages, scroll choreography, a persistent CTA.
   See [BACKLOG.md](BACKLOG.md).
 - **The tension to watch:** campaign staging is *assertion* mode; this site's
@@ -164,6 +165,7 @@ Worth keeping visible: three things were built, measured, and taken back out.
 
 | Built | Why it was wrong | What replaced it |
 | --- | --- | --- |
+| The spec band — four derived numbers at 112px under the hero | Owner's call, 2026-09-15. It restated figures the sections already carry in their own eyebrows (`4 employers · since 2020`, `6 built · 1 live`, `6 areas · 33 tools`) and put a wall of numerals between the hero and the first thing a reader came for | Nothing. The hero runs straight into About, and every figure still lives where it is earned |
 | Rounding SVG path coordinates to 2dp | Destroyed every mark using compact arc syntax — `01.5` is two arc flags and a number. Docker, MLflow and Kubernetes rendered blank while the build stayed green | No rounding. The paths ship in a lazy chunk where the bytes cost first paint nothing |
 | Fading the whole covered card | `opacity` on `.role-card` made its ground translucent, so two covered cards showed each other's text | Dim the card's children only |
 | The base tint on the role-edge light at `accent / 0.45` | The whole card read as *selected*, or as an error state, and the travelling light had nothing to be brighter than | `accent / 0.18` |

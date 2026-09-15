@@ -11,7 +11,6 @@ import ContactRail from "./components/ContactRail";
 import AgentNote from "./components/AgentNote";
 import Collaborate from "./components/Collaborate";
 import NeuralField from "./components/NeuralField";
-import SpecBand from "./components/SpecBand";
 
 function App() {
   return (
@@ -39,11 +38,6 @@ function App() {
             <div className="hero-bg bg-cover bg-no-repeat bg-center">
               <Hero />
             </div>
-            {/* The spec sheet, straight after the hero: four derived numbers at
-                the size a car company sets a 0-100 time. Outside the section
-                rhythm on purpose — it is a band, not a section, and it has no
-                heading because the numbers are the heading. */}
-            <SpecBand />
             <About />
             <Experience />
             <Tech />
