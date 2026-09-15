@@ -42,6 +42,17 @@ one.
   follows the reader instead of a single button in the hero. Small, and worth
   doing after act 4 so it does not fight the scene transitions.
 
+### Done 2026-09-15
+
+- [x] **~~Regenerate `og.png`.~~** It had been previewing a tagline the site no
+  longer had. The template is now guarded by a test that fails if it stops
+  naming the current role; the render stays manual.
+- [x] **~~Guard the JSON-LD and `<noscript>` mirrors.~~** `html-mirror.test.mjs`,
+  7 checks, proved to fail three ways.
+- [x] **~~Trim the font subsets.~~** 20 woff2 files to 12, vendor CSS 12 kB to
+  6.56. Reader transfer is unchanged — the claim that this was worth ~90 kB was
+  wrong, and the measurements are in the WORKLOG.
+
 ### Smaller things worth doing, none of them blocking
 
 - [ ] **(P2, S) A per-project anchor.** About's three proof rows and the ask box

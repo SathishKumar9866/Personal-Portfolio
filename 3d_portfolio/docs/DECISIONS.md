@@ -91,6 +91,21 @@ length.
 - **Guarded by:** `test_every_cited_section_is_a_real_one` — the rename touched
   three files that all had to agree.
 
+### The og:image is the one thing no check can read
+
+**2026-09-15.** `og.png` is a picture of text, so no test in this repo can verify
+its contents — and it went stale exactly as predicted: the headline changed on
+2026-09-14 and the card kept `data to AI, end to end` for a day, previewing a
+tagline the page no longer contained on every share of the link.
+
+- **Mitigation, not a fix:** `docs/og-card.html` is the regenerable source, and
+  a test now asserts that template still names the current `status.role`. If the
+  role changes, the build fails and someone re-renders the card.
+- **Still manual:** the render itself. Capture the template at exactly 1200x630
+  with no device-pixel-ratio scaling and save over `public/og.png`.
+- **The `<noscript>` block had drifted the same way** and was corrected in the
+  same pass. It is now guarded.
+
 ### The crawler copy is checked, not trusted
 
 **2026-09-14.** `llms.txt` is hand-written prose and stays that way, but seven
