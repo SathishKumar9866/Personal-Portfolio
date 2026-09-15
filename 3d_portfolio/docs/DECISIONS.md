@@ -85,8 +85,8 @@ length.
 
 - **Fixed:** the nav said *About* over a section headed *Overview*, and *Work* over
   one headed *Projects* — and "Work" also collided with "Experience".
-- **Renamed:** `Experience` → **Roles** (what they are, and what the spec band
-  counts), `#work` → `#projects`.
+- **Renamed:** `Experience` → **Roles** (what they are, and what the section
+  eyebrow counts), `#work` → `#projects`.
 - **Rejected:** keeping "Experience" for recruiter familiarity. It is a word that
   means everything, over a section holding four jobs with dates.
 - **Guarded by:** `test_every_cited_section_is_a_real_one` — the rename touched
@@ -159,6 +159,49 @@ site names into a plain module.
 - **Absent on purpose:** Azure, S3, DynamoDB and Pinecone show nothing. The first
   three were removed upstream over trademark policy.
 
+### A phone gets three projects, not six
+
+**2026-09-15.** The Projects grid was 29% of the phone page. Three cards show;
+the rest are one tap away.
+
+- **Rejected:** deleting projects, which is what the backlog had concluded was
+  the only remaining option ("anything further means cutting what is shown").
+  It was a false choice — a disclosure shows less without cutting anything.
+- **Rejected:** a `slice` in JS. It needs the viewport width in JavaScript, and
+  it removes the card from the document, which costs every crawler and every
+  reader of `llms.txt` a project.
+- **Cost:** a second state path in `Works.jsx`, and a deep link that has to beat
+  the limit — About cites the sixth project by name.
+- **Result:** 9,825px → 8,091px, 11.6 → 9.6 screens. Shortest the page has been.
+
+### Every section is named for a screen reader, from its own heading
+
+**2026-09-15.** `aria-labelledby` on the `<section>`, pointing at the `<h2>`
+`SectionHead` already renders.
+
+- **Rejected:** `aria-label` with the name typed again. Two copies of one word,
+  and nothing to stop them drifting.
+- **Why it cannot drift:** the id is derived from the heading text, and
+  `test_every_cited_section_is_a_real_one` already forces the section id, the nav
+  label and that heading to be the same word.
+- **Found the same day:** the mobile Stack card put its stage numeral *inside*
+  the `<h3>`, so six groups announced themselves as "Data engineering01". Roles
+  had solved this for the same device already — a fix the codebase had made once
+  and never applied twice.
+
+### One glossary entry can answer to two names
+
+**2026-09-15.** `Federated` and `Federated learning` point at one object.
+
+- **The failure that caused it:** they were two hand-written definitions of one
+  term, and had already diverged — one carried "(privacy-preserving)" and the
+  other did not, so the term explained itself differently depending on which chip
+  you hovered.
+- **Rejected:** an alias layer in `TagTerm`. New machinery for one collision;
+  two keys on one object needs none.
+- **Watch for:** the next tag whose short form and long form both appear. The
+  shape to copy is the `FEDERATED` const, not a second definition.
+
 ## Decisions that were reversed
 
 Worth keeping visible: three things were built, measured, and taken back out.
@@ -169,6 +212,9 @@ Worth keeping visible: three things were built, measured, and taken back out.
 | Rounding SVG path coordinates to 2dp | Destroyed every mark using compact arc syntax — `01.5` is two arc flags and a number. Docker, MLflow and Kubernetes rendered blank while the build stayed green | No rounding. The paths ship in a lazy chunk where the bytes cost first paint nothing |
 | Fading the whole covered card | `opacity` on `.role-card` made its ground translucent, so two covered cards showed each other's text | Dim the card's children only |
 | The base tint on the role-edge light at `accent / 0.45` | The whole card read as *selected*, or as an error state, and the travelling light had nothing to be brighter than | `accent / 0.18` |
+| About printing each cited project's `outcome` | That string **is** the Projects card's own heading, so three whole sentences appeared twice on one page, a screen apart | The claim and a link to the card. The row says *which* project; the card says what it does |
+| `Looking for: {status.openTo}` in the availability card | The hero pill renders the same field two screens up, and the card's own header says "Open to work" above it — one fact, three times | The hero keeps it. A recruiter landing cold should read what he wants in the first screen |
+| `styles.padding` and `styles.paddingY` | Dead tokens nothing imported, while the README sent readers to one of them to change section padding | The clamp on the `<section>` in `SectionWrapper.jsx`, which is what actually does it |
 
 ## See also
 

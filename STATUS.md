@@ -3,9 +3,9 @@
 Written when work stopped. Read this first on return, then `3d_portfolio/README.md`
 for the change-to-file table.
 
-**Last touched:** 2026-09-14
-**Branch:** `main`. Eighteen PRs squash-merged this session, every branch
-deleted, no PR open.
+**Last touched:** 2026-09-15
+**Branch:** `main`. Twenty-seven PRs squash-merged across two sessions, every
+branch deleted, no PR open.
 **Live:** <https://sathishkumarai.github.io/> — GitHub Pages, built from `main`
 by Actions in the OTHER repo. **Deployed and verified**: the bundle hash the
 live site serves matches the one `main` builds.
@@ -14,6 +14,27 @@ live site serves matches the one `main` builds.
 **There IS 3D in it now** — `NeuralField3D.js`, three.js, hero only, desktop
 only, in a lazy chunk a phone never fetches. The folder name stopped being a
 joke on 2026-09-14.
+
+## The 2026-09-15 session, newest first
+
+Nine merges. Read `docs/WORKLOG.md` for the measurements behind each.
+
+| PR | What changed | The number that mattered |
+| --- | --- | --- |
+| #46 | About stopped reprinting each project's description; per-project anchors; one glossary entry for two federated chips | three sentences were on the page twice |
+| #45 | A phone draws three project cards and offers the rest | 9,825px → 8,091px, **9.6 screens** |
+| #44 | Five `<section>`s got accessible names; Stack headings lost a stray `01`; degrees nest under Education | Lighthouse was already 100 — none of it was visible there |
+| #43 | The hero field slowed so it stops competing with the headline | ~9.6 lit dots → ~4.9 |
+
+**Two things to know before editing.**
+
+1. **A phone hides projects 4–6.** `PHONE_CARDS` in `Works.jsx` and the
+   `.projects-grid[data-collapsed]` rule in `index.css` are ONE mechanism, and a
+   deep link to a hidden card has to open the deck first. If you add a link to a
+   project from anywhere new, link to `#<project name>`, not `#projects`.
+2. **Section names for screen readers come from the `<h2>` itself.** Rename a
+   section and the accessible name follows; type the name a second time anywhere
+   and you have created the drift this avoided.
 
 ## Where it stopped
 
@@ -29,8 +50,8 @@ copy cut to campaign length. Two acts of that are built; three are not.
 | **Hero field** | real 3D: input layer on the contact dock, output on the section rail, hidden layers pushed forward and back. The pointer moves the camera | `NeuralField3D.js` |
 | **Clock** | his three zones plus the reader's own, and the hours between them, read from the device | `LiveClock.jsx`, `utils/localzone.js` |
 | **`Ctrl K`** | an ask box. Retrieves passages from the page's own `constants` and cites the section they live in | `CommandPalette.jsx`, `utils/answer.js` |
-| **Scenes** | every other section paints a full-bleed ground with hairline edges; heads at 76px | `SectionWrapper.jsx`, `main > section:nth-of-type(odd)` in `index.css` |
-| **About** | three claims, each with the project `outcome` that proves it and a jump to it | `About.jsx` |
+| **Scenes** | every other section paints a full-bleed ground with hairline edges; heads at 76px | `SectionWrapper.jsx`, `main > section:nth-of-type(even)` in `index.css` — `even` since the spec band was deleted |
+| **About** | three claims, each naming the project that proves it and linking to that card. It no longer reprints the project's own sentence | `About.jsx` |
 | **Roles** | a sticky deck; only the card being read is lit, the covered ones dim | `Experience.jsx` |
 | **Stack** | 25 brand logos and 16 drawn category marks; the six category colours are one cool-to-warm ramp along the pipeline | `TagTerm.jsx`, `toolIcons.js`, `conceptIcons.js` |
 

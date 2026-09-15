@@ -16,8 +16,6 @@ const styles = {
    * spare, and at wider viewports `max-w-7xl` centring makes the value moot.
    */
   paddingX: "px-[clamp(1.25rem,4.5vw,4rem)] rail:px-[4.5rem]",
-  paddingY: "py-[clamp(1.5rem,4vw,4rem)]",
-  padding: "px-[clamp(1.25rem,4.5vw,4rem)] rail:px-[4.5rem] py-[clamp(3rem,7vw,6rem)]",
 
   heroHeadText:
     "font-display font-bold text-white-100 tracking-[-0.02em] leading-[1.02] text-[calc(clamp(2.5rem,6.5vw,5.25rem)*var(--type-scale,1))]",
