@@ -1,3 +1,15 @@
+/* ---------------------------------------------------------------------------
+   PLAIN ENGLISH.
+
+   The four big numbers under the hero: 04 roles, 06 projects, 33 tools, CDT.
+
+   NOT ONE OF THEM IS TYPED. Each is counted from the data in constants at the
+   moment the module loads — add a project and 06 becomes 07 by itself. That is
+   the single most useful habit in this codebase: a number written by hand is a
+   number that goes wrong the next time the data changes, and nothing warns you.
+
+   Walked through slowly: docs/LEARNING-NOTES.md, section 1.
+--------------------------------------------------------------------------- */
 import { motion, useReducedMotion } from "framer-motion";
 import { contact, experience, projects, stackGroups } from "../constants";
 

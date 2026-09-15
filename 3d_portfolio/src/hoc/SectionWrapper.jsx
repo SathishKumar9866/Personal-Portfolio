@@ -1,3 +1,21 @@
+/* ---------------------------------------------------------------------------
+   PLAIN ENGLISH.
+
+   Every section on the page is wrapped by this one function, which gives it two
+   separate things:
+
+     the STAGE   — the <section>, full width, paints the background colour
+     the MEASURE — a <div> inside it, capped in width, where the text lives
+
+   Keeping them apart is what lets a scene colour run edge-to-edge while the
+   words stay in a readable column. When both jobs were on one element, a
+   section could never paint a background wider than its own paragraph.
+
+   A "higher-order component" sounds grand; it is just a function that takes a
+   component and returns a bigger one wrapped around it.
+
+   Walked through slowly: docs/LEARNING-NOTES.md, section 2.
+--------------------------------------------------------------------------- */
 import { motion } from "framer-motion";
 import { styles } from "../styles";
 import { staggerContainer } from "../utils/motion";

@@ -1,3 +1,20 @@
+/* ---------------------------------------------------------------------------
+   PLAIN ENGLISH.
+
+   One tool chip — "PySpark", "Docker", "RAG" — wherever it appears on the page.
+
+   It does three jobs: shows the tool's logo if one exists, explains the term in
+   plain English when you hover or tap it, and stays a 44px touch target on a
+   phone while looking like ordinary text.
+
+   The logos are the interesting part. All 41 marks together are ~17 kB
+   gzipped, which is a lot to pay at first paint for decoration, so they live in
+   a separate file fetched the first time any chip mounts. One module-level
+   cache and a set of waiting callbacks means 33 chips share a single download
+   rather than triggering 33.
+
+   Walked through slowly: docs/LEARNING-NOTES.md, sections 2 and 5.
+--------------------------------------------------------------------------- */
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { glossary } from "../constants";
 

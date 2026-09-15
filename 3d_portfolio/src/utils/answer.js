@@ -1,3 +1,19 @@
+/* ---------------------------------------------------------------------------
+   PLAIN ENGLISH, for anyone learning from this file.
+
+   This is a tiny SEARCH ENGINE over the site's own words. No AI, no server.
+   It splits the question into words, throws away the common ones, and scores
+   every paragraph on the page by how many RARE words it shares with the
+   question — "federated" tells you a lot, "data" tells you nothing. The best
+   sentence of the best paragraph is the answer, quoted exactly.
+
+   Three ideas do the work, and each fixed a real wrong answer:
+     · IDF          — weight a word by how rare it is
+     · length norm  — divide by paragraph length, or long ones win by accident
+     · stemming     — chop endings so "ship" finds "Shipped"
+
+   Walked through slowly: docs/LEARNING-NOTES.md, section 6.
+--------------------------------------------------------------------------- */
 /**
  * Owns: turning a typed question into passages that are already on this page.
  *

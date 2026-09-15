@@ -4,10 +4,62 @@ Future work for the portfolio, as tickets. Priority: **P0** ship-blockers,
 **P1** high-value, **P2** nice-to-have. Effort: S / M / L. Status: `[ ]` todo,
 `[~]` needs input, `[x]` done.
 
-> Current state: live at <https://sathishkumarai.github.io/>, built from `main`.
-> Databricks-style site, light/dark, reader-controlled text size, fluid type and
-> padding, a phone build distinct from the desktop one, and four ambient canvases.
-> `redesign/highway-premium` squash-merged 2026-09-12 as `630a38f`.
+> Current state (2026-09-15): live at <https://sathishkumarai.github.io/>, built
+> from `main`, deployed and verified by bundle hash. Six palettes with **Paper as
+> the default**, reader-controlled text size, full-bleed scenes, a spec band, a
+> sticky Roles deck, a WebGL hero field on desktop, tool logos on every named
+> technology, and an ask box that retrieves from the page's own copy.
+> Nineteen PRs squash-merged 2026-09-14; `npm test` is 20 checks in CI.
+> See [ARCHITECTURE.md](ARCHITECTURE.md) and [DECISIONS.md](DECISIONS.md).
+
+---
+
+## Next up, in order of value (added 2026-09-15)
+
+The four below are the whole of what is worth doing next. Everything after them in
+this file is older and lower-value; if you only have an afternoon, it is the first
+one.
+
+- [ ] **(P0, S) Open the live site in Safari, Firefox and on a real iPhone.**
+  Overdue rather than prudent. The deployed page now leans on `color-mix` for
+  every scene ground, `@property` for the travelling role-edge light, WebGL for
+  the hero, and `position: sticky` for the Roles deck — **and none of it has ever
+  been opened outside Chrome, by anyone.** The hide-on-scroll handler also clamps
+  scroll position for iOS rubber-banding and that code has never executed on an
+  iPhone. Check in this order: scene grounds and hairlines, the role-edge light
+  (it should fall back to a static tinted border where `@property` is missing),
+  deck pinning and covered-card dimming, the WebGL field and its 2D fallback, the
+  ask box, the six palettes. *Plane: `COD-194`.*
+- [~] **(P1, L) Campaign act 3: projects as product pages.** Full-bleed cover art,
+  a spec row beneath it, the diagram as hero rather than thumbnail. **Blocked on
+  the owner:** a software campaign leads with the product and this repo has never
+  had a single screenshot. Three would change the shape of the work entirely.
+  *Plane: `COD-195`.*
+- [ ] **(P1, M) Campaign act 4: scroll choreography.** Pinned scenes and type that
+  arrives as you enter one. The Roles deck is the pattern; generalising it is the
+  work. Nothing blocks this — `Reveal.jsx` and the scene structure already exist.
+- [ ] **(P2, S) Campaign act 5: a persistent CTA.** One "open to roles" bar that
+  follows the reader instead of a single button in the hero. Small, and worth
+  doing after act 4 so it does not fight the scene transitions.
+
+### Smaller things worth doing, none of them blocking
+
+- [ ] **(P2, S) A per-project anchor.** About's three proof rows and the ask box
+  both link to `#projects` — the section, not the card. `id={name}` on each
+  project card would let a citation land on the exact one.
+- [ ] **(P2, S) Tighten the `llms.txt` guard to whole words.** It matches
+  substrings, so renaming `pb-card-deck` to `pb-card-deck-OLD` *in the file* slips
+  through. The direction that actually drifts is caught; this closes the other one.
+- [ ] **(P2, M) Give `Experience.jsx` a name that matches its section.** The
+  section is Roles; the file is still `Experience.jsx`. A rename touches the HOC
+  call, the components README and four imports — cheap, but it is a rename, so do
+  it deliberately rather than as a tidy-up.
+- [ ] **(P2, S) Drop `react-tilt`.** One dependency for an 8° hover tilt on project
+  cards that is already disabled under reduced motion. A dozen lines of CSS
+  `transform` on pointer position would replace it.
+- [ ] **(P2, M) A contrast check in CI.** `TYPE-AUDIT.md` was measured by hand
+  once. The six palettes × the elements that matter is a script, and it would have
+  caught the one real finding in that audit before it shipped.
 
 ---
 

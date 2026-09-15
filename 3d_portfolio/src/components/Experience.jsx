@@ -1,3 +1,25 @@
+/* ---------------------------------------------------------------------------
+   PLAIN ENGLISH.
+
+   The Roles section: four jobs as cards that STACK. Scroll, and each card stops
+   under the navbar while the next slides up over it, like dealing a hand.
+
+   That is `position: sticky` and nothing else — no scroll listener moves the
+   cards. The two hooks below handle the two things sticky cannot decide by
+   itself:
+
+     useDeckFits     — is the tallest card shorter than the room it has? If not,
+                       a pinned card would hide its own bottom (measured: 192px
+                       of text unreachable on a short laptop screen), so the
+                       whole effect turns itself off and it becomes a plain list.
+
+     useCoveredCards — which cards are buried? Those dim their text, so the card
+                       being read is the only bright one and the half-sentence
+                       peeking out from underneath reads as "a card behind"
+                       rather than as broken text.
+
+   Walked through slowly: docs/LEARNING-NOTES.md, sections 4 and 8.
+--------------------------------------------------------------------------- */
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { experience, education } from "../constants";
