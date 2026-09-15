@@ -198,6 +198,21 @@ export const quotes = [
 // plain-English definitions + a "learn more" link (curated: Wikipedia for
 // concepts, official site for tools, Hugging Face for model/task terms).
 // Any term without a link falls back to a Google search of the term.
+/**
+ * One concept, two chips: a project tag says "Federated", a stack item says
+ * "Federated learning". They used to be two glossary entries with two
+ * hand-written definitions, and they had already drifted — one carried
+ * "(privacy-preserving)" and the other did not, so the same term explained
+ * itself differently depending on which chip you hovered. Two keys, one object,
+ * no way to drift. `full` is safe on both: TagTerm skips it when it equals the
+ * chip's own name.
+ */
+const FEDERATED = {
+  def: "Training a model across many devices without their raw data ever leaving them (privacy-preserving).",
+  link: "https://en.wikipedia.org/wiki/Federated_learning",
+  full: "Federated learning",
+};
+
 export const glossary = {
   RAG: { def: "Retrieval-Augmented Generation, the AI looks things up in real documents before answering, so it cites sources instead of guessing.", link: "https://en.wikipedia.org/wiki/Retrieval-augmented_generation", full: "Retrieval-Augmented Generation" },
   LLM: { def: "Large Language Model, the kind of AI (like ChatGPT) that understands and writes text.", link: "https://en.wikipedia.org/wiki/Large_language_model", full: "Large Language Model" },
@@ -205,7 +220,7 @@ export const glossary = {
   Kubernetes: { def: "An industry-standard system that runs and scales apps across many servers automatically.", link: "https://kubernetes.io/", full: "Kubernetes container orchestration" },
   FastAPI: { def: "A fast Python framework for building web APIs, the backend that serves the model.", link: "https://fastapi.tiangolo.com/", full: "FastAPI web framework" },
   Vision: { def: "Computer vision: teaching software to understand images and video.", link: "https://en.wikipedia.org/wiki/Computer_vision", full: "Computer vision" },
-  Federated: { def: "Federated learning: training a model across many devices without their raw data ever leaving them (privacy-preserving).", link: "https://en.wikipedia.org/wiki/Federated_learning", full: "Federated learning" },
+  Federated: FEDERATED,
   PyTorch: { def: "A popular open-source library for building and training neural networks.", link: "https://pytorch.org/" },
   OpenCV: { def: "A widely-used library for processing images and video.", link: "https://opencv.org/", full: "Open Source Computer Vision Library" },
   Docker: { def: "Packages an app with everything it needs so it runs the same anywhere.", link: "https://www.docker.com/" },
@@ -235,7 +250,7 @@ export const glossary = {
   Embeddings: { def: "Turning text or images into numbers that capture meaning, so similar things sit close together.", link: "https://huggingface.co/blog/getting-started-with-embeddings" },
   YOLOv8: { def: "A fast, popular real-time object-detection model.", link: "https://docs.ultralytics.com/", full: "You Only Look Once, version 8" },
   "Detection & tracking": { def: "Finding objects in each frame and following them across a video.", link: "https://en.wikipedia.org/wiki/Object_detection" },
-  "Federated learning": { def: "Training a model across many devices without their raw data ever leaving them.", link: "https://en.wikipedia.org/wiki/Federated_learning" },
+  "Federated learning": FEDERATED,
   MLflow: { def: "Tracks ML experiments and manages model versions.", link: "https://mlflow.org/", full: "MLflow experiment tracking" },
   "GitHub Actions": { def: "Automation that builds, tests, and deploys code on every change (CI/CD).", link: "https://github.com/features/actions" },
   Helm: { def: "A package manager for deploying apps onto Kubernetes.", link: "https://helm.sh/" },

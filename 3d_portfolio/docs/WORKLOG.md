@@ -1,5 +1,93 @@
 # Worklog
 
+## 2026-09-15: three sentences that appeared twice, and one concept defined twice
+
+Asked for plainly: make sure the page has no duplicate information. Dumped every
+visible text node with the section it sits in, then every string in `constants`
+with its path, and compared.
+
+### The page said the same three sentences twice
+
+About's proof rows printed `project.outcome`. That string **is** the Projects
+card's own heading. So three whole sentences appeared twice on one page, about a
+screen apart:
+
+> YOLOv8 detection trained federated: raw data never leaves the client.
+> Document Q&A that cites the exact source passage behind every answer.
+> Live mobile-first scorekeeper: no login, works offline after first load.
+
+The row's job is to say **which** project answers the claim; the card's job is to
+say what it does. The sentence is gone from About and the link carries the name,
+which is the thing a reader follows anyway. About lost 158px on a phone as a side
+effect: 8,249px -> **8,091px, 9.6 screens**.
+
+### The same de-duplication exposed a bug shipped an hour earlier
+
+About cites three projects by name, and one of them — `pb-card-deck` — is the
+**sixth**. The phone limit added this morning hides everything past the third.
+Every one of those links pointed at `#projects`, the section, so on a phone a
+reader tapped `pb-card-deck ↓` and arrived at a section where that card was not
+drawn.
+
+Fixed properly rather than by reordering the data:
+
+- **Each card is now `id={name}`**, so About links to `#pb-card-deck` rather than
+  to the section. This also closes the "per-project anchor" backlog ticket.
+- **A deep link wins over the limit.** `useState` initialiser, not an effect —
+  the card has to be in the layout *before* the browser looks for the anchor.
+- **A hash followed in-page needs a second aim.** The browser scrolls to the
+  anchor while the three cards above it are still hidden, so it lands **1,391px
+  short**. The correction cannot live in a `requestAnimationFrame` inside the
+  handler: that frame can run before React has painted the revealed cards, and
+  then it measures the same short layout that caused the problem —
+  **measured, it was still 1,391px off.** An effect keyed on `showAll` cannot run
+  too early. Measured after: scroll 7,357, card at 7,444, sitting 87px down with
+  the navbar 77px tall.
+
+### One concept, two definitions, already drifted
+
+`glossary` had two entries for federated learning, because a project tag says
+"Federated" and a stack item says "Federated learning", and `TagTerm` looks up
+`glossary[name]` by exact key. Two hand-written definitions for one term, and
+they had **already** diverged:
+
+| Key | Said |
+| --- | --- |
+| `Federated` | "…without their raw data ever leaving them **(privacy-preserving)**." |
+| `Federated learning` | "…without their raw data ever leaving them." |
+
+The same term explained itself differently depending on which chip you hovered.
+Now both keys point at one object, so there is nothing to drift. `full` is safe
+on both — `TagTerm` already skips it when it equals the chip's own name.
+
+### What is repeated on purpose, and stays
+
+| Repeat | Why it is not a duplicate |
+| --- | --- |
+| Nav labels = section headings | The one-name-per-section rule, enforced by a test |
+| `llms.txt`, `<noscript>`, JSON-LD | Mirrors of the page for crawlers. Their whole job, and guarded by 14 checks |
+| Southern Illinois University ×2 | He worked there and studied there. Both true |
+| A tool in a role's stack and in Stack | A tool used on a job and listed as a skill |
+| Contact routes in the icon rail and in Contact | The rail is wayfinding — icons, no addresses |
+| A repo name in About and on its card | A link and its destination |
+
+### Left for the owner to decide
+
+Two facts are still stated twice, and removing either changes what the page says
+rather than how it says it:
+
+- **"AI engineering roles"** — the hero pill and the About card's `LOOKING FOR`.
+- **"AI Engineer · AdvanSoft International, Inc"** — the About card's `CURRENTLY`
+  and the first Roles card.
+
+Three of the availability card's four rows restate something else on the page.
+That is a real design — a glance card so a recruiter need not scroll three
+sections — but it is redundancy, and whether it earns its place is an editorial
+call, not a bug.
+
+Lighthouse mobile **100 / 100 / 100 / 100**. `npm run lint` 0 errors, `npm test`
+27/27, `npm run build` 0.
+
 ## 2026-09-15: the phone page, 9,825px to 8,249px, with nothing removed
 
 The entry above filed this as "the cut has to be content, not compression",
