@@ -83,6 +83,10 @@ A few boundaries worth knowing before editing:
   and rounding turns three tokens into one. Docker, MLflow and Kubernetes
   rendered blank or as a dot. The file parsed, the build passed, and only
   looking at the page found it.
+- **Two fixed docks overlap the page from 1024px up**, and neither is in the
+  flow: `ContactRail` (left) and `SideRail` (right). The clearance lives in
+  `styles.paddingX` as `rail:px-[4.5rem]` — remove it and paragraphs run under
+  the icons, measured at 1024 where `4.5vw` is 46px against a dock ending at 48.
 - **`TagTerm` has two modes.** Default teaches (hover opens the definition);
   `plain` states (native tooltip only). Cards pass `plain`.
 - **`CommandPalette` shows two lists in one listbox.** Answers retrieved from
