@@ -1,3 +1,24 @@
+/* ---------------------------------------------------------------------------
+   PLAIN ENGLISH.
+
+   Works out where the reader is and how many hours apart the two of you are.
+   The browser already knows its own timezone, so nothing here asks permission,
+   looks up an IP, or sends a request anywhere.
+
+   The fiddly part is the OFFSET. JavaScript will happily tell you the time in
+   any zone, but not how far that zone is from UTC — so this formats the SAME
+   instant twice, once in the zone and once in UTC, and subtracts. Doing it that
+   way is automatically right across a daylight-saving boundary, which a
+   hard-coded offset is not: India to US Central is +11:30h in January and
+   +10:30h in July.
+
+   (One ordinary English word in an earlier draft of this comment matched a
+   Tailwind utility name, and Tailwind — which scans this file for class names,
+   comments included — shipped a real CSS rule for it. The word is not repeated
+   here for the same reason. Story: docs/LEARNING-NOTES.md, section 12.)
+
+   Walked through slowly: docs/LEARNING-NOTES.md, section 8.
+--------------------------------------------------------------------------- */
 /**
  * Owns: what the visitor's own device says about where and when they are.
  *

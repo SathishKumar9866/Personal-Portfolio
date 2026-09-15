@@ -1,3 +1,22 @@
+/* ---------------------------------------------------------------------------
+   PLAIN ENGLISH.
+
+   The moving network behind the hero, drawn with real 3D (three.js) on a
+   graphics card. Points are the neurons, lines are the connections, and the
+   little bright dots travelling along them are activations.
+
+   It is a DIAGRAM, not wallpaper: the first layer of points sits exactly on the
+   contact icons down the left edge, and the last layer on the section dots down
+   the right. Those coordinates are read from the real buttons, so the drawing
+   stays wired to the interface.
+
+   This file is ~131 kB gzipped once three.js is counted — about four times the
+   whole app — which is why NeuralField.jsx only `import()`s it for a desktop
+   reader who has not asked for reduced motion and whose browser grants WebGL.
+   Everyone else gets the 2D version and never downloads this.
+
+   Walked through slowly: docs/LEARNING-NOTES.md, section 5.
+--------------------------------------------------------------------------- */
 /**
  * Owns: the hero field as an actual 3D scene, rendered with three.js.
  *
