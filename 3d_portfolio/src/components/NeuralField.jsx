@@ -144,7 +144,10 @@ const NeuralField = () => {
     const spawn = () => {
       if (layers.length < 2) return;
       const path = layers.map((l) => l[Math.floor(Math.random() * l.length)]);
-      signals.push({ path, t: 0, speed: 0.28 + Math.random() * 0.22 });
+      // Matched to NeuralField3D: half the old speed. This file is what a
+      // reduced-motion reader and a browser without WebGL actually see, so
+      // leaving it busy would quietly give the quiet version to nobody.
+      signals.push({ path, t: 0, speed: 0.13 + Math.random() * 0.1 });
     };
 
     const draw = () => {
@@ -254,7 +257,8 @@ const NeuralField = () => {
 
       signals.forEach((s) => (s.t += s.speed * 0.016));
       signals = signals.filter((s) => s.t < 1);
-      if (heroVisible > 0.05 && Math.random() < 0.035) spawn();
+      // ~0.8 a second at 60fps, matching NeuralField3D.
+      if (heroVisible > 0.05 && Math.random() < 0.013) spawn();
 
       draw();
       raf = requestAnimationFrame(frame);

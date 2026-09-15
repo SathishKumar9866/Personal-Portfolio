@@ -86,7 +86,19 @@ const HIDDEN = [8, 6]; // same shape as the 2D field: 4 -> 8 -> 6 -> 5
 // can follow rather than an ornament they scroll past.
 const LAYER_LABELS = ["INPUT", "HIDDEN 1", "HIDDEN 2", "OUTPUT"];
 const HIDDEN_DEPTH = [170, -190]; // toward the reader, then away
-const MAX_SIGNALS = 14;
+/**
+ * EIGHT, NOT FOURTEEN, AND SLOW.
+ *
+ * The field is a diagram behind the page's most important words, and it was
+ * winning. Fourteen activations crossing at roughly a screen every three
+ * seconds is enough motion to pull the eye off a sentence and back again on
+ * every pass — the reader keeps re-finding their line.
+ *
+ * The numbers below are all attention, not performance: the scene ran at 60fps
+ * either way. Halved travel speed, a third of the spawn rate and six fewer
+ * lights make it something you notice once and then read over.
+ */
+const MAX_SIGNALS = 8;
 const FOV = 50;
 
 const rgb = (root, name) => {
@@ -160,7 +172,10 @@ export const start = () => {
   // 0.14, under the canvas's own 0.55: an edge has to be findable when you look
   // for it and invisible when you are reading the headline in front of it.
   const edgeMat = new LineBasicMaterial({ transparent: true, opacity: 0.14, depthWrite: false });
-  const signalMat = new PointsMaterial({ size: 8, sizeAttenuation: true, transparent: true, opacity: 0.95, depthWrite: false });
+  // Smaller and softer than the nodes it travels between. At size 8 and 0.95
+  // alpha each activation was the brightest thing on a page whose brightest
+  // thing should be the headline.
+  const signalMat = new PointsMaterial({ size: 6.5, sizeAttenuation: true, transparent: true, opacity: 0.72, depthWrite: false });
 
   const paintTheme = () => {
     const [r, g, b] = rgb(root, "--c-line-strong");
@@ -296,7 +311,9 @@ export const start = () => {
     live.push({
       path: layers.map((l) => l[Math.floor(Math.random() * l.length)]),
       t: 0,
-      speed: 0.26 + Math.random() * 0.2,
+      // Roughly half of what it was (0.26-0.46). A crossing now takes about
+      // eight seconds instead of three.
+      speed: 0.12 + Math.random() * 0.09,
     });
   };
 
@@ -321,8 +338,11 @@ export const start = () => {
   // drawing promises.
   let px = 0, py = 0, cx = 0, cy = 0;
   const onPointer = (e) => {
-    px = (e.clientX / w - 0.5) * 46;
-    py = (e.clientY / h - 0.5) * 30;
+    // 30/20, down from 46/30. The parallax is the thing that proves the scene
+    // has depth, so it stays — but a reader moving the pointer toward a link
+    // should not shift the whole backdrop behind the text they are reading.
+    px = (e.clientX / w - 0.5) * 30;
+    py = (e.clientY / h - 0.5) * 20;
   };
 
   // --- loop -----------------------------------------------------------------
@@ -334,13 +354,25 @@ export const start = () => {
     last = ts;
     if (!onScreen || hidden) return;
 
-    cx += (px - cx) * 0.045;
-    cy += (py - cy) * 0.045;
+    // A longer tail on the easing, so the camera drifts to the pointer rather
+    // than tracking it.
+    cx += (px - cx) * 0.028;
+    cy += (py - cy) * 0.028;
     camera.position.x = cx;
     camera.position.y = -cy;
     camera.lookAt(0, 0, 0);
 
-    if (Math.random() < dt * 3.2) spawn();
+    /**
+     * 0.8 a second, down from 3.2 — and the arithmetic matters, because halving
+     * the speed DOUBLES how long each activation lives, which cancels most of a
+     * spawn-rate cut.
+     *
+     *   concurrent ≈ spawn rate × lifetime
+     *   before: 3.2/s × ~3.0s  ≈ 9.6 lit at once
+     *   at 1.1: 1.1/s × ~6.1s  ≈ 6.7  — barely quieter
+     *   now:    0.8/s × ~6.1s  ≈ 4.9  — half the old field
+     */
+    if (Math.random() < dt * 0.8) spawn();
     stepSignals(dt);
     renderer.render(scene, camera);
   };
