@@ -379,7 +379,7 @@ const Experience = () => {
 
     {education.length > 0 && (
       <>
-        <Reveal className="mt-16">
+        <Reveal className="mt-10 sm:mt-16">
           <h3 className="font-sans text-[12px] font-medium uppercase tracking-[0.09em] text-accent-ink">
             Education
           </h3>
