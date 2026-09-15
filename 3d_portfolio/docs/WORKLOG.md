@@ -1,5 +1,68 @@
 # Worklog
 
+## 2026-09-15: `react-tilt` out, one dependency for one hover
+
+A runtime dependency existed so that project cards lean 8 degrees toward the
+pointer. That is a `transform` and two numbers.
+
+### What it cost, measured rather than assumed
+
+| | Before | After |
+| --- | ---: | ---: |
+| Total JS, gzipped | 271,791 | **270,691** |
+| `index` chunk, gzipped | 36,716 | 36,750 |
+| Runtime dependencies | 7 | **6** |
+
+**The entry chunk got 34 bytes bigger** — the replacement code lives there, while
+`react-tilt` had been bundled into the React chunk. Only the total is the honest
+number: **−1,100 bytes**, and a dependency out of the tree.
+
+### The replacement is the idiom the repo already had
+
+`Tech.jsx` has written pointer position to a DOM node as `--mx`/`--my` for the
+Stack spotlight since it was built. The same handler shape now writes `--rx` and
+`--ry`, and CSS does the rotation. Imperative for the same reason: routing a
+`pointermove` through React state re-renders six cards on every mouse pixel for
+an effect that is pure compositing.
+
+It also removes a collision. `react-tilt` wrote its transform to the **style
+attribute** of the element it wrapped — exactly where framer-motion writes — so
+the two had to be kept on separate elements. A custom property collides with
+nothing.
+
+### The reset is the cascade, not a handler
+
+The first version cleared `--rx` in a `pointerleave` handler. The second version
+does not have one: the angle applies under `:hover`, so the pointer leaving
+returns the card to flat **whether or not any JavaScript ran**.
+
+A handler does the same job on the happy path and leaves a card stuck at an
+angle the moment it does not fire — a dropped event, a card unmounted mid-gesture,
+a pointer that left the window. A stale `--rx` is harmless: nothing reads it
+until the next hover, which overwrites it.
+
+`transform-style: preserve-3d` is deliberately absent. The cover is a canvas and
+the ground is a backdrop-filtered glass panel; a 3D context puts both in their
+own layers, and on these grounds that shows as a seam. A flat rotation is all the
+effect ever was.
+
+### What was verified, and the one thing that was not
+
+Read off the built page: the rest rule is `transform: none`; the hover rule
+applies both variables; the `(hover: none), (prefers-reduced-motion: reduce)`
+guard resolves to `none`; the handler writes **7.977deg** at the exact corner,
+against a 8deg maximum; and no element carries an inline `perspective`, which was
+`react-tilt`'s signature.
+
+**Not verified: the hover itself.** Touch emulation in this browser session is
+browser-wide, so `(hover: hover)` never matched and a dispatched `pointermove`
+cannot trigger `:hover`. The rules and the arithmetic are proven; that the card
+visibly leans is not, and wants one look on a real desktop pointer. Moving the
+reset into the cascade was partly a response to that — the failure mode a
+handler would have is the one this cannot test for.
+
+`npm run lint` 0 errors, `npm test` 27/27, `npm run build` 0.
+
 ## 2026-09-15: the docs catch up, and the last duplicated fact goes
 
 Asked for three things: update the README, make links open in a new tab, and

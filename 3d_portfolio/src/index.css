@@ -703,6 +703,46 @@ li[data-covered="true"] > .role-card[data-current="true"]::before {
   }
 }
 
+/* PROJECT CARD TILT.
+   `react-tilt` did this in JavaScript, in a wrapper element, by rewriting the
+   style attribute on every pointer move. This is the same effect in the
+   compositor: two custom properties set imperatively (see `tilt` in Works.jsx)
+   and one transform that never touches layout.
+
+   `transform-style: preserve-3d` is deliberately ABSENT. The card's cover is a
+   canvas and its ground is a backdrop-filtered glass panel; giving the card a
+   3D context makes both of those render into their own layers, and on the
+   grounds they sit on that is visible as a seam. A flat rotation is all the
+   effect ever was.
+
+   The transition is on the transform only. `transition: all` here would also
+   animate the border colour the hover rule changes, at 400ms instead of the
+   150ms every other control on the page uses. */
+.project-card {
+  transform: none;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* THE RESET IS THE CASCADE, NOT A HANDLER.
+   The angle only applies while `:hover` holds, so the pointer leaving returns
+   the card to flat whether or not any JavaScript ran. A `pointerleave` handler
+   that clears the variables would do the same job on the happy path and leave a
+   card stuck at an angle the moment it did not fire — a dropped event, a card
+   unmounted mid-gesture, a pointer that left the window. `--rx` going stale is
+   then harmless: nothing reads it until the next hover, which overwrites it. */
+.project-card:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  will-change: transform;
+}
+
+/* A touch device has no hover to leave, and a tap would fire pointermove once
+   and set an angle nothing would take back. */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .project-card:hover {
+    transform: none;
+  }
+}
+
 .stack-card {
   position: relative;
   --cat: var(--c-line-strong);

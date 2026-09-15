@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Tilt } from "react-tilt";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { projects } from "../constants";
 import { fadeIn } from "../utils/motion";
@@ -384,6 +383,35 @@ const ProjectCover = ({ cover = "retrieval", name }) => {
   );
 };
 
+/**
+ * An 8-degree tilt toward the pointer, written to the node as `--rx`/`--ry` for
+ * the transform in `.project-card`. Same idiom as the Stack spotlight in
+ * `Tech.jsx`, and imperative for the same reason: routing a pointermove through
+ * React state would re-render six cards on every mouse pixel for an effect that
+ * is pure compositing.
+ *
+ * This replaced `react-tilt`, a whole runtime dependency for one hover. The
+ * library also wrote its transform to the style attribute of the element it
+ * wrapped, which is exactly where framer-motion writes, so the two had to be
+ * kept on separate elements. A CSS variable does not collide with anything.
+ *
+ * There is no matching "untilt": the transform is applied under `:hover` in
+ * `.project-card`, so the pointer leaving resets it through the cascade and
+ * cannot leave a card stuck at an angle because a handler did not fire.
+ */
+const MAX_TILT = 8;
+
+const tilt = (e) => {
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  // -0.5..0.5 from the centre. Y drives rotateX and X drives rotateY, which
+  // looks backwards and is not: tilting "up at the top" is rotation about X.
+  const x = (e.clientX - r.left) / r.width - 0.5;
+  const y = (e.clientY - r.top) / r.height - 0.5;
+  el.style.setProperty("--rx", `${-y * MAX_TILT * 2}deg`);
+  el.style.setProperty("--ry", `${x * MAX_TILT * 2}deg`);
+};
+
 const ProjectCard = ({ index, name, cover, outcome, description, tags, source_code_link, live_link, featured }) => {
   const reduced = useReducedMotion();
   const isLive = Boolean(live_link);
@@ -412,9 +440,9 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
       delay={(index % 3) * 0.07}
       className={`h-full scroll-mt-[5.5rem] ${featured ? "sm:col-span-2" : ""}`}
     >
-      <Tilt
-        options={{ max: reduced ? 0 : 8, scale: 1, speed: 400 }}
-        className="h-full glass-card p-5 rounded-2xl hover:border-accent/40 transition-colors flex flex-col"
+      <div
+        onPointerMove={reduced ? undefined : tilt}
+        className="project-card h-full glass-card p-5 rounded-2xl hover:border-accent/40 transition-colors flex flex-col"
       >
         <motion.div style={{ y: coverY }}>
           <ProjectCover cover={cover} name={name} />
@@ -466,7 +494,7 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
             </a>
           )}
         </div>
-      </Tilt>
+      </div>
     </Reveal>
   );
 };

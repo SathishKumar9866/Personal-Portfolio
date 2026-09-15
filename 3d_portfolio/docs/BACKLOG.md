@@ -93,9 +93,12 @@ browsing, so these are what that score cannot see.
   section is Roles; the file is still `Experience.jsx`. A rename touches the HOC
   call, the components README and four imports — cheap, but it is a rename, so do
   it deliberately rather than as a tidy-up.
-- [ ] **(P2, S) Drop `react-tilt`.** One dependency for an 8° hover tilt on project
-  cards that is already disabled under reduced motion. A dozen lines of CSS
-  `transform` on pointer position would replace it.
+- [x] **~~(P2, S) Drop `react-tilt`.~~** Done 2026-09-15. Total JS 271,791 ->
+  270,691 gzipped, seven runtime dependencies to six. The reset lives in
+  `:hover` rather than a `pointerleave` handler, so a card cannot stick at an
+  angle because an event did not fire. **One follow-up:** the hover was not
+  verified visually — touch emulation was browser-wide in that session, so
+  `(hover: hover)` never matched. Worth one look on a real desktop pointer.
 - [ ] **(P2, M) A contrast check in CI.** `TYPE-AUDIT.md` was measured by hand
   once. The six palettes × the elements that matter is a script, and it would have
   caught the one real finding in that audit before it shipped.
