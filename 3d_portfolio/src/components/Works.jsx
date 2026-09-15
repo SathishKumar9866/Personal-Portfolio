@@ -405,8 +405,12 @@ const ProjectCard = ({ index, name, cover, outcome, description, tags, source_co
       // Column-based, so a row arrives together and the next row waits for the
       // reader. Indexing by absolute position staggered all six off one event,
       // which on a phone finished before the reader reached card three.
+      // The anchor About links to. Also what lets the reveal below know a
+      // specific card was asked for: a repo name is already unique in `projects`
+      // and already the visible label, so it needs no separate id scheme.
+      id={name}
       delay={(index % 3) * 0.07}
-      className={`h-full ${featured ? "sm:col-span-2" : ""}`}
+      className={`h-full scroll-mt-[5.5rem] ${featured ? "sm:col-span-2" : ""}`}
     >
       <Tilt
         options={{ max: reduced ? 0 : 8, scale: 1, speed: 400 }}
@@ -489,9 +493,45 @@ const WORK_META = `${projects.length} built${LIVE ? ` · ${LIVE} live` : ""}`;
 const PHONE_CARDS = 3;
 
 const Works = () => {
-  const [showAll, setShowAll] = useState(false);
+  // Deep link wins over the limit. About cites three projects by name and one
+  // of them, `pb-card-deck`, is the sixth — so on a phone the limit added in the
+  // same change that introduced it sent a reader to a section where the card
+  // they tapped was not drawn. Any link to a card past the cut opens the deck
+  // first. `useState` initialiser, not an effect: the card has to be in the
+  // layout before the browser looks for the anchor to scroll to.
+  const asked = () => {
+    if (typeof window === "undefined") return false;
+    const name = decodeURIComponent(window.location.hash.slice(1));
+    return projects.findIndex((p) => p.name === name) >= PHONE_CARDS;
+  };
+  const [showAll, setShowAll] = useState(asked);
   const gridRef = useRef(null);
   const hiddenCount = projects.length - PHONE_CARDS;
+
+  // Same again for a link followed while the page is already open, which changes
+  // the hash without reloading. The browser has ALREADY scrolled to the anchor
+  // by then, while the three cards above it were still hidden, so it lands about
+  // 1,800px short of the card.
+  const reaim = useRef(null);
+  useEffect(() => {
+    const onHash = () => {
+      if (!asked()) return;
+      reaim.current = decodeURIComponent(window.location.hash.slice(1));
+      setShowAll(true);
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  // Re-aim AFTER the commit, not in a `requestAnimationFrame` inside the
+  // handler: that frame can run before React has painted the revealed cards, and
+  // then the correction is computed against the same short layout that caused
+  // the problem. An effect keyed on `showAll` cannot run too early.
+  useEffect(() => {
+    if (!showAll || !reaim.current) return;
+    document.getElementById(reaim.current)?.scrollIntoView();
+    reaim.current = null;
+  }, [showAll]);
 
   /** The button removes itself once used, and a removed element takes the
    *  keyboard's place in the document with it: the next Tab would start again

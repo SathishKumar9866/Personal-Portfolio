@@ -82,9 +82,10 @@ browsing, so these are what that score cannot see.
 
 ### Smaller things worth doing, none of them blocking
 
-- [ ] **(P2, S) A per-project anchor.** About's three proof rows and the ask box
-  both link to `#projects` — the section, not the card. `id={name}` on each
-  project card would let a citation land on the exact one.
+- [x] **~~(P2, S) A per-project anchor.~~** Done 2026-09-15, because the phone
+  limit made it urgent: About cites `pb-card-deck`, the sixth project, which a
+  phone hides. Each card is `id={name}`, About links to it, and a deep link to a
+  hidden card opens the deck first. The ask box still links to `#projects`.
 - [ ] **(P2, S) Tighten the `llms.txt` guard to whole words.** It matches
   substrings, so renaming `pb-card-deck` to `pb-card-deck-OLD` *in the file* slips
   through. The direction that actually drifts is caught; this closes the other one.

@@ -128,11 +128,14 @@ const About = () => (
                 <span aria-hidden="true" className="relative top-[-0.3em] h-px w-5 shrink-0 bg-accent/70" />
                 {claim}
               </p>
-              <p className="mt-1.5 pl-8 font-sans text-secondary text-body leading-[1.55]">
-                {project.outcome}
-              </p>
+              {/* The project's `outcome` used to be printed here, and it is
+                  the Projects card's own heading — so three whole sentences
+                  appeared twice on one page, a screen apart. This row's job is
+                  to say WHICH project answers the claim; the card's job is to
+                  say what it does. The link carries the name and nothing is
+                  lost, because the name is the thing you follow. */}
               <a
-                href="#projects"
+                href={`#${project.name}`}
                 className="mt-1 ml-8 inline-block font-mono text-label text-faint hover:text-accent transition-colors"
               >
                 {project.name} ↓
