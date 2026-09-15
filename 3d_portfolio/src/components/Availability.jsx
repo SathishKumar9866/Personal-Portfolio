@@ -166,7 +166,12 @@ const Availability = () => {
             original complaint. */}
         <dl className="grid gap-7">
           <Fact label="Currently" lines={[status.role, status.company]} />
-          <Fact label="Looking for" lines={[status.openTo]} />
+          {/* `Looking for: {status.openTo}` used to sit here, and the hero pill
+              two screens up renders THE SAME FIELD as "Open to AI engineering
+              roles" — one fact, printed twice, with this card's own header
+              saying "Open to work" above it for a third time. The hero keeps it:
+              a recruiter landing cold should read what he wants in the first
+              screen, not in a card further down. */}
           <Fact label="Where" lines={[status.country, status.arrangement]} />
         </dl>
       </div>

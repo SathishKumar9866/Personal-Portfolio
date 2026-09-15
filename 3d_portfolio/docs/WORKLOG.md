@@ -1,5 +1,81 @@
 # Worklog
 
+## 2026-09-15: the docs catch up, and the last duplicated fact goes
+
+Asked for three things: update the README, make links open in a new tab, and
+bring every document up to date in one pass.
+
+### The links were already right, and saying so is the answer
+
+**15 external links, 15 with `target="_blank"` and `rel="noreferrer"`, 0
+without.** The three `mailto:` anchors carry no `target`, which is the rule
+working rather than a miss — a new tab for a mail client leaves an empty one
+behind. `noreferrer` alone is enough; it implies `noopener` in every browser
+that matters.
+
+Verified by walking the anchors on the rendered page, and again by parsing every
+`<a>` in `src/**/*.jsx`. Nothing to change. The README already carried the
+convention and a stale count of 13.
+
+### What the docs were still claiming
+
+| File | Said | Actually |
+| --- | --- | --- |
+| `README.md` | scene tinting is `nth-of-type(odd)` | `even`, since the spec band was deleted |
+| `README.md` | section padding lives in `styles.padding` | That token is **dead**, imported by nothing. The padding is the clamp on the `<section>` in `SectionWrapper.jsx` |
+| `README.md` | the section is called Work | Projects — and a phone draws three of them |
+| `README.md` | `npm test` is "retrieval, timezone logic, and the llms.txt guard" | 27 checks, four files |
+| `README.md` | 13 external links | 15 |
+| `DECISIONS.md` | Roles is "what the spec band counts" | The section eyebrow counts it |
+| `STATUS.md` | last touched 2026-09-14, eighteen PRs | 2026-09-15, twenty-seven |
+| `STATUS.md` | About shows each project's `outcome` | It shows the claim and a link |
+
+`styles.paddingY` was dead too, and went with it. **A dead token the README
+points at is worse than a dead token**: it sends the next person to edit a value
+that changes nothing, and they will conclude the build is broken before they
+conclude the doc is wrong.
+
+### What was added rather than corrected
+
+- **`ARCHITECTURE.md`** — a section on the phone limit: the four pieces, why the
+  breakpoint is 639 and not 767, why the limit is CSS rather than a `slice`, and
+  the two ordering traps with the measurement behind each.
+- **`DECISIONS.md`** — three decisions (three projects on a phone; sections named
+  from their own `<h2>`; one glossary entry answering to two names) and four more
+  reversals, including the two duplications removed today.
+- **`LEARNING-NOTES.md` §13, new** — "Showing less without deleting anything".
+  The disclosure arithmetic (1,424px hidden for one tap, against 114px for six
+  taps in the rejected About version), why `slice` is the wrong tool, and both
+  ordering traps as one lesson: **the DOM changes when React commits, not when
+  you call `setState`.** A fourteenth exercise was added: find a fact the page
+  states twice.
+- **`README.md`** — four new rows in the change-to-file table, and two new rules
+  in the phone section.
+
+### The last duplicated fact
+
+`Looking for: {status.openTo}` came out of the availability card. The hero pill
+renders **the same field** two screens up as "Open to AI engineering roles", and
+the card's own header says "Open to work" directly above it — one fact, three
+times, twice inside one card. The hero keeps it: a recruiter landing cold should
+read what he wants in the first screen, not in a card further down.
+
+The card is now `Open to work · available now` / `Currently` / `Where` /
+`Reach out`.
+
+**`Currently: AI Engineer · AdvanSoft International, Inc` stays**, and it does
+repeat the first Roles card. It is kept deliberately: the Roles card is a *dated
+history entry* with a summary and a stack, and this is a *status* line. Same two
+strings, two different jobs. Recorded in `DECISIONS.md` so nobody removes it as
+an oversight.
+
+Phone page 8,091px → **8,004px, 9.5 screens**.
+
+### Verified
+
+15/15 links, 0 broken relative links across all eight documents, `npm run lint`
+0 errors, `npm test` 27/27, `npm run build` 0.
+
 ## 2026-09-15: three sentences that appeared twice, and one concept defined twice
 
 Asked for plainly: make sure the page has no duplicate information. Dumped every

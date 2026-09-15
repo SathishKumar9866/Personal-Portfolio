@@ -142,6 +142,38 @@ while the spec band was the first section in `main`; removing that band on
 three sections. Roles and Projects carry the ground because they are the dense,
 card-heavy ones, so the selector moved to `even` in the same commit.
 
+## What a phone is given, and how the limit is enforced
+
+The Projects grid is six cards, and at 390px wide that is 2,818px — **29% of the
+whole page**, all of which a reader crosses to reach Contact. A phone draws three.
+
+The mechanism is deliberately split across two files, and they are one thing:
+
+| Piece | File | Job |
+| --- | --- | --- |
+| `PHONE_CARDS = 3` | `components/Works.jsx` | How many, and what the button counts |
+| `.projects-grid[data-collapsed="true"] > *:nth-child(n + 4)` | `index.css`, inside `@media (max-width: 639px)` | The hiding itself |
+| `id={name}` on each card | `components/Works.jsx` | The anchor About links to |
+| `useState(asked)` + a `hashchange` listener | `components/Works.jsx` | A deep link opens the deck |
+
+**639px, not the 767px `MobileCollapse` uses.** This rule must switch where the
+grid stops being one column (`sm:grid-cols-2`); a hidden card in a two-column
+grid leaves a hole in the row.
+
+**The limit is CSS, not a `slice`.** A `slice` needs JS to know the viewport
+width — a media query in JS, a listener, and a first render that guesses wrong.
+It also removes the card from the DOM, and everything that reads the document
+rather than the rendering would lose it.
+
+**Two ordering traps, both measured rather than reasoned about:**
+
+1. The reveal is a `useState` **initialiser**, not an effect. The card has to be
+   in the layout before the browser looks for the anchor to scroll to.
+2. The re-aim after a hash change is an **effect keyed on `showAll`**, not a
+   `requestAnimationFrame` inside the handler. That frame can run before React
+   has painted the revealed cards, so it measures the same short layout that
+   caused the problem — measured, it was still 1,391px off.
+
 ## Motion budget
 
 Five things move. Every one of them is metered.

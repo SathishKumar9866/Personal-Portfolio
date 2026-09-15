@@ -19,7 +19,7 @@ Read this table instead of the code.
 | Any copy: roles, projects, glossary, status | `src/constants/index.js` |
 | Colour, spacing, type tokens | `src/index.css`, then `tailwind.config.js` |
 | A whole section's layout | `src/components/<Section>.jsx` |
-| Which scenes are tinted, and the scene rhythm | `main > section:nth-of-type(odd)` in `src/index.css` |
+| Which scenes are tinted, and the scene rhythm | `main > section:nth-of-type(even)` in `src/index.css`. **`even`, not `odd`** — the spec band used to be the first section and its removal flipped the parity |
 | The stage every section sits on | `src/hoc/SectionWrapper.jsx` |
 | The order of sections | `src/App.tsx` |
 | Which items appear in the nav and the right rail | `navLinks` in `src/constants/index.js` |
@@ -35,8 +35,11 @@ Read this table instead of the code.
 | The Stack pipeline rail, card glow, stage numerals | `src/components/Tech.jsx`, `.stack-card` / `.stack-seg` in `src/index.css` |
 | The og:image social card | `docs/og-card.html`, then re-render over `public/og.png` |
 | How big any text is | the named scale in `tailwind.config.js`, never a literal |
-| How much a section is padded | `styles.padding` in `src/styles.js`, one clamp |
+| How much a section is padded | the `py-[clamp(3rem,9vw,8rem)]` on the `<section>` in `src/hoc/SectionWrapper.jsx`. The FLOOR is what a phone gets: 9vw is 35px at 390px wide, so the middle term never wins there |
 | What a phone hides that a desktop shows | `MobileCollapse.jsx`, plus `md:` classes at the call site |
+| How many projects a phone shows before asking | `PHONE_CARDS` in `src/components/Works.jsx`, and the `.projects-grid[data-collapsed]` rule in `src/index.css` — **both, they are one mechanism** |
+| Where a per-project link lands | `id={name}` on the card in `Works.jsx`; About builds `#${project.name}` |
+| What a screen reader calls each section | `SectionHead.jsx` ids its own `<h2>`; `SectionWrapper.jsx` points `aria-labelledby` at it |
 | The diagram beside each role | `CareerTrack.jsx`, keyed by `glyph` in `stackGroups`' sibling `experience` |
 | What a typed question can find, and how it is ranked | `src/utils/answer.js` |
 | What the ask box looks like, and its commands | `src/components/CommandPalette.jsx` |
@@ -53,7 +56,8 @@ npm install
 npm run dev        # http://localhost:5173
 npm run build
 npm run lint
-npm test           # retrieval, timezone logic, and the llms.txt mirror guard
+npm test           # 27 checks, four files: retrieval, timezone maths,
+                   # and the llms.txt / index.html crawler mirrors
 npm run icons      # regenerate src/components/toolIcons.js from simple-icons
 ```
 
@@ -318,10 +322,10 @@ the footer separator.
 | Section | Component | Notes |
 | --- | --- | --- |
 | Hero | `Hero.jsx` | One headline, one CTA, one status line. The second CTA was removed: it was the fifth route to `#contact` |
-| About | `About.jsx` | Portrait, lede, availability card. The six capability cards were deleted: they restated Stack's six groups in adjectives instead of tools |
+| About | `About.jsx` | Portrait, lede, three proof rows, availability card. The six capability cards were deleted: they restated Stack's six groups in adjectives instead of tools. A proof row names the project and does **not** repeat its description — the card already carries that sentence |
 | Roles | `Experience.jsx` | A sticky deck of role cards, then education, dates right-aligned. The component keeps its old name; the section is called Roles |
 | Stack | `Tech.jsx` | Six groups, each with a category dot. Two tiers. Bare flowing terms on a phone, cards from md |
-| Work | `Works.jsx` | Six projects, generative canvas covers, plain chips |
+| Projects | `Works.jsx` | Six projects, generative canvas covers, plain chips. **A phone draws three** and offers the rest; each card is an anchor |
 | Contact | `Contact.jsx` | Invitation left, every route right, each URL printed as text |
 | Collaborate | `Collaborate.jsx` | Closing band, desktop only. On a phone it lives in the menu |
 | Agent note | `AgentNote.jsx` | Full-width band for crawlers and LLMs. A notice, never an instruction. Short form on a phone |
@@ -381,6 +385,7 @@ desktop's content.
 | Stack | Six labelled rows of bare terms, no boxes | Six cards, each with its description |
 | Stack intro copy | Hidden | Shown |
 | Role points, project copy | Behind a disclosure (Projects, Roles) | All inline |
+| Projects | Three cards, then "Show 3 more projects" | All six |
 | Role points alignment | Ragged right | Justified, auto-hyphenated |
 | Collaborate band | In the menu | Closing section after Contact |
 | Agent note | Two sentences plus `/llms.txt` | Six-point grid |
@@ -395,7 +400,18 @@ Three rules behind that table:
    It is in Projects (852px) and Roles (1,189px). It was not in About, where
    six two-line descriptions bought 114px for six taps — and those cards have
    since been deleted outright, which is the cheaper answer to the same
-   question.
+   question. The Projects limit is the same rule at section scale: three cards
+   hidden is 1,424px for one tap.
+4. **A limit a phone applies must be CSS, not a `slice`.** A `slice` needs JS to
+   know the viewport width — a media query in JS, a listener, and a first render
+   that guesses wrong before correcting itself. `nth-child(n + 4)` inside a
+   `max-width` block is the browser doing it, right on the first paint. It also
+   keeps every card in the DOM, so nothing that reads the document rather than
+   the rendering loses anything.
+5. **A deep link beats the limit.** About cites a project that a phone hides, so
+   a link to a hidden card opens the deck before the browser looks for the
+   anchor. Anything else sends a reader to a section where the card they tapped
+   is not drawn.
 2. **A disclosure is never drawn empty.** Education renders through the same
    component as a job but has no points and no stack, so the control is omitted
    rather than opening onto nothing.
@@ -492,8 +508,13 @@ to write one down, check where a link goes before following it, or reach him whe
 the target site will not load for them. An icon answers none of those, so the
 Contact card prints the full URL next to every destination.
 
-Verified in the browser rather than by grep: 13 external links, 13 with
-`target="_blank"`, 0 without `rel`.
+Verified in the browser rather than by grep, on the deployed page: **15 external
+links, 15 with `target="_blank"` and `rel="noreferrer"`, 0 without.** The three
+`mailto:` anchors carry no `target`, which is the rule working, not a miss.
+
+`noreferrer` alone is enough — it implies `noopener` in every browser that
+matters, so `rel="noopener noreferrer"` would be belt and braces on the same
+belt.
 
 ## House style
 

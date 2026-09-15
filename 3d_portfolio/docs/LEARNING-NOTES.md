@@ -305,7 +305,64 @@ decide whether you want a build step that reads your prose.
 
 ---
 
-## 13. What to build next, if you are learning from this repo
+## 13. Showing less without deleting anything
+
+**In plain words.** A long page is not fixed by writing less. It is usually fixed
+by drawing less *at first*, and letting the reader ask for the rest.
+
+The Projects grid on a phone was six cards, 2,818px — 29% of the whole page, and
+a reader heading for the contact details crossed every pixel of it. Now three are
+drawn and a button offers the others. **Nothing was deleted:** all six are in the
+HTML, in `llms.txt`, and in the `<noscript>` block a crawler reads.
+
+**The arithmetic that makes it worth doing.** A disclosure costs a 44px row and a
+tap. It only pays if what it hides is much taller than that. Here it hides
+1,424px for one tap, which is an easy yes; in About it would once have hidden
+114px behind six taps, which is why that idea was rejected and the cards deleted
+instead.
+
+**Where it lives.** Two files, and they are one mechanism:
+
+```jsx
+// Works.jsx — how many, and what the button counts
+const PHONE_CARDS = 3;
+<div data-collapsed={showAll ? undefined : "true"} className="projects-grid ...">
+```
+
+```css
+/* index.css — the hiding itself */
+@media (max-width: 639px) {
+  .projects-grid[data-collapsed="true"] > *:nth-child(n + 4) { display: none; }
+}
+```
+
+**Why the limit is CSS and not `projects.slice(0, 3)`.** A `slice` has to know
+how wide the window is, and JavaScript only learns that by asking — a media
+query in JS, a listener for when it changes, and a first render that guesses and
+then corrects itself, which the reader sees. The CSS rule is the browser doing
+the same job with the right answer on the first paint. The slice would also take
+the card out of the document, and a crawler reads the document.
+
+**Two ordering traps, and both are the same lesson: the DOM changes when React
+commits, not when you call `setState`.**
+
+1. A visitor arriving at `/#pb-card-deck` needs that card in the layout *before*
+   the browser goes looking for the anchor. So the state starts correct —
+   `useState(asked)` — rather than being fixed by an effect afterwards.
+2. A visitor clicking a link to a hidden card gets scrolled by the browser
+   immediately, while three cards above it are still hidden — landing 1,391px
+   short. The obvious fix, a `requestAnimationFrame` inside the handler, **also
+   measured 1,391px off**: that frame can run before React has painted, so it
+   corrects against the same wrong layout. An effect keyed on the state cannot
+   run too early.
+
+**Try next.** Set `PHONE_CARDS` to 1 and watch the button's own label change —
+it is derived, so it cannot say "3 more" while hiding five. Then open
+`/#pb-card-deck` on a narrow window and watch the deck open before the scroll.
+
+---
+
+## 14. What to build next, if you are learning from this repo
 
 In rough order of how much you learn per hour:
 
@@ -321,6 +378,11 @@ In rough order of how much you learn per hour:
 5. **Try act 4 of the campaign** (see [BACKLOG.md](BACKLOG.md)): make a section's
    heading arrive as you scroll into its scene. Everything needed is already here —
    `Reveal.jsx` and the scene structure.
+6. **Find a fact the page states twice.** Dump every visible text node with the
+   section it sits in and count the repeats — that is exactly how About was found
+   restating three project descriptions word for word. Most of what you find will
+   be legitimate (a nav label equals its heading on purpose); the value is in
+   telling those apart.
 
 ## See also
 
