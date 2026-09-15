@@ -176,7 +176,7 @@ the stemmer did. Both are pinned by tests named for the failure.
 
 ## Tests: what each one actually protects
 
-`npm test` is 20 checks in three plain-node files. No framework, no fixtures — the
+`npm test` is 27 checks in four plain-node files. No framework, no fixtures — the
 repo has no runner and does not need one.
 
 | File | Checks | The failure it exists for |
@@ -184,6 +184,7 @@ repo has no runner and does not need one.
 | `utils/answer.test.mjs` | 8 | A citation that is generated rather than quoted; a cited section that is not a real nav id; `ship` not matching `Shipped` |
 | `utils/localzone.test.mjs` | 5 | An offset that is right in July and wrong in January — India to US Central is +11:30h then +10:30h |
 | `utils/llms-mirror.test.mjs` | 7 | The crawler copy drifting from `constants`. It shipped with **no employment history at all**; this is the check that would have caught it |
+| `utils/html-mirror.test.mjs` | 7 | The other two hand-written mirrors: the JSON-LD a search engine reads, and the `<noscript>` block that is the only content in the served HTML. Also that `og-card.html` still names the current role |
 
 Each was proved to fail before being trusted: the mirror guard was run against a
 copy with the Roles section deleted and reported the three employers and four role

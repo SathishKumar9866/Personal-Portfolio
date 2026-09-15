@@ -17,6 +17,12 @@
     3. save over 3d_portfolio/public/og.png
     4. check index.html still says og:image:width 1200 / og:image:height 630
 
+  WHEN to regenerate: whenever the name, the role or the tagline on the site
+  changes. It went stale exactly once already - the headline changed on
+  2026-09-14 and this card kept "data to AI, end to end" for a day, so every
+  share of the link previewed a tagline the page no longer contained. Nothing
+  warns you, because a grep cannot read a PNG and no test can either.
+
   Colours are the dark-theme tokens from src/index.css, hard-coded because this
   page is not part of the app and must render standalone with no build step.
   Type is Barlow and JetBrains Mono, same as the site, from Google Fonts.
@@ -98,7 +104,7 @@
     <h1>Sathish Kumar</h1>
     <!-- Interpunct, not an em dash: the house style dropped long dashes and the
          old card was the last place one survived. -->
-    <p class="sub">AI Engineer &middot; data to AI, end to end</p>
+    <p class="sub">AI Engineer &middot; from model development to real-world impact</p>
     <p class="terms">
       RAG<span class="dot">&middot;</span>Computer vision<span class="dot">&middot;</span>MLOps<span class="dot">&middot;</span>Shipped products
     </p>

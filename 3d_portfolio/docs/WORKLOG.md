@@ -1,5 +1,83 @@
 # Worklog
 
+## 2026-09-15: the social card, the unguarded mirrors, and a font finding that went the other way
+
+Three things off the findings list. Two were real; the third taught more by being
+wrong than it would have by being right.
+
+### The social card had been previewing a tagline the site no longer had
+
+`public/og.png` was generated on 11 September. The headline changed on the 14th.
+For a day, every share of this link on LinkedIn, Slack or anywhere else showed
+**"AI Engineer · data to AI, end to end"** — a line that exists nowhere on the
+page. Nothing warned anyone, because a grep cannot read a PNG and neither can a
+test.
+
+Regenerated from `docs/og-card.html` at exactly 1200x630, and the template's copy
+now matches the site. The `<noscript>` block in `index.html` had drifted the same
+way — same old tagline — and was corrected with it.
+
+**What can actually be checked is the template**, so that is what is now checked:
+`test_the_og_card_source_matches_the_role` fails the build if `og-card.html`
+stops naming the current role. The render stays manual, and the header comment in
+that file now says when to redo it and what went wrong the one time nobody did.
+
+### Two more hand-written mirrors, both unguarded until today
+
+Yesterday's `llms-mirror.test.mjs` guards `public/llms.txt`. It left two copies of
+the same facts unchecked, and the asymmetry was mine:
+
+- the **JSON-LD** block — what Google and every structured-data consumer reads
+- the **`<noscript>`** block — the only content in the served HTML
+
+`html-mirror.test.mjs` now asserts the JSON-LD parses at all, that `jobTitle`
+equals `status.role`, that the email matches, that every school appears in
+`alumniOf`, that every social link appears in `sameAs`, and that `knowsAbout` has
+not drifted more than four tools from the primaries.
+
+**Proved to fail, three ways.** Against copies with the job title changed, a
+school name truncated and six tools removed from `knowsAbout`, each failed the
+right test by name; the real file passes 7/7.
+
+### The font finding was wrong twice, and the measurements said so
+
+Reported as "swap Barlow for a variable font and drop unused subsets, ~90kB".
+Both halves collapsed on contact with evidence.
+
+1. **There is no variable Barlow.** `npm view @fontsource-variable/barlow`
+   returns 404. All four static weights are genuinely used: 400 twice, 500
+   twenty-nine times, 600 ten times, 700 on the headline.
+2. **There is no font problem to fix.** Measured on the live page: all six fonts
+   a reader fetches finish at **137ms against a first paint at 152ms**, and
+   layout shift is **0**. Nothing swaps, nothing shifts, and preloading would
+   optimise a cost that does not exist.
+
+What was left was deploy weight: 20 woff2 files built and published for a site
+written in English, including Vietnamese, Cyrillic and Greek.
+
+**Then the fix made transfer worse, which is the interesting part.** Importing
+`latin` *and* `latin-ext` added four faces no character on the page needs — and
+Chrome downloaded all four anyway, 55kB of them. The page contains `→` (U+2192)
+and `↗` (U+2197), which the latin subset does not cover; when a glyph is missing
+from the first matching face the browser tries the **next face in the family**
+before falling back to a system font. Offering a subset you do not need is not
+free.
+
+Latin only, then:
+
+| | Before | After |
+| --- | --- | --- |
+| woff2 files built | 20 | **12** |
+| Font bytes in `dist` | 361 kB | **292 kB** |
+| `@font-face` rules shipped | 21 | 13 |
+| vendor CSS | 12 kB / 3.14 kB gz | **6.56 kB / 2.91 kB gz** |
+| Fonts a reader fetches | 6 files, 184 kB | **unchanged** |
+
+The honest summary: **0.23 kB gzipped off every page load**, 69 kB off the
+deploy, and a trap documented in `main.tsx` that cost 55 kB when it fired.
+
+`npm test` is 27 checks in four files.
+
 ## 2026-09-14: the crawler copy is now checked, not trusted
 
 `public/llms.txt` is a hand-written mirror of facts in `constants/index.js`.
